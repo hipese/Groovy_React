@@ -12,10 +12,10 @@ import Attendence from "./pages/Attendence/Attendence";
 import Contact from "./pages/Contact/Contact";
 import DashBoard from "./pages/DashBoard/DashBoard";
 import Email from "./pages/Email/Email";
-import Main from "../../quiz02/src/pages/Main/conpenents";
 import Message from "./pages/Message/Message";
 import Sign_Main from "./pages/Sign/components/Sign_Main/Sign_Main";
 import Survey from "./pages/Survey/Survey";
+import Admin from "./pages/Admin/Admin";
 
 function App() {
   return (
@@ -23,18 +23,17 @@ function App() {
       <Navigator />
       <SlideBar />
       <Routes>
-        <Route path="admin" elemen={<Admin/>}/> 
-        <Route path="attendence" elemen={<Attendence/>}/>
-        <Route path="board" elemen={<Board/>}/>
-        <Route path="calendar" elemen={<Calendar/>}/>
-        <Route path="contact" elemen={<Contact/>}/>
-        <Route path="dashboard" elemen={<DashBoard/>}/>
-        <Route path="email" elemen={<Email/>}/>
-        <Route path="main" elemen={<Main/>}/>
-        <Route path="message" elemen={<Message/>}/>
-        <Route path="sign" elemen={<Sign_Main/>}/>
-        <Route path="survey" elemen={<Survey/>}/>
-        <Route path="todolist" elemen={<ToDoList/>}/>
+        <Route path="admin" element={<Admin />} />
+        <Route path="attendence" element={<Attendence />} />
+        <Route path="board" element={<Board />} />
+        <Route path="calendar" element={<Calendar />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="dashboard" element={<DashBoard />} />
+        <Route path="email" element={<Email />} />
+        <Route path="message" element={<Message />} />
+        <Route path="sign" element={<Sign_Main />} />
+        <Route path="survey" element={<Survey />} />
+        <Route path="todolist" element={<ToDoList />} />
       </Routes>
     </Router>
   );
