@@ -212,7 +212,7 @@ class Dropdown extends Component {
             </li>
             <li style={styles.item}>
               <Item>
-                <Link to="/Setting" style={styles.link}>
+                <Link to="/Attendence" style={styles.link}>
                   <List>
                     <img src={setting} alt="" width={"15px"} height={"15px"} />{" "}
                     근태관리
