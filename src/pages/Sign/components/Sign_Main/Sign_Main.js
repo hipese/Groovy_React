@@ -2,8 +2,10 @@ import { Container } from "reactstrap";
 
 const Sign_Main=()=>{
     return(
-        <Container fluid>
-            
+        <Container>
+            <div>
+                전자결제 홈
+            </div>
         </Container>
     );
 }
