@@ -1,8 +1,25 @@
-* {
+/* * {
   box-sizing: border-box;
 }
 
 div {
   border: 1px solid black;
+} */
+
+.Attendence {
+  height: 100%;
 }
 
+.myVacation {
+  position: relative;
+  top: 60px;
+  left: 60px;
+  height: 30%;
+  width: 100%;
+  font-weight: bold;
+
+}
+
+.applyButton {
+  margin-left: 10px; /* You can adjust the value to control the spacing */
+}
