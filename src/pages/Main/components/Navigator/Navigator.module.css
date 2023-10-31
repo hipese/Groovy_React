@@ -1,16 +1,21 @@
-.container{
+.container {
     height: 60px;
     border-bottom: 1px solid rgba(128, 128, 128, 0.300);
-    position: relative;
+    position: fixed;
+    background-color: white;
+    z-index: 9999;
 }
-.logo{
+
+.logo {
     float: left;
-    
+
 }
-.logo:hover{
+
+.logo:hover {
     cursor: pointer;
 }
-.name{
+
+.name {
     font-size: 15px;
     position: absolute;
     top: 20px;
