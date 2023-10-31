@@ -1,9 +1,9 @@
 import { Container } from "reactstrap";
-
-const Sign_Main=()=>{
-    return(
+import style from "./Sign_Main.module.css"
+const Sign_Main = () => {
+    return (
         <Container>
-            <div>
+            <div className={style.header}>
                 전자결제 홈
             </div>
         </Container>

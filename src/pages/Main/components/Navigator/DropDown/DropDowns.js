@@ -203,7 +203,7 @@ class Dropdown extends Component {
             </li>
             <li style={styles.item}>
               <Item>
-                <Link to="/Approval" style={styles.link}>
+                <Link to="/Sign" style={styles.link}>
                   <List>
                     <img src={approval} alt="" width={"15px"} height={"15px"} />{" "}
                     전자결재
