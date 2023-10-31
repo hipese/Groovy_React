@@ -2,7 +2,8 @@ import style from "./Attendence.module.css";
 
 const Attendence = () => {
     return (
-        <div>근태관리</div>
+        <div className={style.myVacation}>내 연차 내역</div>
+        <div>연락</div>
     );
 }
 
