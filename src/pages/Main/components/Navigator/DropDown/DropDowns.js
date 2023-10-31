@@ -16,7 +16,8 @@ import down from "./assets/down.svg";
 const styles = {
   dropdown: {
     display: "block",
-    zIndex: "100",
+    zIndex: "9999",
+
   },
   button: {
     marginTop: "15px",

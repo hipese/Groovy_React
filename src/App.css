@@ -1,0 +1,13 @@
+.MainContainer {
+    margin: 0px;
+    padding: 0px;
+    z-index: -1;
+
+}
+
+.SubContainer {
+    position: absolute;
+    top: 50px;
+    left: 250px;
+    height: 100%;
+}
