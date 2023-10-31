@@ -17,7 +17,6 @@ const styles = {
   dropdown: {
     display: "block",
     zIndex: "9999",
-
   },
   button: {
     marginTop: "15px",
@@ -121,7 +120,7 @@ class Dropdown extends Component {
         </button>
         <div style={dropdownMenuStyle}>
           <ul style={styles.list}>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/" style={styles.link}>
                   <List>
@@ -131,7 +130,7 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Contacts" style={styles.link}>
                   <List>
@@ -141,7 +140,7 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Message" style={styles.link}>
                   <List>
@@ -151,7 +150,7 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Mail" style={styles.link}>
                   <List>
@@ -161,7 +160,7 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Survey" style={styles.link}>
                   <List>
@@ -171,7 +170,7 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/List" style={styles.link}>
                   <List>
@@ -181,7 +180,7 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Calendar" style={styles.link}>
                   <List>
@@ -191,7 +190,7 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Board" style={styles.link}>
                   <List>
@@ -201,7 +200,7 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Approval" style={styles.link}>
                   <List>
@@ -211,7 +210,7 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Attendence" style={styles.link}>
                   <List>
