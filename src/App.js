@@ -26,6 +26,7 @@ function App() {
         <SlideBar />
         <div className="SubContainer">
         <Routes>
+            <Route path="" element={<DashBoard />} />
             <Route path="admin" element={<Admin />} />
             <Route path="attendence" element={<Attendence />} />
             <Route path="board" element={<Board />} />
