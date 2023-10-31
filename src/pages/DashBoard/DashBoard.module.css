@@ -1,3 +1,32 @@
+*{
+    box-sizing: border-box;
+}
+
+div{
+    border: 1px solid black;
+}
+
 .ml210{
     margin-left: 250px;
+}
+
+.innerpad{
+    width: 1000px;
+    height: 90%;
+    margin: 10px;
+}
+
+.worksection{
+    width: 300px;
+    height: 350px;
+}
+
+.signsection{
+    width: 300px;
+    height: 180px;
+}
+
+.calandarsection{
+    width: 300px;
+    height: 350px;
 }
