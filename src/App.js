@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col } from "reactstrap";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
+import Login from "./pages/Login/Login";
 import Navigator from "./pages/Main/components/Navigator/Navigator";
 import SlideBar from "./pages/Main/components/SlideBar/SlideBar/SlideBar";
 import ToDoList from "./pages/ToDoList/ToDoList";
@@ -20,13 +21,16 @@ import Admin from "./pages/Admin/Admin";
 function App() {
   return (
     <Router>
-      <Navigator />
- 
-      <Container className="MainContainer">
+      <Container className="NaviContainer g-0" fluid>
+        <Navigator />
+      </Container>
+      <div className="SlideContainer">
         <SlideBar />
-        <div className="SubContainer">
+      </div>
+      <div className="MainContainer">
         <Routes>
-            <Route path="" element={<DashBoard />} />
+            <Route path="/" element={<Login />} />
+            <Route path="dashboard" element={<DashBoard />} />
             <Route path="admin" element={<Admin />} />
             <Route path="attendence" element={<Attendence />} />
             <Route path="board" element={<Board />} />
@@ -39,10 +43,9 @@ function App() {
             <Route path="survey" element={<Survey />} />
             <Route path="todolist" element={<ToDoList />} />
           </Routes>
-          </div>
-      </Container>
+      </div>
     </Router>
-    
+  
   );
 }
 

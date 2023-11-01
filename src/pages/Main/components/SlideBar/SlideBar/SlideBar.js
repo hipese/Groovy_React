@@ -20,21 +20,21 @@ import ToDoListSlide from "./ToDoList/ToDoListSlide";
 
 const SlideBar = () => {
   return (
-    <Container className={styles.slidebar} fluid>
+    <div className={styles.slide}>
       <Routes>
         <Route path="/" element={<DashBoardSlide />} />
-        <Route path="/Admin" element={<AdminSlide />} />
-        <Route path="/Attendence" element={<AttendenceSlide />} />
-        <Route path="/Board" element={<BoardSlide />} />
-        <Route path="/Calendar" element={<CalendarSlide />} />
-        <Route path="/Contacts" element={<ContactsSlide />} />
-        <Route path="/EMail" element={<EMailSlide />} />
-        <Route path="/Message" element={<MessageSlide />} />
-        <Route path="/Sign" element={<SignSlide />} />
-        <Route path="/Survey" element={<SurveySlide />} />
-        <Route path="/ToDoList" element={<ToDoListSlide />} />
+        <Route path="/admin/*" element={<AdminSlide />} />
+        <Route path="/attendence/*" element={<AttendenceSlide />} />
+        <Route path="/board/*" element={<BoardSlide />} />
+        <Route path="/calendar/*" element={<CalendarSlide />} />
+        <Route path="/contacts/*" element={<ContactsSlide />} />
+        <Route path="/mail/*" element={<EMailSlide />} />
+        <Route path="/message/*" element={<MessageSlide />} />
+        <Route path="/sign/*" element={<SignSlide />} />
+        <Route path="/survey/*" element={<SurveySlide />} />
+        <Route path="/list/*" element={<ToDoListSlide />} />
       </Routes>
-    </Container>
+      </div>
   );
 };
 
