@@ -17,7 +17,6 @@ const styles = {
   dropdown: {
     display: "block",
     zIndex: "9999",
-
   },
   button: {
     marginTop: "15px",
@@ -121,7 +120,7 @@ class Dropdown extends Component {
         </button>
         <div style={dropdownMenuStyle}>
           <ul style={styles.list}>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/" style={styles.link}>
                   <List>
@@ -131,9 +130,9 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/Contacts" style={styles.link}>
+                <Link to="/contacts" style={styles.link}>
                   <List>
                     <img src={contacts} alt="" width={"15px"} height={"15px"} />{" "}
                     주소록
@@ -141,9 +140,9 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/Message" style={styles.link}>
+                <Link to="/message" style={styles.link}>
                   <List>
                     <img src={message} alt="" width={"15px"} height={"15px"} />{" "}
                     메시징
@@ -151,9 +150,9 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/Mail" style={styles.link}>
+                <Link to="/mail" style={styles.link}>
                   <List>
                     <img src={mail} alt="" width={"15px"} height={"15px"} />{" "}
                     메일
@@ -161,9 +160,9 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/Survey" style={styles.link}>
+                <Link to="/survey" style={styles.link}>
                   <List>
                     <img src={survey} alt="" width={"15px"} height={"15px"} />{" "}
                     설문
@@ -171,9 +170,9 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/List" style={styles.link}>
+                <Link to="/list" style={styles.link}>
                   <List>
                     <img src={list} alt="" width={"15px"} height={"15px"} />{" "}
                     할일
@@ -181,9 +180,9 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/Calendar" style={styles.link}>
+                <Link to="/calendar" style={styles.link}>
                   <List>
                     <img src={calendar} alt="" width={"15px"} height={"15px"} />{" "}
                     캘린더
@@ -191,9 +190,9 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/Board" style={styles.link}>
+                <Link to="/board" style={styles.link}>
                   <List>
                     <img src={board} alt="" width={"15px"} height={"15px"} />{" "}
                     게시판
@@ -201,9 +200,9 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/Approval" style={styles.link}>
+                <Link to="/sign" style={styles.link}>
                   <List>
                     <img src={approval} alt="" width={"15px"} height={"15px"} />{" "}
                     전자결재
@@ -211,9 +210,9 @@ class Dropdown extends Component {
                 </Link>
               </Item>
             </li>
-            <li style={styles.item}>
+            <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/Attendence" style={styles.link}>
+                <Link to="/attendence" style={styles.link}>
                   <List>
                     <img src={setting} alt="" width={"15px"} height={"15px"} />{" "}
                     근태관리
