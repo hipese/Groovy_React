@@ -16,13 +16,11 @@ import SurveySlide from "./Survey/SurveySlide";
 import ToDoListSlide from "./ToDoList/ToDoListSlide";
 
 
-
-
 const SlideBar = () => {
   return (
     <div className={styles.slide}>
       <Routes>
-        <Route path="/" element={<DashBoardSlide />} />
+        <Route path="/dashboard/*" element={<DashBoardSlide />} />
         <Route path="/admin/*" element={<AdminSlide />} />
         <Route path="/attendence/*" element={<AttendenceSlide />} />
         <Route path="/board/*" element={<BoardSlide />} />
@@ -32,7 +30,7 @@ const SlideBar = () => {
         <Route path="/message/*" element={<MessageSlide />} />
         <Route path="/sign/*" element={<SignSlide />} />
         <Route path="/survey/*" element={<SurveySlide />} />
-        <Route path="/list/*" element={<ToDoListSlide />} />
+        <Route path ="/list/*" element={<ToDoListSlide />} />
       </Routes>
       </div>
   );
