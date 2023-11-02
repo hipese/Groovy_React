@@ -123,7 +123,7 @@ class Dropdown extends Component {
           <ul style={styles.list}>
             <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/dashboard" style={styles.link}>
+                <Link to="/Groovy/dashboard" style={styles.link}>
                   <List>
                     <img src={layout} alt="" width={"15px"} height={"15px"} />{" "}
                     개요
@@ -133,7 +133,7 @@ class Dropdown extends Component {
             </li>
             <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/contacts" style={styles.link}>
+                <Link to="/Groovy/contacts" style={styles.link}>
                   <List>
                     <img src={contacts} alt="" width={"15px"} height={"15px"} />{" "}
                     주소록
@@ -143,7 +143,7 @@ class Dropdown extends Component {
             </li>
             <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/message" style={styles.link}>
+                <Link to="/Groovy/message" style={styles.link}>
                   <List>
                     <img src={message} alt="" width={"15px"} height={"15px"} />{" "}
                     메시징
@@ -153,7 +153,7 @@ class Dropdown extends Component {
             </li>
             <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/mail" style={styles.link}>
+                <Link to="/Groovy/mail" style={styles.link}>
                   <List>
                     <img src={mail} alt="" width={"15px"} height={"15px"} />{" "}
                     메일
@@ -163,7 +163,7 @@ class Dropdown extends Component {
             </li>
             <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/survey" style={styles.link}>
+                <Link to="/Groovy/survey" style={styles.link}>
                   <List>
                     <img src={survey} alt="" width={"15px"} height={"15px"} />{" "}
                     설문
@@ -173,7 +173,7 @@ class Dropdown extends Component {
             </li>
             <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/list" style={styles.link}>
+                <Link to="/Groovy/list" style={styles.link}>
                   <List>
                     <img src={list} alt="" width={"15px"} height={"15px"} />{" "}
                     할일
@@ -183,7 +183,7 @@ class Dropdown extends Component {
             </li>
             <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/calendar" style={styles.link}>
+                <Link to="/Groovy/calendar" style={styles.link}>
                   <List>
                     <img src={calendar} alt="" width={"15px"} height={"15px"} />{" "}
                     캘린더
@@ -193,7 +193,7 @@ class Dropdown extends Component {
             </li>
             <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/board" style={styles.link}>
+                <Link to="/Groovy/board" style={styles.link}>
                   <List>
                     <img src={board} alt="" width={"15px"} height={"15px"} />{" "}
                     게시판
@@ -203,7 +203,7 @@ class Dropdown extends Component {
             </li>
             <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/sign" style={styles.link}>
+                <Link to="/Groovy/sign" style={styles.link}>
                   <List>
                     <img src={approval} alt="" width={"15px"} height={"15px"} />{" "}
                     전자결재
@@ -213,7 +213,7 @@ class Dropdown extends Component {
             </li>
             <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/attendence" style={styles.link}>
+                <Link to="/Groovy/attendence" style={styles.link}>
                   <List>
                     <img src={setting} alt="" width={"15px"} height={"15px"} />{" "}
                     근태관리
