@@ -1,20 +1,29 @@
-import style from "./ToDoListSlide.module.css";
+import style from "../SlideBar.module.css";
 import { Link, Route, Routes } from "react-router-dom";
-
-import ToDoListDash from "../../../../../ToDoList/ToDoList";
-import ToDoListBoard from "../../../../../ToDoList/ToDoListBoard";
-import ToDoListCalendar from "../../../../../ToDoList/ToDoListCalendar";
-import ToDoListTeam from "../../../../../ToDoList/ToDoListTeam";
 
 const ToDoListSlide = () => {
     return (
         <div className={style.ToDoListSlide}>
-            <button className={style.btn}>
-            <strong>+</strong> 일정 작성하기
-            </button>
-            <Routes>
-                <Route path="/" element={<ToDoListDash />} />
-            </Routes>
+            <Link to="">
+                <button className={style.btn}>
+                    <strong>+</strong> 일정
+                </button>
+            </Link>
+            <Link to="ToDoListBoard">
+                <button className={style.btn}>
+                    <strong>+</strong> 내 보드
+                </button>
+            </Link>
+            <Link to="ToDoListCalendar">
+                <button className={style.btn}>
+                    <strong>+</strong> 캘린더
+                </button>
+            </Link>
+            <Link to="ToDoListTeam">
+                <button className={style.btn}>
+                    <strong>+</strong> 팀 보드
+                </button>
+            </Link>
         </div>
     );
 };

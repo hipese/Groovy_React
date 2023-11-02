@@ -2,21 +2,17 @@
 *{box-sizing: border-box;}
 
 .sign_container{
-    width: 1500px;
+    width: 1200px;
     height: 100%;
 }
 .header{
-    height: 20%;
     font-size: 30px;
-    margin: 20px;
-    padding: 15px;
+    margin: 15px;
 }
-.body{
-    height: 60%;
-    margin: 20px;
-    padding: 10px;
+.documents{
+    margin-bottom:100px;
+    margin-left: 100px;
 }
-
 .text{
     font-weight: bold;
     margin: 10px;
@@ -28,27 +24,3 @@
     margin: 10px;
     padding: 10px;
 }
-.tableBox{
-    width: 100%;
-    background-color: aliceblue;
-}
-.tableHead{background-color: aqua;}
-.tableRow{
-    float: left;
-    width: 100%;
-    
-}
-.tableRow>div{
-    display: flex;
-    float: left;
-    justify-content: center;
-    border: 1px solid black;
-    font-size: 20px;
-}
-
-.tableRow > div:nth-child(1) { width: 10%;  /* 문서번호 넓이 */}
-.tableRow > div:nth-child(2) {width: 20%; /* 기안일 넓이 */}
-.tableRow > div:nth-child(3) { width: 10%; /* 결제양식 넓이 */}
-.tableRow > div:nth-child(4) {width: 10%; /* 기안자 넓이 */}
-.tableRow > div:nth-child(5) { width: 40%; /* 제목 넓이 */}
-.tableRow > div:nth-child(6) {width: 10%; /* 첨부 넓이 */}

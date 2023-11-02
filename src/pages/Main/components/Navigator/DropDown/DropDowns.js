@@ -16,7 +16,7 @@ import down from "./assets/down.svg";
 const styles = {
   dropdown: {
     display: "block",
-    zIndex: "9999",
+
   },
   button: {
     marginTop: "15px",
@@ -30,6 +30,7 @@ const styles = {
     border: "1px solid black",
     borderRadius: "5px",
     position: "fixed",
+    zIndex: "9999",
     top: "60px",
     left: "90px",
     padding: "30px",
@@ -122,7 +123,7 @@ class Dropdown extends Component {
           <ul style={styles.list}>
             <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/" style={styles.link}>
+                <Link to="/dashboard" style={styles.link}>
                   <List>
                     <img src={layout} alt="" width={"15px"} height={"15px"} />{" "}
                     개요
