@@ -29,7 +29,7 @@ const Groovy = () => {
     // }, []);
     
     useEffect(e=>{
-        if(location.pathname=="/Groovy/") {
+        if(location.pathname=="/Groovy/" || location.pathname=="/Groovy") {
             navi("/Groovy/dashboard");
         }
     }, []);
