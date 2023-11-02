@@ -6,27 +6,57 @@ div{
     border: 1px solid black;
 }
 
-.ml210{
-    margin-left: 250px;
+.guideDiv{
+    border: 1px solid black;
+    width: 1200px;
+    height: 100%;
+    margin-left: 100px;
 }
 
-.innerpad{
-    width: 1000px;
-    height: 90%;
-    margin: 10px;
+.left{
+    float: left;
+    width: 30%;
+    height: 100%;
+    padding: 10px;
+}
+
+.right{
+    float: left;
+    width: 70%;
+    height: 100%;
+    padding: 10px;
 }
 
 .worksection{
-    width: 300px;
-    height: 350px;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
+    height: 40%;
 }
 
 .signsection{
-    width: 300px;
-    height: 180px;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
+    height: 25%;
 }
 
 .calandarsection{
-    width: 300px;
-    height: 350px;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
+    height: 35%;
+}
+
+.projectsection{
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
+    height: 50%;
+}
+
+.contentsDiv{
+    width: 90%;
+    height: 80%;
+    margin: auto;
 }
