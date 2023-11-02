@@ -1,4 +1,4 @@
-import style from "./SlideBar";
+import style from "./SignSlide.module.css";
 import { Link } from "react-router-dom"
 
 const SignSlide = () => {
