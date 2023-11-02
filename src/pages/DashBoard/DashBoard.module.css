@@ -3,7 +3,7 @@
 }
 
 div{
-    border: 1px solid black;
+    border: 0px solid black;
 }
 
 .guideDiv{
@@ -56,6 +56,7 @@ div{
 }
 
 .contentsDiv{
+    border-left: 1px solid black;
     width: 90%;
     height: 80%;
     margin: auto;
