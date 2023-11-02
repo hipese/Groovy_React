@@ -17,9 +17,8 @@ div {
   height: 30%;
   width: 100%;
   font-weight: bold;
-
 }
 
 .applyButton {
-  margin-left: 10px; /* You can adjust the value to control the spacing */
+  margin-left: 10px;
 }
