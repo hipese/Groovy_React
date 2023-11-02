@@ -10,6 +10,7 @@ const Attendence = () => {
                         <div>김민아 과장</div>
                         <div>마케팅팀</div>
                     </div>
+                    
                     <div className={style.all}>
                         <div>총연차</div>
                         <div>15일</div>
