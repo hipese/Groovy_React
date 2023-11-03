@@ -24,7 +24,6 @@ const Org_Chart_DropDown = () => {
                 </button>
             </div>
 
-
             {isOpen &&
                 <div className={style.contents_div}>
                     <ul>
@@ -34,7 +33,6 @@ const Org_Chart_DropDown = () => {
                     </ul>
                 </div>
             }
-
 
         </div>
 
