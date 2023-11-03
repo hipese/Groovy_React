@@ -7,9 +7,38 @@ import { Button, ButtonGroup, Grid, IconButton } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
+import Clock from 'react-live-clock';
 
 
 const Worksection = () => {
+    const [working,setWorking] = React.useState(false);
+    const [workState,setWorkstate] = React.useState("");
+    const [today,setToday] = React.useState(new Date().toLocaleDateString());
+    const [checkInTime, setCheckIn] = React.useState("00:00:00");
+    const [checkOutTime, setCheckOut] = React.useState("00:00:00");
+    const [workname, setWorkname] = React.useState("");
+
+    const handleCheckIn = () => {
+        //axios해서 res로 정상 출근인정되면 setworiking으로 버튼 활성화 되도록.
+        setWorkstate("출근");
+        const now = new Date();
+        setCheckIn(now.toLocaleTimeString());
+        setWorking(true);
+    }
+
+    const handleCheckOut = () => {
+        //axios해서 res로 정상 퇴근인정되면 setworiking으로 버튼 비활성화 되도록.
+        setWorkstate("퇴근");
+        const now = new Date();
+        setCheckOut(now.toLocaleTimeString());
+        setWorking(false);
+    }
+
+    const handleWorkName = (e) => {
+        const workname = e.target.textContent;
+        setWorkname("- "+workname);
+    }
+    
     return(
         <div className={style.worksection}>
             <div className={`${style.padding15} ${style.height20}`}>
@@ -17,17 +46,17 @@ const Worksection = () => {
                     근무체크
                 </div>
                 <div className={`${style.right50}`}>
-                    근무상태
+                    {`${workState} ${workname}`}
                 </div>
             </div>
             <div className={style.workContents}>
                 <div className={style.padding10}>
                     <div className={style.dateDiv}>
                         <div className={`${style.today_date} ${style.left50}`} id='today_date'>
-                                11월 3일
+                            {today}
                         </div>
                         <div className={`${style.clock} ${style.right50}`} id='clock'>
-                            09:12
+                            <Clock format={'HH:mm:ss'} ticking={true} timezone={'Asia/Seoul'}/>
                         </div>
                     </div>
                 </div>
@@ -35,13 +64,13 @@ const Worksection = () => {
                     <div>
                         <Grid container rowSpacing={2}>
                             <Grid xs={6} className={style.center}>
-                                <IconButton aria-label="login" size="large">
+                                <IconButton aria-label="login" size="large" disabled={working} onClick={handleCheckIn}>
                                     <LoginIcon>
                                     </LoginIcon>    
                                 </IconButton>
                             </Grid>
                             <Grid xs={6} className={style.center}>
-                                <IconButton aria-label="login" size="large">
+                                <IconButton aria-label="login" size="large" disabled={!working} onClick={handleCheckOut}>
                                     <LogoutIcon/>
                                     
                                 </IconButton>
@@ -58,23 +87,23 @@ const Worksection = () => {
                             </Grid>
                             <Grid xs={6} className={style.center}>
                                 <div>
-                                    00:00:00
+                                    {checkInTime}
                                 </div>
                             </Grid>
                             <Grid xs={6} className={style.center}>
                                 <div>
-                                    00:00:00
+                                    {checkOutTime}
                                 </div>
                             </Grid>
                         </Grid>
                     </div>
                     <div>
                         <Grid className={`${style.center} ${style.paddingtop15}`}>
-                            <ButtonGroup aria-label="outlined button group">
-                                <Button>업무</Button>
-                                <Button>외출</Button>
-                                <Button>회의</Button>
-                                <Button>외근</Button>
+                            <ButtonGroup aria-label="outlined button group" disabled={!working}>
+                                <Button onClick={handleWorkName}>업무</Button>
+                                <Button onClick={handleWorkName}>외출</Button>
+                                <Button onClick={handleWorkName}>회의</Button>
+                                <Button onClick={handleWorkName}>외근</Button>
                             </ButtonGroup>                    
                         </Grid>
                         
@@ -151,7 +180,7 @@ const ProjectSection = () => {
 
 const NoticeSection = () => {
     return (
-        <div className={style.projectsection}>
+        <div className={style.noticesection}>
             <div className={`${style.padding10} ${style.borderbtm}`}>
                 <Grid container spacing={2}>
                     <Grid item xs={11} className={`${style.vcenter}`}>
