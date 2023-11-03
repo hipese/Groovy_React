@@ -88,6 +88,7 @@ div{
 }
 
 .padding15{
+    position: relative;
     padding: 15px;
 }
 .padding10{
@@ -137,10 +138,19 @@ div{
     align-items: center;
 }
 
+.vcenter{
+    display: flex;
+    align-items: center;
+}
+
 .width100{
     width: 100%;
 }
 
 .paddingtop15{
     padding-top: 15px;
+}
+
+.posRight15{
+    left: 15px;
 }

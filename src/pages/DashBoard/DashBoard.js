@@ -6,6 +6,7 @@ import style from './DashBoard.module.css';
 import { Button, ButtonGroup, Grid, IconButton } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AddIcon from '@mui/icons-material/Add';
 
 
 const Worksection = () => {
@@ -128,8 +129,20 @@ const Calandarsection = () => {
 const ProjectSection = () => {
     return (
         <div className={style.projectsection}>
-            <div className={style.padding15}>
-                프로젝트
+            <div className={`${style.padding10} ${style.borderbtm}`}>
+                <Grid container spacing={2}>
+                    <Grid item xs={11} className={`${style.vcenter}`}>
+                        프로젝트
+                    </Grid>
+                    <Grid item xs={1}>
+                        <IconButton aria-label="add">
+                            <AddIcon fontSize='small'/>
+                        </IconButton>
+                    </Grid>
+                </Grid>
+            </div>
+            <div>
+
             </div>
 
         </div>
@@ -139,8 +152,20 @@ const ProjectSection = () => {
 const NoticeSection = () => {
     return (
         <div className={style.projectsection}>
-            <div className={style.padding15}>
-                부서 내 소식
+            <div className={`${style.padding10} ${style.borderbtm}`}>
+                <Grid container spacing={2}>
+                    <Grid item xs={11} className={`${style.vcenter}`}>
+                        부서 내 소식
+                    </Grid>
+                    <Grid item xs={1}>
+                        <IconButton aria-label="add">
+                            <AddIcon fontSize='small'/>
+                        </IconButton>
+                    </Grid>
+                </Grid>
+            </div>
+            <div>
+                
             </div>
         </div>
     )
