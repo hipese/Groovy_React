@@ -99,11 +99,26 @@ const Sign_Detail = () => {
                                 <div>과장님 휴가좀 승인해주세요</div>
                             </div>
                             <div className={style.contents}>
-                                일이 너무 힘들어요
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br/>
                             </div>
                         </div>
-                        <div className="textEditor">
-                           
+                        <div className={style.fileList}>
+                           첨부파일 나올곳
                         </div>
                     </div>
                 </div>
