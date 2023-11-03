@@ -1,0 +1,9 @@
+.table{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(121, 162, 199);
+    margin: auto;
+}
+
+.table_header{height: 20%;}
+.table_input{background-color: aliceblue;}
