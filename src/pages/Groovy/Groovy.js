@@ -7,7 +7,6 @@ import Calendar from "../Calendar/Calendar";
 import Contact from "../Contact/Contact";
 import Email from "../Email/Email";
 import Message from "../Message/Message";
-import Sign_Main from "../Sign/components/Sign_Main/Sign_Main";
 import Survey from "../Survey/Survey";
 import ToDoList from "../ToDoList/ToDoList";
 import Navigator from "../Main/components/Navigator/Navigator";
@@ -15,7 +14,7 @@ import { Container } from "reactstrap";
 import SlideBar from "../Main/components/SlideBar/SlideBar/SlideBar";
 import { useContext, useEffect } from "react";
 import { LoginContext } from "../../App";
-import Sign_List from "../Sign/components/Sign_Main/Sign_List";
+import Sign_List from "../Sign/components/Sign_List/Sign_List";
 
 const Groovy = () => {
 
@@ -54,7 +53,7 @@ const Groovy = () => {
                     <Route path="dashboard/*" element={<DashBoard />} />
                     <Route path="email/*" element={<Email />} />
                     <Route path="message/*" element={<Message />} />
-                    <Route path="signlist/*" element={<Sign_Main />} />
+                    <Route path="signlist/*" element={<Sign_List />} />
                     <Route path="survey/*" element={<Survey />} />
                     <Route path="list/*" element={<ToDoList />} />
                 </Routes>

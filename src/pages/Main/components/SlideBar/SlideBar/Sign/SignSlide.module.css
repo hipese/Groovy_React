@@ -2,9 +2,9 @@
 .btn{
     text-align: center;
     height: 50px;
+    width: 160px;
     margin: 10px;
     border-radius: 10px;
-    width: 100%;
     border: none;
     background-color: rgb(130, 200, 255);
     color: white;
@@ -17,9 +17,9 @@
 .writeBtn{
     text-align: center;
     height: 60px;
+    width: 180px;
     margin: 10px;
     border-radius: 10px;
-    width: 100%;
     border: none;
     background-color: rgb(130, 200, 255);
     color: white;

@@ -30,9 +30,6 @@ const Sign_Main = () => {
                 <DocumentList />
             </div>
             
-            <div>
-                여긴 오냐?ㄴㄴㄴ
-            </div>
         </div>
     );
 }
