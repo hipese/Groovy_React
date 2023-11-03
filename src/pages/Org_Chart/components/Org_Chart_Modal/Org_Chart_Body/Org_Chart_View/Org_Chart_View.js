@@ -10,17 +10,11 @@ const Org_Chart_View = ({ selectedEmployee }) => {
         <div className={style.view_div}>
 
             <div className={style.view}>
-                {selectedEmployee && (
-                    <>
-                        <p>이름: {selectedEmployee.name}</p>
-                        <p>부서: {selectedEmployee.department}</p>
-                        {/* 여기에 더 많은 직원 정보를 표시할 수 있습니다. */}
-                    </>
-                )}
+                중간결제자 선택시 데이터 이동
             </div>
 
             <div className={style.view}>
-
+                최종결제자 선택시 데이터 이동
             </div>
 
         </div>
