@@ -9,15 +9,17 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
 import Clock from 'react-live-clock';
 import axios from 'axios';
+import { LoginContext } from '../../App';
 
 const Worksection = () => {
+    const {loginID} = React.useContext(LoginContext);
     const [working,setWorking] = React.useState(false);
     const [workState,setWorkstate] = React.useState("");
     const [today,setToday] = React.useState(new Date().toLocaleDateString());
     const [checkInTime, setCheckIn] = React.useState("00:00:00");
     const [checkOutTime, setCheckOut] = React.useState("00:00:00");
     const [workname, setWorkname] = React.useState("");
-
+    console.log(loginID);
     const handleCheckIn = async () => {
         //axios해서 res로 정상 출근인정되면 setworiking으로 버튼 활성화 되도록.
         setWorkstate("출근");
@@ -26,11 +28,11 @@ const Worksection = () => {
         setCheckIn(now);
 
         const checkInData = new FormData();
-        checkInData.append("id","test");
+        checkInData.append("id",loginID);
         checkInData.append("date",nowdate);
         checkInData.append("time",now);
         
-        await axios.post("/api/dash",checkInData).then(res =>{
+        await axios.post("/api/dash/checkin",checkInData).then(res =>{
             console.log(res.data);
             setWorking(true);
         });
@@ -38,9 +40,17 @@ const Worksection = () => {
 
     const handleCheckOut = () => {
         //axios해서 res로 정상 퇴근인정되면 setworiking으로 버튼 비활성화 되도록.
+        const checkInData = new FormData();
+        const now = new Date().toLocaleTimeString('en-US',{hour12:false});
+        const nowdate = new Date().toLocaleDateString('ko-KR',{hour12:false});
+
         setWorkstate("퇴근");
-        const now = new Date();
         setCheckOut(now.toLocaleTimeString());
+        
+        checkInData.append("id","test");
+        checkInData.append("date",nowdate);
+        checkInData.append("time",now);
+
         setWorkname("");
         setWorking(false);
     }
@@ -49,6 +59,18 @@ const Worksection = () => {
         const workname = e.target.textContent;
         setWorkname("- "+workname);
     }
+
+    React.useEffect(()=>{
+        {loginID ? axios.get(`/api/dash/workstart/${loginID}`).then(res=>{
+            console.log(res.data);
+        }).catch((e)=>{
+            console.log(e);
+        }) : axios.get(`/api/dash/workstart/test`).then(res=>{
+            console.log(res.data);
+        }).catch((e)=>{
+            console.log(e);
+        });}
+    },[]);
     
     return(
         <div className={style.worksection}>
