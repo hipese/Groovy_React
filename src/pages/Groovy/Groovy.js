@@ -15,6 +15,7 @@ import { Container } from "reactstrap";
 import SlideBar from "../Main/components/SlideBar/SlideBar/SlideBar";
 import { useContext, useEffect } from "react";
 import { LoginContext } from "../../App";
+import Sign_List from "../Sign/components/Sign_Main/Sign_List";
 
 const Groovy = () => {
 
@@ -53,7 +54,7 @@ const Groovy = () => {
                     <Route path="dashboard" element={<DashBoard />} />
                     <Route path="email" element={<Email />} />
                     <Route path="message" element={<Message />} />
-                    <Route path="sign" element={<Sign_Main />} />
+                    <Route path="signlist" element={<Sign_List />} />
                     <Route path="survey" element={<Survey />} />
                     <Route path="todolist" element={<ToDoList />} />
                 </Routes>
