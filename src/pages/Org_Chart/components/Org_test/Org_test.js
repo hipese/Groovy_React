@@ -1,3 +1,5 @@
+import React from 'react';
+
 
 const Org_test=()=>{
     return(
@@ -6,3 +8,5 @@ const Org_test=()=>{
         </div>
     );
 }
+
+export default Org_test;

@@ -11,14 +11,52 @@
   }
   
   .modal {
+    width: 1300px;
+    height: 600px;
     background: white;
     padding: 20px;
     border-radius: 5px;
     z-index: 1000;
   }
-  
+  .modal_head{height: 10%;}
+ 
+  .modal_body{
+    height: 70%;
+  }
+
+  .search_div{
+    float: left;
+    width: 50%;
+  }
+
+  .select_div{
+    float: left;
+    width: 25%;
+  }
+  .view_div{
+    float: left;
+    width: 25%;
+  }
+
+  .modal_footer{
+    height: 20%;
+    display: flex;
+    justify-content: end;
+    align-items:center
+  }
+
   .modal_close_button {
-    /* 스타일링 */
+    width: 120px;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 20px;
+    position: relative;
+    top: 30px;
+    z-index: 1;
+    margin: 10px;
   }
   
   /* 나머지 스타일 */
