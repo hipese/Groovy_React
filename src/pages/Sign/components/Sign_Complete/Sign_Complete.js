@@ -6,6 +6,8 @@ import Org_Chart from '../../../Org_Chart/components/Org_Chart_Modal/Org_Chart';
 
 const Sign_Complete = () => {
 
+
+    // 모달을 키거나 끌때 필요한 놈
     const [isModalOpen, setModalOpen] = useState(false);
 
     const toggleModal = () => {

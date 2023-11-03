@@ -1,5 +1,6 @@
 import React from "react";
 import style from "./Org_Chart.module.css"
+import Org_Chart_Table from "./Org_Chart_Body/Org_Chart_Table/Org_Chart_Table";
 
 const Org_Chart = ({ isOpen, close }) => {
 
@@ -20,7 +21,20 @@ const Org_Chart = ({ isOpen, close }) => {
 
                     <div className={style.modal_body}>
 
-                        <div className={style.search_div}>search</div>
+                        <div className={style.search_div}>
+
+                            <div className={style.dropbox}>
+                                dropbox
+                            </div>
+
+                            <div className={style.tablebox}>
+                                <Org_Chart_Table/>
+                            </div>
+
+
+                        </div>
+
+
 
                         <div className={style.select_div}>
 
