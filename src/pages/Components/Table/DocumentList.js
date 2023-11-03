@@ -1,5 +1,6 @@
 
 import style from "./DocumentList.module.css"
+import { Link } from 'react-router-dom';
 
 
 
@@ -19,7 +20,7 @@ const DocumentList = () => {
                 <div>2023</div>
                 <div>2023-10-24</div>
                 <div>품의서</div>
-                <div>안성진</div>
+                <div><Link to={`detail`}>안성진</Link></div>
                 <div>휴가 신청</div>
                 <div>파일 아이콘</div>
             </div>

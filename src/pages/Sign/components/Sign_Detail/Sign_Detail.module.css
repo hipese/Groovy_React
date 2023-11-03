@@ -1,0 +1,142 @@
+* {
+    box-sizing: border-box;
+}
+
+.header {
+    font-size: 30px;
+    margin: 15px;
+}
+
+.documents1 {
+    margin-bottom: 50px;
+    margin-left: 100px;
+}
+
+.top {
+    margin-bottom: 50px;
+}
+
+.leftContainer {
+    float: left;
+}
+
+.left {
+    width: 200px;
+    height: 50px;
+    background-color: whitesmoke;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: left;
+}
+
+.right {
+    width: 200px;
+    height: 50px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signwrite {
+    margin-left: 100px;
+    margin-bottom: 50px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px;
+    padding: 10px;
+    margin-left: 450px;
+    margin-top: 50px;
+}
+
+
+.rightContainer {
+    padding-left: 900px;
+}
+
+.writeHead div {
+    float: left;
+}
+
+.writeHead {
+    background-color: whitesmoke;
+}
+
+.writeRow {
+    clear: both;
+    /* 이전 요소들과의 float 해제 */
+    width: 1000px;
+    overflow: hidden;
+    /* 플로팅된 요소들을 감춤 */
+}
+
+.writeRow>div {
+    display: flex;
+    float: left;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    font-size: 20px;
+}
+
+.writeRow>div:nth-child(1) {
+    width: 15%;
+    height: 40px;
+}
+
+.writeRow>div:nth-child(2) {
+    width: 15%;
+    height: 40px;
+}
+
+.writeRow>div:nth-child(3) {
+    width: 10%;
+    height: 40px;
+}
+
+.writeRow>div:nth-child(4) {
+    width: 25%;
+    height: 40px;
+}
+
+.writeRow>div:nth-child(5) {
+    width: 15%;
+    height: 40px;
+}
+
+.writeRow>div:nth-child(6) {
+    width: 20%;
+    height: 40px;
+}
+
+.titleRow {
+    clear: both;
+    /* 이전 요소들과의 float 해제 */
+    width: 1000px;
+    overflow: hidden;
+    /* 플로팅된 요소들을 감춤 */
+}
+
+.titleRow>div {
+    display: flex;
+    float: left;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    font-size: 20px;
+}
+
+.titleRow>div:nth-child(1) {
+    width: 15%;
+    height: 40px;
+}
+
+.titleRow>div:nth-child(2) {
+    width: 85%;
+    height: 40px;
+}
