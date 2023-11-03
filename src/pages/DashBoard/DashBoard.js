@@ -10,6 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Clock from 'react-live-clock';
 import axios from 'axios';
 import { LoginContext } from '../../App';
+import { async } from 'q';
 
 const Worksection = () => {
     const {loginID} = React.useContext(LoginContext);
@@ -38,21 +39,24 @@ const Worksection = () => {
         });
     }
 
-    const handleCheckOut = () => {
+    const handleCheckOut = async () => {
         //axios해서 res로 정상 퇴근인정되면 setworiking으로 버튼 비활성화 되도록.
-        const checkInData = new FormData();
+        const checkOutData = new FormData();
         const now = new Date().toLocaleTimeString('en-US',{hour12:false});
         const nowdate = new Date().toLocaleDateString('ko-KR',{hour12:false});
 
         setWorkstate("퇴근");
-        setCheckOut(now.toLocaleTimeString());
+        setCheckOut(now);
         
-        checkInData.append("id","test");
-        checkInData.append("date",nowdate);
-        checkInData.append("time",now);
+        checkOutData.append("id",loginID);
+        checkOutData.append("date",nowdate);
+        checkOutData.append("time",now);
 
-        setWorkname("");
-        setWorking(false);
+        await axios.put("/api/dash/checkout",checkOutData).then(res =>{
+            console.log(res.data);
+            setWorking(false);
+            setWorkname("");
+        });
     }
 
     const handleWorkName = (e) => {
@@ -63,10 +67,31 @@ const Worksection = () => {
     React.useEffect(()=>{
         {loginID ? axios.get(`/api/dash/workstart/${loginID}`).then(res=>{
             console.log(res.data);
+            if(res.data){
+                setWorking(true);
+                setCheckIn(res.data.workstart);
+                setWorkstate("출근");
+                if(res.data.workend){
+                    console.log("퇴근했는데 왜 또 로그인해");
+                    setCheckOut(res.data.workend);
+                }
+            }else{
+                setWorking(false);
+            }
         }).catch((e)=>{
             console.log(e);
+            setWorking(false);
         }) : axios.get(`/api/dash/workstart/test`).then(res=>{
             console.log(res.data);
+            
+            if(res.data){
+                setWorking(true);
+                setCheckIn(res.data.workstart);
+                setWorkstate("출근");
+            }else{
+                setWorking(false);
+            }
+            
         }).catch((e)=>{
             console.log(e);
         });}
