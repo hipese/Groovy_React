@@ -1,0 +1,17 @@
+.fc-daygrid-day-top {
+    display: block !important;
+}
+
+tbody td[role="gridcell"] {
+    height: 50px !important;
+}
+
+.fc-time-grid .fc-slats td {
+    height: 50px !important;
+    /* Set your desired height */
+}
+
+.red-highlight .fc-daygrid-day-number {
+    background-color: red !important;
+    color: white !important;
+}
