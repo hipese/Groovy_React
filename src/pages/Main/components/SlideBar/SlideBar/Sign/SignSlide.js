@@ -6,35 +6,40 @@ const SignSlide = () => {
         <div className={style.SignSlide}>
 
             <div className={style.btndiv}>
-                <Link to="Sign_Wirte">
+                <Link to="write">
                     <button className={style.writeBtn}><strong>전자 결재 작성</strong></button>
                 </Link>
             </div>
 
 
             <div className={style.btndiv}>
-                <Link to="Sign_Main"></Link>
-                <button className={style.btn}>전자결제 홈</button>
+                <Link to="">
+                    <button className={style.btn}>전자결제 홈</button>
+                </Link>
             </div>
 
             <div className={style.btndiv}>
-                <Link to="Sign_Wirte"></Link>
-                <button className={style.btn}>새결제 진행</button>
+                <Link to="write">
+                    <button className={style.btn}>새결제 진행</button>
+                </Link>
             </div>
 
             <div className={style.btndiv}>
-                <Link to="Sign_Wait"></Link>
-                <button className={style.btn}>결제대기중</button>
+                <Link to="wait">
+                    <button className={style.btn}>결제대기중</button>
+                </Link>
             </div>
 
             <div className={style.btndiv}>
-                <Link to="Sign_Progress"></Link>
-                <button className={style.btn}>진행중문서</button>
+                <Link to="progress">
+                    <button className={style.btn}>진행중문서</button>
+                </Link>
             </div>
 
             <div className={style.btndiv}>
-                <Link to="Sign_Complete"></Link>
-                <button className={style.btn}>완료문서</button>
+                <Link to="complete">
+                    <button className={style.btn}>완료문서</button>
+                </Link>
             </div>
 
 

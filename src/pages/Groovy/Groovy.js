@@ -15,6 +15,7 @@ import { Container } from "reactstrap";
 import SlideBar from "../Main/components/SlideBar/SlideBar/SlideBar";
 import { useContext, useEffect } from "react";
 import { LoginContext } from "../../App";
+import Sign_List from "../Sign/components/Sign_Main/Sign_List";
 
 const Groovy = () => {
 
@@ -44,18 +45,18 @@ const Groovy = () => {
             </div>
             <div className="MainContainer">
                 <Routes>
-                    <Route path="dashboard" element={<DashBoard />} />
-                    <Route path="admin" element={<Admin />} />
-                    <Route path="attendence" element={<Attendence />} />
-                    <Route path="board" element={<Board />} />
-                    <Route path="calendar" element={<Calendar />} />
-                    <Route path="contact" element={<Contact />} />
-                    <Route path="dashboard" element={<DashBoard />} />
-                    <Route path="email" element={<Email />} />
-                    <Route path="message" element={<Message />} />
-                    <Route path="sign" element={<Sign_Main />} />
-                    <Route path="survey" element={<Survey />} />
-                    <Route path="todolist" element={<ToDoList />} />
+                    <Route path="dashboard/*" element={<DashBoard />} />
+                    <Route path="admin/*" element={<Admin />} />
+                    <Route path="attendence/*" element={<Attendence />} />
+                    <Route path="board/*" element={<Board />} />
+                    <Route path="calendar/*" element={<Calendar />} />
+                    <Route path="contact/*" element={<Contact />} />
+                    <Route path="dashboard/*" element={<DashBoard />} />
+                    <Route path="email/*" element={<Email />} />
+                    <Route path="message/*" element={<Message />} />
+                    <Route path="signlist/*" element={<Sign_Main />} />
+                    <Route path="survey/*" element={<Survey />} />
+                    <Route path="list/*" element={<ToDoList />} />
                 </Routes>
             </div>
         </div>
