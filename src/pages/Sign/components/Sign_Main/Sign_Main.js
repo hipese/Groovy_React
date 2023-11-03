@@ -15,6 +15,18 @@ const Sign_Main = () => {
                 <div className={style.text}>승인할 문서 11건이 있습니다.</div>
                 <DocumentList />
             </div>
+
+            <div className={style.documents}>
+                <div className={style.titleText}>결제 진행 문서</div>
+                <div className={style.text}>진행중 문서가 11건이 있습니다.</div>
+                <DocumentList />
+            </div>
+
+            <div className={style.documents}>
+                <div className={style.titleText}>완료 문서</div>
+                <div className={style.text}>완료된 문서가 11건이 있습니다.</div>
+                <DocumentList />
+            </div>
       
         </div>
     );
