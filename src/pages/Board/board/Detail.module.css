@@ -1,0 +1,30 @@
+.buttons button{
+    margin: 5px;
+    width: 70px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.buttons button:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.boardContainer{
+    margin-top: 30px;
+}
+
+hr {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+table{
+    margin: auto;
+    width: 90%;
+}
