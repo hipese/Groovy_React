@@ -44,7 +44,7 @@ const Org_Chart = ({ isOpen, close }) => {
                             </div>
 
                             <div className={style.tablebox}>
-                                <Org_Chart_Table onEmployeeSelect={handleEmployeeSelect}/>
+                                <Org_Chart_Table selectedEmployee={selectedEmployee} setSelectedEmployee={setSelectedEmployee}/>
                             </div>
 
 
