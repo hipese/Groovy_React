@@ -4,11 +4,10 @@ import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { setCookie } from "./Cookie";
+import { getCookie, removeCookie, setCookie } from "./Cookie";
 
 
 const Login = () => {
-
     const navi = useNavigate();
     const { loginID, setLoginID } = useContext(LoginContext);
     const [acc, setAcc] = useState({id:"", password:""})
@@ -18,37 +17,36 @@ const Login = () => {
         if(loginID != "") {
             navi("/Groovy/dashboard");
         }
-    },[])
-
-    useEffect((e) => {
-        console.log("useEffect Activated")
-        if(remID) {
-            setCookie("GroovyID", acc.id,{path:'/'})
-            console.log("Cookie has been set");
-        } else {
-            setCookie("GroovyID", "",{path:'/', maxAge:0})
-            console.log("Cookie has been eliminated");
+        if(getCookie("GroovyID") !== undefined) {
+            setAcc({id : getCookie("GroovyID"), password:""});
+            setRem(true);
         }
-            
-    },[remID, acc.id])
+    },[])
 
     const handleChange = (e) => {
         const {name, value} = e.target;
-        setAcc(prev => ({...prev, [name] : value}));
+        setAcc(prev => {
+            if(remID && name == "id") {
+                setCookie("GroovyID",value);
+            }
+            return {...prev,[name]:value};
+        });
+        
     }
 
-    const handleIdRemChange = (isChecked) => {
-        if(isChecked) {
-            setRem(true);
+    const handleIdRemChange = (e) => {
+        setRem(e.target.checked);
+        if(!e.target.checked) {
+            removeCookie("GroovyID");
         } else {
-            setRem(false);
+            setCookie("GroovyID", acc.id);
         }
-        console.log(isChecked)
     }
 
     const handleLogin = () => {
         axios.post("/auth/login", acc).then(resp => {
-            
+            setLoginID(resp.data);
+            navi("/Groovy/dashboard")
         }).catch( () => {
             alert("아이디와 비밀번호를 다시 확인해주십시오.")
         });
@@ -80,7 +78,7 @@ const Login = () => {
                         <Row>
                         <Col xs={2}></Col>
                             <Col xs={8} className={style.checkbox_idRem_container}>
-                                <Input type="checkbox" className={style.checkbox_idRem} onChange={handleIdRemChange}></Input><span className={style.idRem_notice}>아이디 기억하기</span>
+                                <Input type="checkbox" className={style.checkbox_idRem} onChange={handleIdRemChange} checked={remID}></Input><span className={style.idRem_notice}>아이디 기억하기</span>
                             </Col>
                         </Row>
                         <Row>
