@@ -6,9 +6,11 @@
     const CalendarWrite = () => {
         return (
             <div>
-                <button className={style.btn}>
-                    <strong>+</strong> 일정 추가
-                </button>
+                <div>
+                    <button className={style.btn}>
+                        <strong>+</strong> 일정 추가
+                        </button>
+                </div>
                 <div className={styles.Calendar}>
                      캘린더 들어갈 자리
                 </div>

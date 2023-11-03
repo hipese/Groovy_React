@@ -44,18 +44,18 @@ const Groovy = () => {
             </div>
             <div className="MainContainer">
                 <Routes>
-                    <Route path="dashboard" element={<DashBoard />} />
-                    <Route path="admin" element={<Admin />} />
-                    <Route path="attendence" element={<Attendence />} />
-                    <Route path="board" element={<Board />} />
-                    <Route path="calendar" element={<Calendar />} />
-                    <Route path="contact" element={<Contact />} />
-                    <Route path="dashboard" element={<DashBoard />} />
-                    <Route path="email" element={<Email />} />
-                    <Route path="message" element={<Message />} />
-                    <Route path="sign" element={<Sign_Main />} />
-                    <Route path="survey" element={<Survey />} />
-                    <Route path="todolist" element={<ToDoList />} />
+                    <Route path="dashboard/*" element={<DashBoard />} />
+                    <Route path="admin/*" element={<Admin />} />
+                    <Route path="attendence/*" element={<Attendence />} />
+                    <Route path="board/*" element={<Board />} />
+                    <Route path="calendar/*" element={<Calendar />} />
+                    <Route path="contact/*" element={<Contact />} />
+                    <Route path="dashboard/*" element={<DashBoard />} />
+                    <Route path="email/*" element={<Email />} />
+                    <Route path="message/*" element={<Message />} />
+                    <Route path="sign/*" element={<Sign_Main />} />
+                    <Route path="survey/*" element={<Survey />} />
+                    <Route path="list/*" element={<ToDoList />} />
                 </Routes>
             </div>
         </div>

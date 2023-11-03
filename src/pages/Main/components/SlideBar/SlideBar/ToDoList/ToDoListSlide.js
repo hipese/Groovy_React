@@ -43,19 +43,3 @@ const ToDoListSlide = () => {
 };
 
 export default ToDoListSlide;
-
-            // <Link to="ToDoListBoard">
-            //     <button className={style.btn}>
-            //         <strong>+</strong> 내 보드
-            //     </button>
-            // </Link>
-            // <Link to="ToDoListCalendar">
-            //     <button className={style.btn}>
-            //         <strong>+</strong> 캘린더
-            //     </button>
-            // </Link>
-            // <Link to="ToDoListTeam">
-            //     <button className={style.btn}>
-            //         <strong>+</strong> 팀 보드
-            //     </button>
-            // </Link>
