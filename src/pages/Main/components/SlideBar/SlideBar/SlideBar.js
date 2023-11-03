@@ -30,7 +30,7 @@ const SlideBar = () => {
         <Route path="/message/*" element={<MessageSlide />} />
         <Route path="/sign/*" element={<SignSlide />} />
         <Route path="/survey/*" element={<SurveySlide />} />
-        <Route path ="/list/*" element={<ToDoListSlide />} />
+        <Route path ="list/*" element={<ToDoListSlide />} />
       </Routes>
       </div>
   );
