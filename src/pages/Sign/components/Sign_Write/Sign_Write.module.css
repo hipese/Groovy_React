@@ -191,10 +191,8 @@ select {
 
 .titleRow {
     clear: both;
-    /* 이전 요소들과의 float 해제 */
     width: 1000px;
     overflow: hidden;
-    /* 플로팅된 요소들을 감춤 */
 }
 
 .titleRow>div {
