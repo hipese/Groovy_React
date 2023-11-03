@@ -24,7 +24,6 @@ const Org_Chart = ({ isOpen, close }) => {
         console.log("이거 가져오냐?"+selectedEmployee);
     };
 
-    
 
     return (
         <div>
@@ -47,7 +46,6 @@ const Org_Chart = ({ isOpen, close }) => {
                                 <Org_Chart_Table selectedEmployee={selectedEmployee} setSelectedEmployee={setSelectedEmployee}/>
                             </div>
 
-
                         </div>
 
 
@@ -69,6 +67,7 @@ const Org_Chart = ({ isOpen, close }) => {
                             <Org_Chart_View selectedEmployee={selectedEmployee}/>
 
                         </div>
+
                     </div>
 
                     <div className={style.modal_footer}>
