@@ -4,6 +4,47 @@
     background-color: rgb(121, 162, 199);
     margin: auto;
 }
+.btn{
+    width: 15%;
+    height: 100%;
+    border-radius: 5px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 20px;
+    top: 30px;
+}
+.table_header{
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+}
+    
+.table_input{
+    border: none;
+    background-color: aliceblue;
+    height: 100%;
+    width: 60%;
+    border-radius: 10px;
+    margin: 10px;
+}
 
-.table_header{height: 20%;}
-.table_input{background-color: aliceblue;}
+.table_body{
+    height: 90%;
+}
+.table_row{
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    height: 10%;
+    width: 100%;
+}
+.table_col{
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 25%;
+}
