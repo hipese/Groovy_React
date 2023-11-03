@@ -20,9 +20,32 @@ const Org_Chart = ({ isOpen, close }) => {
 
                     <div className={style.modal_body}>
 
-                        <div className="">search</div>
-                        <div className="">select</div>
-                        <div className="">veiw</div>
+                        <div className={style.search_div}>search</div>
+
+                        <div className={style.select_div}>
+
+                            <div className={style.select_btndiv}>
+                                <button className={style.modal_close_button}>중간결제자</button>
+                            </div>
+
+                            <div className={style.select_btndiv}>
+                                <button className={style.modal_close_button}>최종결제자</button>
+                            </div>
+
+                        </div>
+
+
+                        <div className={style.view_div}>
+
+                            <div className={style.view}>
+
+                            </div>
+
+                            <div className={style.view}>
+
+                            </div>
+
+                        </div>
                     </div>
 
                     <div className={style.modal_footer}>
