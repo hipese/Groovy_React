@@ -4,6 +4,7 @@ import Sign_Wait from "../Sign_Wait/Sign_Wait";
 import Sign_Complete from "../Sign_Complete/Sign_Complete";
 import Sign_Progress from "../Sign_Progress/Sign_Progress";
 import Sign_Write from "../Sign_Write/Sign_Write";
+import Sign_Detail from "../Sign_Detail/Sign_Detail";
 
 
 const SignM=()=>{
@@ -43,6 +44,7 @@ const Sign_List = () => {
       <Route path="/wait" element={<SignWa />} />
       <Route path="/progress" element={<SignP />} />
       <Route path="/complete" element={<SignC />} />
+      <Route path="/detail" element={<Sign_Detail />} />
     </Routes>
   );
 };
