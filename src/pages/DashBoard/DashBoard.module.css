@@ -1,3 +1,166 @@
-.ml210{
-    margin-left: 250px;
+*{
+    box-sizing: border-box;
+}
+
+div{
+    border: 0px solid black;
+}
+
+.guideDiv{
+    border: 1px solid black;
+    width: 1200px;
+    height: 800px;
+    margin-left: 100px;
+}
+
+.left{
+    float: left;
+    width: 30%;
+    height: 100%;
+    padding: 10px;
+}
+
+.right{
+    float: left;
+    width: 70%;
+    height: 100%;
+    padding: 10px;
+}
+
+.worksection{
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
+    height: 300px;
+    padding: 15px;
+    padding-top: 0px;
+}
+
+.signsection{
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-top: 15px;
+    width: 100%;
+    height: 160px;
+}
+
+.calandarsection{
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-top: 15px;
+    width: 100%;
+    height: 290px;
+}
+
+.projectsection{
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
+    height: 49%;
+}
+
+.noticesection{
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-top: 15px;
+    width: 100%;
+    height: 49%;
+}
+
+.workContents{
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
+    height: 80%;
+    margin: auto;
+}
+
+.signContents{
+    
+    width: 90%;
+    height: 60%;
+    margin: auto;
+}
+
+.signBtns>button{
+    width: 120px;
+}
+
+.contentsDiv{
+    border-left: 1px solid black;
+    width: 90%;
+    height: 80%;
+    margin: auto;
+}
+
+.borderbtm{
+    border-bottom: 1px solid grey;
+}
+
+.padding15{
+    position: relative;
+    padding: 15px;
+}
+.padding10{
+    padding: 10px;
+}
+
+.today_date{
+    font-size: 14px;
+}
+.clock{
+    font-size: 22px;
+}
+
+.float{
+    float: left;
+}
+
+.dateDiv{
+    width: 100%;
+    height: 30px;
+}
+
+.left50{
+    width: 50%;
+    height: 100%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.right50{
+    width: 50%;
+    height: 100%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.height20{
+    height: 20%;
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vcenter{
+    display: flex;
+    align-items: center;
+}
+
+.width100{
+    width: 100%;
+}
+
+.paddingtop15{
+    padding-top: 15px;
+}
+
+.posRight15{
+    left: 15px;
 }

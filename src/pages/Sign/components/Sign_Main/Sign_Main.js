@@ -3,7 +3,9 @@ import style from "./Sign_Main.module.css"
 import DocumentList from "../../../Components/Table/DocumentList";
 
 const Sign_Main = () => {
+
     return (
+        
         <div className={style.sign_container}>
             <div className={style.header}>
                 전자결제 홈
@@ -27,7 +29,7 @@ const Sign_Main = () => {
                 <div className={style.text}>완료된 문서가 11건이 있습니다.</div>
                 <DocumentList />
             </div>
-      
+            
         </div>
     );
 }

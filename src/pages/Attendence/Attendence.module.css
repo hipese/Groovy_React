@@ -6,57 +6,9 @@ div {
   border: 1px solid black;
 } */
 
-.Attendence {
-  height: 100%;
-  font-weight: bold;
-}
-
-.title {
-  position: relative;
-  top: 60px;
-  left: 60px;
-}
-
-.myVacation {
-  position: relative;
-  top: 80px;
-  left: 100px;
-  height: 60px;
-  width: 80%;
-  font-weight: bold;
-  background-color: whitesmoke;
-}
-
-.applyButton {
-  margin-left: 30px;
-}
-
-.vacationStatus div {
-  width: 25%;
-  height: 30px;
-  float: left;
-  text-align: center;
-}
-
-.vacationStatus div div{
-  width: 100%;
-  float: none;
-}
-
-.docTitle{
-  position: relative;
-  top: 120px;
-  left: 60px;
-}
-
-.acceptDoc{
-  position: relative;
-  top: 140px;
-  left: 100px;
-  height: 60px;
-  width: 80%;
-  font-weight: bold;
-  background-color: whitesmoke;
+.sign_container{
+    width: 1200px;
+    height: 100%;
 }
 
 
