@@ -5,6 +5,7 @@ import Sign_Complete from "./Sign_Complete";
 import Sign_Progress from "./Sign_Progress";
 import Sign_Write from "./Sign_Write";
 
+
 const SignM=()=>{
   return(
     <Sign_Main/>
@@ -12,7 +13,7 @@ const SignM=()=>{
 }
 const SignWrt=()=>{
   return(
-    <Sign_Write/>
+   <Sign_Write/>
   );
 }
 
@@ -38,10 +39,10 @@ const Sign_List = () => {
   return (
     <Routes>
       <Route path="/" element={<SignM/>} />
+      <Route path="/write" element={<SignWrt/>} />
       <Route path="/wait" element={<SignWa />} />
-      <Route path="/write" element={<Sign_Write/>} />
-      {/* <Route path="/progress" element={<SignP />} />
-      <Route path="/complete" element={<SignC />} /> */}
+      <Route path="/progress" element={<SignP />} />
+      <Route path="/complete" element={<SignC />} />
     </Routes>
   );
 };
