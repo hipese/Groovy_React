@@ -7,8 +7,7 @@ const Calendar = () => {
   return (
     <div className={style.CalendarContainer}>
       <h1>Calendar</h1>
-      <br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz<br />zzzz
-    </div>
+      </div>
   );
 };
 export default Calendar;
