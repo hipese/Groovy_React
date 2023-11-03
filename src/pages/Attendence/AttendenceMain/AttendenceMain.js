@@ -3,10 +3,11 @@ import style from "./AttendenceMain.module.css";
 
 const AttendenceMain = () => {
     return (
-        <><div className={style.header}>
-            근태관리 홈
-            <hr />
-        </div><div className={style.documents1}>
+        <div>
+            <div className={style.header}>
+                근태관리 홈
+                <hr />
+            </div><div className={style.documents1}>
                 <div className={style.titleText}>내 연차 내역</div>
                 <div className={style.vacationStatus}>
                     <div className={style.name}>
@@ -34,7 +35,9 @@ const AttendenceMain = () => {
                 <div className={style.titleText}>진행중인 문서</div>
                 <div className={style.text}>승인할 문서 11건이 있습니다.</div>
                 <DocumentList />
-            </div></>
+            </div>
+        </div>
+
     );
 }
 
