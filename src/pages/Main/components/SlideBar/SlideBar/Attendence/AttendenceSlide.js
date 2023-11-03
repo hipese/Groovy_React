@@ -21,9 +21,11 @@ const AttendenceSlide = () => {
             </div>
 
             <div className={style.btndiv}>
-                <button className={style.btn}>
-                    연차신청하기
-                </button>
+                <Link to="/Groovy/signlist/write">
+                    <button className={style.btn}>
+                        연차신청하기
+                    </button>
+                </Link>
             </div>
 
             <div className={style.btndiv}>
