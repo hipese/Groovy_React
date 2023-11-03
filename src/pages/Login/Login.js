@@ -12,16 +12,36 @@ const Login = () => {
     const { loginID, setLoginID } = useContext(LoginContext);
     const [acc, setAcc] = useState({id:"", password:""})
     const [remID, setRem] = useState(false);
+    const [isLoading, setLoading] = useState(false);
 
     useEffect((e)=>{
         if(loginID != "") {
             navi("/Groovy/dashboard");
         }
+        axios.get("/auth/isLogined").then(resp => {
+            if(resp.data != "") {
+                setLoginID(resp.data);
+                navi("/Groovy/dashboard");
+            }
+            
+        }).finally(() => {
+            setLoading(false);
+        })
         if(getCookie("GroovyID") !== undefined) {
             setAcc({id : getCookie("GroovyID"), password:""});
             setRem(true);
         }
     },[])
+
+    if(isLoading) {
+        return(
+            <Container>
+                <Row style={{marginTop : "30%"}}>
+                    <Col className="text-center" style={{fontWeight:1000, fontSize:"10em"}}>Loading...</Col>
+                </Row>
+            </Container>
+        )
+    }
 
     const handleChange = (e) => {
         const {name, value} = e.target;
