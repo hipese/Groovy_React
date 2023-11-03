@@ -7,7 +7,7 @@ const Attendence = () => {
     return (
         <div className={style.sign_container}>
             <Routes>
-                <Route path="/attendence/*" element={<AttendenceMain />} />
+                <Route path="/" element={<AttendenceMain />} />
             </Routes>
         </div>
     );
