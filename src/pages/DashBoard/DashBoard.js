@@ -8,7 +8,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
 import Clock from 'react-live-clock';
-
+import axios from 'axios';
 
 const Worksection = () => {
     const [working,setWorking] = React.useState(false);
@@ -18,12 +18,22 @@ const Worksection = () => {
     const [checkOutTime, setCheckOut] = React.useState("00:00:00");
     const [workname, setWorkname] = React.useState("");
 
-    const handleCheckIn = () => {
+    const handleCheckIn = async () => {
         //axios해서 res로 정상 출근인정되면 setworiking으로 버튼 활성화 되도록.
         setWorkstate("출근");
-        const now = new Date();
-        setCheckIn(now.toLocaleTimeString());
-        setWorking(true);
+        const now = new Date().toLocaleTimeString('en-US',{hour12:false});
+        const nowdate = new Date().toLocaleDateString('ko-KR',{hour12:false});
+        setCheckIn(now);
+
+        const checkInData = new FormData();
+        checkInData.append("id","test");
+        checkInData.append("date",nowdate);
+        checkInData.append("time",now);
+        
+        await axios.post("/api/dash",checkInData).then(res =>{
+            console.log(res.data);
+            setWorking(true);
+        });
     }
 
     const handleCheckOut = () => {
@@ -31,6 +41,7 @@ const Worksection = () => {
         setWorkstate("퇴근");
         const now = new Date();
         setCheckOut(now.toLocaleTimeString());
+        setWorkname("");
         setWorking(false);
     }
 
