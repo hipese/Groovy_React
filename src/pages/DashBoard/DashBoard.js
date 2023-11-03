@@ -8,36 +8,94 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
 import Clock from 'react-live-clock';
-
+import axios from 'axios';
+import { LoginContext } from '../../App';
+import { async } from 'q';
 
 const Worksection = () => {
+    const {loginID} = React.useContext(LoginContext);
     const [working,setWorking] = React.useState(false);
     const [workState,setWorkstate] = React.useState("");
     const [today,setToday] = React.useState(new Date().toLocaleDateString());
     const [checkInTime, setCheckIn] = React.useState("00:00:00");
     const [checkOutTime, setCheckOut] = React.useState("00:00:00");
     const [workname, setWorkname] = React.useState("");
-
-    const handleCheckIn = () => {
+    console.log(loginID);
+    const handleCheckIn = async () => {
         //axios해서 res로 정상 출근인정되면 setworiking으로 버튼 활성화 되도록.
         setWorkstate("출근");
-        const now = new Date();
-        setCheckIn(now.toLocaleTimeString());
-        setWorking(true);
+        const now = new Date().toLocaleTimeString('en-US',{hour12:false});
+        const nowdate = new Date().toLocaleDateString('ko-KR',{hour12:false});
+        setCheckIn(now);
+
+        const checkInData = new FormData();
+        checkInData.append("id",loginID);
+        checkInData.append("date",nowdate);
+        checkInData.append("time",now);
+        
+        await axios.post("/api/dash/checkin",checkInData).then(res =>{
+            console.log(res.data);
+            setWorking(true);
+        });
     }
 
-    const handleCheckOut = () => {
+    const handleCheckOut = async () => {
         //axios해서 res로 정상 퇴근인정되면 setworiking으로 버튼 비활성화 되도록.
+        const checkOutData = new FormData();
+        const now = new Date().toLocaleTimeString('en-US',{hour12:false});
+        const nowdate = new Date().toLocaleDateString('ko-KR',{hour12:false});
+
         setWorkstate("퇴근");
-        const now = new Date();
-        setCheckOut(now.toLocaleTimeString());
-        setWorking(false);
+        setCheckOut(now);
+        
+        checkOutData.append("id",loginID);
+        checkOutData.append("date",nowdate);
+        checkOutData.append("time",now);
+
+        await axios.put("/api/dash/checkout",checkOutData).then(res =>{
+            console.log(res.data);
+            setWorking(false);
+            setWorkname("");
+        });
     }
 
     const handleWorkName = (e) => {
         const workname = e.target.textContent;
         setWorkname("- "+workname);
     }
+
+    React.useEffect(()=>{
+        {loginID ? axios.get(`/api/dash/workstart/${loginID}`).then(res=>{
+            console.log(res.data);
+            if(res.data){
+                setWorking(true);
+                setCheckIn(res.data.workstart);
+                setWorkstate("출근");
+                if(res.data.workend){
+                    console.log("퇴근했는데 왜 또 로그인해");
+                    setCheckOut(res.data.workend);
+                }
+            }else{
+                setWorking(false);
+            }
+        }).catch((e)=>{
+            console.log(e);
+            setWorking(false);
+        }) : axios.get(`/api/dash/workstart/test`).then(res=>{
+            console.log(res.data);
+            
+            if(res.data){
+                setWorking(true);
+                setCheckIn(res.data.workstart);
+                setWorkstate("출근");
+            }else{
+                setWorking(false);
+            }
+            
+        }).catch((e)=>{
+            console.log(e);
+        });}
+    },[]);
     
     return(
         <div className={style.worksection}>
