@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import Sign_Main from "./Sign_Main";
-import Sign_Wait from "./Sign_Wait";
-import Sign_Complete from "./Sign_Complete";
-import Sign_Progress from "./Sign_Progress";
-import Sign_Write from "./Sign_Write";
+import Sign_Main from "../Sign_Main/Sign_Main";
+import Sign_Wait from "../Sign_Wait/Sign_Wait";
+import Sign_Complete from "../Sign_Complete/Sign_Complete";
+import Sign_Progress from "../Sign_Progress/Sign_Progress";
+import Sign_Write from "../Sign_Write/Sign_Write";
 
 
 const SignM=()=>{

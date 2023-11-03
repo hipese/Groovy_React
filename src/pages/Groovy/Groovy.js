@@ -14,7 +14,7 @@ import { Container } from "reactstrap";
 import SlideBar from "../Main/components/SlideBar/SlideBar/SlideBar";
 import { useContext, useEffect } from "react";
 import { LoginContext } from "../../App";
-import Sign_List from "../Sign/components/Sign_Main/Sign_List";
+import Sign_List from "../Sign/components/Sign_List/Sign_List";
 
 const Groovy = () => {
 
