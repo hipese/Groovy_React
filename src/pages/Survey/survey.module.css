@@ -1,0 +1,51 @@
+.surveyContents{
+    width: 1300px;
+    height: 760px;
+    border: 1px solid black;
+    margin-left: 50px;
+    margin-top: 50px;
+}
+
+.vcenter{
+    display: flex;
+    align-items: center;
+}
+
+.hcenter{
+    display: flex;
+    justify-content: center;
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.padding10{
+    padding: 10px;
+}
+.padding15{
+    padding: 15px;
+}
+
+.marginT50{
+    margin-top: 50px;
+}
+
+.marginB50{
+    margin-bottom: 50px;
+}
+
+.marginTB50{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.fs18{
+    font-size: 18px;
+}
+
+.bold{
+    font-weight: bold;
+}
