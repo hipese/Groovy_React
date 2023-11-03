@@ -23,6 +23,9 @@ const Login = () => {
                 setLoginID(resp.data);
                 navi("/Groovy/dashboard");
             }
+            
+        }).finally(() => {
+            setLoading(false);
         })
         if(getCookie("GroovyID") !== undefined) {
             setAcc({id : getCookie("GroovyID"), password:""});
