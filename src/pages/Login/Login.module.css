@@ -1,0 +1,63 @@
+* {box-sizing: border-box;}
+.loginBox_container {
+    margin-top: 10em;
+    padding-bottom: 50px;
+}
+
+.loginBox {
+    border-radius: 2px;
+    padding-top: 20px;
+    padding-bottom: 70px;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+}
+
+.logo_container {
+    color: #1380dd;
+    font-size: 5rem;
+    text-align: center;
+    font-weight: 1000;
+}
+
+.input_id_container {
+    margin-top: 50px;
+}
+
+.input_pw_container {
+    margin-top: 20px;
+}
+
+.input_id, .input_pw ,.checkbox_idRem {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.input_id:focus, .input_pw:focus, .checkbox_idRem:focus {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.checkbox_idRem_container {
+    margin-top: 5px;
+}
+
+.checkbox_idRem {
+    margin-right: 5px;
+}
+
+.idRem_notice {
+    color: #ababab;
+}
+
+.loginbtn_container {
+    margin-top: 3em;
+}
+
+.loginbtn {
+    width: 100%;
+    background-color: #1380dd;
+    border: 0px;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.loginbtn:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
