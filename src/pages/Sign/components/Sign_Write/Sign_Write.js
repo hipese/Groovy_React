@@ -2,6 +2,8 @@ import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import style from "./Sign_Write.module.css";
+import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const modules = {
     toolbar: [
@@ -19,11 +21,56 @@ const formats = [
 
 const Sign_Write = (props) => {
 
-    const [quillValue, setQuillValue] = useState("");
+    const navi = useNavigate();
+    const [contents, setContents] = useState("에디터 내용");
+    const [document_type, setDocument_type] = useState("품의서");
+    const [writer, setWriter] = useState("작성자 이름");
+    const [title, setTitle] = useState("");
+    const [recipient, setRecipient] = useState("결재자 이름");
+    const [accept, setAccept] = useState(0);
+    const [comment, setComment] = useState("");
+    const [formdata, setFormData] = useState({
+        files: []
+    });
 
-    const handleQuillChange = (content, delta, source, editor) => {
-        setQuillValue(editor.getContents());
+    const handleFileChange = (e) => {
+        setFormData(prev => ({ ...prev, files: [...e.target.files] }))
+    }
+    // const handleQuillChange = (content, delta, source, editor) => {
+    //     setQuillValue(editor.getContents());
+    // };
+    const handleTitleChange = (event) => {
+        setTitle(event.target.value);
     };
+
+    const handleSubmit = () => {
+        const submitFormData = new FormData();
+
+        // Append the additional data to the submitFormData object
+        submitFormData.append("document_type", document_type);
+        submitFormData.append("writer", writer);
+        submitFormData.append("contents", contents);
+        submitFormData.append("recipient", recipient);
+        submitFormData.append("accept", accept);
+        submitFormData.append("comment", comment);
+        submitFormData.append("title", title);
+
+        // Append files to the submitFormData
+        formdata.files.forEach(e => {
+            submitFormData.append("files", e);
+        });
+
+        // Send the data to the server
+        axios.post('/api/signlist', submitFormData)
+            .then(resp => {
+                navi("/Groovy/signlist");
+            })
+            .catch(e => {
+                console.error(e);
+            });
+    };
+
+
 
     return (
         <div>
@@ -90,17 +137,17 @@ const Sign_Write = (props) => {
                             <div>기안문서</div>
                             <div>자동설정</div>
                         </div>
-                        <div className={style.writeRow}>
-                            <div>증명서 종류</div>
-                            <div><input type="text" style={{ width: '100%', height: "100%" }} /></div>
-                            <div>용도</div>
-                            <div><input type="text" style={{ width: '100%' }} /></div>
-                            <div>제출처</div>
-                            <div><input type="text" style={{ width: '100%' }} /></div>
-                        </div>
                         <div className={style.titleRow}>
                             <div>제목</div>
-                            <div><input type="text" style={{ width: '100%' }} placeholder="제목입력" /></div>
+                            <div>
+                                <input
+                                    type="text"
+                                    style={{ width: '100%' }}
+                                    placeholder="제목입력"
+                                    value={title}
+                                    onChange={handleTitleChange}
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className="textEditor">
@@ -109,18 +156,18 @@ const Sign_Write = (props) => {
                             theme="snow"
                             modules={modules}
                             formats={formats}
-                            value={quillValue || ""}
-                            onChange={handleQuillChange}
+                            // value={quillValue || ""}
+                            // onChange={handleQuillChange}
                         />
                     </div>
                 </div>
                 <div className={style.fileRow}>
                     <div>파일첨부</div>
-                    <div><input type="file"></input></div>
+                    <div><input type="file" onChange={handleFileChange} multiple></input></div>
                 </div>
                 <div className={style.buttons}>
-                    <button className={style.apply}>신청</button>
-                    <button className={style.cancel}>취소</button>
+                    <button className={style.apply} onClick={handleSubmit}>신청</button>
+                    <Link to="/Groovy/signlist"><button className={style.cancel}>취소</button></Link>
                 </div>
 
             </div>
