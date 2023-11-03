@@ -203,7 +203,7 @@ class Dropdown extends Component {
             </li>
             <li style={styles.item} onClick={this.toggleState}>
               <Item>
-                <Link to="/Groovy/sign" style={styles.link}>
+                <Link to="/Groovy/signlist" style={styles.link}>
                   <List>
                     <img src={approval} alt="" width={"15px"} height={"15px"} />{" "}
                     전자결재
