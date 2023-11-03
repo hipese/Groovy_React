@@ -12,7 +12,7 @@ const Login = () => {
     const { loginID, setLoginID } = useContext(LoginContext);
     const [acc, setAcc] = useState({id:"", password:""})
     const [remID, setRem] = useState(false);
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(false);
 
     useEffect((e)=>{
         if(loginID != "") {
