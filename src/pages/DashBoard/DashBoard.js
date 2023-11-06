@@ -73,7 +73,7 @@ const Worksection = () => {
                 setWorkstate("출근");
                 if(res.data.workend){
                     console.log("퇴근했는데 왜 또 로그인해");
-                    setCheckOut(res.data.workend);
+                    setCheckOut(new Date());
                 }
             }else{
                 setWorking(false);
