@@ -47,6 +47,7 @@ const Sign_Write = (props) => {
 
         // Append the additional data to the submitFormData object
         submitFormData.append("document_type", document_type);
+        
         submitFormData.append("contents", contents);
         submitFormData.append("recipient", recipient);
         submitFormData.append("accept", accept);
