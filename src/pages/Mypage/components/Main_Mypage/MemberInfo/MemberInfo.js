@@ -2,6 +2,22 @@ import { useEffect, useState } from "react"
 import style from "./MemberInfo.module.css"
 import img from "./assets/쥐돌이.png"
 import axios from "axios";
+import Avatar from "@mui/material/Avatar";
+import { styled } from "@mui/material/styles";
+
+const StyledAvatar = styled(Avatar)({
+    width: "100%",
+    height: "100%",
+    border: "1px solid #000000",
+    "&:hover": {
+        opacity: "0.8",
+        cursor: "pointer",
+    },
+});
+const ProfileContainer = styled("div")({
+    width: "75px",
+    height: "75px",
+});
 
 
 const MemberInfo = () => {
@@ -12,7 +28,7 @@ const MemberInfo = () => {
 
     // 수정시 데이터를 임시로 저장하는 변수
     const [backUpMember, setBackUpMember] = useState({});
-    
+
 
     useEffect(() => {
         axios.get("/api/member").then(resp => {
@@ -25,9 +41,9 @@ const MemberInfo = () => {
     const handleUpdate = () => {
 
     }
-    
+
     // 수정 변경 취소시 데이터를 되돌리는 코드
-    const handCancel=()=>{
+    const handCancel = () => {
 
         setMember(backUpMember);
 
@@ -43,17 +59,18 @@ const MemberInfo = () => {
                 <div className={style.infoHeader}>
 
                     <div className={style.imagebox}>
-                        <img src={img} alt="" /> 
-                    {/* {member.profile_image}  */}
+                        <ProfileContainer>
+                            <StyledAvatar src={img} alt="profile" />
+                        </ProfileContainer>
                     </div>
 
                     <div className={style.contentsbox}>
 
-                        <div>
+                        <div className={style.name}>
                             {member.name}
                         </div>
 
-                        <div>
+                        <div className={style.email}>
                             {member.email}
                         </div>
 
