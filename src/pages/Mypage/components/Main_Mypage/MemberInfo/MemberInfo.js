@@ -17,7 +17,7 @@ const MemberInfo = () => {
                 <div className={style.infoHeader}>
 
                     <div className={style.imagebox}>
-                        <img src={img} alt="" />
+                        {/* <img src={img} alt="" /> */}
                         이미지 넣어라
                     </div>
 
