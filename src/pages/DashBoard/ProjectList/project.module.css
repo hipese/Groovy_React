@@ -1,0 +1,52 @@
+.list{
+    width: 1000px;
+    margin: auto;
+}
+
+/* ProjectList */
+
+
+/* ProjectList */
+
+
+/* ProjectContent */
+.progsection{
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.todosection{
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.membersection{
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+/* ProjectContent */
+
+
+
+/* ProjectCreate */
+
+/* ProjectCreate */
+
+
+
+
+
+
+
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vcenter{
+    display: flex;
+    align-items: center;
+}

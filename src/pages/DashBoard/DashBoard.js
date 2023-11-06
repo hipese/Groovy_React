@@ -11,6 +11,9 @@ import Clock from 'react-live-clock';
 import axios from 'axios';
 import { LoginContext } from '../../App';
 import { async } from 'q';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import ProjectList from './ProjectList/ProjectList';
+import DeptNotice from './DeptNotice/DeptNotice';
 
 const Worksection = () => {
     const {loginID} = React.useContext(LoginContext);
@@ -73,7 +76,7 @@ const Worksection = () => {
                 setWorkstate("출근");
                 if(res.data.workend){
                     console.log("퇴근했는데 왜 또 로그인해");
-                    setCheckOut(new Date());
+                    setCheckOut(res.data.workend);
                 }
             }else{
                 setWorking(false);
@@ -222,9 +225,10 @@ const ProjectSection = () => {
                         프로젝트
                     </Grid>
                     <Grid item xs={1}>
+                        <Link to='project'>
                         <IconButton aria-label="add">
                             <AddIcon fontSize='small'/>
-                        </IconButton>
+                        </IconButton></Link>
                     </Grid>
                 </Grid>
             </div>
@@ -245,9 +249,10 @@ const NoticeSection = () => {
                         부서 내 소식
                     </Grid>
                     <Grid item xs={1}>
+                    <Link to='notice'>
                         <IconButton aria-label="add">
                             <AddIcon fontSize='small'/>
-                        </IconButton>
+                        </IconButton></Link>
                     </Grid>
                 </Grid>
             </div>
@@ -258,7 +263,7 @@ const NoticeSection = () => {
     )
 }
 
-const DashBoard=()=>{
+const DashPageOne = () => {
     return(
         <div className={style.guideDiv}>
             <div className={style.left}>
@@ -271,8 +276,16 @@ const DashBoard=()=>{
                 <NoticeSection/>
             </div>
         </div>
-        
-        
+    )
+}
+
+const DashBoard=()=>{
+    return(
+        <Routes>
+            <Route path='/' element={<DashPageOne/>}></Route>
+            <Route path='project/*' element={<ProjectList/>}></Route>
+            <Route path='notice' element={<DeptNotice/>}></Route>
+        </Routes>        
     )
 }
 
