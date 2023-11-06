@@ -1,8 +1,11 @@
+import style from "./Main_Mypage.module.css"
+import MemberInfo from "./MemberInfo/MemberInfo";
+
 
 const Mypage=()=>{
     return(
-        <div>
-            mypage 작성하세요
+        <div className={style.container}>
+            <MemberInfo/>
         </div>
     );
 }

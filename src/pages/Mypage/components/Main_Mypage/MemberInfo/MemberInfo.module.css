@@ -1,7 +1,9 @@
 .container{
-    background-color: antiquewhite;
+    width: 100%;
 }
+
 
 .memberInfo{
     border-radius: 5px;
+    border: 1px solid black;
 }
