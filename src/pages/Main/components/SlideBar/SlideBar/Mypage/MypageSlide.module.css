@@ -1,0 +1,40 @@
+
+.btn{
+    text-align: center;
+    height: 50px;
+    width: 160px;
+    margin: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    top: 30px;
+    z-index: 1;
+}
+
+.writeBtn{
+    text-align: center;
+    height: 60px;
+    width: 180px;
+    margin: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 20px;
+    position: relative;
+    top: 30px;
+    z-index: 1;
+}
+
+.btndiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.SignSlide{
+    padding: 10px;
+   
+}

@@ -3,7 +3,9 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import style from "./Sign_Write.module.css";
 import { Link, useNavigate } from "react-router-dom";
+import Org_Chart from '../../../Org_Chart/components/Org_Chart_Modal/Org_Chart';
 import axios from 'axios';
+
 
 const modules = {
     toolbar: [
@@ -21,10 +23,17 @@ const formats = [
 
 const Sign_Write = (props) => {
 
+    // 모달을 키거나 끌때 필요한 놈
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    const toggleModal = () => {
+        setModalOpen(!isModalOpen);
+    };
+
+
     const navi = useNavigate();
     const [contents, setContents] = useState("에디터 내용");
     const [document_type, setDocument_type] = useState("품의서");
-    const [writer, setWriter] = useState("작성자 이름");
     const [title, setTitle] = useState("");
     const [recipient, setRecipient] = useState("결재자 이름");
     const [accept, setAccept] = useState(0);
@@ -48,7 +57,7 @@ const Sign_Write = (props) => {
 
         // Append the additional data to the submitFormData object
         submitFormData.append("document_type", document_type);
-        submitFormData.append("writer", writer);
+
         submitFormData.append("contents", contents);
         submitFormData.append("recipient", recipient);
         submitFormData.append("accept", accept);
@@ -100,7 +109,10 @@ const Sign_Write = (props) => {
                     </div>
                 </div>
                 <div className={style.signline}>
-                    <div className={style.titleText}>결제선 지정 <button>조직도 검색</button></div>
+                    <div className={style.titleText}>결제선 지정
+                        <button onClick={toggleModal}>조직도 검색</button>
+                        <Org_Chart isOpen={isModalOpen} close={toggleModal} />
+                    </div>
                     <div className={style.table}>
                         <div className={style.tableBox}>
                             <div className={`${style.tableRow} ${style.tableHead}`}>
@@ -156,8 +168,8 @@ const Sign_Write = (props) => {
                             theme="snow"
                             modules={modules}
                             formats={formats}
-                            // value={quillValue || ""}
-                            // onChange={handleQuillChange}
+                        // value={quillValue || ""}
+                        // onChange={handleQuillChange}
                         />
                     </div>
                 </div>

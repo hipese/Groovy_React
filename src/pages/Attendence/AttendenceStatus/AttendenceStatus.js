@@ -1,6 +1,54 @@
+import axios from "axios";
 import style from "./AttendenceStatus.module.css";
+import { useEffect, useState } from "react";
 
 const AttendenceStatus = () => {
+
+    const [attendence, setAttendence] = useState([]);
+
+    useEffect(() => {
+        axios.get("/api/attend").then(resp => {
+            // 데이터를 가져온 후 시간 및 날짜 분리 처리
+            const processedData = resp.data.map(item => {
+                // 출근 및 퇴근 시간을 JavaScript Date 객체로 변환
+                const workstartDate = new Date(item.workstart);
+                const workendDate = new Date(item.workend);
+
+                // 날짜 및 시간 형식 지정
+                const dateFormatOptions = {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                };
+                const timeFormatOptions = {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                };
+
+                // 각각의 필드에 적용
+                const workStartDateString = workstartDate.toLocaleDateString(undefined, dateFormatOptions);
+                const workStartTimeString = workstartDate.toLocaleTimeString(undefined, timeFormatOptions);
+                const workEndDateString = workendDate.toLocaleDateString(undefined, dateFormatOptions);
+                const workEndTimeString = workendDate.toLocaleTimeString(undefined, timeFormatOptions);
+                const totalWorkTimeInMinutes = (workendDate - workstartDate) / (1000 * 60); // 분 단위로 변환
+                const totalWorkHours = Math.floor(totalWorkTimeInMinutes / 60);
+                const totalWorkMinutes = totalWorkTimeInMinutes % 60;
+                return {
+                    id: item.id,
+                    workStartDate: workStartDateString,
+                    workStartTime: workStartTimeString,
+                    workEndDate: workEndDateString,
+                    workEndTime: workEndTimeString,
+                    totalWorkHours: totalWorkHours,
+                    totalWorkMinutes: totalWorkMinutes
+                };
+            });
+
+            setAttendence(processedData);
+        });
+    }, []);
+
     return (
         <div>
             <div>
@@ -17,30 +65,17 @@ const AttendenceStatus = () => {
                             <div>총근무시간</div>
                         </div>
 
-                        <div className={style.tableRow}>
-                            <div>2023-10-27</div>
-                            <div>08:50</div>
-                            <div>17:50</div>
-                            <div>8</div>
-                        </div>
-                        <div className={style.tableRow}>
-                            <div>2023-10-26</div>
-                            <div>08:50</div>
-                            <div>17:50</div>
-                            <div>8</div>
-                        </div>
-                        <div className={style.tableRow}>
-                            <div>2023-10-25</div>
-                            <div>08:50</div>
-                            <div>17:50</div>
-                            <div>8</div>
-                        </div>
-                        <div className={style.tableRow}>
-                            <div>2023-10-24</div>
-                            <div>08:50</div>
-                            <div>17:50</div>
-                            <div>8</div>
-                        </div>
+                        {attendence.map((e, i) => {
+                            return(
+                            <div className={style.tableRow} key={i}>
+                                <div>{e.workStartDate}</div>
+                                <div>{e.workStartTime}</div>
+                                <div>{e.workEndTime}</div>
+                                <div>{e.totalWorkHours}시간 {e.totalWorkMinutes.toFixed(0)}분</div>
+                            </div>
+                            );
+                        })}
+
                     </div>
                 </div>
             </div>
