@@ -2,8 +2,37 @@
     width: 100%;
 }
 
-
 .memberInfo{
+    width: 100%;
+    height: 200px;
     border-radius: 5px;
     border: 1px solid black;
+    margin-top: 50px;
+   
+}
+
+.infoHeader{
+    width: 100%;
+    height: 40%;
+}
+
+.imagebox{
+    float: left;
+    width: 20%;
+}
+
+.contentsbox{
+    float: left;
+    width: 80%;
+}
+.contentsdiv{
+    height: 20%;
+}
+.textdiv{float: left;width: 80%;}
+.btndiv{
+    float: left;
+    width: 10%; 
+    display: flex;
+    justify-content: end;
+    justify-items: end;
 }
