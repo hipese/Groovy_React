@@ -4,6 +4,8 @@ import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import img from "../assets/쥐돌이.png";
+import { Link } from 'react-router-dom';
+
 
 // 뱃지의 스타일을 지정
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -68,7 +70,9 @@ function BadgeAvatars() {
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           variant="dot"
         >
-          <StyledAvatar src={img} alt="profile" />
+          <Link to="mypagelist">
+            <StyledAvatar src={img} alt="profile" />
+          </Link>
         </StyledBadge>
       </ProfileContainer>
     </Stack>

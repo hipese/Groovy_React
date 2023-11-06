@@ -15,6 +15,7 @@ import SlideBar from "../Main/components/SlideBar/SlideBar/SlideBar";
 import { useContext, useEffect } from "react";
 import { LoginContext } from "../../App";
 import Sign_List from "../Sign/components/Sign_List/Sign_List";
+import Mypagelist from "../Mypage/components/Mypagelist";
 
 const Groovy = () => {
 
@@ -53,6 +54,7 @@ const Groovy = () => {
                     <Route path="dashboard/*" element={<DashBoard />} />
                     <Route path="email/*" element={<Email />} />
                     <Route path="message/*" element={<Message />} />
+                    <Route path="mypagelist/*" element={<Mypagelist />} />
                     <Route path="signlist/*" element={<Sign_List />} />
                     <Route path="survey/*" element={<Survey />} />
                     <Route path="list/*" element={<ToDoList />} />
