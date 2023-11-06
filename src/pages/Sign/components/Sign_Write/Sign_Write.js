@@ -24,7 +24,6 @@ const Sign_Write = (props) => {
     const navi = useNavigate();
     const [contents, setContents] = useState("에디터 내용");
     const [document_type, setDocument_type] = useState("품의서");
-    const [writer, setWriter] = useState("작성자 이름");
     const [title, setTitle] = useState("");
     const [recipient, setRecipient] = useState("결재자 이름");
     const [accept, setAccept] = useState(0);
@@ -48,7 +47,6 @@ const Sign_Write = (props) => {
 
         // Append the additional data to the submitFormData object
         submitFormData.append("document_type", document_type);
-        submitFormData.append("writer", writer);
         submitFormData.append("contents", contents);
         submitFormData.append("recipient", recipient);
         submitFormData.append("accept", accept);
