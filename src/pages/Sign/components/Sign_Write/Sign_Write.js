@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import style from "./Sign_Write.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { LoginContext } from "../../../../App";
 
 const modules = {
     toolbar: [
@@ -20,6 +21,8 @@ const formats = [
 ];
 
 const Sign_Write = (props) => {
+
+    const { loginID } = useContext(LoginContext);
 
     const navi = useNavigate();
     const [contents, setContents] = useState("에디터 내용");
@@ -93,7 +96,7 @@ const Sign_Write = (props) => {
                             기안작성자
                         </div>
                         <div className={style.name}>
-                            누군가의 이름
+                            {`${loginID}`}
                         </div>
                     </div>
                 </div>
@@ -154,8 +157,8 @@ const Sign_Write = (props) => {
                             theme="snow"
                             modules={modules}
                             formats={formats}
-                            // value={quillValue || ""}
-                            // onChange={handleQuillChange}
+                        // value={quillValue || ""}
+                        // onChange={handleQuillChange}
                         />
                     </div>
                 </div>
