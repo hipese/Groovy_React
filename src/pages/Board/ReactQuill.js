@@ -30,10 +30,6 @@ function Reactquill({ id, value, setValue, isDisabled }) {
     'background',
   ];
 
-  const editorStyle = {
-    minHeight: '300px', // Add min-height here
-  };
-
   return (
     <ReactQuill
       id={id}
@@ -42,8 +38,8 @@ function Reactquill({ id, value, setValue, isDisabled }) {
       modules={modules}
       formats={formats}
       value={value || ''}
-      onChange={(content, delta, source, editor) => setValue(content)}
-      style={{ width: '100%', height: '100%', ...editorStyle }}
+      onChange={(contents) => setValue(contents)}
+      style={{ height: "300px", width: "100%"}}
       readOnly={isDisabled}
     />
   );
