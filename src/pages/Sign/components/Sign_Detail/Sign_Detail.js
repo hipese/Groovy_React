@@ -1,7 +1,18 @@
-import ReactQuill from "react-quill";
+import { useEffect, useState } from "react";
 import style from "./Sign_Detail.module.css";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const Sign_Detail = () => {
+    const { seq } = useParams();
+    const [sign_list, setSign_list] = useState({ seq: seq, writer: "", document_type: "", recipient: "", title: "", contents: "", accept: "", write_date: "", comment: "" });
+
+    useEffect(e => {
+        axios.get(`/api/signlist/${seq}`).then(resp => {
+            setSign_list(resp.data);
+            console.log(resp.data);
+        });
+    }, []);
 
     return (
         <div>
@@ -17,7 +28,7 @@ const Sign_Detail = () => {
                                 문서종류
                             </div>
                             <div className={style.right}>
-                                휴가신청서
+                                {`${sign_list.document_type}`}
                             </div>
                         </div>
                         <div className={style.docWriter}>
@@ -25,7 +36,7 @@ const Sign_Detail = () => {
                                 기안자
                             </div>
                             <div className={style.right}>
-                                안성진
+                            {`${sign_list.writer}`}
                             </div>
                         </div> <div className={style.docDepartment}>
                             <div className={style.left}>
@@ -96,29 +107,29 @@ const Sign_Detail = () => {
                             </div>
                             <div className={style.titleRow}>
                                 <div>제목</div>
-                                <div>과장님 휴가좀 승인해주세요</div>
+                                <div>{`${sign_list.title}`}</div>
                             </div>
                             <div className={style.contents}>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
-                                일이 너무 힘들어요<br/>
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
+                                일이 너무 힘들어요<br />
                             </div>
                         </div>
                         <div className={style.fileList}>
-                           첨부파일 나올곳
+                            첨부파일 나올곳
                         </div>
                     </div>
                 </div>
