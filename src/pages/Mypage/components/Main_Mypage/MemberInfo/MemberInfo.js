@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
 import style from "./MemberInfo.module.css"
-import img from "./assets/쥐돌이.png"
 import axios from "axios";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
 import { Modal } from "@mui/material";
 import ImageChange from "./ImageChange/ImageChange";
+
+
+//C:\ReactWorkSpace\groovy\src\assets
 
 const StyledAvatar = styled(Avatar)({
     width: "100%",
@@ -22,14 +24,15 @@ const ProfileContainer = styled("div")({
 });
 
 
-const MemberInfo = () => {
 
-    const [previewSrc, setPreviewSrc] = useState(null);//이미지 변수
+const MemberInfo = () => {    
+   
     
     const [openModal, setOpenModal] = useState(false); // 모달 상태
 
     // 모달을 열고 닫는 함수들
     const handleOpenModal = () => {
+        console.log(`/assets/${member.profile_image}`);
         console.log("Opening modal");
         setOpenModal(true);
     };
@@ -70,6 +73,11 @@ const MemberInfo = () => {
 
     return (
         <div className={style.contanier}>
+            <div>
+                ssss
+            <img src={`/assets/${member.profile_image}`} alt="" />
+            </div>
+           
             <div className={style.memberInfo}>
 
 
@@ -79,15 +87,15 @@ const MemberInfo = () => {
 
                         {/* profile_image가 null이면 기본으로 설정된 이미지를 아니면 profile이미지로 설정한다. */}
                         {member.profile_image ? <ProfileContainer>
-                            <StyledAvatar src={img} alt="profile" onClick={handleOpenModal} />
+                            <StyledAvatar src={`/assets/이사.png`} alt="profile" onClick={handleOpenModal} />
                         </ProfileContainer> : <ProfileContainer>
-                            <StyledAvatar src={img} alt="profile" onClick={handleOpenModal} />
+                            <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" onClick={handleOpenModal} />
                         </ProfileContainer>}
 
                         <Modal
                             open={openModal} // 모달의 열림 상태를 관리하는 open 속성
                             onClose={handleCloseModal} // 모달을 닫는 함수를 지정
-                        ><ImageChange src={img} onClose={handleCloseModal} /></Modal>
+                        ><ImageChange src={`/assets/${member.profile_image}`} onClose={handleCloseModal} /></Modal>
                     </div>
 
                     <div className={style.contentsbox}>

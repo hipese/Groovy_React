@@ -5,13 +5,13 @@ import style from "./BtnDiv.module.css"
 
 const BtnDiv = ({ cfile, onClose }) => {
 
-    console.log(cfile);
+    
     const handleImageChange = () => {
-
+        console.log(cfile);
         const formData = new FormData();
         formData.append("cfile", cfile);
 
-        axios.post("/api/member/", formData, {
+        axios.post("/api/member", formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

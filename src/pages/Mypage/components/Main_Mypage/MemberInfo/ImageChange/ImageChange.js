@@ -24,6 +24,7 @@ const ImageChange = ({ src, onClose }) => {
     const [previewSrc, setPreviewSrc] = useState(null);// 미리보기를 위한 변수
     const [fileName, setFileName] = useState(""); // 파일 이름을 위한 상태
 
+    const [cfile, setCfile] = useState(null); // 파일 이름을 위한 상태
 
     //파일 입력에 대한 참조 변수
     const fileInputRef = useRef();
@@ -34,10 +35,9 @@ const ImageChange = ({ src, onClose }) => {
             const file = e.target.files[0];
 
             if (file.type.match("image.*")) {
-
                 //파일의 이름값을 저장
-                setFileName(file.name);
-
+                setCfile(file);
+            
                 // FileReader를 사용하여 파일을 읽습니다.
                 const reader = new FileReader();
                 reader.onload = (loadEvent) => {
@@ -87,7 +87,7 @@ const ImageChange = ({ src, onClose }) => {
             </div>
 
             <div className={styles.buttonDiv}>
-                <BtnDiv fileName={fileName} onClose={onClose} />
+                <BtnDiv cfile={cfile} onClose={onClose} />
             </div>
 
         </div>
