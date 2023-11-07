@@ -1,16 +1,16 @@
 import { Col, Container, Input, Row } from "reactstrap";
-import style from "./Contact.module.css";
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import StarIcon from '@mui/icons-material/Star';
+import style from "./Contact.module.css"
 import { useEffect, useState } from "react";
 import axios from "axios";
+import StarIcon from '@mui/icons-material/Star';
 
-let Contact = () => {
+const Contact_Favorite = () => {
 
     const [contacts, setContacts] = useState([]);
     const [favorite, setFavorite] = useState([]);
+
     useEffect(() => {
-        axios.get("/api/contact/selectAll").then((resp) => {
+        axios.get("/api/contact/selectFavorite").then((resp) => {
             setContacts(resp.data);
             axios.get("/api/contact/favorite").then((resp2) => {
                 setFavorite(resp2.data);
@@ -22,19 +22,6 @@ let Contact = () => {
         })
 
     }, [])
-
-    const favoriteEmptyHandler = (e) => {
-        console.log("Favorite!")
-        console.log("target : " + e.target);
-        const {id} = e.target.dataset;
-        console.log("clicked id : " + id)
-        axios.post("/api/contact/setFavorite",{target_id:id}).then((resp) => {
-            console.log(resp.data)
-            setFavorite(resp.data);
-        }).catch(err => {
-            console.log(err)
-        })
-    }
 
     const favoriteFilledHandler = (e) => {
         console.log("Unfavorite!")
@@ -72,14 +59,11 @@ let Contact = () => {
 
                         {
                             contacts.map((member) => {
+                                if(favorite.some(fav => fav == member.id))
                                 return (
                                     <Row className={style.contact_object} key={member.id}>
                                         <Col xs={1} className={style.favorite_container}>
-                                            {
-                                                favorite.some(target => target == member.id)
-                                                ? <StarIcon onClick={favoriteFilledHandler} className={style.favorite_filled} data-id={member.id}></StarIcon>
-                                                : <StarBorderIcon onClick={favoriteEmptyHandler} className={style.favorite_empty} data-id={member.id}></StarBorderIcon>
-                                            }
+                                            <StarIcon onClick={favoriteFilledHandler} className={style.favorite_filled} data-id={member.id}></StarIcon>
                                         </Col>
                                         <Col xs={2} className={style.group_container}>
                                             {member.group_name}
@@ -99,6 +83,8 @@ let Contact = () => {
                                     </Row>
 
                                 )
+                                else 
+                                return "";
                             })
                         }
 
@@ -106,7 +92,7 @@ let Contact = () => {
                 </Col>
             </Row>
         </Container>
-    );
+    )
 }
 
-export default Contact;
+export default Contact_Favorite;

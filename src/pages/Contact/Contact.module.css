@@ -3,10 +3,6 @@
     padding-bottom: 10px;
 }
 
-.search_container {
-
-}
-
 .input_search {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
@@ -39,8 +35,8 @@
     border-bottom: 1px solid black;
 }
 
-.header_favorite, .header_group, .header_name, .header_position, .header_contact, .header_email,
-.favorite_container, .group_container, .name_container, .position_container, .contact_container, .email_container {
+.header_favorite, .header_group, .header_name, .header_position, .header_contact, .header_email, .header_company
+.favorite_container, .group_container, .name_container, .position_container, .contact_container, .email_container, .company_container {
     text-align: center;
 }
 
@@ -52,3 +48,6 @@
     cursor: pointer;
 }
 
+path {
+    pointer-events: none;
+}

@@ -149,3 +149,17 @@
     overflow-y: auto;
     border: 1px solid black;
 }
+
+.fileList{
+    color: dodgerblue;
+}
+
+.buttons{
+    display: flex;
+    align-items: center;
+    margin-left: 500px;
+}
+
+.buttons button{
+    margin-left: 30px;
+}

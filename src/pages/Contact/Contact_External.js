@@ -1,53 +1,19 @@
+import { useEffect, useState } from "react";
 import { Col, Container, Input, Row } from "reactstrap";
 import style from "./Contact.module.css";
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import StarIcon from '@mui/icons-material/Star';
-import { useEffect, useState } from "react";
 import axios from "axios";
 
-let Contact = () => {
-
+const Contact_External = () => {
     const [contacts, setContacts] = useState([]);
-    const [favorite, setFavorite] = useState([]);
     useEffect(() => {
-        axios.get("/api/contact/selectAll").then((resp) => {
+        axios.get("/api/contact/selectExternal").then((resp) => {
             setContacts(resp.data);
-            axios.get("/api/contact/favorite").then((resp2) => {
-                setFavorite(resp2.data);
-            }).catch(err => {
-                console.log(err);
-            })
         }).catch(err => {
             console.log(err);
         })
 
     }, [])
 
-    const favoriteEmptyHandler = (e) => {
-        console.log("Favorite!")
-        console.log("target : " + e.target);
-        const {id} = e.target.dataset;
-        console.log("clicked id : " + id)
-        axios.post("/api/contact/setFavorite",{target_id:id}).then((resp) => {
-            console.log(resp.data)
-            setFavorite(resp.data);
-        }).catch(err => {
-            console.log(err)
-        })
-    }
-
-    const favoriteFilledHandler = (e) => {
-        console.log("Unfavorite!")
-        console.log("target : " + e.target);
-        const {id} = e.target.dataset;
-        console.log("clicked id : " + id)
-        axios.delete(`/api/contact/delFavorite/${id}`).then((resp) => {
-            console.log(resp.data)
-            setFavorite(resp.data);
-        }).catch(err => {
-            console.log(err)
-        })
-    }
 
     return (
         <Container>
@@ -62,7 +28,7 @@ let Contact = () => {
                 <Col xs={12} className={style.contacts_list_container}>
                     <Row className={style.contacts_list}>
                         <Row className={style.contacts_list_header}>
-                            <Col xs={1} className={style.header_favorite}><StarIcon></StarIcon></Col>
+                            <Col xs={1} className={style.header_company}>회사</Col>
                             <Col xs={2} className={style.header_group}>부서</Col>
                             <Col xs={2} className={style.header_name}>이름</Col>
                             <Col xs={1} className={style.header_position}>직책</Col>
@@ -74,12 +40,8 @@ let Contact = () => {
                             contacts.map((member) => {
                                 return (
                                     <Row className={style.contact_object} key={member.id}>
-                                        <Col xs={1} className={style.favorite_container}>
-                                            {
-                                                favorite.some(target => target == member.id)
-                                                ? <StarIcon onClick={favoriteFilledHandler} className={style.favorite_filled} data-id={member.id}></StarIcon>
-                                                : <StarBorderIcon onClick={favoriteEmptyHandler} className={style.favorite_empty} data-id={member.id}></StarBorderIcon>
-                                            }
+                                        <Col xs={1} className={style.company_container}>
+                                            {member.company}
                                         </Col>
                                         <Col xs={2} className={style.group_container}>
                                             {member.group_name}
@@ -109,4 +71,4 @@ let Contact = () => {
     );
 }
 
-export default Contact;
+export default Contact_External;

@@ -46,6 +46,12 @@
 .tableRow > div:nth-child(5) { width: 40%; /* 제목 넓이 */}
 .tableRow > div:nth-child(6) {width: 10%; /* 첨부 넓이 */}
 
+.titleContainer {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .pagenation{
     margin-top: 500px;
     margin-left: 100px;

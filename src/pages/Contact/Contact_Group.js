@@ -1,16 +1,16 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Col, Container, Input, Row } from "reactstrap";
 import style from "./Contact.module.css";
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
-import { useEffect, useState } from "react";
-import axios from "axios";
 
-let Contact = () => {
+const Contact_Group = () => {
 
     const [contacts, setContacts] = useState([]);
     const [favorite, setFavorite] = useState([]);
     useEffect(() => {
-        axios.get("/api/contact/selectAll").then((resp) => {
+        axios.get("/api/contact/selectGroup").then((resp) => {
             setContacts(resp.data);
             axios.get("/api/contact/favorite").then((resp2) => {
                 setFavorite(resp2.data);
@@ -109,4 +109,4 @@ let Contact = () => {
     );
 }
 
-export default Contact;
+export default Contact_Group;
