@@ -214,6 +214,10 @@ select {
     height: 40px;
 }
 
+.texteditor{
+ 
+}
+
 .fileRow {
     clear: both;
     /* 이전 요소들과의 float 해제 */
