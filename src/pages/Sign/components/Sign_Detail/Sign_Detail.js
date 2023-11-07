@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import style from "./Sign_Detail.module.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { LoginContext } from "../../../../App";
 
 const Sign_Detail = () => {
 
     const { seq } = useParams();
     const [sign_list, setSign_list] = useState({ seq: seq, writer: "", document_type: "", recipient: "", title: "", contents: "", accept: "", write_date: "", comment: "" });
-    const [sign_files, setSign_files] = useState([])
+    const [sign_files, setSign_files] = useState([]);
+    const navi = useNavigate();
+    const { loginID } = useContext(LoginContext);
 
     useEffect(e => {
         axios.get(`/api/signlist/${seq}`).then(resp => {
@@ -46,6 +49,22 @@ const Sign_Detail = () => {
                 console.error('File download error:', error);
             });
     };
+
+    const handleAccept = (e) => {
+        axios.put(`/api/signlist/accept/${seq}`).then(resp => {
+            navi("/Groovy/signlist/wait");
+        }).catch(e => {
+
+        });
+    }
+
+    const handleReject = (e) => {
+        axios.put(`/api/signlist/reject/${seq}`).then(resp => {
+            navi("/Groovy/signlist/wait");
+        }).catch(e => {
+
+        });
+    }
 
     return (
         <div>
@@ -108,14 +127,14 @@ const Sign_Detail = () => {
                                 이름
                             </div>
                             <div className={style.right}>
-                                고재훈
+                                {`${sign_list.recipient}`}
                             </div>
                         </div> <div className={style.docWrite_Date}>
                             <div className={style.left}>
                                 승인여부
                             </div>
                             <div className={style.right}>
-                                미승인
+                                {sign_list.accept === 0 ? "승인" : sign_list.accept === 1 ? "미승인" : sign_list.accept === 2 ? "반려" : "알 수 없음"}
                             </div>
                         </div>
                     </div>
@@ -151,6 +170,14 @@ const Sign_Detail = () => {
                                 </div>
                             ))}
                         </div>
+                    </div>
+                    <div className={style.buttons}>
+                        {loginID == `${sign_list.recipient}` ? (
+                            <div>
+                                <button onClick={handleAccept}>승인</button>
+                                <button onClick={handleReject}>반려</button>
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             </div>
