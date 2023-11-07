@@ -3,6 +3,28 @@
     margin: auto;
 }
 
+.contentDiv{
+    width: 1100px;
+    height: 790px;
+}
+
+.padding10{
+    padding: 10px;
+}
+
+.padding20{
+    padding: 20px;
+}
+
+.padding40{
+    padding: 40px;
+}
+
+.borderbtm{
+    border-bottom: 1px solid black;
+}
+
+
 /* ProjectList */
 
 
@@ -49,4 +71,9 @@
 .vcenter{
     display: flex;
     align-items: center;
+}
+
+.hcenter{
+    display: flex;
+    justify-content: center;
 }
