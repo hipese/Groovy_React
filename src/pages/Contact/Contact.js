@@ -14,17 +14,37 @@ let Contact = () => {
             setContacts(resp.data);
             axios.get("/api/contact/favorite").then((resp2) => {
                 setFavorite(resp2.data);
+            }).catch(err => {
+                console.log(err);
             })
         })
 
     }, [])
 
-    const favoriteEmptyHandler = () => {
+    const favoriteEmptyHandler = (e) => {
         console.log("Favorite!")
+        console.log("target : " + e.target);
+        const {id} = e.target.dataset;
+        console.log("clicked id : " + id)
+        axios.post("/api/contact/setFavorite",{target_id:id}).then((resp) => {
+            console.log(resp.data)
+            setFavorite(resp.data);
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
-    const favoriteFilledHandler = () => {
+    const favoriteFilledHandler = (e) => {
         console.log("Unfavorite!")
+        console.log("target : " + e.target);
+        const {id} = e.target.dataset;
+        console.log("clicked id : " + id)
+        axios.delete(`/api/contact/delFavorite/${id}`).then((resp) => {
+            console.log(resp.data)
+            setFavorite(resp.data);
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     return (
@@ -55,8 +75,8 @@ let Contact = () => {
                                         <Col xs={1} className={style.favorite_container}>
                                             {
                                                 favorite.some(target => target == member.id)
-                                                ? <StarIcon onClick={favoriteFilledHandler} className={style.favorite_filled}></StarIcon>
-                                                : <StarBorderIcon onClick={favoriteEmptyHandler} className={style.favorite_empty}></StarBorderIcon>
+                                                ? <span><StarIcon onClick={favoriteFilledHandler} className={style.favorite_filled} data-id={member.id}></StarIcon></span>
+                                                : <StarBorderIcon onClick={favoriteEmptyHandler} className={style.favorite_empty} data-id={member.id}></StarBorderIcon>
                                             }
                                         </Col>
                                         <Col xs={2} className={style.group_container}>
