@@ -24,11 +24,20 @@ const ProfileContainer = styled("div")({
 
 const MemberInfo = () => {
 
+    const [previewSrc, setPreviewSrc] = useState(null);//이미지 변수
+    
     const [openModal, setOpenModal] = useState(false); // 모달 상태
 
     // 모달을 열고 닫는 함수들
-    const handleOpenModal = () => setOpenModal(true);
-    const handleCloseModal = () => setOpenModal(false);
+    const handleOpenModal = () => {
+        console.log("Opening modal");
+        setOpenModal(true);
+    };
+
+    const handleCloseModal = () => {
+        console.log("Closing modal");
+        setOpenModal(false);
+    };
 
     // 수정모드 
     const [isEdit, setEdit] = useState(false);
@@ -41,7 +50,6 @@ const MemberInfo = () => {
 
     useEffect(() => {
         axios.get("/api/member").then(resp => {
-            console.log(resp.data);
             setMember(resp.data)
             setBackUpMember(resp.data);
         });
@@ -68,14 +76,18 @@ const MemberInfo = () => {
                 <div className={style.infoHeader}>
 
                     <div className={style.imagebox}>
-                        <ProfileContainer>
+
+                        {/* profile_image가 null이면 기본으로 설정된 이미지를 아니면 profile이미지로 설정한다. */}
+                        {member.profile_image ? <ProfileContainer>
                             <StyledAvatar src={img} alt="profile" onClick={handleOpenModal} />
-                        </ProfileContainer>
+                        </ProfileContainer> : <ProfileContainer>
+                            <StyledAvatar src={img} alt="profile" onClick={handleOpenModal} />
+                        </ProfileContainer>}
 
                         <Modal
                             open={openModal} // 모달의 열림 상태를 관리하는 open 속성
                             onClose={handleCloseModal} // 모달을 닫는 함수를 지정
-                        ><ImageChange/></Modal>
+                        ><ImageChange src={img} onClose={handleCloseModal} /></Modal>
                     </div>
 
                     <div className={style.contentsbox}>
