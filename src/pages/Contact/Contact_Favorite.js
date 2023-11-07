@@ -2,7 +2,6 @@ import { Col, Container, Input, Row } from "reactstrap";
 import style from "./Contact.module.css"
 import { useEffect, useState } from "react";
 import axios from "axios";
-import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 
 const Contact_Favorite = () => {
@@ -18,6 +17,8 @@ const Contact_Favorite = () => {
             }).catch(err => {
                 console.log(err);
             })
+        }).catch(err => {
+            console.log(err);
         })
 
     }, [])

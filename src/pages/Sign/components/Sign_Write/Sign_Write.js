@@ -35,10 +35,10 @@ const Sign_Write = (props) => {
 
     const navi = useNavigate();
     const [contents, setContents] = useState("");
-    const [document_type, setDocument_type] = useState("품의서");
+    const [document_type, setDocument_type] = useState("");
     const [title, setTitle] = useState("");
-    const [recipient, setRecipient] = useState("결재자 이름");
-    const [accept, setAccept] = useState(0);
+    const [recipient, setRecipient] = useState("1002");
+    const [accept, setAccept] = useState(1);
     const [comment, setComment] = useState("");
     const [formdata, setFormData] = useState({
         files: []
@@ -99,7 +99,7 @@ const Sign_Write = (props) => {
                         문서종류
                     </div>
                     <div className={style.dropbox}>
-                        <select name="doc">
+                        <select name="doc" onChange={(e) => setDocument_type(e.target.value)}>
                             <option value="품의서">품의서</option>
                             <option value="휴가신청서">휴가신청서</option>
                         </select>
