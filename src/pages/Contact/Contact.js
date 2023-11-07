@@ -75,7 +75,7 @@ let Contact = () => {
                                         <Col xs={1} className={style.favorite_container}>
                                             {
                                                 favorite.some(target => target == member.id)
-                                                ? <span><StarIcon onClick={favoriteFilledHandler} className={style.favorite_filled} data-id={member.id}></StarIcon></span>
+                                                ? <StarIcon onClick={favoriteFilledHandler} className={style.favorite_filled} data-id={member.id}></StarIcon>
                                                 : <StarBorderIcon onClick={favoriteEmptyHandler} className={style.favorite_empty} data-id={member.id}></StarBorderIcon>
                                             }
                                         </Col>
