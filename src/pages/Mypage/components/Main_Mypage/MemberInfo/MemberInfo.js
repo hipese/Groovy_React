@@ -7,8 +7,6 @@ import { Modal } from "@mui/material";
 import ImageChange from "./ImageChange/ImageChange";
 
 
-//C:\ReactWorkSpace\groovy\src\assets
-
 const StyledAvatar = styled(Avatar)({
     width: "100%",
     height: "100%",
@@ -29,18 +27,28 @@ const MemberInfo = () => {
    
     
     const [openModal, setOpenModal] = useState(false); // 모달 상태
+    const [editingField, setEditingField] = useState(null);
+
 
     // 모달을 열고 닫는 함수들
     const handleOpenModal = () => {
         console.log(`/assets/${member.profile_image}`);
         console.log("Opening modal");
+        console.log(`/assets/${encodeURIComponent(member.profile_image)}`)
         setOpenModal(true);
     };
 
+    const handleEdit = (field) => {
+        setEditingField(field); // 수정 중인 필드 설정
+        setOpenModal(true); // 모달 열기
+      }; 
+    
+
     const handleCloseModal = () => {
-        console.log("Closing modal");
         setOpenModal(false);
-    };
+        setEditingField(null); // 수정 중인 필드 상태를 초기화
+      };
+      
 
     // 수정모드 
     const [isEdit, setEdit] = useState(false);
@@ -55,28 +63,15 @@ const MemberInfo = () => {
         axios.get("/api/member").then(resp => {
             setMember(resp.data)
             setBackUpMember(resp.data);
+            console.log(resp.data);
+
         });
     }, []);
 
-    const handleUpdate = () => {
-
-    }
-
-    // 수정 변경 취소시 데이터를 되돌리는 코드
-    const handCancel = () => {
-
-        setMember(backUpMember);
-
-
-        setEdit(false);
-    }
 
     return (
         <div className={style.contanier}>
-            <div>
-                ssss
-            <img src={`/assets/${member.profile_image}`} alt="" />
-            </div>
+      
            
             <div className={style.memberInfo}>
 
@@ -87,7 +82,7 @@ const MemberInfo = () => {
 
                         {/* profile_image가 null이면 기본으로 설정된 이미지를 아니면 profile이미지로 설정한다. */}
                         {member.profile_image ? <ProfileContainer>
-                            <StyledAvatar src={`/assets/이사.png`} alt="profile" onClick={handleOpenModal} />
+                            <StyledAvatar src={`/assets/${member.profile_image}`} alt="profile" onClick={handleOpenModal} />
                         </ProfileContainer> : <ProfileContainer>
                             <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" onClick={handleOpenModal} />
                         </ProfileContainer>}
@@ -117,7 +112,7 @@ const MemberInfo = () => {
                     </div>
 
                     <div className={style.btndiv}>
-                        <button className={style.btn} onClick={handleUpdate}>수정</button>
+                        <button className={style.btn} onClick={() => handleEdit('contact')}>수정</button>
                     </div>
                 </div>
 
@@ -127,7 +122,7 @@ const MemberInfo = () => {
                     </div>
 
                     <div className={style.btndiv}>
-                        <button className={style.btn} onClick={handleUpdate}>수정</button>
+                        <button className={style.btn}onClick={() => handleEdit('group_name')}>수정</button>
                     </div>
                 </div>
 
@@ -136,7 +131,7 @@ const MemberInfo = () => {
                         {member.position}
                     </div>
                     <div className={style.btndiv}>
-                        <button className={style.btn} onClick={handleUpdate}>수정</button>
+                        <button className={style.btn} onClick={() => handleEdit('position')}>수정</button>
                     </div>
 
                 </div>
