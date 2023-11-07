@@ -8,7 +8,7 @@ import axios from 'axios';
 
 let todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
 
-const Modal = ({ showModal, setShowModal, selectedDate }) => {
+const Modal = ({ showModal, setShowModal, selectedDate, onEventAdded }) => {
     const { loginID } = React.useContext(LoginContext);
     const [alarmValue, setAlarmValue] = React.useState("15분 전");
     const [reanOnly, setReadOnly] = React.useState(false);
@@ -28,7 +28,6 @@ const Modal = ({ showModal, setShowModal, selectedDate }) => {
 
         // 'Invalid Date' 객체가 생성되는지 확인합니다.
         if (!isNaN(startDate) && !isNaN(endDate)) {
-            console.log(startDate, endDate);
             setFormData(prev => ({
                 ...prev,
                 starttime: startDate,
@@ -55,15 +54,12 @@ const Modal = ({ showModal, setShowModal, selectedDate }) => {
     }
 
     const handleSubmit = (e) => {
-        // e.preventDefault();
+        e.preventDefault();
         axios.post("/api/calendar", formData)
             .then((res) => {
                 setShowModal(false);
-                window.location.reload();
+                onEventAdded();
             })
-            .catch((err) => {
-                console.log(err);
-            });
         setFormData({
             project: "나의 프로젝트",
             title: "",

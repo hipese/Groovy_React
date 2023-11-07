@@ -10,6 +10,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import { CalendarUpPush, TeamBirthdays } from './CalendarEvent_utils'
 import axios from 'axios'
 import { formatISO, parseISO, addDays } from 'date-fns'
+import CalendarInnerModal from './CalendarInnerModal'
 
 // 옵저버 설정
 function applyStyles() {
@@ -38,23 +39,26 @@ applyStyles();
 const Calendar = () => {
     const [weekendsVisible, setWeekendsVisible] = useState(true);
     const [events, setEvents] = useState([]);
+    const [myData, setMyData] = useState([]);
     const [highlightDates, setHighlightDates] = useState([]);
     const [calendarData, setCalendarData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [eventModalOpen, setEventModalOpen] = useState(false);
+    const [eventDetails, setEventDetails] = useState(null);
   
   useEffect(() => {
     const fetchDataForMonth = async (year, month) => {
       try {
         const params = {
-          serviceKey: 'KBtONbKUtoe336dp6ygLurqhbr7XvDzTKfIMXUHfgCA0VC/O2FFPLUlkJaRRYvSL+tHCVccZKj2+t3MNvYW+Og==',
+          serviceKey: process.env.REACT_APP_API_KEY,
           solYear: year,
           solMonth: month
         };
         const response = await axios.get('http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo', { params });
         const transformedEvents = response.data.response.body.items.item.map(event => ({
           title: event.dateName,
-          start: event.locdate.toString(), // 'YYYYMMDD' 형식을 'YYYY-MM-DD'로 변환해야 할 수도 있습니다.
+          start: event.locdate.toString(),
           color: "white",
           textColor: "red",
           borderColor: "red",
@@ -65,28 +69,6 @@ const Calendar = () => {
       } catch (error) {
         return [];
       }
-    };
-    const MyData = async () => {
-      try {
-        const resp = await axios.get("/api/calendar");
-        setCalendarData(resp.data);
-        if (resp.data && resp.data.length > 0) {
-          const transformedEvents = resp.data.map(event => ({
-            title: event.title,
-            start: event.starttime,
-            end: formatISO(addDays(parseISO(event.endtime), 1)),
-            color: "white",
-            textColor: "black",
-            borderColor: "black",
-            allDay: true,
-            classNames: ['myData-event']
-          }));
-          return transformedEvents;
-        }
-      } catch (error) {
-        console.error("Error fetching MyData", error);
-      }
-      return [];
     };
 
     const fetchDataForYear = async (year) => {
@@ -105,8 +87,6 @@ const Calendar = () => {
       const eventPromises = years.map(fetchDataForYear);
       const eventsForAllYears = await Promise.all(eventPromises);
       const combinedEvents = [].concat(...eventsForAllYears);
-      const MyDataEvent = await MyData();
-      combinedEvents.push(...MyDataEvent);
       combinedEvents.push(...CalendarUpPush);
       combinedEvents.push(...TeamBirthdays);
       setEvents(combinedEvents);
@@ -115,6 +95,38 @@ const Calendar = () => {
     };
     initializeCalendar();
   }, []);
+    const refreshCalendar = async () => {
+      try {
+        const resp = await axios.get("/api/calendar");
+        const NewEvents = resp.data.map(transformEventDataToCalendarEvent);
+        setCalendarData(NewEvents);
+        setMyData(NewEvents)
+      } catch (error) {
+        console.error("Error fetching MyData", error);
+      }
+      
+    };
+    const transformEventDataToCalendarEvent = (event) => ({
+      extendedProps: {
+        seq: event.seq,
+        write_date: event.write_date,
+        contents: event.contents,
+        title: event.title,
+        start: event.starttime,
+        end: formatISO(addDays(parseISO(event.endtime), 1)),
+      },
+      title: event.title,
+      start: event.starttime,
+      end: formatISO(addDays(parseISO(event.endtime), 1)),
+      color: "white",
+      textColor: "black",
+      borderColor: "black",
+      allDay: true,
+      classNames: ['myData-event']
+    });
+  useEffect(() => {
+      refreshCalendar();
+    }, []);
 
   const handleDateSelect = (selectInfo) => {
     const startDateStr = selectInfo.startStr;
@@ -133,6 +145,18 @@ const Calendar = () => {
     setSelectedDate({ start: startDateStr, end: endDateStr });
     setShowModal(true);
   };
+
+  function handleEventClick(clickInfo) {
+    const { extendedProps } = clickInfo.event;
+    if (extendedProps && extendedProps.seq) {
+      setEventDetails(extendedProps); // 이벤트의 세부 정보를 상태에 저장
+      setEventModalOpen(true); // 모달을 열기
+    }
+  }
+  const handleCloseModal = () => {
+    setEventModalOpen(false);
+    setEventDetails(null);
+  };
   
   return (
     <>
@@ -145,22 +169,19 @@ const Calendar = () => {
                   headerToolbar={{ left: 'dayGridMonth,timeGridWeek,timeGridDay', center: 'title', right: 'today prev,next' }}
                   locale={koLocale}
                   weekends={weekendsVisible}
-                  events={events}
+                  events={[...events, ...myData]}
                   select={handleDateSelect}
                   selectable={true}
                   selectMirror={true}
                   dayMaxEvents={true}
-                  eventClick={function (arg) {
-                    alert(arg.event.title);
-                    // 이걸로 모달만 보여주면 끝?
-                  }}
+                  eventClick={handleEventClick}
                 />
             </div>
       </div>
-      <Modal showModal={showModal} setShowModal={setShowModal} selectedDate={selectedDate} calendarData={calendarData} setCalendarData={setCalendarData} />
+      <CalendarInnerModal isOpen={eventModalOpen} onClose={handleCloseModal} eventDetails={eventDetails} onEventAdded={refreshCalendar} />
+      <Modal showModal={showModal} setShowModal={setShowModal} selectedDate={selectedDate} onEventAdded={refreshCalendar}/>
     </>
   );
 };
-
 
 export default Calendar;
