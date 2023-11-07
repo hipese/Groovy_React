@@ -8,7 +8,7 @@ const ContactSlide = () => {
             <div className={style.mainbtn_container}>
                 <button className={style.mainbtn}>
                     <Link to="/Groovy/contacts">
-                        <strong>회사 주소록</strong>
+                        <strong className={style.strong_main}>회사 주소록</strong>
                     </Link>
                 </button>
             </div>
