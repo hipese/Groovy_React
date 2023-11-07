@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import style from './DashBoard.module.css';
-import { Button, ButtonGroup, Grid, IconButton } from '@mui/material';
+import { Button, ButtonGroup, Grid, IconButton, Typography } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
@@ -239,30 +239,39 @@ const ProjectSection = () => {
                 </Grid>
             </div>
             <div>
-            <table border="1" className={`${style.list}`}>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>관리자</th>
-                        <th>프로젝트 이름</th>
-                        <th>기한</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <Box sx={{ '& button': { m: 1 } }}>
+                    
                     {project.map((e,i)=>{
-                        return(
-                            <tr key={i}>
-                                <td>{e.pseq}</td>
-                                <td>{e.pmanager}</td>
-                                <td><Link to={`/groovy/dashboard/project/content/${e.pseq}`}>{e.pname}</Link></td>
-                                <td>{e.ptime_limit}</td>
-                            </tr>
+                        return(          
+                            <Grid container key={i} className={`${style.marginT40} ${style.border}`}> 
+                                <Grid xs={1} className={style.center}>
+                                    <Typography className={`${style.fs} ${style.b}`}>
+                                    {e.pseq}
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={3} className={style.center}>
+                                    <Typography className={`${style.fs} ${style.b}`}>
+                                        {e.pmanager}
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={5} className={style.center}>
+                                    <Typography className={`${style.fs} ${style.b}`}>
+                                    <Link to={`/groovy/dashboard/project/content/${e.pseq}`}>{e.pname}</Link>
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={2} className={style.center}>
+                                    <Typography className={`${style.fs} ${style.b}`}>
+                                    {e.ptime_limit}
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={1} className={style.center}>
+                                    
+                                </Grid>
+                            </Grid>            
                         )
                     })}
-                </tbody>
-            </table>
+                </Box>
             </div>
-
         </div>
     )
 }
