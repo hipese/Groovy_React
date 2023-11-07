@@ -34,7 +34,7 @@ const Sign_Progress = () => {
             </div>
             <div className={style.documents}>
                 <div className={style.titleText}>결제 진행중인 문서</div>
-                <div className={style.text}>진행중 문서가 11건이 있습니다.</div>
+                <div className={style.text}>{`진행중 문서가 ${sign_list.length}건이 있습니다.`}</div>
                 <div className={`${style.tableRow} ${style.tableHead}`}>
                     <div>문서번호</div>
                     <div>기안일</div>
@@ -51,7 +51,7 @@ const Sign_Progress = () => {
                             <div>{e.write_date}</div>
                             <div>{e.document_type}</div>
                             <div>{e.writer}</div>
-                            <div>
+                            <div className={style.titleContainer}>
                                 <Link to={`/Groovy/signlist/detail/${e.seq}`}>{e.title}</Link>
                             </div>
                             <div>파일 아이콘</div>
