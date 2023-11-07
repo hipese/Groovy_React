@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 import style from "./Board.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
 
-const List = () => {
+const DeptBoard = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [boards, setBoards] = useState([]);
     const COUNT_PER_PAGE = 10;
 
     useEffect(() => {
-        axios.get("/api/boards/recent").then(resp => {
+        axios.get("/api/boards/dept").then(resp => {
             setBoards(resp.data);
         })
     }, []);
@@ -36,7 +36,7 @@ const List = () => {
             <hr></hr>
             <div className="body">
                 <div className={style.margin}>
-                    최근 게시물
+                    부서 공지
                 </div>
                 <hr></hr>
                 <div className={style.margin}>
@@ -87,4 +87,4 @@ const List = () => {
     )
 }
 
-export default List;
+export default DeptBoard;
