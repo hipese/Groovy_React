@@ -9,7 +9,7 @@ const Detail = () => {
     const [isEdit, setEdit] = useState(false);
     const [backupBoard, setBackupBoard] = useState({}); // Backup 
     const navi = useNavigate();
-    const [Board, setBoard] = useState({ seq: "", title: "", writer: "", contents: "", file: "", like: "", profile: "", view: "", category: "", date: "" });
+    const [Board, setBoard] = useState({ seq: "", title: "", writer: "", contents: "", file: "",  view_count: "", category: "", write_date: "" });
 
     const handleDelete = () => {
         axios.delete(`/api/boards/${seq}`).then(resp => {

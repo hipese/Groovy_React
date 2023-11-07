@@ -31,17 +31,19 @@ function Reactquill({ id, value, setValue, isDisabled }) {
   ];
 
   return (
-    <ReactQuill
-      id={id}
-      className="form-control text-editor"
-      theme="snow"
-      modules={modules}
-      formats={formats}
-      value={value || ''}
-      onChange={(contents) => setValue(contents)}
-      style={{ height: "300px", width: "100%"}}
-      readOnly={isDisabled}
-    />
+    <div>
+      <ReactQuill
+        id={id}
+        className="form-control text-editor"
+        theme="snow"
+        modules={modules}
+        formats={formats}
+        value={value || ''}
+        onChange={(contents) => setValue(contents)}
+        style={{ height: "300px", width: "100%" }}
+        readOnly={isDisabled}
+      />
+    </div>
   );
 }
 

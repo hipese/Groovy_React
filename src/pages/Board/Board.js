@@ -1,9 +1,13 @@
 
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import List from './List';
 import Write from './Write';
 import Detail from './Detail';
+import ComBoard from './ComBoard';
+import ComFreeBoard from './ComFreeBoard';
+import DeptBoard from './DeptBoard';
+import DeptFreeBoard from './DeptFreeBoard';
 
 function Board() {
     return (
@@ -12,6 +16,10 @@ function Board() {
                 <Route path="/" element={<List />} />
                 <Route path="/write" element={<Write />} />
                 <Route path="/detail/:seq" element={<Detail />} />
+                <Route path="/com" element={<ComBoard />} />
+                <Route path="/comfree" element={<ComFreeBoard />} />
+                <Route path="/dept" element={<DeptBoard />} />
+                <Route path="/deptfree" element={<DeptFreeBoard />} />
             </Routes>
         </div>
     )
