@@ -8,6 +8,7 @@ function Update() {
     const [board, setBoard] = useState({
         seq: "",
         title: "",
+        file: null, 
         contents: "",
         category: "",
     });
@@ -35,8 +36,12 @@ function Update() {
         setBoard((prev) => ({ ...prev, [name]: value }));
     };
 
+    const handleFileChange = (e) => {
+        setBoard((prev) => ({ ...prev, file: e.target.files[0] }));
+    };
+
     const handleCancel = () => {
-        navi(`/groovy/board/detail/${seq}`); 
+        navi(`/groovy/board/detail/${seq}`);
     };
 
     const handleUpdate = () => {
@@ -44,10 +49,11 @@ function Update() {
         formData.append('title', board.title);
         formData.append('contents', board.contents);
         formData.append('category', board.category);
+        formData.append('files', board.file);
 
-        axios.put(`/api/boards/update/${seq}`, formData, {
-        }).then((resp) => {
-                navi(`/groovy/board/detail/${seq}`); 
+        axios.put(`/api/boards/update/${seq}`, formData, {})
+            .then((resp) => {
+                navi(`/groovy/board/detail/${seq}`);
             })
             .catch((e) => {
                 console.error(e);
@@ -60,22 +66,13 @@ function Update() {
             <hr></hr>
             <div className={style.margin}>
                 제목
-                <input
-                    type="text"
-                    placeholder="제목"
-                    name="title"
-                    onChange={handleChange}
-                    value={board.title}
-                    className={style.title}
-                /><br />
+                <input type="text" placeholder="제목" name="title" onChange={handleChange} value={board.title} className={style.title} /><br />
+                <hr></hr>
+                파일 첨부
+                <input type="file" onChange={handleFileChange} className={style.file} />
                 <hr></hr>
                 카테고리
-                <select
-                    name="category"
-                    onChange={handleChange}
-                    value={board.category}
-                    className={style.category}
-                >
+                <select name="category" onChange={handleChange} value={board.category} className={style.category}>
                     <option value="">선택</option>
                     <option value="전사 공지">전사 공지</option>
                     <option value="전사 자유">전사 자유</option>
@@ -91,7 +88,7 @@ function Update() {
                     setValue={(value) => setBoard({ ...board, contents: value })}
                 />
             </div>
-            <hr></hr>
+
             <div className={style.btn}>
                 <button onClick={handleUpdate}>수정</button>
                 <button onClick={handleCancel}>수정 취소</button>
