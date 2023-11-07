@@ -121,106 +121,86 @@ class Dropdown extends Component {
         </button>
         <div style={dropdownMenuStyle}>
           <ul style={styles.list}>
-            <li style={styles.item} onClick={this.toggleState}>
+            <List style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Groovy/dashboard" style={styles.link}>
-                  <List>
                     <img src={layout} alt="" width={"15px"} height={"15px"} />{" "}
                     개요
-                  </List>
                 </Link>
               </Item>
-            </li>
-            <li style={styles.item} onClick={this.toggleState}>
+            </List>
+            <List style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Groovy/contacts" style={styles.link}>
-                  <List>
                     <img src={contacts} alt="" width={"15px"} height={"15px"} />{" "}
                     주소록
-                  </List>
                 </Link>
               </Item>
-            </li>
-            <li style={styles.item} onClick={this.toggleState}>
+            </List>
+            <List style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Groovy/message" style={styles.link}>
-                  <List>
                     <img src={message} alt="" width={"15px"} height={"15px"} />{" "}
                     메시징
-                  </List>
                 </Link>
               </Item>
-            </li>
-            <li style={styles.item} onClick={this.toggleState}>
+            </List>
+            <List style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Groovy/mail" style={styles.link}>
-                  <List>
                     <img src={mail} alt="" width={"15px"} height={"15px"} />{" "}
                     메일
-                  </List>
                 </Link>
               </Item>
-            </li>
-            <li style={styles.item} onClick={this.toggleState}>
+            </List>
+            <List style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Groovy/survey" style={styles.link}>
-                  <List>
                     <img src={survey} alt="" width={"15px"} height={"15px"} />{" "}
                     설문
-                  </List>
                 </Link>
               </Item>
-            </li>
-            <li style={styles.item} onClick={this.toggleState}>
+            </List>
+            <List style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Groovy/list" style={styles.link}>
-                  <List>
                     <img src={list} alt="" width={"15px"} height={"15px"} />{" "}
                     할일
-                  </List>
                 </Link>
               </Item>
-            </li>
-            <li style={styles.item} onClick={this.toggleState}>
+            </List>
+            <List style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Groovy/calendar" style={styles.link}>
-                  <List>
                     <img src={calendar} alt="" width={"15px"} height={"15px"} />{" "}
                     캘린더
-                  </List>
                 </Link>
               </Item>
-            </li>
-            <li style={styles.item} onClick={this.toggleState}>
+            </List>
+            <List style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Groovy/board" style={styles.link}>
-                  <List>
                     <img src={board} alt="" width={"15px"} height={"15px"} />{" "}
                     게시판
-                  </List>
                 </Link>
               </Item>
-            </li>
-            <li style={styles.item} onClick={this.toggleState}>
+            </List>
+            <List style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Groovy/signlist" style={styles.link}>
-                  <List>
                     <img src={approval} alt="" width={"15px"} height={"15px"} />{" "}
                     전자결재
-                  </List>
                 </Link>
               </Item>
-            </li>
-            <li style={styles.item} onClick={this.toggleState}>
+            </List>
+            <List style={styles.item} onClick={this.toggleState}>
               <Item>
                 <Link to="/Groovy/attendence" style={styles.link}>
-                  <List>
                     <img src={setting} alt="" width={"15px"} height={"15px"} />{" "}
                     근태관리
-                  </List>
                 </Link>
               </Item>
-            </li>
+            </List>
           </ul>
         </div>
       </div>

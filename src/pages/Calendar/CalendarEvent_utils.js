@@ -1,7 +1,7 @@
 let eventGuid = 0;
 let todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
 
-const CalendarUpPush = [
+export const CalendarUpPush = [
         {
           id: createEventId(),
           title: '크리스마스',
@@ -46,19 +46,8 @@ const CalendarUpPush = [
           borderColor: "red",
           classNames: ['centered-event']
         },
-        {
-            id: createEventId(),
-            title: 'Test Event',
-            start: "2023-11-06",
-            end: "2023-11-06",
-            allDay: true,
-            color: "white",
-            textColor: "red",
-            borderColor: "red",
-            classNames: ['centered-event']
-        }
 ];
-const TeamBirthdays = [
+export const TeamBirthdays = [
         { id: createEventId(), title: '강휘재 생일', start: "2023-04-01", end: "2023-04-01", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
         { id: createEventId(), title: '강휘재 생일', start: "2024-04-01", end: "2024-04-01", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
         { id: createEventId(), title: '강휘재 생일', start: "2025-04-01", end: "2025-04-01", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
@@ -77,15 +66,8 @@ const TeamBirthdays = [
         { id: createEventId(), title: '황자원 생일', start: "2023-09-13", end: "2023-09-13", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
         { id: createEventId(), title: '황자원 생일', start: "2024-09-13", end: "2024-09-13", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
         { id: createEventId(), title: '황자원 생일', start: "2025-09-13", end: "2025-09-13", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
-        { id: createEventId(), title: 'Test Event2', start: "2023-11-06", end: "2023-11-06", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
     ];
     
 function createEventId() {
     return String(eventGuid++)
-}
-
-module.exports = {
-    CalendarUpPush,
-    TeamBirthdays,
-    createEventId,
 }

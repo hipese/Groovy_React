@@ -34,12 +34,20 @@ th[role="columnheader"] {
 .centered-event {
     color: red !important;
     text-align: center !important;
+    z-index: 1;
 }
 
 .birthday-event {
     border: 1px solid blue !important;
     background-color: white !important;
     text-align: center !important;
+    z-index: 2;
+}
+
+.myData-event {
+    background-color: white !important;
+    text-align: center !important;
+    z-index: 3;
 }
 
 .fc-button {
