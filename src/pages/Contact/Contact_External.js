@@ -5,6 +5,8 @@ import axios from "axios";
 
 const Contact_External = () => {
     const [contacts, setContacts] = useState([]);
+    const [search, setSearch] = useState("");
+
     useEffect(() => {
         axios.get("/api/contact/selectExternal").then((resp) => {
             setContacts(resp.data);
@@ -14,13 +16,17 @@ const Contact_External = () => {
 
     }, [])
 
+    const inputChangeHandler = (e) => {
+        setSearch(e.target.value);
+    }
+
 
     return (
         <Container>
             <Row className={style.search_row}>
                 <Col xs={10}></Col>
                 <Col xs={2} className={style.search_container}>
-                    <Input placeholder="검색" className={style.input_search}></Input>
+                    <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
                 </Col>
             </Row>
 
@@ -37,7 +43,36 @@ const Contact_External = () => {
                         </Row>
 
                         {
+                            search == ""
+                            ?
                             contacts.map((member) => {
+                                return (
+                                    <Row className={style.contact_object} key={member.id}>
+                                        <Col xs={1} className={style.company_container}>
+                                            {member.company}
+                                        </Col>
+                                        <Col xs={2} className={style.group_container}>
+                                            {member.group_name}
+                                        </Col>
+                                        <Col xs={2} className={style.name_container}>
+                                            {member.name}
+                                        </Col>
+                                        <Col xs={1} className={style.position_container}>
+                                            {member.position}
+                                        </Col>
+                                        <Col xs={3} className={style.contact_container}>
+                                            {member.contact}
+                                        </Col>
+                                        <Col xs={3} className={style.email_container}>
+                                            {member.email}
+                                        </Col>
+                                    </Row>
+
+                                )
+                            })
+                            :
+                            contacts.filter(member => member.company.includes(search) || member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search))
+                            .map((member) => {
                                 return (
                                     <Row className={style.contact_object} key={member.id}>
                                         <Col xs={1} className={style.company_container}>
