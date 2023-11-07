@@ -72,6 +72,11 @@ const Login = () => {
         });
     }
 
+    const handleOnKeyPress = (e) => {
+        if(e.key === "Enter")
+            handleLogin();
+    }
+
     return (
         <Container fluid>
             <Row className={style.loginBox_container}>
@@ -92,7 +97,7 @@ const Login = () => {
                         <Row>
                         <Col xs={2}></Col>
                             <Col xs={8} className={style.input_pw_container}>
-                                <Input type="password" className={style.input_pw} name="password" placeholder="Password" onChange={handleChange} value={acc.password} />
+                                <Input type="password" className={style.input_pw} name="password" placeholder="Password" onChange={handleChange} value={acc.password} onKeyDown={handleOnKeyPress}/>
                             </Col>
                         </Row>
                         <Row>

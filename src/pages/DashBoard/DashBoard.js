@@ -217,6 +217,12 @@ const Calandarsection = () => {
 }
 
 const ProjectSection = () => {
+    const {project,setProject} = React.useContext(ProjectContext);
+    React.useEffect(()=>{
+        axios.get("/api/project").then(res=>{
+            setProject(res.data);
+        });
+    },[]);
     return (
         <div className={style.projectsection}>
             <div className={`${style.padding10} ${style.borderbtm}`}>
@@ -233,7 +239,28 @@ const ProjectSection = () => {
                 </Grid>
             </div>
             <div>
-
+            <table border="1" className={`${style.list}`}>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>관리자</th>
+                        <th>프로젝트 이름</th>
+                        <th>기한</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {project.map((e,i)=>{
+                        return(
+                            <tr key={i}>
+                                <td>{e.pseq}</td>
+                                <td>{e.pmanager}</td>
+                                <td><Link to={`/groovy/dashboard/project/content/${e.pseq}`}>{e.pname}</Link></td>
+                                <td>{e.ptime_limit}</td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
             </div>
 
         </div>
@@ -279,13 +306,18 @@ const DashPageOne = () => {
     )
 }
 
+export const ProjectContext = React.createContext();
+
 const DashBoard=()=>{
+    const [project,setProject] = React.useState([{}]);
     return(
-        <Routes>
-            <Route path='/' element={<DashPageOne/>}></Route>
-            <Route path='project/*' element={<ProjectList/>}></Route>
-            <Route path='notice' element={<DeptNotice/>}></Route>
-        </Routes>        
+        <ProjectContext.Provider value={{project,setProject}}>
+            <Routes>
+                <Route path='/' element={<DashPageOne/>}></Route>
+                    <Route path='project/*' element={<ProjectList/>}></Route>
+                <Route path='notice' element={<DeptNotice/>}></Route>
+            </Routes>        
+        </ProjectContext.Provider>
     )
 }
 

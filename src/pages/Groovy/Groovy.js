@@ -4,7 +4,6 @@ import Admin from "../Admin/Admin";
 import Attendence from "../Attendence/Attendence";
 import Board from "../Board/Board";
 import Calendar from "../Calendar/Calendar";
-import Contact from "../Contact/Contact";
 import Email from "../Email/Email";
 import Message from "../Message/Message";
 import Survey from "../Survey/Survey";
@@ -17,6 +16,7 @@ import { LoginContext } from "../../App";
 import Sign_List from "../Sign/components/Sign_List/Sign_List";
 import Mypagelist from "../Mypage/components/Mypagelist";
 import axios from "axios";
+import Contact_Route from "../Contact/Contact_Route";
 
 const Groovy = () => {
 
@@ -61,7 +61,7 @@ const Groovy = () => {
                     <Route path="attendence/*" element={<Attendence />} />
                     <Route path="board/*" element={<Board />} />
                     <Route path="calendar/*" element={<Calendar />} />
-                    <Route path="contacts/*" element={<Contact />} />
+                    <Route path="contacts/*" element={<Contact_Route />} />
                     <Route path="dashboard/*" element={<DashBoard />} />
                     <Route path="email/*" element={<Email />} />
                     <Route path="message/*" element={<Message />} />

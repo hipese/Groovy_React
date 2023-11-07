@@ -34,7 +34,7 @@ const Sign_Write = (props) => {
 
 
     const navi = useNavigate();
-    const [contents, setContents] = useState("에디터 내용");
+    const [contents, setContents] = useState("");
     const [document_type, setDocument_type] = useState("품의서");
     const [title, setTitle] = useState("");
     const [recipient, setRecipient] = useState("결재자 이름");
@@ -54,12 +54,15 @@ const Sign_Write = (props) => {
         setTitle(event.target.value);
     };
 
+    const handleContentChange = (value) => {
+        setContents(value);
+    };
+
     const handleSubmit = () => {
         const submitFormData = new FormData();
 
         // Append the additional data to the submitFormData object
         submitFormData.append("document_type", document_type);
-
         submitFormData.append("contents", contents);
         submitFormData.append("recipient", recipient);
         submitFormData.append("accept", accept);
@@ -170,8 +173,8 @@ const Sign_Write = (props) => {
                             theme="snow"
                             modules={modules}
                             formats={formats}
-                        // value={quillValue || ""}
-                        // onChange={handleQuillChange}
+                            value={contents} // 내용을 contents 상태로 설정
+                            onChange={handleContentChange} // 내용이 변경될 때 호출할 핸들러
                         />
                     </div>
                 </div>
