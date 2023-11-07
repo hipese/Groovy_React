@@ -1,16 +1,12 @@
 import { Link, Route, Routes } from "react-router-dom"
 import ProjectContent from './ProjectContent.js'
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import axios from "axios";
 import style from './project.module.css'
+import { ProjectContext } from "../DashBoard.js";
 
 const ProjectList = () => {
-    const [project,setProject] = useState([{}]);
-    useEffect(()=>{
-        axios.get("/api/project").then(res=>{
-            setProject(res.data);
-        });
-    },[]);
+    const {project,setProject} = useContext(ProjectContext);
     return(
         <div>
             <table border="1" className={`${style.list}`}>
