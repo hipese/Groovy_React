@@ -1,15 +1,15 @@
-import React, { useState, useContext } from 'react'; // Import useContext
+import React, { useState, useContext } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import style from './Write.module.css';
 import axios from 'axios';
 import ReactQuill from './ReactQuill';
-import { LoginContext } from '../../App'; // Import the LoginContext
+import { LoginContext } from '../../App'; 
 
 function Write() {
   const [board, setBoard] = useState({ seq: "", title: "", writer: "", contents: "", file: "", view_count: "", category: "", write_date: "" });
   const [file, setFile] = useState(null);
   const navi = useNavigate();
-  const { loginID } = useContext(LoginContext); // Access the loginID from the context
+  const { loginID } = useContext(LoginContext); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
