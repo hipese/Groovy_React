@@ -44,7 +44,7 @@ const Sign_List = () => {
       <Route path="/wait" element={<SignWa />} />
       <Route path="/progress" element={<SignP />} />
       <Route path="/complete" element={<SignC />} />
-      <Route path="/detail" element={<Sign_Detail />} />
+      <Route path="/detail/:seq" element={<Sign_Detail />} />
     </Routes>
   );
 };

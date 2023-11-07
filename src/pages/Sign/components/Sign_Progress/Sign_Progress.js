@@ -52,7 +52,7 @@ const Sign_Progress = () => {
                             <div>{e.document_type}</div>
                             <div>{e.writer}</div>
                             <div>
-                                <Link to={`/Groovy/signlist/detail`}>{e.title}</Link>
+                                <Link to={`/Groovy/signlist/detail/${e.seq}`}>{e.title}</Link>
                             </div>
                             <div>파일 아이콘</div>
                         </div>

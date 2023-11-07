@@ -149,3 +149,7 @@
     overflow-y: auto;
     border: 1px solid black;
 }
+
+.fileList{
+    color: dodgerblue;
+}
