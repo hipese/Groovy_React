@@ -14,6 +14,7 @@ import MessageSlide from "./Message/MessageSlide";
 import SignSlide from "./Sign/SignSlide";
 import SurveySlide from "./Survey/SurveySlide";
 import ToDoListSlide from "./ToDoList/ToDoListSlide";
+import MypageSlide from "./Mypage/MypageSlide";
 
 
 const SlideBar = () => {
@@ -28,6 +29,7 @@ const SlideBar = () => {
         <Route path="/contacts/*" element={<ContactsSlide />} />
         <Route path="/mail/*" element={<EMailSlide />} />
         <Route path="/message/*" element={<MessageSlide />} />
+        <Route path="/mypagelist/*" element={<MypageSlide />} />
         <Route path="/signlist/*" element={<SignSlide />} />
         <Route path="/survey/*" element={<SurveySlide />} />
         <Route path ="list/*" element={<ToDoListSlide />} />
