@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Org_Chart from '../../../Org_Chart/components/Org_Chart_Modal/Org_Chart';
 
 
 
