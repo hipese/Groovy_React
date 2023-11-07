@@ -4,10 +4,12 @@ import { useContext, useEffect, useState } from "react"
 import axios from "axios";
 import style from './project.module.css'
 import { ProjectContext } from "../DashBoard.js";
-import { Grid, Typography, alpha } from "@mui/material";
+import { Divider, Grid, List, ListItem, Typography, alpha } from "@mui/material";
 import styled from "styled-components";
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
+import ProjectCreate from "./ProjectCreate.js";
+import { format } from "date-fns";
 
 const ProjectList = () => {
     const {project,setProject} = useContext(ProjectContext);
@@ -52,28 +54,34 @@ const ProjectList = () => {
             <div id='list'>
                 {project.map((e,i)=>{
                         return(
-                            <Grid container key={i} className={`${style.marginT40} ${style.border}`}> 
-                                <Grid xs={1} className={style.center}>
-                                    <Typography className={`${style.fs} ${style.b}`}>
-                                    {e.pseq}
-                                    </Typography>
-                                </Grid>
-                                <Grid xs={3} className={style.center}>
-                                    <Typography className={`${style.fs} ${style.b}`}>
-                                        {e.pmanager}
-                                    </Typography>
-                                </Grid>
-                                <Grid xs={6} className={style.center}>
-                                    <Typography className={`${style.fs} ${style.b}`}>
-                                    <Link to={`/groovy/dashboard/project/content/${e.pseq}`}>{e.pname}</Link>
-                                    </Typography>
-                                </Grid>
-                                <Grid xs={2} className={style.center}>
-                                    <Typography className={`${style.fs} ${style.b}`}>
-                                    {e.ptime_limit}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
+                            <List sx={style} component="nav" aria-label="mailbox folders">
+                                <Link to={`/groovy/dashboard/project/content/${e.pseq}`}><ListItem button>
+                                    <Grid container key={i}> 
+                                        <Grid xs={1} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.pseq}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={3} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                                {e.pmanager}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={6} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.pname}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={2} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.ptime_limit ? format(new Date(e.ptime_limit), 'yyyy-MM-dd') : e.ptime_limit}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>            
+                                </ListItem></Link>
+                            <Divider />
+                                
+                            </List>
                         )
                     })}
                 
@@ -89,6 +97,7 @@ const ProjectState = () => {
         <Routes>
             <Route path="/" element={<ProjectList/>}></Route>
             <Route path="content/:seq" element={<ProjectContent/>}></Route>
+            <Route path="create" element={<ProjectCreate/>}></Route>
         </Routes>
     )
 }

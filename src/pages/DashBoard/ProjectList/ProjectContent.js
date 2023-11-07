@@ -1,4 +1,4 @@
-import { Grid, IconButton, Typography } from "@mui/material";
+import { Divider, Grid, IconButton, List, ListItem, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import style from './project.module.css';
 import { createContext, useContext, useEffect, useState } from "react";
@@ -7,6 +7,10 @@ import Piechart from './Piechart.js'
 import AddIcon from '@mui/icons-material/Add';
 import Modal from '@mui/material/Modal';
 import { Box } from "@mui/system";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { format } from 'date-fns';
 
 const Modalstyle = {
     position: 'absolute',
@@ -39,6 +43,11 @@ const AddSchedule = ({handleClose}) => {
         <div>
             <div className={`${style.border}`}>
                 시작일 : 
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DateTimePicker']}>
+                        <DateTimePicker label="Basic date time picker" />
+                    </DemoContainer>
+                </LocalizationProvider>
                 <input type="date" name="pschedule_start" onChange={handleChange}/>
             </div>
             <div className={`${style.border}`}>
@@ -109,30 +118,73 @@ const ProjectTodo = () => {
                     <AddSchedule handleClose={handleClose}/>
                 </Box>
             </Modal>
-            <table border="1" className={`${style.list}`}>
-                <thead>
-                    <tr>
-                        <th>시작일</th>
-                        <th>종료일</th>
-                        <th>할일</th>
-                        <th>중요도</th>
-                        <th>상태</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div>
+                <Grid container className={`${style.marginT10}`}> 
+                    <Grid xs={3} className={style.center}>
+                        <Typography className={`${style.fs} ${style.b}`}>
+                        시작일
+                        </Typography>
+                    </Grid>
+                    <Grid xs={3} className={style.center}>
+                        <Typography className={`${style.fs} ${style.b}`}>
+                            종료일
+                        </Typography>
+                    </Grid>
+                    <Grid xs={3} className={style.center}>
+                        <Typography className={`${style.fs} ${style.b}`}>
+                        할일
+                        </Typography>
+                    </Grid>
+                    <Grid xs={2} className={style.center}>
+                        <Typography className={`${style.fs} ${style.b}`}>
+                        중요도
+                        </Typography>
+                    </Grid>
+                    <Grid xs={1} className={style.center}>
+                        <Typography className={`${style.fs} ${style.b}`}>
+                        상태
+                        </Typography>
+                    </Grid>
+                </Grid>     
+                <Divider/>
+            </div>
                     {todo.map((e,i)=>{
                         return(
-                            <tr key={i}>
-                                <td>{e.pschedule_start}</td>
-                                <td>{e.pschedule_end}</td>
-                                <td>{e.pschedule_contents}</td>
-                                <td>{e.pschedule_importance}</td>
-                                <td>{e.pschedule_state}</td>
-                            </tr>
+                            <List sx={style} component="nav" aria-label="mailbox folders">
+                                <ListItem button>
+                                    <Grid container key={i} className={`${style.marginT10}`}> 
+                                        <Grid xs={3} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.pschedule_start ? format(new Date(e.pschedule_start), 'yyyy-MM-dd') : e.pschedule_start}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={3} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                                {e.pschedule_end ? format(new Date(e.pschedule_end), 'yyyy-MM-dd') : e.pschedule_end}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={3} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.pschedule_contents}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={2} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.pschedule_importance}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={1} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.pschedule_state}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>            
+                                </ListItem>
+                            <Divider />
+                                
+                            </List>
                         )
                     })}
-                </tbody>
-            </table>
         </div>
     )
 }
