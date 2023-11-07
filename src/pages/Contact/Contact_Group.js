@@ -9,6 +9,8 @@ const Contact_Group = () => {
 
     const [contacts, setContacts] = useState([]);
     const [favorite, setFavorite] = useState([]);
+    const [search, setSearch] = useState("");
+
     useEffect(() => {
         axios.get("/api/contact/selectGroup").then((resp) => {
             setContacts(resp.data);
@@ -22,6 +24,10 @@ const Contact_Group = () => {
         })
 
     }, [])
+
+    const inputChangeHandler = (e) => {
+        setSearch(e.target.value);
+    }
 
     const favoriteEmptyHandler = (e) => {
         console.log("Favorite!")
@@ -54,7 +60,7 @@ const Contact_Group = () => {
             <Row className={style.search_row}>
                 <Col xs={10}></Col>
                 <Col xs={2} className={style.search_container}>
-                    <Input placeholder="검색" className={style.input_search}></Input>
+                    <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
                 </Col>
             </Row>
 
@@ -71,7 +77,40 @@ const Contact_Group = () => {
                         </Row>
 
                         {
+                            search == ""
+                            ?
                             contacts.map((member) => {
+                                return (
+                                    <Row className={style.contact_object} key={member.id}>
+                                        <Col xs={1} className={style.favorite_container}>
+                                            {
+                                                favorite.some(target => target == member.id)
+                                                ? <StarIcon onClick={favoriteFilledHandler} className={style.favorite_filled} data-id={member.id}></StarIcon>
+                                                : <StarBorderIcon onClick={favoriteEmptyHandler} className={style.favorite_empty} data-id={member.id}></StarBorderIcon>
+                                            }
+                                        </Col>
+                                        <Col xs={2} className={style.group_container}>
+                                            {member.group_name}
+                                        </Col>
+                                        <Col xs={2} className={style.name_container}>
+                                            {member.name}
+                                        </Col>
+                                        <Col xs={1} className={style.position_container}>
+                                            {member.position}
+                                        </Col>
+                                        <Col xs={3} className={style.contact_container}>
+                                            {member.contact}
+                                        </Col>
+                                        <Col xs={3} className={style.email_container}>
+                                            {member.email}
+                                        </Col>
+                                    </Row>
+
+                                )
+                            })
+                            :
+                            contacts.filter(member => member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search))
+                            .map((member) => {
                                 return (
                                     <Row className={style.contact_object} key={member.id}>
                                         <Col xs={1} className={style.favorite_container}>
