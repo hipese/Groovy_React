@@ -7,17 +7,9 @@ const MypageSlide = () => {
 
             <div className={style.btndiv}>
                 <Link to="update">
-                    <button className={style.writeBtn}><strong>마이페이지 수정</strong></button>
+                    <button className={style.writeBtn}><strong>돌아가기</strong></button>
                 </Link>
             </div>
-
-
-            <div className={style.btndiv}>
-                <Link to="">
-                    <button className={style.btn}>마이페이지 홈</button>
-                </Link>
-            </div>
-
 
         </div>
     );

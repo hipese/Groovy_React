@@ -20,7 +20,23 @@ import Contact_Route from "../Contact/Contact_Route";
 import { formatISO, parseISO, addDays } from 'date-fns'
 
 export const ListContext = createContext();
+const MemberContext = createContext();
+
+
+
 const Groovy = () => {
+
+    // 맴버변수 
+    const [member, setMember] = useState({});
+    
+
+    useEffect(() => {
+        axios.get("/api/member").then(resp => {
+            setMember(resp.data)
+      
+        });
+    }, []);
+
 
     const location = useLocation();
     const navi = useNavigate();
@@ -32,19 +48,19 @@ const Groovy = () => {
     //         navi("/")
     //     }
     // }, []);
-    
-    useEffect(e=>{
+
+    useEffect(e => {
 
         axios.get("/auth/isLogined").then((resp) => {
             console.log("ID from Groovy.js : " + resp.data)
-            if(resp.data == "" || resp.data == null || resp.data == undefined) {
+            if (resp.data == "" || resp.data == null || resp.data == undefined) {
                 navi("/");
             } else {
                 setLoginID(resp.data);
             }
         })
 
-        if(location.pathname=="/Groovy/" || location.pathname=="/Groovy") {
+        if (location.pathname == "/Groovy/" || location.pathname == "/Groovy") {
             navi("/Groovy/dashboard");
         }
     }, []);
@@ -81,6 +97,7 @@ const Groovy = () => {
     
 
     return (
+        <MemberContext.Provider value={{ member, setMember}}>
         <div>
             <Container className="NaviContainer g-0" fluid>
                 <Navigator />
@@ -111,8 +128,10 @@ const Groovy = () => {
                     <Route path="list/*" element={<ToDoList />} />
                 </Routes>
                 </div>
-        </div>
+            </div>
+            </MemberContext.Provider>
     )
 }
 
 export default Groovy;
+export { MemberContext };

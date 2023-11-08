@@ -93,6 +93,10 @@ div{
     margin: auto;
 }
 
+.border{
+    border: 1px solid black;
+}
+
 .borderbtm{
     border-bottom: 1px solid grey;
 }
@@ -163,4 +167,11 @@ div{
 
 .posRight15{
     left: 15px;
+}
+
+.marginT10{
+    margin-top: 10px;
+}
+.marginT30{
+    margin-top: 30px;
 }

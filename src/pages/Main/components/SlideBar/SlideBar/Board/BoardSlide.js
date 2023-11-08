@@ -23,7 +23,7 @@ const BoardSlide = () => {
                     <strong>+</strong> 글 작성하기
                 </button>
             </Link>
-            <Link to="">
+            <Link to="/groovy/board">
                 <button className={style.btn}>
                     최근 게시물
                 </button>
@@ -39,12 +39,12 @@ const BoardSlide = () => {
             </button>
             {isHidden && (
                 <>
-                    <Link to="">
+                    <Link to="/groovy/board/com">
                         <button className={style.btn}>
                             사내 공지
                         </button>
                     </Link>
-                    <Link to="">
+                    <Link to="/groovy/board/comfree">
                         <button className={style.btn}>
                             자유 게시판
                         </button>
@@ -57,19 +57,19 @@ const BoardSlide = () => {
             </button>
             {isHidden2 && (
                 <>
-                    <Link to="">
+                    <Link to="/groovy/board/dept">
                         <button className={style.btn}>
                             부서 공지
                         </button>
                     </Link>
-                    <Link to="">
+                    <Link to="/groovy/board/deptfree">
                         <button className={style.btn}>
                             자유 게시판
                         </button>
                     </Link>
                 </>
             )}
-            <Link to="">
+            <Link to="/groovy/board/temp">
                 <button className={style.btn}>
                     임시 저장함
                 </button>
