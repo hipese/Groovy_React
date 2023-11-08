@@ -1,3 +1,4 @@
+import React, { useContext } from "react";
 import styles from "./Navigator.module.css";
 import DropDowns from "./DropDown/DropDowns";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -5,8 +6,10 @@ import { Container, Row, Col } from "reactstrap";
 import logo from "./assets/다운로드.png";
 import Avatar from "./Avatar/Avatar";
 import Badge from "./Badge/Badge";
+import { MemberContext } from "../../../Groovy/Groovy";
 
 const Navigator = () => {
+  const members = useContext(MemberContext);
   return (
     <Container className={styles.container} fluid>
       <Row>
@@ -21,7 +24,7 @@ const Navigator = () => {
           <div className="DropDown">
             <DropDowns />
           </div>
-          <div className={styles.name}>○○○ 님</div>
+          <div className={styles.name}>{members.member.name} {members.member.position}님</div>
           <Badge />
           <Avatar />
         </Col>

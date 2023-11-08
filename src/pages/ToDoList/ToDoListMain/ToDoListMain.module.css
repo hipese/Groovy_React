@@ -1,0 +1,47 @@
+.tdlMain {
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 60px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+}
+
+.tdlMaintitle {
+    font-size: 25px;
+    font-weight: 700;
+    margin-left: 20px;
+}
+
+.tdlMaintitle span {
+    font-size: 23px;
+}
+
+.muat {
+    font-size: 12px !important;
+    color: #8f8f8f;
+    display: block;
+    ;
+}
+
+.tdlBoards {
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 60px;
+}
+
+.tdlBoardsTitle {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 70px;
+}
+
+.tdlInsert {
+    width: 300px;
+    height: 100px;
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
