@@ -120,7 +120,7 @@ const Groovy = () => {
                     </ListContext.Provider>  } />
                     <Route path="contacts/*" element={<Contact_Route />} />
                     <Route path="dashboard/*" element={<DashBoard />} />
-                    <Route path="email/*" element={<Email />} />
+                    <Route path="mail/*" element={<Email />} />
                     <Route path="message/*" element={<Message />} />
                     <Route path="mypagelist/*" element={<Mypagelist />} />
                     <Route path="signlist/*" element={<Sign_List />} />
