@@ -80,6 +80,7 @@ const Worksection = () => {
                     const endtime = res.data.workend ? format(new Date(res.data.workend), 'HH:mm:ss') : res.data.workend;
                     console.log("퇴근했는데 왜 또 로그인해");
                     setCheckOut(endtime);
+                    setWorkstate("퇴근");
                 }
             }else{
                 setWorking(false);
@@ -128,13 +129,13 @@ const Worksection = () => {
                     <div>
                         <Grid container rowSpacing={2}>
                             <Grid xs={6} className={style.center}>
-                                <IconButton aria-label="login" size="large" disabled={working} onClick={handleCheckIn}>
+                                <IconButton aria-label="login" size="large" disabled={checkOutTime != "00:00:00" ? true : working} onClick={handleCheckIn}>
                                     <LoginIcon>
                                     </LoginIcon>    
                                 </IconButton>
                             </Grid>
                             <Grid xs={6} className={style.center}>
-                                <IconButton aria-label="login" size="large" disabled={!working} onClick={handleCheckOut}>
+                                <IconButton aria-label="login" size="large" disabled={checkOutTime != "00:00:00" ? true : !working} onClick={handleCheckOut}>
                                     <LogoutIcon/>
                                     
                                 </IconButton>
