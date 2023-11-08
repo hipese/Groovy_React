@@ -1,9 +1,12 @@
+import axios from "axios";
 import style from "./Org_Chart_Table.module.css"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 
-const Org_Chart_Table = ({ employees,selectedRow ,setSelectedRow}) => {
+const Org_Chart_Table = ({ setEmployees,employees,selectedRow ,setSelectedRow,setBackUpEmployees}) => {
 
+
+    const [searchText,setSearchText] =useState("");
 
     // 행을 클릭했을 때 호출되는 함수입니다.
     const handleRowClick = (id) => {
@@ -17,12 +20,22 @@ const Org_Chart_Table = ({ employees,selectedRow ,setSelectedRow}) => {
         }
     };
 
+    const handleChange=(e)=>{
+        setSearchText(e.target.value);
+    }
+
+    const haadlesearch=()=>{
+        axios.get(`/api/member/${searchText}`).then(resp => {
+            console.log(resp.data);
+        });
+    }
+
 
     return (
         <div className={style.table}>
             <div className={style.table_header}>
-                <input className={style.table_input} type="text" placeholder="이름, 부서 검색" />
-                <button className={style.btn}>검색</button>
+                <input className={style.table_input} type="text" name="searchText" value={searchText} placeholder="이름, 부서 검색" onChange={handleChange} />
+                <button className={style.btn} onClick={haadlesearch} > 검색</button>
             </div>
 
             <div className={style.table_body}>

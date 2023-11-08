@@ -55,7 +55,8 @@ const Org_Chart = ({ isOpen, close ,approver,setApprover}) => {
                             </div>
 
                             <div className={style.tablebox}>
-                                <Org_Chart_Table employees={employees} setEmployees={setEmployees} selectedRow={selectedRow} setSelectedRow={setSelectedRow}/>
+                                <Org_Chart_Table employees={employees} setEmployees={setEmployees} 
+                                selectedRow={selectedRow} setSelectedRow={setSelectedRow} setBackUpEmployees={setBackUpEmployees} setEmployees={setEmployees} />
                             </div>
 
                         </div>
