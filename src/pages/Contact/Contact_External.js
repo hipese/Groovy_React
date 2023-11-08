@@ -9,6 +9,10 @@ const Contact_External = () => {
 
     useEffect(() => {
         axios.get("/api/contact/selectExternal").then((resp) => {
+            resp.data.forEach((member) => {
+                if(member.group_name == null)
+                    member.group_name = "-";
+            })
             setContacts(resp.data);
         }).catch(err => {
             console.log(err);
@@ -71,7 +75,7 @@ const Contact_External = () => {
                                 )
                             })
                             :
-                            contacts.filter(member => member.company.includes(search) || member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search))
+                            contacts.filter(member => member.company.includes(search) || member.group_name.includes(search) || member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search))
                             .map((member) => {
                                 return (
                                     <Row className={style.contact_object} key={member.id}>
