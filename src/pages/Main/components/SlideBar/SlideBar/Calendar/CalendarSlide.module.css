@@ -146,12 +146,6 @@
     resize: none;
 }
 
-
-
-
-
-
-
 .buttonbox {
     width: 100%;
     margin-top: 20px;
@@ -185,4 +179,9 @@
 
 .cancelButton:hover {
     background-color: rgb(255, 100, 100);
+}
+
+.calendar {
+    width: 100%;
+    padding: 10px;
 }
