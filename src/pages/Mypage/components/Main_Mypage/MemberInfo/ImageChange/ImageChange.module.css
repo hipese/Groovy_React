@@ -1,0 +1,38 @@
+
+  .modalContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 800px;
+    background-color: #fff;
+    border: 2px solid #000;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+    padding: 16px;
+}
+.changeImageDiv{
+  width: 100%;
+  height: 40%;
+}
+.textDiv{
+  width: 100%;
+  height: 20%;
+  font-size: 30px;
+  text-align: center;
+}
+.imageDiv{
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 80%;
+  padding: 5px;
+}
+.inputDiv{width: 100%; height: 10%;}
+.buttonDiv{
+  width: 100%;
+  height: 10%;
+}
