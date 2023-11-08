@@ -1,11 +1,14 @@
 
 import axios from "axios";
 import style from "./BtnDiv.module.css"
+import { useContext } from "react";
+import { MemberContext } from "../../../../../../Groovy/Groovy";
 
 
-const BtnDiv = ({ cfile, src,setProfile_scr,onClose }) => {
+const BtnDiv = ({cfile,onClose}) => {
 
-    
+    const members=useContext(MemberContext);
+
     const handleImageChange = () => {
         console.log(cfile);
         const formData = new FormData();
@@ -17,9 +20,8 @@ const BtnDiv = ({ cfile, src,setProfile_scr,onClose }) => {
             }
         }).then(resp => {
             console.log(resp.data);
-            setProfile_scr(resp.data);
+            members.setProfile_scr(resp.data);
 
-            console.log(src)
             onClose(); 
         }).catch(error => {
             console.error(error);

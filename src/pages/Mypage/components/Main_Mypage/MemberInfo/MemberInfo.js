@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import style from "./MemberInfo.module.css"
 import axios from "axios";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
 import { Modal } from "@mui/material";
 import ImageChange from "./ImageChange/ImageChange";
+import { MemberContext } from "../../../../Groovy/Groovy";
 
 
 const StyledAvatar = styled(Avatar)({
@@ -30,13 +31,10 @@ const MemberInfo = () => {
 
     const [editingField, setEditingField] = useState(null);
 
-    const [profile_scr, setProfile_scr]=useState("");
+    const members=useContext(MemberContext);
 
     // 모달을 열고 닫는 함수들
     const handleOpenModal = () => {
-        console.log(`/assets/${member.profile_image}`);
-        console.log("Opening modal");
-        console.log(`/assets/${encodeURIComponent(member.profile_image)}`)
         setOpenModal(true);
     };
 
@@ -54,20 +52,8 @@ const MemberInfo = () => {
 
     // 수정모드 
     const [isEdit, setEdit] = useState(false);
-
-    const [member, setMember] = useState({});
-
     // 수정시 데이터를 임시로 저장하는 변수
     const [backUpMember, setBackUpMember] = useState({});
-
-
-    useEffect(() => {
-        axios.get("/api/member").then(resp => {
-            setMember(resp.data)
-            setBackUpMember(resp.data);
-            setProfile_scr(resp.data.profile_image)
-        });
-    }, []);
 
 
     return (
@@ -82,29 +68,29 @@ const MemberInfo = () => {
                     <div className={style.imagebox}>
 
                         {/* profile_image가 null이면 기본으로 설정된 이미지를 아니면 profile이미지로 설정한다. */}
-                        {member.profile_image ? <ProfileContainer>
-                            <StyledAvatar src={`/profiles/${profile_scr}`} alt="profile" onClick={handleOpenModal} />
+                        {members.member.profile_image ? <ProfileContainer>
+                            <StyledAvatar src={`/profiles/${members.profile_scr}`} alt="profile" onClick={handleOpenModal} />
                         </ProfileContainer> : <ProfileContainer>
                             <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" onClick={handleOpenModal} />
                         </ProfileContainer>}
-                        {member.profile_image ? <Modal
+                        {members.member.profile_image ? <Modal
                             open={openModal} // 모달의 열림 상태를 관리하는 open 속성
                             onClose={handleCloseModal} // 모달을 닫는 함수를 지정
-                        ><ImageChange src={`/profiles/${profile_scr}`} setProfile_scr={setProfile_scr}  onClose={handleCloseModal} /></Modal> : <Modal
+                        ><ImageChange src={`/profiles/${members.profile_scr}`} setProfile_scr={members.setProfile_scr}  onClose={handleCloseModal} /></Modal> : <Modal
                             open={openModal} // 모달의 열림 상태를 관리하는 open 속성
                             onClose={handleCloseModal} // 모달을 닫는 함수를 지정
-                        ><ImageChange src={`/assets/Default_pfp.svg`} setProfile_scr={setProfile_scr} onClose={handleCloseModal} /></Modal>}
+                        ><ImageChange src={`/assets/Default_pfp.svg`} setProfile_scr={members.setProfile_scr} onClose={handleCloseModal} /></Modal>}
 
                     </div>
 
                     <div className={style.contentsbox}>
 
                         <div className={style.name}>
-                            {member.name}
+                            {members.member.name}
                         </div>
 
                         <div className={style.email}>
-                            {member.email}
+                            {members.member.email}
                         </div>
 
                     </div>
@@ -112,7 +98,7 @@ const MemberInfo = () => {
 
                 <div className={style.contentsdiv}>
                     <div className={style.textdiv}>
-                        {member.contact}
+                        {members.member.contact}
                     </div>
 
                     <div className={style.btndiv}>
@@ -122,7 +108,7 @@ const MemberInfo = () => {
 
                 <div className={style.contentsdiv}>
                     <div className={style.textdiv}>
-                        {member.group_name}
+                        {members.member.group_name}
                     </div>
 
                     <div className={style.btndiv}>
@@ -132,7 +118,7 @@ const MemberInfo = () => {
 
                 <div className={style.contentsdiv}>
                     <div className={style.textdiv}>
-                        {member.position}
+                        {members.member.position}
                     </div>
                     <div className={style.btndiv}>
                         <button className={style.btn} onClick={() => handleEdit('position')}>수정</button>

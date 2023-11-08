@@ -5,6 +5,7 @@ import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import img from "../assets/쥐돌이.png";
 import { Link } from 'react-router-dom';
+import { MemberContext } from "../../../../Groovy/Groovy";
 
 
 // 뱃지의 스타일을 지정
@@ -52,8 +53,8 @@ const StyledAvatar = styled(Avatar)({
   },
 });
 const ProfileContainer = styled("div")({
-  width: "35px",
-  height: "35px",
+  width: "40px",
+  height: "40px",
   borderRadius: "50%",
   position: "absolute",
   right: "20px",
@@ -63,16 +64,7 @@ const ProfileContainer = styled("div")({
 // 뱃지를 이용하여 프로필 사진을 띄움
 function BadgeAvatars() {
 
-  // const [member, setMember] = useState({});
-  
-  // const [profile_scr, setProfile_scr]=useState("");
-
-  // useEffect(() => {
-  //   axios.get("/api/member").then(resp => {
-  //     setMember(resp.data)
-  //     setProfile_scr(resp.data.profile_image)
-  //   });
-  // }, []);
+  const {member,setMember}=React.useContext(MemberContext);
 
 
   return (
@@ -84,7 +76,7 @@ function BadgeAvatars() {
           variant="dot"
         >
           <Link to="mypagelist">
-            <StyledAvatar src={img} alt="profile" />
+            {member.profile_image?  <StyledAvatar src={`/profiles/${member.profile_image}`} alt="profile" />:  <StyledAvatar src={`/assets/Default_pfp.svg`}  alt="profile" />}
           </Link>
         </StyledBadge>
       </ProfileContainer>

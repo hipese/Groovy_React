@@ -11,68 +11,91 @@ import ToDoList from "../ToDoList/ToDoList";
 import Navigator from "../Main/components/Navigator/Navigator";
 import { Container } from "reactstrap";
 import SlideBar from "../Main/components/SlideBar/SlideBar/SlideBar";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, createContext, useState } from "react";
 import { LoginContext } from "../../App";
 import Sign_List from "../Sign/components/Sign_List/Sign_List";
 import Mypagelist from "../Mypage/components/Mypagelist";
 import axios from "axios";
 import Contact_Route from "../Contact/Contact_Route";
 
+const MemberContext = createContext();
+
+
+
 const Groovy = () => {
+
+    // 맴버의 프로필 이미지를 바꾸기 위해
+    const [member, setMember] = useState({});
+
+    const [profile_scr, setProfile_scr] = useState("");
+
+
+
+    useEffect(() => {
+        axios.get("/api/member").then(resp => {
+            setMember(resp.data)
+            setProfile_scr(resp.data.profile_image)
+        });
+    }, []);
+
 
     const location = useLocation();
     const navi = useNavigate();
-    const {loginID, setLoginID} = useContext(LoginContext);
+    const { loginID, setLoginID } = useContext(LoginContext);
 
     // useEffect(e=>{
     //     if(!loginID) {
     //         navi("/")
     //     }
     // }, []);
-    
-    useEffect(e=>{
+
+    useEffect(e => {
 
         axios.get("/auth/isLogined").then((resp) => {
             console.log("ID from Groovy.js : " + resp.data)
-            if(resp.data == "" || resp.data == null || resp.data == undefined) {
+            if (resp.data == "" || resp.data == null || resp.data == undefined) {
                 navi("/");
             } else {
                 setLoginID(resp.data);
             }
         })
 
-        if(location.pathname=="/Groovy/" || location.pathname=="/Groovy") {
+        if (location.pathname == "/Groovy/" || location.pathname == "/Groovy") {
             navi("/Groovy/dashboard");
         }
     }, []);
 
+
     return (
-        <div>
-            <Container className="NaviContainer g-0" fluid>
-                <Navigator />
-            </Container>
-            <div className="SlideContainer">
-                <SlideBar />
+        <MemberContext.Provider value={{ member, setMember, profile_scr, setProfile_scr }}>
+            <div>
+                <Container className="NaviContainer g-0" fluid>
+                    <Navigator />
+                </Container>
+                <div className="SlideContainer">
+                    <SlideBar />
+                </div>
+                <div className="MainContainer">
+                    <Routes>
+                        <Route path="dashboard/*" element={<DashBoard />} />
+                        <Route path="admin/*" element={<Admin />} />
+                        <Route path="attendence/*" element={<Attendence />} />
+                        <Route path="board/*" element={<Board />} />
+                        <Route path="calendar/*" element={<Calendar />} />
+                        <Route path="contacts/*" element={<Contact_Route />} />
+                        <Route path="dashboard/*" element={<DashBoard />} />
+                        <Route path="email/*" element={<Email />} />
+                        <Route path="message/*" element={<Message />} />
+                        <Route path="mypagelist/*" element={<Mypagelist />} />
+                        <Route path="signlist/*" element={<Sign_List />} />
+                        <Route path="survey/*" element={<Survey />} />
+                        <Route path="list/*" element={<ToDoList />} />
+                    </Routes>
+                </div>
             </div>
-            <div className="MainContainer">
-                <Routes>
-                    <Route path="dashboard/*" element={<DashBoard />} />
-                    <Route path="admin/*" element={<Admin />} />
-                    <Route path="attendence/*" element={<Attendence />} />
-                    <Route path="board/*" element={<Board />} />
-                    <Route path="calendar/*" element={<Calendar />} />
-                    <Route path="contacts/*" element={<Contact_Route />} />
-                    <Route path="dashboard/*" element={<DashBoard />} />
-                    <Route path="email/*" element={<Email />} />
-                    <Route path="message/*" element={<Message />} />
-                    <Route path="mypagelist/*" element={<Mypagelist />} />
-                    <Route path="signlist/*" element={<Sign_List />} />
-                    <Route path="survey/*" element={<Survey />} />
-                    <Route path="list/*" element={<ToDoList />} />
-                </Routes>
-            </div>
-        </div>
+        </MemberContext.Provider>
     )
 }
 
 export default Groovy;
+export { MemberContext };

@@ -2,7 +2,8 @@ import BtnDiv from "./BtnDiv/BtnDiv";
 import styles from "./ImageChange.module.css"
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
-import React, { useState,useRef } from 'react';
+import React, { useState,useRef,useContext } from 'react';
+import { MemberContext } from "../../../../../Groovy/Groovy";
 
 
 const StyledAvatar = styled(Avatar)({
@@ -19,7 +20,9 @@ const ProfileContainer = styled("div")({
     height: "240px",
 });
 
-const ImageChange = ({ src,setProfile_scr, onClose }) => {
+const ImageChange = ({onClose}) => {
+
+    const members=useContext(MemberContext);
 
     const [previewSrc, setPreviewSrc] = useState(null);// 미리보기를 위한 변수
     const [fileName, setFileName] = useState(""); // 파일 이름을 위한 상태
@@ -66,7 +69,7 @@ const ImageChange = ({ src,setProfile_scr, onClose }) => {
                 </div>
                 <div className={styles.imageDiv}>
                     <ProfileContainer>
-                        <StyledAvatar src={src} alt="profile" />
+                        <StyledAvatar src={members.profile_src} alt="profile" />
                     </ProfileContainer>
                 </div>
             </div>
@@ -77,7 +80,7 @@ const ImageChange = ({ src,setProfile_scr, onClose }) => {
                 </div>
                 <div className={styles.imageDiv}>
                     <ProfileContainer>
-                        <StyledAvatar src={previewSrc || src} alt="profile" />
+                        <StyledAvatar src={previewSrc || members.profile_src} alt="profile" />
                     </ProfileContainer>
                 </div>
             </div>
@@ -87,7 +90,7 @@ const ImageChange = ({ src,setProfile_scr, onClose }) => {
             </div>
 
             <div className={styles.buttonDiv}>
-                <BtnDiv cfile={cfile} src={src} setProfile_scr={setProfile_scr} onClose={onClose} />
+                <BtnDiv cfile={cfile}  onClose={onClose} />
             </div>
 
         </div>
