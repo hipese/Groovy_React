@@ -3,9 +3,14 @@ import styled from "styled-components";
 import style from "../SlideBar.module.css";
 import styles from "./CalendarSlide.module.css";
 import Modal from "./CalendarModal"
+import dayjs from "dayjs";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
 const CalendarWrite = ({refreshList}) => {
     const [showModal, setShowModal] = useState(false);
+    let todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
     
     useEffect(() => {
         if(!showModal) {
@@ -14,16 +19,17 @@ const CalendarWrite = ({refreshList}) => {
      }, [showModal]);
 
     return (
-        <div>
+        <div className={styles.calendarslideBody}>
             <button className={style.btn} onClick={() => setShowModal(true)}>
                 <strong>+</strong> 일정 추가
             </button>
             <Modal showModal={showModal} setShowModal={setShowModal} onEventAdded={refreshList}/>
             <div className={styles.Calendar}>
-                캘린더 들어갈 자리
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DateCalendar showDaysOutsideCurrentMonth fixedWeekNumber={6} />
+                </LocalizationProvider>
             </div>
             <div className={styles.MyCalendar}>
-                내 캘린더
             </div>
         </div>
     );
