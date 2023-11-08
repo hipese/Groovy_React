@@ -28,16 +28,20 @@
 .contentsbox{
     float: left;
     width: 80%;
+    height: 100%;
 }
 .contentsdiv{
     height: 20%;
 }
+.name{font-size: 30px; font-weight: bold;}
+.email{font-size: 20px;}
 .textdiv{
     float: left;
     width: 80%;  
     height: 100%;
     font-size: 20px;
     font-weight: bold;
+    padding: 5px;
 }
 .btndiv{
     float: left;
@@ -56,4 +60,5 @@
     background-color: rgb(130, 200, 255);
     color: white;
     font-size: 20px;
+   
 }
