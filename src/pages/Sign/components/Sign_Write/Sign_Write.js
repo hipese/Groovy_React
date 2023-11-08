@@ -29,6 +29,7 @@ const Sign_Write = (props) => {
     const [isModalOpen, setModalOpen] = useState(false);
 
     const toggleModal = () => {
+        console.log(approver);
         setModalOpen(!isModalOpen);
     };
 
@@ -43,6 +44,8 @@ const Sign_Write = (props) => {
     const [formdata, setFormData] = useState({
         files: []
     });
+
+    const [approver, setApprover] = useState({});
 
     const handleFileChange = (e) => {
         setFormData(prev => ({ ...prev, files: [...e.target.files] }))
@@ -116,29 +119,31 @@ const Sign_Write = (props) => {
                 <div className={style.signline}>
                     <div className={style.titleText}>결제선 지정
                         <button onClick={toggleModal}>조직도 검색</button>
-                        <Org_Chart isOpen={isModalOpen} close={toggleModal} />
+                        <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} />
                     </div>
                     <div className={style.table}>
                         <div className={style.tableBox}>
                             <div className={`${style.tableRow} ${style.tableHead}`}>
                                 <div>구분</div>
-                                <div>중간 결재자</div>
-                                <div>최종 결재자</div>
+                                <div>결재자</div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>이름</div>
-                                <div>조직도 검색에서 선택한 멤버</div>
-                                <div>조직도 검색에서 선택한 멤버</div>
+                                <div>
+                                    {approver.name ? approver.name : "맴버을 선택하세요"}
+                                </div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>부서</div>
-                                <div>조직도 검색에서 선택한 부서</div>
-                                <div>조직도 검색에서 선택한 부서</div>
+                                <div>
+                                    {approver.group_name  ? approver.group_name : "부서을 선택하세요"}
+                                </div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>직급</div>
-                                <div>조직도 검색에서 선택한 직급</div>
-                                <div>조직도 검색에서 선택한 직급</div>
+                                <div>
+                                    {approver.position ? approver.position : "직급을 선택하세요"}
+                                </div>
                             </div>
                         </div>
                     </div>

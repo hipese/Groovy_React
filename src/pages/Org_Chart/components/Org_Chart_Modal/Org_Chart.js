@@ -5,13 +5,12 @@ import Org_Chart_DropDown from "./Org_Chart_Body/Org_Chart_DropDown/Org_Char_Dro
 import Org_Chart_View from "./Org_Chart_Body/Org_Chart_View/Org_Chart_View";
 import axios from "axios";
 
-const Org_Chart = ({ isOpen, close }) => {
+const Org_Chart = ({ isOpen, close ,approver,setApprover}) => {
 
     const [employees, setEmployees] = useState({}); // 여기서 선택된 직원의 목록을 보여줍니다.
     const [backUpEmployees, setBackUpEmployees] = useState({}); // 원래 직원의 목록을 저장합니다
     const [selectedRow, setSelectedRow] = useState(null); //선택한 행의 값을 가져옵니다.
 
-    const [approver, setApprover] = useState({}); //선택한 행의 값을 가져옵니다.
 
     useEffect(() => { 
         axios.get("/api/member/selectedEmployee").then(resp => {
@@ -37,11 +36,6 @@ const Org_Chart = ({ isOpen, close }) => {
             setApprover(resp.data);
         })
     };
-
-    const handleFinSelect = () => {
-        console.log("선택한 놈의 아이디: "+selectedRow);
-    };
-
 
     return (
         <div>
@@ -70,11 +64,7 @@ const Org_Chart = ({ isOpen, close }) => {
                         <div className={style.select_div}>
 
                             <div className={style.select_btndiv}>
-                                <button className={style.modal_close_button} onClick={handleMidSelect}>중간결제자</button>
-                            </div>
-
-                            <div className={style.select_btndiv}>
-                                <button className={style.modal_close_button} onClick={handleFinSelect}>최종결제자</button>
+                                <button className={style.modal_close_button} onClick={handleMidSelect}>결제자 선택</button>
                             </div>
 
                         </div>
@@ -82,7 +72,7 @@ const Org_Chart = ({ isOpen, close }) => {
 
                         <div className={style.view_div}>
 
-                            <Org_Chart_View employees={employees}/>
+                            <Org_Chart_View  approver={approver}/>
 
                         </div>
 
