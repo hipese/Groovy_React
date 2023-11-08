@@ -4,11 +4,9 @@ import style from "../SlideBar.module.css";
 import styles from "./CalendarSlide.module.css";
 import Modal from "./CalendarModal"
 import dayjs from "dayjs";
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { to } from "@react-spring/core";
 
 const CalendarWrite = ({refreshList}) => {
     const [showModal, setShowModal] = useState(false);
@@ -21,23 +19,17 @@ const CalendarWrite = ({refreshList}) => {
      }, [showModal]);
 
     return (
-        <div>
+        <div className={styles.calendarslideBody}>
             <button className={style.btn} onClick={() => setShowModal(true)}>
                 <strong>+</strong> 일정 추가
             </button>
             <Modal showModal={showModal} setShowModal={setShowModal} onEventAdded={refreshList}/>
             <div className={styles.Calendar}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['DateCalendar']}>
-                        <DateCalendar
-                        referenceDate={dayjs(todayStr)}
-                        views={['year', 'month', 'day']}
-                        />
-                    </DemoContainer>
+                    <DateCalendar showDaysOutsideCurrentMonth fixedWeekNumber={6} />
                 </LocalizationProvider>
             </div>
             <div className={styles.MyCalendar}>
-                내 캘린더
             </div>
         </div>
     );
