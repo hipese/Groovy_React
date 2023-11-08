@@ -1,5 +1,4 @@
 import style from "./Sign_Main.module.css"
-import DocumentList from "../../../Components/Table/DocumentList";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -9,7 +8,7 @@ const Sign_Main = () => {
     const [sign_wait_list, setSign_wait_list] = useState([]);
     const [sign_progress_list, setSign_progress_list] = useState([]);
     const [sign_complete_list, setSign_complete_list] = useState([]);
-
+   
     useEffect(() => {
         axios.get("/api/signlist/wait").then((resp) => {
             setSign_wait_list(resp.data);
@@ -115,7 +114,6 @@ const Sign_Main = () => {
                     );
                 })}
             </div>
-
         </div>
     );
 }
