@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback, useContext} from 'react'
 import styles from './Calendar.module.css'
 import "./Calendar.css"
 import Modal from "../Main/components/SlideBar/SlideBar/Calendar/CalendarModal"
@@ -9,8 +9,8 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { CalendarUpPush, TeamBirthdays } from './CalendarEvent_utils'
 import axios from 'axios'
-import { formatISO, parseISO, addDays } from 'date-fns'
 import CalendarInnerModal from './CalendarInnerModal'
+import { ListContext } from "../Groovy/Groovy"
 
 // 옵저버 설정
 function applyStyles() {
@@ -39,13 +39,14 @@ applyStyles();
 const Calendar = () => {
     const [weekendsVisible, setWeekendsVisible] = useState(true);
     const [events, setEvents] = useState([]);
-    const [myData, setMyData] = useState([]);
     const [highlightDates, setHighlightDates] = useState([]);
     const [calendarData, setCalendarData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [eventModalOpen, setEventModalOpen] = useState(false);
     const [eventDetails, setEventDetails] = useState(null);
+    const { dbList, refreshList } = useContext(ListContext);
+
   
   useEffect(() => {
     const fetchDataForMonth = async (year, month) => {
@@ -95,38 +96,7 @@ const Calendar = () => {
     };
     initializeCalendar();
   }, []);
-    const refreshCalendar = async () => {
-      try {
-        const resp = await axios.get("/api/calendar");
-        const NewEvents = resp.data.map(transformEventDataToCalendarEvent);
-        setCalendarData(NewEvents);
-        setMyData(NewEvents)
-      } catch (error) {
-        console.error("Error fetching MyData", error);
-      }
-      
-    };
-    const transformEventDataToCalendarEvent = (event) => ({
-      extendedProps: {
-        seq: event.seq,
-        write_date: event.write_date,
-        contents: event.contents,
-        title: event.title,
-        start: event.starttime,
-        end: formatISO(addDays(parseISO(event.endtime), 1)),
-      },
-      title: event.title,
-      start: event.starttime,
-      end: formatISO(addDays(parseISO(event.endtime), 1)),
-      color: "white",
-      textColor: "black",
-      borderColor: "black",
-      allDay: true,
-      classNames: ['myData-event']
-    });
-  useEffect(() => {
-      refreshCalendar();
-    }, []);
+
 
   const handleDateSelect = (selectInfo) => {
     const startDateStr = selectInfo.startStr;
@@ -157,6 +127,7 @@ const Calendar = () => {
     setEventModalOpen(false);
     setEventDetails(null);
   };
+
   
   return (
     <>
@@ -169,19 +140,27 @@ const Calendar = () => {
                   headerToolbar={{ left: 'dayGridMonth,timeGridWeek,timeGridDay', center: 'title', right: 'today prev,next' }}
                   locale={koLocale}
                   weekends={weekendsVisible}
-                  events={[...events, ...myData]}
+                  events={[...events, ...dbList]}
                   select={handleDateSelect}
                   selectable={true}
                   selectMirror={true}
                   dayMaxEvents={true}
-                  eventClick={handleEventClick}
-                />
+                 eventClick={handleEventClick}
+          />
             </div>
       </div>
-      <CalendarInnerModal isOpen={eventModalOpen} onClose={handleCloseModal} eventDetails={eventDetails} onEventAdded={refreshCalendar} />
-      <Modal showModal={showModal} setShowModal={setShowModal} selectedDate={selectedDate} onEventAdded={refreshCalendar}/>
+      <CalendarInnerModal isOpen={eventModalOpen} onClose={handleCloseModal} eventDetails={eventDetails} onEventAdded={refreshList}/>
+      {showModal && (
+        <Modal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          selectedDate={selectedDate}
+          onEventAdded={refreshList}
+        />
+      )}
     </>
   );
 };
+
 
 export default Calendar;

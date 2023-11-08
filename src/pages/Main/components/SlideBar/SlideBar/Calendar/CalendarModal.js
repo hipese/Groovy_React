@@ -8,10 +8,10 @@ import axios from 'axios';
 
 let todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
 
+
 const Modal = ({ showModal, setShowModal, selectedDate, onEventAdded }) => {
     const { loginID } = React.useContext(LoginContext);
     const [alarmValue, setAlarmValue] = React.useState("15분 전");
-    const [reanOnly, setReadOnly] = React.useState(false);
 
     const [formData, setFormData] = React.useState({
         project: "나의 프로젝트",
@@ -54,21 +54,27 @@ const Modal = ({ showModal, setShowModal, selectedDate, onEventAdded }) => {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        axios.post("/api/calendar", formData)
-            .then((res) => {
-                setShowModal(false);
-                onEventAdded();
-            })
-        setFormData({
-            project: "나의 프로젝트",
-            title: "",
-            starttime: new Date(todayStr),
-            endtime: new Date(todayStr),
-            alarm: "15분 전",
-            contents: "",
-        });
+    e.preventDefault();
+    if (!formData.title.trim() || !formData.contents.trim()) {
+        alert('제목과 내용을 입력해 주세요.');
+        return;
     }
+    axios.post("/api/calendar", formData)
+        .then((res) => {
+            setShowModal(false);
+            onEventAdded();
+        }).catch((error) => {
+            console.error("There was an error submitting the form: ", error);
+        });
+    setFormData({
+        project: "나의 프로젝트",
+        title: "",
+        starttime: new Date(todayStr),
+        endtime: new Date(todayStr),
+        alarm: "15분 전",
+        contents: "",
+    });
+}
 
 
 
