@@ -35,7 +35,7 @@ const Sign_Write = (props) => {
 
     const navi = useNavigate();
     const [contents, setContents] = useState("");
-    const [document_type, setDocument_type] = useState("");
+    const [document_type, setDocument_type] = useState("품의서");
     const [title, setTitle] = useState("");
     const [recipient, setRecipient] = useState("1002");
     const [accept, setAccept] = useState(1);
