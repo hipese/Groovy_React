@@ -24,17 +24,14 @@ const MemberContext = createContext();
 
 const Groovy = () => {
 
-    // 맴버의 프로필 이미지를 바꾸기 위해
+    // 맴버변수 
     const [member, setMember] = useState({});
-
-    const [profile_scr, setProfile_scr] = useState("");
-
-
+    
 
     useEffect(() => {
         axios.get("/api/member").then(resp => {
             setMember(resp.data)
-            setProfile_scr(resp.data.profile_image)
+      
         });
     }, []);
 
@@ -67,7 +64,7 @@ const Groovy = () => {
 
 
     return (
-        <MemberContext.Provider value={{ member, setMember, profile_scr, setProfile_scr }}>
+        <MemberContext.Provider value={{ member, setMember}}>
             <div>
                 <Container className="NaviContainer g-0" fluid>
                     <Navigator />
@@ -84,7 +81,7 @@ const Groovy = () => {
                         <Route path="calendar/*" element={<Calendar />} />
                         <Route path="contacts/*" element={<Contact_Route />} />
                         <Route path="dashboard/*" element={<DashBoard />} />
-                        <Route path="email/*" element={<Email />} />
+                        <Route path="mail/*" element={<Email />} />
                         <Route path="message/*" element={<Message />} />
                         <Route path="mypagelist/*" element={<Mypagelist />} />
                         <Route path="signlist/*" element={<Sign_List />} />

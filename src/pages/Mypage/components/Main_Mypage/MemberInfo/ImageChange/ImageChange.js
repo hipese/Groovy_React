@@ -2,7 +2,7 @@ import BtnDiv from "./BtnDiv/BtnDiv";
 import styles from "./ImageChange.module.css"
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
-import React, { useState,useRef,useContext } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { MemberContext } from "../../../../../Groovy/Groovy";
 
 
@@ -20,9 +20,11 @@ const ProfileContainer = styled("div")({
     height: "240px",
 });
 
-const ImageChange = ({onClose}) => {
+const ImageChange = ({ onClose }) => {
 
-    const members=useContext(MemberContext);
+    const members = useContext(MemberContext);
+
+    console.log(members.profile_scr);
 
     const [previewSrc, setPreviewSrc] = useState(null);// 미리보기를 위한 변수
     const [fileName, setFileName] = useState(""); // 파일 이름을 위한 상태
@@ -40,7 +42,7 @@ const ImageChange = ({onClose}) => {
             if (file.type.match("image.*")) {
                 //파일의 이름값을 저장
                 setCfile(file);
-                
+
                 // FileReader를 사용하여 파일을 읽습니다.
                 const reader = new FileReader();
                 reader.onload = (loadEvent) => {
@@ -48,14 +50,14 @@ const ImageChange = ({onClose}) => {
                     setPreviewSrc(loadEvent.target.result);
                 };
                 reader.readAsDataURL(file); // 파일의 내용을 읽어 데이터 URL로 변환합니다.
-            }else{
+            } else {
                 alert("이미지로 다시 선택해주세요")
-                
+
                 if (fileInputRef.current) {
                     fileInputRef.current.value = "";
                 }
                 setFileName("");
-                return ;
+                return;
             }
 
         }
@@ -69,7 +71,7 @@ const ImageChange = ({onClose}) => {
                 </div>
                 <div className={styles.imageDiv}>
                     <ProfileContainer>
-                        <StyledAvatar src={members.profile_src} alt="profile" />
+                        {members.member.profile_image ? <StyledAvatar src={`/profiles/${members.member.profile_image}`} alt="profile" /> : <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" />}
                     </ProfileContainer>
                 </div>
             </div>
@@ -80,17 +82,17 @@ const ImageChange = ({onClose}) => {
                 </div>
                 <div className={styles.imageDiv}>
                     <ProfileContainer>
-                        <StyledAvatar src={previewSrc || members.profile_src} alt="profile" />
+                        <StyledAvatar src={previewSrc || `/profiles/${members.member.profile_image}`} alt="profile" />
                     </ProfileContainer>
                 </div>
             </div>
 
             <div className={styles.inputDiv}>
-                <input type="file"  ref={fileInputRef} onChange={handleImageChange} />
+                <input type="file" ref={fileInputRef} onChange={handleImageChange} />
             </div>
 
             <div className={styles.buttonDiv}>
-                <BtnDiv cfile={cfile}  onClose={onClose} />
+                <BtnDiv cfile={cfile} onClose={onClose} />
             </div>
 
         </div>

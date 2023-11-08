@@ -6,6 +6,9 @@ import { styled } from "@mui/material/styles";
 import { Modal } from "@mui/material";
 import ImageChange from "./ImageChange/ImageChange";
 import { MemberContext } from "../../../../Groovy/Groovy";
+import UpdateContact from "./Update/UpdateContact";
+import UpdateGroup_Name from "./Update/UpdateGroup_Name";
+import UpdatePosition from "./Update/UpdatePosition";
 
 
 const StyledAvatar = styled(Avatar)({
@@ -31,7 +34,7 @@ const MemberInfo = () => {
 
     const [editingField, setEditingField] = useState(null);
 
-    const members=useContext(MemberContext);
+    const members = useContext(MemberContext);
 
     // 모달을 열고 닫는 함수들
     const handleOpenModal = () => {
@@ -69,17 +72,14 @@ const MemberInfo = () => {
 
                         {/* profile_image가 null이면 기본으로 설정된 이미지를 아니면 profile이미지로 설정한다. */}
                         {members.member.profile_image ? <ProfileContainer>
-                            <StyledAvatar src={`/profiles/${members.profile_scr}`} alt="profile" onClick={handleOpenModal} />
+                            <StyledAvatar src={`/profiles/${members.member.profile_image}`} alt="profile" onClick={() => handleEdit('imageChage')} />
                         </ProfileContainer> : <ProfileContainer>
-                            <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" onClick={handleOpenModal} />
+                            <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" onClick={() => handleEdit('imageChage')} />
                         </ProfileContainer>}
-                        {members.member.profile_image ? <Modal
-                            open={openModal} // 모달의 열림 상태를 관리하는 open 속성
+                        <Modal
+                            open={openModal && editingField === 'imageChage'} 
                             onClose={handleCloseModal} // 모달을 닫는 함수를 지정
-                        ><ImageChange src={`/profiles/${members.profile_scr}`} setProfile_scr={members.setProfile_scr}  onClose={handleCloseModal} /></Modal> : <Modal
-                            open={openModal} // 모달의 열림 상태를 관리하는 open 속성
-                            onClose={handleCloseModal} // 모달을 닫는 함수를 지정
-                        ><ImageChange src={`/assets/Default_pfp.svg`} setProfile_scr={members.setProfile_scr} onClose={handleCloseModal} /></Modal>}
+                        ><ImageChange onClose={handleCloseModal} /></Modal>
 
                     </div>
 
@@ -103,6 +103,12 @@ const MemberInfo = () => {
 
                     <div className={style.btndiv}>
                         <button className={style.btn} onClick={() => handleEdit('contact')}>수정</button>
+                        <Modal
+                            open={openModal && editingField === 'contact'} // 'group_name' 필드를 편집할 때만 모달을 열기
+                            onClose={handleCloseModal}
+                        >
+                        <UpdateContact/>
+                        </Modal>
                     </div>
                 </div>
 
@@ -113,6 +119,12 @@ const MemberInfo = () => {
 
                     <div className={style.btndiv}>
                         <button className={style.btn} onClick={() => handleEdit('group_name')}>수정</button>
+                        <Modal
+                            open={openModal && editingField === 'group_name'} // 'group_name' 필드를 편집할 때만 모달을 열기
+                            onClose={handleCloseModal}
+                        >
+                        <UpdateGroup_Name/>
+                        </Modal>
                     </div>
                 </div>
 
@@ -122,6 +134,12 @@ const MemberInfo = () => {
                     </div>
                     <div className={style.btndiv}>
                         <button className={style.btn} onClick={() => handleEdit('position')}>수정</button>
+                        <Modal
+                            open={openModal && editingField === 'position'} // 'group_name' 필드를 편집할 때만 모달을 열기
+                            onClose={handleCloseModal}
+                        >
+                        <UpdatePosition/>
+                        </Modal>
                     </div>
 
                 </div>

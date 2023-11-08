@@ -47,6 +47,7 @@ const StyledAvatar = styled(Avatar)({
   height: "100%",
   borderRadius: "50%",
   border: "1px solid #000000",
+  aspectRatio: "1/1",
   "&:hover": {
     opacity: "0.8",
     cursor: "pointer",
@@ -64,7 +65,7 @@ const ProfileContainer = styled("div")({
 // 뱃지를 이용하여 프로필 사진을 띄움
 function BadgeAvatars() {
 
-  const {member,setMember}=React.useContext(MemberContext);
+  const members=React.useContext(MemberContext);
 
 
   return (
@@ -76,7 +77,7 @@ function BadgeAvatars() {
           variant="dot"
         >
           <Link to="mypagelist">
-            {member.profile_image?  <StyledAvatar src={`/profiles/${member.profile_image}`} alt="profile" />:  <StyledAvatar src={`/assets/Default_pfp.svg`}  alt="profile" />}
+            {members.member.profile_image?  <StyledAvatar src={`/profiles/${members.member.profile_image}`} alt="profile" />:  <StyledAvatar src={`/assets/Default_pfp.svg`}  alt="profile" />}
           </Link>
         </StyledBadge>
       </ProfileContainer>

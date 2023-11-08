@@ -20,8 +20,8 @@ const BtnDiv = ({cfile,onClose}) => {
             }
         }).then(resp => {
             console.log(resp.data);
-            members.setProfile_scr(resp.data);
-
+            members.setMember(prev => ({ ...prev, profile_image: resp.data }));
+           
             onClose(); 
         }).catch(error => {
             console.error(error);
