@@ -1,27 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./Org_Chart.module.css"
 import Org_Chart_Table from "./Org_Chart_Body/Org_Chart_Table/Org_Chart_Table";
 import Org_Chart_DropDown from "./Org_Chart_Body/Org_Chart_DropDown/Org_Char_DropDown";
 import Org_Chart_View from "./Org_Chart_Body/Org_Chart_View/Org_Chart_View";
+import axios from "axios";
 
 const Org_Chart = ({ isOpen, close }) => {
 
-    const [selectedEmployee, setSelectedEmployee] = useState({name:"",position:"",department:"",id:""}); // 여기서 선택된 직원의 상태를 관리합니다.
+    const [employees, setEmployees] = useState({}); // 여기서 선택된 직원의 상태를 관리합니다.
+    const [backUpEmployees, setBackUpEmployees] = useState({}); // 여기서 선택된 직원의 상태를 관리합니다.
+
+    useEffect(() => {
+        axios.get("/api/member/selectedEmployee").then(resp => {
+            console.log(resp.data);
+            setEmployees(resp.data)
+            setBackUpEmployees(resp.data);
+        });
+    }, []);
+
 
     if (!isOpen) return null;
 
     // 선택된 직원을 업데이트하는 함수
     const handleEmployeeSelect = (employee) => {
-        setSelectedEmployee(employee);
+        setEmployees(employee);
     };
 
     // '중간결제자' 또는 '최종결제자' 버튼 클릭 시 처리할 함수
     const handleMidSelect = (role) => {
-        console.log("이거 가져오냐?"+selectedEmployee);
+        console.log("이거 가져오냐?"+employees);
     };
 
     const handleFinSelect = (role) => {
-        console.log("이거 가져오냐?"+selectedEmployee);
+        console.log("이거 가져오냐?"+employees);
     };
 
 
@@ -39,11 +50,11 @@ const Org_Chart = ({ isOpen, close }) => {
                         <div className={style.search_div}>
 
                             <div className={style.dropbox}>
-                                <Org_Chart_DropDown />
+                                <Org_Chart_DropDown employees={employees} setEmployees={setEmployees} backUpEmployees={backUpEmployees} />
                             </div>
 
                             <div className={style.tablebox}>
-                                <Org_Chart_Table selectedEmployee={selectedEmployee} setSelectedEmployee={setSelectedEmployee}/>
+                                <Org_Chart_Table employees={employees} setEmployees={setEmployees}/>
                             </div>
 
                         </div>
@@ -64,7 +75,7 @@ const Org_Chart = ({ isOpen, close }) => {
 
                         <div className={style.view_div}>
 
-                            <Org_Chart_View selectedEmployee={selectedEmployee}/>
+                            <Org_Chart_View employees={employees}/>
 
                         </div>
 
