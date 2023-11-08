@@ -13,6 +13,10 @@ let Contact = () => {
 
     useEffect(() => {
         axios.get("/api/contact/selectAll").then((resp) => {
+            resp.data.forEach((member) => {
+                if(member.group_name == null)
+                    member.group_name = "-";
+            })
             setContacts(resp.data);
             axios.get("/api/contact/favorite").then((resp2) => {
                 setFavorite(resp2.data);
@@ -109,7 +113,7 @@ let Contact = () => {
                                 )
                             })
                             :
-                            contacts.filter(member => member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search))
+                            contacts.filter(member => member.group_name.includes(search) || member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search))
                             .map((member) => {
                                 return (
                                     <Row className={style.contact_object} key={member.id}>
