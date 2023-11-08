@@ -62,6 +62,19 @@ const ProfileContainer = styled("div")({
 
 // 뱃지를 이용하여 프로필 사진을 띄움
 function BadgeAvatars() {
+
+  // const [member, setMember] = useState({});
+  
+  // const [profile_scr, setProfile_scr]=useState("");
+
+  // useEffect(() => {
+  //   axios.get("/api/member").then(resp => {
+  //     setMember(resp.data)
+  //     setProfile_scr(resp.data.profile_image)
+  //   });
+  // }, []);
+
+
   return (
     <Stack direction="row" spacing={2}>
       <ProfileContainer>

@@ -23,12 +23,14 @@ const ProfileContainer = styled("div")({
 
 
 
-const MemberInfo = () => {    
-   
-    
+const MemberInfo = () => {
+
+
     const [openModal, setOpenModal] = useState(false); // 모달 상태
+
     const [editingField, setEditingField] = useState(null);
 
+    const [profile_scr, setProfile_scr]=useState("");
 
     // 모달을 열고 닫는 함수들
     const handleOpenModal = () => {
@@ -41,14 +43,14 @@ const MemberInfo = () => {
     const handleEdit = (field) => {
         setEditingField(field); // 수정 중인 필드 설정
         setOpenModal(true); // 모달 열기
-      }; 
-    
+    };
+
 
     const handleCloseModal = () => {
         setOpenModal(false);
         setEditingField(null); // 수정 중인 필드 상태를 초기화
-      };
-      
+    };
+
 
     // 수정모드 
     const [isEdit, setEdit] = useState(false);
@@ -63,16 +65,15 @@ const MemberInfo = () => {
         axios.get("/api/member").then(resp => {
             setMember(resp.data)
             setBackUpMember(resp.data);
-            console.log(resp.data);
-
+            setProfile_scr(resp.data.profile_image)
         });
     }, []);
 
 
     return (
         <div className={style.contanier}>
-      
-           
+
+
             <div className={style.memberInfo}>
 
 
@@ -82,15 +83,18 @@ const MemberInfo = () => {
 
                         {/* profile_image가 null이면 기본으로 설정된 이미지를 아니면 profile이미지로 설정한다. */}
                         {member.profile_image ? <ProfileContainer>
-                            <StyledAvatar src={`/assets/${member.profile_image}`} alt="profile" onClick={handleOpenModal} />
+                            <StyledAvatar src={`/profiles/${profile_scr}`} alt="profile" onClick={handleOpenModal} />
                         </ProfileContainer> : <ProfileContainer>
                             <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" onClick={handleOpenModal} />
                         </ProfileContainer>}
-
-                        <Modal
+                        {member.profile_image ? <Modal
                             open={openModal} // 모달의 열림 상태를 관리하는 open 속성
                             onClose={handleCloseModal} // 모달을 닫는 함수를 지정
-                        ><ImageChange src={`/assets/${member.profile_image}`} onClose={handleCloseModal} /></Modal>
+                        ><ImageChange src={`/profiles/${profile_scr}`} setProfile_scr={setProfile_scr}  onClose={handleCloseModal} /></Modal> : <Modal
+                            open={openModal} // 모달의 열림 상태를 관리하는 open 속성
+                            onClose={handleCloseModal} // 모달을 닫는 함수를 지정
+                        ><ImageChange src={`/assets/Default_pfp.svg`} setProfile_scr={setProfile_scr} onClose={handleCloseModal} /></Modal>}
+
                     </div>
 
                     <div className={style.contentsbox}>
@@ -122,7 +126,7 @@ const MemberInfo = () => {
                     </div>
 
                     <div className={style.btndiv}>
-                        <button className={style.btn}onClick={() => handleEdit('group_name')}>수정</button>
+                        <button className={style.btn} onClick={() => handleEdit('group_name')}>수정</button>
                     </div>
                 </div>
 

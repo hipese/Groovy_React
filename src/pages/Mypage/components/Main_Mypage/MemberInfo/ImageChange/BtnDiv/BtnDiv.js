@@ -3,7 +3,7 @@ import axios from "axios";
 import style from "./BtnDiv.module.css"
 
 
-const BtnDiv = ({ cfile, onClose }) => {
+const BtnDiv = ({ cfile, src,setProfile_scr,onClose }) => {
 
     
     const handleImageChange = () => {
@@ -17,9 +17,15 @@ const BtnDiv = ({ cfile, onClose }) => {
             }
         }).then(resp => {
             console.log(resp.data);
+            setProfile_scr(resp.data);
+
+            console.log(src)
+            onClose(); 
         }).catch(error => {
             console.error(error);
         });
+
+
     }
 
     return (

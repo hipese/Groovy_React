@@ -19,7 +19,7 @@ const ProfileContainer = styled("div")({
     height: "240px",
 });
 
-const ImageChange = ({ src, onClose }) => {
+const ImageChange = ({ src,setProfile_scr, onClose }) => {
 
     const [previewSrc, setPreviewSrc] = useState(null);// 미리보기를 위한 변수
     const [fileName, setFileName] = useState(""); // 파일 이름을 위한 상태
@@ -37,7 +37,7 @@ const ImageChange = ({ src, onClose }) => {
             if (file.type.match("image.*")) {
                 //파일의 이름값을 저장
                 setCfile(file);
-            
+                
                 // FileReader를 사용하여 파일을 읽습니다.
                 const reader = new FileReader();
                 reader.onload = (loadEvent) => {
@@ -87,7 +87,7 @@ const ImageChange = ({ src, onClose }) => {
             </div>
 
             <div className={styles.buttonDiv}>
-                <BtnDiv cfile={cfile} onClose={onClose} />
+                <BtnDiv cfile={cfile} src={src} setProfile_scr={setProfile_scr} onClose={onClose} />
             </div>
 
         </div>
