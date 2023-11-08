@@ -1,0 +1,131 @@
+.search_row {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgb(210, 210, 210);
+}
+
+.input_search, .checkbox_selectUser {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.input_search:focus, .checkbox_selectUser:focus {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.checked_member_list_container {
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.checked_member_list {
+    height: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(240, 240, 240);
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+.checked_member {
+    width: 10%;
+    aspect-ratio: 4/5;
+    padding-top: 1%;
+    border-radius: 10%;
+}
+
+.checked_member_profile_container {
+    width: 100%;
+    aspect-ratio: 1/1;
+    margin-bottom: 10%;
+}
+
+.checked_profile_image {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.checked_member_name_container {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+    font-size: 50%;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+}
+
+
+.members_list_container {
+    display: flex;
+    justify-content: center;
+}
+
+.members_list {
+    margin-top: 15px;
+    /* border-top: 1px solid rgb(210, 210, 210);
+    border-bottom: 1px solid rgb(210, 210, 210); */
+    min-width: 700px;
+    width: 80%;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.member_object {
+    border-bottom: 1px solid rgb(210, 210, 210);
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.member_object:first-child {
+    border-top: 1px solid rgb(210, 210, 210)
+}
+
+.checkbox_container,.profile_container, .info_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile_image {
+    width: 40%;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+}
+
+.btn_container {
+    display: flex;
+    position: relative;
+}
+
+.btn_create {
+    position: fixed;
+    margin-right: 15%;
+    min-width: 130px;
+    aspect-ratio: 1/1;
+    width: 5%;
+    bottom : 5%;
+    right : -10%;
+    background-color: rgb(240, 240, 240);
+    border: 0px;
+    border-radius: 50%;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    transition: all 0.5s cubic-bezier(.25,.8,.25,1);
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.btn_create:hover {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    background-color: rgb(210, 210, 210);
+    color: rgb(0, 0, 0);
+}
+
+path {
+    pointer-events: none;
+}

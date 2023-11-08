@@ -5,7 +5,7 @@ import Attendence from "../Attendence/Attendence";
 import Board from "../Board/Board";
 import Calendar from "../Calendar/Calendar";
 import Email from "../Email/Email";
-import Message from "../Message/Message";
+import Message_Route from "../Message/Message_Route";
 import Survey from "../Survey/Survey";
 import ToDoList from "../ToDoList/ToDoList";
 import Navigator from "../Main/components/Navigator/Navigator";
@@ -121,7 +121,7 @@ const Groovy = () => {
                     <Route path="contacts/*" element={<Contact_Route />} />
                     <Route path="dashboard/*" element={<DashBoard />} />
                     <Route path="mail/*" element={<Email />} />
-                    <Route path="message/*" element={<Message />} />
+                    <Route path="message/*" element={<Message_Route />} />
                     <Route path="mypagelist/*" element={<Mypagelist />} />
                     <Route path="signlist/*" element={<Sign_List />} />
                     <Route path="survey/*" element={<Survey />} />

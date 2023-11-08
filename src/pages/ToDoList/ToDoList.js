@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
-import ToDoListMain from "./ToDoListMain";
-import ToDoListBoard from "./ToDoListBoard";
-import ToDoListCalendar from "./ToDoListCalendar";
-import ToDoListTeam from "./ToDoListTeam";
+import ToDoListMain from "./ToDoListMain/ToDoListMain";
+import ToDoListBoard from "./ToDoListBoard/ToDoListBoard";
+import ToDoListCalendar from "./ToDoListCalendar/ToDoListCalendar";
+import ToDoListTeam from "./ToDoListTeam/ToDoListTeam";
 
 const ToDoListM = () => {
   return (

@@ -10,7 +10,6 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
 const CalendarWrite = ({refreshList}) => {
     const [showModal, setShowModal] = useState(false);
-    let todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
     
     useEffect(() => {
         if(!showModal) {
