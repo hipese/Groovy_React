@@ -14,7 +14,7 @@ const formatContact = (contact) => {
 };
 
 
-const UpdateContact = () => {
+const UpdateContact = ({onClose}) => {
 
 
     const members = useContext(MemberContext)
@@ -29,7 +29,7 @@ const UpdateContact = () => {
     const handleConfirm = () => {
         // 멤버 상태를 업데이트하는 로직
         axios.put(`/api/member/${contact}`).then(resp => {
-            // 성공적으로 변경되었을 때의 처리 로직
+            onClose();
         }).catch(error => {
             // 오류 처리 로직
         });
@@ -56,7 +56,7 @@ const UpdateContact = () => {
             </div>
             <div className={style.btnDiv}>
                 <button className={style.btn} onClick={handleConfirm}>확인</button>
-                <button className={style.btn} >취소</button>
+                <button className={style.btn} onClick={() => { onClose() }}>취소</button>
             </div>
         </div>
     );

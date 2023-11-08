@@ -107,7 +107,7 @@ const MemberInfo = () => {
                             open={openModal && editingField === 'contact'} // 'group_name' 필드를 편집할 때만 모달을 열기
                             onClose={handleCloseModal}
                         >
-                        <UpdateContact/>
+                        <UpdateContact onClose={handleCloseModal}/>
                         </Modal>
                     </div>
                 </div>
