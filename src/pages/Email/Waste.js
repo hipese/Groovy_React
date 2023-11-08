@@ -4,19 +4,26 @@ import { Link } from "react-router-dom";
 import style from "./List.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
 
-const Spam = () => {
+const Waste = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
+    const [mail, setMail] = useState([]);
     const [mails, setMails] = useState([]);
     const COUNT_PER_PAGE = 15;
 
     useEffect(() => {
-        axios.get("/api/mails/spam").then(resp => {
+        axios.get("/api/mails/waste/inbox").then(resp => {
+            setMail(resp.data);
+        })
+    }, []);
+
+    useEffect(() => {
+        axios.get("/api/mails/waste/send").then(resp => {
             setMails(resp.data);
         })
     }, []);
 
-    const totalItems = mails.length;
+    const totalItems = mail.length+mails.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
 
     const onPageChange = (e, page) => {
@@ -25,7 +32,8 @@ const Spam = () => {
 
     const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
     const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
-    const visibleMail = mails.slice(startIndex, endIndex);
+    const visibleMail = mail.slice(startIndex, endIndex);
+    const visibleMails = mails.slice(startIndex, endIndex);
 
     return (
         <div className="Mailcontainer">
@@ -36,7 +44,7 @@ const Spam = () => {
             <hr></hr>
             <div className="body">
                 <div className={style.margin}>
-                    내게쓴메일함
+                    휴지통
                 </div>
                 <hr></hr>
                 <div className={style.margin}>
@@ -45,7 +53,7 @@ const Spam = () => {
                             <tr>
                                 <th>Seq</th>
                                 <th>삭제</th>
-                                <th>Writer</th>
+                                <th>Sender</th>
                                 <th>Title</th>
                                 <th>Write_Date</th>
                             </tr>
@@ -53,7 +61,18 @@ const Spam = () => {
                                 <tr key={e.seq}>
                                     <td>{e.seq}</td>
                                     <td><button>삭제</button></td>
-                                    <td>{e.writer}</td>
+                                    <td>{e.sender}</td>
+                                    <td>
+                                        <Link to={`/groovy/mail/detail/${e.seq}`}>{e.title}</Link>
+                                    </td>
+                                    <td>{e.write_date}</td>
+                                </tr>
+                            ))}
+                            {visibleMails.map((e) => (
+                                <tr key={e.seq}>
+                                    <td>{e.seq}</td>
+                                    <td><button>삭제</button></td>
+                                    <td>{e.sender}</td>
                                     <td>
                                         <Link to={`/groovy/mail/detail/${e.seq}`}>{e.title}</Link>
                                     </td>
@@ -85,4 +104,4 @@ const Spam = () => {
     )
 }
 
-export default Spam;
+export default Waste;

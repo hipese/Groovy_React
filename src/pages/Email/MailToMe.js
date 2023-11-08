@@ -45,7 +45,6 @@ const MailToMe = () => {
                             <tr>
                                 <th>Seq</th>
                                 <th>삭제</th>
-                                <th>Writer</th>
                                 <th>Title</th>
                                 <th>Write_Date</th>
                             </tr>
@@ -53,7 +52,6 @@ const MailToMe = () => {
                                 <tr key={e.seq}>
                                     <td>{e.seq}</td>
                                     <td><button>삭제</button></td>
-                                    <td>{e.writer}</td>
                                     <td>
                                         <Link to={`/groovy/mail/detail/${e.seq}`}>{e.title}</Link>
                                     </td>

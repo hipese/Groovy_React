@@ -1,20 +1,39 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from "react-router-dom";
 import style from "./List.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
 
+import { LoginContext } from '../../App'; 
+
 const List = () => {
+
+    const { loginID } = useContext(LoginContext); 
 
     const [currentPage, setCurrentPage] = useState(1);
     const [mails, setMails] = useState([]);
     const COUNT_PER_PAGE = 15;
 
     useEffect(() => {
-        axios.get("/api/mails/inbox").then(resp => {
-            setMails(resp.data);
-        })
+        LoadMails();
     }, []);
+
+    const LoadMails = () => {
+        axios.get(`/api/mails/inbox/${loginID}`).then(resp => {
+            setMails(resp.data);
+        }).catch(error => {
+            console.error("데이터 불러오기 중 오류 발생", error);
+        });
+    }
+
+    const handleDelete = (seq) => {
+        axios.put(`/api/mails/inbox/${seq}`).then((resp) => {
+            LoadMails();
+        })
+            .catch((error) => {
+                console.error("삭제중 오류 발생", error);
+            });
+    };
 
     const totalItems = mails.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
@@ -36,7 +55,7 @@ const List = () => {
             <hr></hr>
             <div className="body">
                 <div className={style.margin}>
-                    내게쓴메일함
+                    받은메일함
                 </div>
                 <hr></hr>
                 <div className={style.margin}>
@@ -45,15 +64,17 @@ const List = () => {
                             <tr>
                                 <th>Seq</th>
                                 <th>삭제</th>
-                                <th>Writer</th>
+                                <th>Sender</th>
+                                <th>Receipient</th>
                                 <th>Title</th>
                                 <th>Write_Date</th>
                             </tr>
                             {visibleMail.map((e) => (
                                 <tr key={e.seq}>
                                     <td>{e.seq}</td>
-                                    <td><button>삭제</button></td>
-                                    <td>{e.writer}</td>
+                                    <td><button onClick={() => handleDelete(e.seq)}>Del</button></td>
+                                    <td>{e.sender}</td>
+                                    <td>{e.receipient}</td>
                                     <td>
                                         <Link to={`/groovy/mail/detail/${e.seq}`}>{e.title}</Link>
                                     </td>

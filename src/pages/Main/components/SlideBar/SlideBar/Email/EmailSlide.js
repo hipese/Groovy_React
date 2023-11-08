@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import style from "./EmailSlide.module.css";
 
-const BoardSlide = () => {
+const EmailSlide = () => {
     return (
         <div className={style.CalendarSlide}>
             <Link to="/groovy/mail/write">
@@ -19,7 +19,7 @@ const BoardSlide = () => {
                     보낸메일함
                 </button>
             </Link>
-            <Link to="/groovy/mail/temp">
+            <Link to="">
                 <button className={style.btn}>
                     임시보관함
                 </button>
@@ -29,13 +29,13 @@ const BoardSlide = () => {
                     내게쓴메일함
                 </button>
             </Link>
-            <Link to="/groovy/mail/spam">
+            <Link to="/groovy/mail/waste">
                 <button className={style.btn}>
-                    스팸메일함
+                    휴지통
                 </button>
             </Link>
         </div>
     );
 };
 
-export default BoardSlide;
+export default EmailSlide;
