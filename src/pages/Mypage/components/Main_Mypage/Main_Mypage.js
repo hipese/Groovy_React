@@ -5,6 +5,7 @@ import MemberInfo from "./MemberInfo/MemberInfo";
 const Mypage=()=>{
     return(
         <div className={style.container}>
+            
             <MemberInfo/>
         </div>
     );
