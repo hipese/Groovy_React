@@ -1,0 +1,15 @@
+.search {
+    display: flex;
+    justify-content: flex-end;
+    margin: 30px;
+}
+
+hr{
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.margin{
+    margin-left: 30px;
+    margin-right: 30px;
+}

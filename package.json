@@ -5,6 +5,9 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@fullcalendar/core": "^6.1.9",
     "@fullcalendar/daygrid": "^6.1.9",
     "@fullcalendar/google-calendar": "^6.1.9",
@@ -25,8 +28,13 @@
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
     "i": "^0.3.7",
+    "install": "^0.13.0",
     "moment": "^2.29.4",
+<<<<<<< HEAD
     "net": "^1.0.2",
+=======
+    "npm": "^10.2.3",
+>>>>>>> 29389ba52e4b2c90359b4d9e6b29fc6a16b20b1b
     "quill": "^1.3.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
