@@ -12,6 +12,10 @@ const Contact_Favorite = () => {
 
     useEffect(() => {
         axios.get("/api/contact/selectFavorite").then((resp) => {
+            resp.data.forEach((member) => {
+                if(member.group_name == null)
+                    member.group_name = "-";
+            })
             setContacts(resp.data);
             axios.get("/api/contact/favorite").then((resp2) => {
                 setFavorite(resp2.data);
@@ -94,7 +98,7 @@ const Contact_Favorite = () => {
                                 return "";
                             })
                             :
-                            contacts.filter(member => member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search))
+                            contacts.filter(member => member.group_name.includes(search) || member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search))
                             .map((member) => {
                                 if(favorite.some(fav => fav == member.id))
                                 return (
