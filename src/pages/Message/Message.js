@@ -1,12 +1,14 @@
-import { Container } from "reactstrap";
+import { Col, Container, Input, Row } from "reactstrap";
 import style from "./Message.module.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 let Message = () => {
-    return(
+    return (
         <Container>
-            Message 페이지 입니다
+            asdf
         </Container>
-    );
+    )
 };
 
 export default Message;
