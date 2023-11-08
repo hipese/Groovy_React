@@ -1,9 +1,10 @@
 import { ResponsivePie } from '@nivo/pie'
-import { useContext } from 'react';
-import { progressContext } from './ProjectContent';
+import { useContext, useEffect } from 'react';
+import { AddScheduleContext, progressContext } from './ProjectContent';
+import axios from 'axios';
 
 const Piechart = () => {
-    const {progress,setProgress} = useContext(progressContext);
+    const {progress,setProgress,todo,setTodo,seq} = useContext(progressContext);
     const handle = {
         padClick: (data) => {
             console.log(data);
@@ -13,7 +14,13 @@ const Piechart = () => {
             console.log(data);
         },
     };
-
+    useEffect(()=>{
+        axios.get(`/api/project/progress/${seq}`).then(res=>{
+            setProgress(res.data);
+        }).catch((e)=>{
+            console.log(e);
+        });
+    },[todo]);
     return (
         // chart height이 100%이기 때문이 chart를 덮는 마크업 요소에 height 설정
         <div style={{ width: '800px', height: '500px', margin: '0 auto' }}>
