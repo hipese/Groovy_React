@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import style from './DashBoard.module.css';
-import { Button, ButtonGroup, Grid, IconButton } from '@mui/material';
+import { Button, ButtonGroup, Divider, Grid, IconButton, List, ListItem, ListItemText, Typography } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
@@ -14,6 +14,7 @@ import { async } from 'q';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import ProjectList from './ProjectList/ProjectList';
 import DeptNotice from './DeptNotice/DeptNotice';
+import { format } from 'date-fns';
 
 const Worksection = () => {
     const {loginID} = React.useContext(LoginContext);
@@ -72,11 +73,14 @@ const Worksection = () => {
             console.log(res.data);
             if(res.data){
                 setWorking(true);
-                setCheckIn(res.data.workstart);
+                const starttime = res.data.workstart ? format(new Date(res.data.workstart), 'HH:mm:ss') : res.data.workstart;
+                setCheckIn(starttime);
                 setWorkstate("출근");
                 if(res.data.workend){
+                    const endtime = res.data.workend ? format(new Date(res.data.workend), 'HH:mm:ss') : res.data.workend;
                     console.log("퇴근했는데 왜 또 로그인해");
-                    setCheckOut(res.data.workend);
+                    setCheckOut(endtime);
+                    setWorkstate("퇴근");
                 }
             }else{
                 setWorking(false);
@@ -125,13 +129,13 @@ const Worksection = () => {
                     <div>
                         <Grid container rowSpacing={2}>
                             <Grid xs={6} className={style.center}>
-                                <IconButton aria-label="login" size="large" disabled={working} onClick={handleCheckIn}>
+                                <IconButton aria-label="login" size="large" disabled={checkOutTime != "00:00:00" ? true : working} onClick={handleCheckIn}>
                                     <LoginIcon>
                                     </LoginIcon>    
                                 </IconButton>
                             </Grid>
                             <Grid xs={6} className={style.center}>
-                                <IconButton aria-label="login" size="large" disabled={!working} onClick={handleCheckOut}>
+                                <IconButton aria-label="login" size="large" disabled={checkOutTime != "00:00:00" ? true : !working} onClick={handleCheckOut}>
                                     <LogoutIcon/>
                                     
                                 </IconButton>
@@ -217,9 +221,10 @@ const Calandarsection = () => {
 }
 
 const ProjectSection = () => {
+    const {loginID} = React.useContext(LoginContext);
     const {project,setProject} = React.useContext(ProjectContext);
     React.useEffect(()=>{
-        axios.get("/api/project").then(res=>{
+        axios.get(`/api/project/${loginID}`).then(res=>{
             setProject(res.data);
         });
     },[]);
@@ -238,31 +243,71 @@ const ProjectSection = () => {
                     </Grid>
                 </Grid>
             </div>
+            <div className={`${style.marginT30} ${style.padding10}`}>
+                <Grid container rowSpacing={2}>
+                    <Grid xs={1} className={style.center}>
+                        <Typography className={`${style.fs18} ${style.bold}`}>
+                            번호
+                        </Typography>
+                    </Grid>
+                    <Grid xs={3} className={style.center}>
+                        <Typography className={`${style.fs18} ${style.bold}`}>
+                        관리자
+                        </Typography>
+                    </Grid>
+                    <Grid xs={5} className={style.center}>
+                        <Typography className={`${style.fs18} ${style.bold}`}>
+                        프로젝트
+                        </Typography>
+                    </Grid>
+                    <Grid xs={2} className={style.center}>
+                        <Typography className={`${style.fs18} ${style.bold}`}>
+                        기한
+                        </Typography>
+                    </Grid>
+                    <Grid xs={1} className={style.center}>
+                        
+                    </Grid>
+                </Grid>
+            </div>
             <div>
-            <table border="1" className={`${style.list}`}>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>관리자</th>
-                        <th>프로젝트 이름</th>
-                        <th>기한</th>
-                    </tr>
-                </thead>
-                <tbody>
                     {project.map((e,i)=>{
-                        return(
-                            <tr key={i}>
-                                <td>{e.pseq}</td>
-                                <td>{e.pmanager}</td>
-                                <td><Link to={`/groovy/dashboard/project/content/${e.pseq}`}>{e.pname}</Link></td>
-                                <td>{e.ptime_limit}</td>
-                            </tr>
+                        return(          
+                            <List sx={style} component="nav" aria-label="mailbox folders">
+                                <Link to={`/groovy/dashboard/project/content/${e.pseq}`}><ListItem button>
+                                    <Grid container key={i} className={`${style.marginT10}`}> 
+                                        <Grid xs={1} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.pseq}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={3} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                                {e.pmanager}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={5} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.pname}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={2} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.ptime_limit ? format(new Date(e.ptime_limit), 'yyyy-MM-dd') : e.ptime_limit}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={1} className={style.center}>
+                                            
+                                        </Grid>
+                                    </Grid>            
+                                </ListItem></Link>
+                            <Divider />
+                                
+                            </List>
                         )
                     })}
-                </tbody>
-            </table>
+                
             </div>
-
         </div>
     )
 }
