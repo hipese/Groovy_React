@@ -2,17 +2,19 @@ import style from "./Org_Chart_Table.module.css"
 import React, { useState } from 'react';
 
 
-const Org_Chart_Table = ({ employees, setEmployees }) => {
+const Org_Chart_Table = ({ employees,selectedRow ,setSelectedRow}) => {
 
-    // 상태를 사용하여 선택된 행의 ID를 저장합니다.
-    const [selectedRow, setSelectedRow] = useState(null);
 
     // 행을 클릭했을 때 호출되는 함수입니다.
-    const handleRowClick = (e) => {
-        // 클릭된 행의 ID를 상태에 설정합니다.
-        console.log(e.target);
-        setSelectedRow(e);
-
+    const handleRowClick = (id) => {
+        // 이미 선택된 행을 클릭하면 선택을 해제합니다.
+        if (selectedRow === id) {
+            setSelectedRow(null);
+        } else {
+            // 다른 행을 클릭하면 선택된 행의 ID를 업데이트합니다.
+            setSelectedRow(id);
+            console.log(id);
+        }
     };
 
 

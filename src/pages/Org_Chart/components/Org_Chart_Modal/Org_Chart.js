@@ -7,10 +7,13 @@ import axios from "axios";
 
 const Org_Chart = ({ isOpen, close }) => {
 
-    const [employees, setEmployees] = useState({}); // 여기서 선택된 직원의 상태를 관리합니다.
-    const [backUpEmployees, setBackUpEmployees] = useState({}); // 여기서 선택된 직원의 상태를 관리합니다.
+    const [employees, setEmployees] = useState({}); // 여기서 선택된 직원의 목록을 보여줍니다.
+    const [backUpEmployees, setBackUpEmployees] = useState({}); // 원래 직원의 목록을 저장합니다
+    const [selectedRow, setSelectedRow] = useState(null); //선택한 행의 값을 가져옵니다.
 
-    useEffect(() => {
+    const [midApprover, setMidApprover] = useState(); //선택한 행의 값을 가져옵니다.
+
+    useEffect(() => { 
         axios.get("/api/member/selectedEmployee").then(resp => {
             console.log(resp.data);
             setEmployees(resp.data)
@@ -27,12 +30,15 @@ const Org_Chart = ({ isOpen, close }) => {
     };
 
     // '중간결제자' 또는 '최종결제자' 버튼 클릭 시 처리할 함수
-    const handleMidSelect = (role) => {
-        console.log("이거 가져오냐?"+employees);
+    const handleMidSelect = () => {
+        console.log("선택한 놈의 아이디: "+selectedRow);
+        axios.get(`/api/member/${selectedRow}`).then(resp=>{
+            console.log(resp.data);
+        })
     };
 
-    const handleFinSelect = (role) => {
-        console.log("이거 가져오냐?"+employees);
+    const handleFinSelect = () => {
+        console.log("선택한 놈의 아이디: "+selectedRow);
     };
 
 
@@ -54,7 +60,7 @@ const Org_Chart = ({ isOpen, close }) => {
                             </div>
 
                             <div className={style.tablebox}>
-                                <Org_Chart_Table employees={employees} setEmployees={setEmployees}/>
+                                <Org_Chart_Table employees={employees} setEmployees={setEmployees} selectedRow={selectedRow} setSelectedRow={setSelectedRow}/>
                             </div>
 
                         </div>
