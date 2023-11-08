@@ -43,11 +43,11 @@ const AddSchedule = ({handleClose}) => {
         <div>
             <div className={`${style.border}`}>
                 시작일 : 
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DateTimePicker']}>
-                        <DateTimePicker label="Basic date time picker" />
+                        <DateTimePicker label="시작일" name="pschedule_start" onChange={handleChange}/>
                     </DemoContainer>
-                </LocalizationProvider>
+                </LocalizationProvider> */}
                 <input type="date" name="pschedule_start" onChange={handleChange}/>
             </div>
             <div className={`${style.border}`}>
