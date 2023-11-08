@@ -11,7 +11,7 @@ const Org_Chart = ({ isOpen, close }) => {
     const [backUpEmployees, setBackUpEmployees] = useState({}); // 원래 직원의 목록을 저장합니다
     const [selectedRow, setSelectedRow] = useState(null); //선택한 행의 값을 가져옵니다.
 
-    const [midApprover, setMidApprover] = useState(); //선택한 행의 값을 가져옵니다.
+    const [approver, setApprover] = useState({}); //선택한 행의 값을 가져옵니다.
 
     useEffect(() => { 
         axios.get("/api/member/selectedEmployee").then(resp => {
@@ -34,6 +34,7 @@ const Org_Chart = ({ isOpen, close }) => {
         console.log("선택한 놈의 아이디: "+selectedRow);
         axios.get(`/api/member/${selectedRow}`).then(resp=>{
             console.log(resp.data);
+            setApprover(resp.data);
         })
     };
 
