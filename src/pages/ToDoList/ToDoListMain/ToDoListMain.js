@@ -18,8 +18,49 @@ const ProfileContainer = styled("div")({
     maxHeight: "70px",
 });
 
+const StarIcon = ({onClick}) => {
+  const [isFilled, setIsFilled] = useState(false);
+
+  const toggleFill = () => {
+    setIsFilled(!isFilled);
+    if(onClick) onClick();
+  };
+  const strokeColor = isFilled ? "#FFD700" : "#000";
+  const fillClass = isFilled ? styles.ratingStarFilled : styles.ratingStarNotFilled;
+
+
+  return (
+    <label htmlFor="rating-2" className={styles.ratingLabel} onClick={toggleFill}>
+      <svg className={styles.ratingStar} width="15px" height="15px" viewBox="0 0 32 32" aria-hidden="true">
+        <g transform="translate(16,16)">
+          <circle className={styles.ratingStarRing} fill="none" stroke="#000" strokeWidth="16" r="8" transform="scale(0)" />
+        </g>
+        <g stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <g transform="translate(16,16) rotate(180)">
+            <polygon className={styles.ratingStarStroke} points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07" fill="none" />
+            <polygon className={`${styles.ratingStarFill} ${fillClass}`} points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07" />
+          </g>
+          <g transform="translate(16,16)" strokeDasharray="12 12" strokeDashoffset="12">
+            <polyline className={styles.ratingStarLine} transform="rotate(0)" points="0 4,0 16" />
+            <polyline className={styles.ratingStarLine} transform="rotate(72)" points="0 4,0 16" />
+            <polyline className={styles.ratingStarLine} transform="rotate(144)" points="0 4,0 16" />
+            <polyline className={styles.ratingStarLine} transform="rotate(216)" points="0 4,0 16" />
+            <polyline className={styles.ratingStarLine} transform="rotate(288)" points="0 4,0 16" />
+          </g>
+        </g>
+      </svg>
+    </label>
+  );
+};
+
 const ToDoListMain = () => {
   const members = useContext(MemberContext);
+  const [starActive, setStarActive] = useState(false);
+
+  const toggleStar = () => {
+    setStarActive(!starActive);
+  }
+
 
   return (
     <div className={styles.tdl}>
@@ -34,7 +75,7 @@ const ToDoListMain = () => {
         <div className={styles.tdlBoardsTitle}>Boards</div>
         <ul className={styles.tdlul}>
           <li className={styles.tdlli}>
-            <div className={styles.tdlInsert}>Create New Board</div>
+            <div className={styles.tdlInsert}>Create New Board <div className={`${styles.starimg} ${starActive ? styles.starActive : ''}`}><StarIcon onClick={toggleStar} /></div></div>
           </li>
           <li className={styles.tdlli}>
             <div className={styles.tdlInsert}>Create New Board</div>
@@ -47,6 +88,9 @@ const ToDoListMain = () => {
           </li>
           <li className={styles.tdlli}>
             <div className={styles.tdlInsert}>Create New Board</div>
+          </li>
+          <li>
+            
           </li>
         </ul>
         

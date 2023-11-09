@@ -58,16 +58,59 @@
         width: 25%;
     }
 
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     padding-right: 20px;
     float: left;
 }
 
 .tdlInsert {
-
     height: 100px;
     background-color: whitesmoke;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.tdlInsert:hover {
+    cursor: pointer;
+    background-color: #e9ecef;
+}
+
+.starimg {
+    position: absolute;
+    top: 0px;
+    right: -50px;
+    transition: right 0.3s ease-in-out;
+}
+
+.tdlInsert:hover .starimg {
+    right: 5px;
+}
+
+.starActive {
+    top: 0px;
+    right: 5px;
+}
+
+.starimg:active {
+    transform: scale(0.8);
+}
+
+.ratingLabel {
+    cursor: pointer;
+}
+
+.ratingStarStroke {
+    stroke: Gold;
+}
+
+
+.ratingStarFilled {
+    fill: Gold;
+}
+
+.ratingStarNotFilled {
+    fill: transparent;
 }
