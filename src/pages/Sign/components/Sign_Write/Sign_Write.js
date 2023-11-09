@@ -6,6 +6,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Org_Chart from '../../../Org_Chart/components/Org_Chart_Modal/Org_Chart';
 import axios from 'axios';
 import { LoginContext } from "../../../../App";
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+import { useWebSocket } from "../../../../WebSocketContext/WebSocketContext";
 
 
 const modules = {
@@ -94,6 +97,14 @@ const Sign_Write = () => {
             });
     };
 
+    const stompClient = useWebSocket();
+
+    const sendMessage = () => {
+      if (stompClient) {
+        const message = "안녕하세요";
+        stompClient.send("/app/user", {}, JSON.stringify(message));
+      }
+    };
 
 
     return (
@@ -198,7 +209,7 @@ const Sign_Write = () => {
                     <button className={style.apply} onClick={handleSubmit}>신청</button>
                     <Link to="/Groovy/signlist"><button className={style.cancel}>취소</button></Link>
                 </div>
-
+                <button onClick={sendMessage}>Send Message</button>
             </div>
         </div>
 
