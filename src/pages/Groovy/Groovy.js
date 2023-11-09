@@ -102,19 +102,6 @@ const Groovy = () => {
         });
     };
 
-    useEffect(() => {
-        initializeWebSocket();
-
-        // 컴포넌트가 언마운트될 때 웹 소켓 연결 해제 (clean-up 함수)
-        return () => {
-            if (stompClient) {
-                stompClient.disconnect();
-            }
-        };
-    }, []); // 빈 배열을 전달하여 처음 마운트될 때만 실행
-
-
-
     return (
         <WebSocketProvider>
             <MemberContext.Provider value={{ member, setMember }}>
