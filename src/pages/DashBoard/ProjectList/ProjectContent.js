@@ -11,13 +11,13 @@ import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { format } from 'date-fns';
+import Org_Chart from "../../Org_Chart/components/Org_Chart_Modal/Org_Chart.js";
 
 const Modalstyle = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
@@ -97,7 +97,7 @@ const ProjectProgress = () => {
 
 const UpdateState = ({handleClose,pseq,setUpdate}) => {
     const navi = useNavigate();
-    const [state,setState] = useState({pseq:pseq,pschedule_state:0});
+    const [state,setState] = useState({pschedule_seq:pseq,pschedule_state:0});
     const handleChange = (e) => {
         const {name,value} = e.target;
         setState({pschedule_seq:pseq,[name]:value});
@@ -232,15 +232,15 @@ const ProjectTodo = () => {
                                     </Grid>            
                                 </ListItem>
                                 <Modal
-                                        open={openUpdate}
-                                        onClose={handleCloseUpdate}
-                                        aria-labelledby="modal-modal-title"
-                                        aria-describedby="modal-modal-description"
-                                        >
-                                        <Box sx={Modalstyle} className={`${style.bgwhite}`}>
-                                            <UpdateState handleClose={handleCloseUpdate} pseq={pseq} setUpdate={setUpdate}/>
-                                        </Box>
-                                    </Modal>
+                                    open={openUpdate}
+                                    onClose={handleCloseUpdate}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                    >
+                                    <Box sx={Modalstyle} className={`${style.bgwhite}`}>
+                                        <UpdateState handleClose={handleCloseUpdate} pseq={pseq} setUpdate={setUpdate}/>
+                                    </Box>
+                                </Modal>
                                 
                             <Divider />
                                 
@@ -252,15 +252,33 @@ const ProjectTodo = () => {
 }
 
 const AddMember = ({handleClose}) => {
+    const [childopen, setChildOpen] = useState(false);
+    const handleChildOpen = () => setChildOpen(true);
+    const handleChildClose = () => setChildOpen(false);
+    
+    const [isModalOpen, setModalOpen] = useState(false);
+    const toggleModal = () => {
+        setModalOpen(!isModalOpen);
+    };
+
     const navi = useNavigate();
     const {seq} = useParams();
     const {member, setMember} = useContext(MemberContext);
-    const [newMember,setNewMember] = useState({pmember_seq:0,pseq:0,group_name:"",name:""});
+    const [newMember,setNewMember] = useState({pseq:0,group_name:"없음",name:"",id:""});
+    const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
+
     const handleChange = (e) => {
         const {name,value} = e.target;
-        
         setNewMember(prev=>({...prev,[name]:value}));
     }
+    useEffect(()=>{
+        if(approver.group_name == null){
+            setNewMember(prev=>({...prev,["group_name"]:"없음",["id"]:approver.id,["name"]:approver.name}));
+        }else{
+            setNewMember(prev=>({...prev,["group_name"]:approver.group_name,["id"]:approver.id,["name"]:approver.name}));
+        }
+        
+    },[approver]);
 
     const handleAdd = () => {
         setMember(prev=>([...prev,newMember]));
@@ -272,27 +290,44 @@ const AddMember = ({handleClose}) => {
     }
     return(
         <div>
+            <IconButton aria-label="add" onClick={toggleModal}>
+                <AddIcon fontSize='small'/>
+            </IconButton>
             <div className={`${style.border}`}>
-                이름
-                <input type="text" name="name" onChange={handleChange}/>
+                ID
+                <input type="text" name="name" value={approver.id ? approver.id : ""} onChange={handleChange}/>
             </div>
             <div className={`${style.border}`}>
                 부서
-                <input type="text" name="group_name" onChange={handleChange}/>
+                <input type="text" name="group_name" value={approver.group_name == null ? "없음" : approver.group_name} onChange={handleChange}/>
+            </div>
+            <div className={`${style.border}`}>
+                이름
+                <input type="text"value={approver.name ? approver.name : ""}/>
             </div>
             <div className={`${style.border} ${style.btnEven}`}>
                 <button onClick={handleClose}>취소</button>
                 <button onClick={handleAdd}>추가</button>
             </div>
+            <div className={`${style.modalWidth}`}>
+                <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} />
+            </div>
+            
+            
         </div>
+        
     )
 }
 
 const ProjectMember = () => {
     const {member,setMember} = useContext(MemberContext);
+    
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    
+    
     return(
         <div className={`${style.membersection}`}>
             <div className={`${style.borderbtm} ${style.padding10} ${style.center}`}>
@@ -301,6 +336,7 @@ const ProjectMember = () => {
                     <AddIcon fontSize='small'/>
                 </IconButton>
             </div>
+            
             <Modal
                 open={open}
                 onClose={handleClose}
