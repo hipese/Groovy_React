@@ -15,6 +15,10 @@ import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import ProjectList from './ProjectList/ProjectList';
 import DeptNotice from './DeptNotice/DeptNotice';
 import { format } from 'date-fns';
+import { DateCalendar, DatePicker, LocalizationProvider, StaticDatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { ControlCameraSharp } from '@mui/icons-material';
 
 const Worksection = () => {
     const {loginID} = React.useContext(LoginContext);
@@ -210,10 +214,16 @@ const Signsection = () => {
 }
 
 const Calandarsection = () => {
+    const handleDate = (e) => {
+        const pickedDate = format(new Date(e.$d), 'yyyy-MM-dd')
+        console.log(pickedDate);
+    }
     return (
         <div className={style.calandarsection}>
-            <div className={style.padding15}>
-                일정(달력 들어와야함)
+            <div className={style.padding10}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DateCalendar onChange={handleDate} />
+                </LocalizationProvider>
             </div>
             
         </div>

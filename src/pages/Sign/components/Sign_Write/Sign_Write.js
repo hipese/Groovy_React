@@ -29,6 +29,7 @@ const Sign_Write = (props) => {
     const [isModalOpen, setModalOpen] = useState(false);
 
     const toggleModal = () => {
+        console.log(approver.id);
         setModalOpen(!isModalOpen);
     };
 
@@ -38,11 +39,13 @@ const Sign_Write = (props) => {
     const [document_type, setDocument_type] = useState("품의서");
     const [title, setTitle] = useState("");
     const [recipient, setRecipient] = useState("1002");
+    const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
     const [accept, setAccept] = useState(1);
     const [comment, setComment] = useState("");
     const [formdata, setFormData] = useState({
         files: []
     });
+
 
     const handleFileChange = (e) => {
         setFormData(prev => ({ ...prev, files: [...e.target.files] }))
@@ -59,12 +62,16 @@ const Sign_Write = (props) => {
     };
 
     const handleSubmit = () => {
+
+        //approver이 없으면 선택하라고 알려주는 경고창 띄우기
+
+
         const submitFormData = new FormData();
 
         // Append the additional data to the submitFormData object
         submitFormData.append("document_type", document_type);
         submitFormData.append("contents", contents);
-        submitFormData.append("recipient", recipient);
+        submitFormData.append("recipient", approver.id);
         submitFormData.append("accept", accept);
         submitFormData.append("comment", comment);
         submitFormData.append("title", title);
@@ -116,29 +123,31 @@ const Sign_Write = (props) => {
                 <div className={style.signline}>
                     <div className={style.titleText}>결제선 지정
                         <button onClick={toggleModal}>조직도 검색</button>
-                        <Org_Chart isOpen={isModalOpen} close={toggleModal} />
+                        <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} />
                     </div>
                     <div className={style.table}>
                         <div className={style.tableBox}>
                             <div className={`${style.tableRow} ${style.tableHead}`}>
                                 <div>구분</div>
-                                <div>중간 결재자</div>
-                                <div>최종 결재자</div>
+                                <div>결재자</div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>이름</div>
-                                <div>조직도 검색에서 선택한 멤버</div>
-                                <div>조직도 검색에서 선택한 멤버</div>
+                                <div>
+                                    {approver.name ? approver.name : "맴버을 선택하세요"}
+                                </div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>부서</div>
-                                <div>조직도 검색에서 선택한 부서</div>
-                                <div>조직도 검색에서 선택한 부서</div>
+                                <div>
+                                    {approver.group_name  ? approver.group_name : "부서을 선택하세요"}
+                                </div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>직급</div>
-                                <div>조직도 검색에서 선택한 직급</div>
-                                <div>조직도 검색에서 선택한 직급</div>
+                                <div>
+                                    {approver.position ? approver.position : "직급을 선택하세요"}
+                                </div>
                             </div>
                         </div>
                     </div>

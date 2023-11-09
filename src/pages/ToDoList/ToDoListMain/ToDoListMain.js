@@ -32,7 +32,24 @@ const ToDoListMain = () => {
       </div>
       <div className={styles.tdlBoards}>
         <div className={styles.tdlBoardsTitle}>Boards</div>
-        <div className={styles.tdlInsert}>df</div>
+        <ul className={styles.tdlul}>
+          <li className={styles.tdlli}>
+            <div className={styles.tdlInsert}>Create New Board</div>
+          </li>
+          <li className={styles.tdlli}>
+            <div className={styles.tdlInsert}>Create New Board</div>
+          </li>
+          <li className={styles.tdlli}>
+            <div className={styles.tdlInsert}>Create New Board</div>
+          </li>
+          <li className={styles.tdlli}>
+            <div className={styles.tdlInsert}>Create New Board</div>
+          </li>
+          <li className={styles.tdlli}>
+            <div className={styles.tdlInsert}>Create New Board</div>
+          </li>
+        </ul>
+        
       </div>
     </div>
   );
