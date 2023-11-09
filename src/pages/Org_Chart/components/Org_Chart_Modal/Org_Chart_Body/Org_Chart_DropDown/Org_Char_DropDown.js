@@ -68,8 +68,8 @@ const Org_Chart_DropDown = ({ employees, setEmployees, backUpEmployees }) => {
                     <ul>
                         {department.map((dept, i) => (
                             // 클릭 이벤트에 현재 부서 이름을 전달합니다.
-                            <li key={i} onClick={() => handleDeptSearch(dept.group_name)}>
-                                {dept.group_name}
+                            <li key={i} onClick={() => handleDeptSearch(dept.dept_name)}>
+                                {dept.dept_name}
                             </li>
                         ))}
                         <li  onClick={() => handlereset()}>
