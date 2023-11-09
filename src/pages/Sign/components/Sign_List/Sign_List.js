@@ -5,6 +5,10 @@ import Sign_Complete from "../Sign_Complete/Sign_Complete";
 import Sign_Progress from "../Sign_Progress/Sign_Progress";
 import Sign_Write from "../Sign_Write/Sign_Write";
 import Sign_Detail from "../Sign_Detail/Sign_Detail";
+import { createContext, useState } from "react";
+
+
+// const Receiver=createContext(); 나중에 사용할거면 만들어서 ㄱㄱ
 
 
 const SignM=()=>{
@@ -37,10 +41,11 @@ const SignC=()=>{
 }
 
 const Sign_List = () => {
+
   return (
     <Routes>
       <Route path="/" element={<SignM/>} />
-      <Route path="/write" element={<SignWrt/>} />
+      <Route path="/write" element={<SignWrt/> } />
       <Route path="/wait" element={<SignWa />} />
       <Route path="/progress" element={<SignP />} />
       <Route path="/complete" element={<SignC />} />

@@ -3,8 +3,9 @@ import style from "./Sign_Detail.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { LoginContext } from "../../../../App";
+import { MemberContext } from "../../../Groovy/Groovy";
 
-const Sign_Detail = () => {
+const Sign_Detail = ({ approver }) => {
 
     const { seq } = useParams();
     const [sign_list, setSign_list] = useState({ seq: seq, writer: "", document_type: "", recipient: "", title: "", contents: "", accept: "", write_date: "", comment: "" });
@@ -12,16 +13,36 @@ const Sign_Detail = () => {
     const navi = useNavigate();
     const { loginID } = useContext(LoginContext);
 
+    const members = useContext(MemberContext);
+
+    const [signWriterInfo, setSignWriterInfo] = useState({});
+    const [signReceiverInfo, setSignReceiverInfo] = useState({});
+
     useEffect(e => {
         axios.get(`/api/signlist/${seq}`).then(resp => {
             setSign_list(resp.data);
+
         });
 
         axios.get(`/api/signfiles/${seq}`).then(resp1 => {
             setSign_files(resp1.data);
-            console.log(resp1.data);
         });
     }, []);
+
+    useEffect(() => {
+        if (sign_list.recipient) {
+            axios.get(`/api/member/signWriterInfo/${sign_list.writer}`).then(resp2 => {
+                console.log(resp2.data);
+                setSignWriterInfo(resp2.data);
+            });
+
+            axios.get(`/api/member/signReceiverInfo/${sign_list.recipient}`).then(resp2 => {
+                console.log(resp2.data);
+                setSignReceiverInfo(resp2.data);
+            });
+        }
+    }, [sign_list.recipient]);
+
 
     const downloadFile = (file) => {
         // Make an API request to fetch the file content
@@ -92,21 +113,22 @@ const Sign_Detail = () => {
                                 기안자
                             </div>
                             <div className={style.right}>
-                                {`${sign_list.writer}`}
+                                {signWriterInfo.name}
                             </div>
                         </div> <div className={style.docDepartment}>
                             <div className={style.left}>
                                 소속
                             </div>
                             <div className={style.right}>
-                                Git관리부
+                                {signWriterInfo.group_name}
                             </div>
                         </div> <div className={style.docWrite_Date}>
                             <div className={style.left}>
                                 기안작성일
                             </div>
                             <div className={style.right}>
-                                2023-11-03
+                                {`${sign_list.write_date}`}
+                                {/* 이거 포맷 바꿔줘라 */}
                             </div>
                         </div>
                     </div>
@@ -124,14 +146,14 @@ const Sign_Detail = () => {
                                 직급
                             </div>
                             <div className={style.right}>
-                                과장
+                                {signReceiverInfo.position}
                             </div>
                         </div> <div className={style.docDepartment}>
                             <div className={style.left}>
                                 이름
                             </div>
                             <div className={style.right}>
-                                {`${sign_list.recipient}`}
+                                {signReceiverInfo.name}
                             </div>
                         </div> <div className={style.docWrite_Date}>
                             <div className={style.left}>
