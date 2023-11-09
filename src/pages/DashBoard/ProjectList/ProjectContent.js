@@ -95,34 +95,30 @@ const ProjectProgress = () => {
     )
 }
 
-const UpdateState = ({handleClose}) => {
+const UpdateState = ({handleClose,pseq,setUpdate}) => {
     const navi = useNavigate();
-    const {seq} = useParams();
-    const {member, setMember} = useContext(MemberContext);
-    const [newMember,setNewMember] = useState({pmember_seq:0,pseq:0,group_name:"",name:""});
+    const [state,setState] = useState({pseq:pseq,pschedule_state:0});
     const handleChange = (e) => {
         const {name,value} = e.target;
-        
-        setNewMember(prev=>({...prev,[name]:value}));
+        setState({pschedule_seq:pseq,[name]:value});
     }
 
     const handleAdd = () => {
-        setMember(prev=>([...prev,newMember]));
-        console.log(newMember);
-        axios.post(`/api/project/addMember/${seq}`,newMember).then(res=>{
-            setMember(prev=>([...prev,member]));
+        console.log(state);
+        axios.put(`/api/project/update/state`,state).then(res=>{
+            setUpdate(true);
             handleClose();
         });
     }
     return(
         <div>
             <div className={`${style.border}`}>
-                이름
-                <input type="text" name="name" onChange={handleChange}/>
-            </div>
-            <div className={`${style.border}`}>
-                부서
-                <input type="text" name="group_name" onChange={handleChange}/>
+                상태 - 
+                <select name="pschedule_state" id="state" onChange={handleChange}>
+                    <option value="0" name="state">해야할 일</option>
+                    <option value="1" name="state">진행중</option>
+                    <option value="2" name="state">완료</option>
+                </select>
             </div>
             <div className={`${style.border} ${style.btnEven}`}>
                 <button onClick={handleClose}>취소</button>
@@ -133,10 +129,25 @@ const UpdateState = ({handleClose}) => {
 }
 
 const ProjectTodo = () => {
+    const {seq} = useParams();
     const {todo,setTodo} = useContext(AddScheduleContext);
     const [open, setOpen] = useState(false);
+    const [pseq,setSeq] = useState(0);
+    const [isUpdate,setUpdate] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const [openUpdate, setOpenUpdate] = useState(false);
+    const handleOpenUpdate = () => setOpenUpdate(true);
+    const handleCloseUpdate = () => setOpenUpdate(false);
+    useEffect(()=>{
+        axios.get(`/api/project/todo/${seq}`).then(res=>{
+            setTodo(res.data);
+            setUpdate(false);
+        }).catch(()=>{
+            console.log("0");
+        });
+    },[isUpdate]);
     return(
         <div className={`${style.todosection}`}>
             <div className={`${style.borderbtm} ${style.padding10} ${style.center}`}>
@@ -188,7 +199,10 @@ const ProjectTodo = () => {
                     {todo.map((e,i)=>{
                         return(
                             <List sx={style} component="nav" aria-label="mailbox folders">
-                                <ListItem button>
+                                <ListItem button onClick={()=>{
+                                    handleOpenUpdate();
+                                    setSeq(e.pschedule_seq);
+                                }}>
                                     <Grid container key={i} className={`${style.marginT10}`}> 
                                         <Grid xs={3} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
@@ -217,6 +231,17 @@ const ProjectTodo = () => {
                                         </Grid>
                                     </Grid>            
                                 </ListItem>
+                                <Modal
+                                        open={openUpdate}
+                                        onClose={handleCloseUpdate}
+                                        aria-labelledby="modal-modal-title"
+                                        aria-describedby="modal-modal-description"
+                                        >
+                                        <Box sx={Modalstyle} className={`${style.bgwhite}`}>
+                                            <UpdateState handleClose={handleCloseUpdate} pseq={pseq} setUpdate={setUpdate}/>
+                                        </Box>
+                                    </Modal>
+                                
                             <Divider />
                                 
                             </List>
@@ -289,6 +314,7 @@ const ProjectMember = () => {
             <table border="1" className={`${style.list}`}>
                 <thead>
                     <tr>
+                        <th>사원번호</th>
                         <th>이름</th>
                         <th>부서</th>
                     </tr>
@@ -297,6 +323,7 @@ const ProjectMember = () => {
                     {member.map((e,i)=>{
                         return(
                             <tr key={i}>
+                                <td>{e.id}</td>
                                 <td>{e.name}</td>
                                 <td>{e.group_name}</td>
                             </tr>
