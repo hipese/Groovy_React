@@ -1,27 +1,46 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { Component, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import style from "./MypageDropDown.module.css"
+import { MemberContext } from "../../../../Groovy/Groovy";
+import { LoginContext } from "../../../../../App";
+import axios from "axios";
+
+
 
 // MypageDropDown 컴포넌트 정의
-const MypageDropDown = () => {
+const MypageDropDown = ({ closeDropdown }) => {
+
+
+    const members = useContext(MemberContext);
+    const { loginID, setLoginID }=useContext(LoginContext)
+    const navigate = useNavigate();
+
+    const handleMypage=()=>{
+        closeDropdown();
+        navigate("mypagelist");
+    }
+
+    const handleOutout=()=>{
+        console.log(loginID)
+
+        const confirmLogout = window.confirm("로그아웃하시겠습니까?");
+        if(confirmLogout){
+
+            axios.post("/auth/logout").then(resp=>{
+                console.log(resp.data);
+                setLoginID("");
+                navigate("/");
+            })
+
+        }
+    }
+
     return (
-        <div className="">
-            <div>
-                email 적는 장소
+        <div className={style.container}>
+            <div className={style.buttonDiv}>
+                <button className={style.btn} onClick={handleMypage}>  프로필 설정</button>
+                <button className={style.btn} onClick={handleOutout}>로그아웃</button>
             </div>
-            <div>
-                <div>
-                    아바타 이미지 들어가는 장소
-                </div>
-                
-                <div>
-                    안녕하세요 누구누구님
-                </div>
-
-            </div>
-
-            <Link to="mypagelist">
-                여기 누르면 이동해요?
-            </Link>
         </div>
     );
 }

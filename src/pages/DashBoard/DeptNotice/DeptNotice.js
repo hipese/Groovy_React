@@ -1,8 +1,14 @@
 import style from './notice.module.css';
-import {Grid, IconButton, Typography } from '@mui/material';
+import {Grid, IconButton, List, ListItem, Typography } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
+import { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
+import { LoginContext } from '../../../App';
+import { Route, Routes } from 'react-router';
+import { Link } from 'react-router-dom';
+import DeptNoticeWrite from './DeptNoticeWrite.js';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -44,12 +50,22 @@ color: 'inherit',
 },
 }));
 
-const DeptNotice = () => {
+const DeptNoticeList = () => {
+    const {loginID} = useContext(LoginContext);
+    const [isExcutives,setExcutives] = useState(false);
+    useEffect(()=>{
+        axios.get(`/api/dept_notice/${loginID}`).then(res=>{
+            console.log(res.data);
+            setExcutives(res.data);
+        }).catch((e)=>{
+            console.log(e);
+        });
+    },[]);
     return (
         <div className={`${style.surveyContents}`}>
             <div className={`${style.padding10}`}>
                 <Grid container spacing={2}>
-                    <Grid item xs={8} className={`${style.vcenter}`}>
+                    <Grid item xs={7} className={`${style.vcenter}`}>
                         <Typography variant="h5" >
                             부서 내 소식
                         </Typography>
@@ -65,10 +81,14 @@ const DeptNotice = () => {
                             />
                         </Search>
                     </Grid>
+                    <Grid item xs={1} className={`${style.vcenter}`}>
+                        {isExcutives ? <Link to="write_notice"><button>공지 생성</button></Link> : ""}
+                        
+                    </Grid>
                 </Grid>
             </div>
             <hr></hr>
-            <div className={`${style.marginT50}`}>
+            <div className={`${style.marginT40}`}>
                 <Grid container rowSpacing={2}>
                     <Grid xs={1} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
@@ -94,30 +114,43 @@ const DeptNotice = () => {
             </div>
             <hr></hr>
             <div id='list'>
-            <Grid container rowSpacing={2}>
-                    <Grid xs={1} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                            번호
-                        </Typography>
-                    </Grid>
-                    <Grid xs={6} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                            제목
-                        </Typography>
-                    </Grid>
-                    <Grid xs={3} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                            작성일자
-                        </Typography>
-                    </Grid>
-                    <Grid xs={2} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                            상태
-                        </Typography>
-                    </Grid>
-                </Grid>
+                <List sx={style} component="nav" aria-label="mailbox folders">
+                    <ListItem button>
+                        <Grid container className={`${style.marginT10}`}> 
+                            <Grid xs={1} className={style.center}>
+                                <Typography className={`${style.fs} ${style.b}`}>
+                                1
+                                </Typography>
+                            </Grid>
+                            <Grid xs={6} className={style.center}>
+                                <Typography className={`${style.fs} ${style.b}`}>
+                                    2
+                                </Typography>
+                            </Grid>
+                            <Grid xs={3} className={style.center}>
+                                <Typography className={`${style.fs} ${style.b}`}>
+                                3
+                                </Typography>
+                            </Grid>
+                            <Grid xs={2} className={style.center}>
+                                <Typography className={`${style.fs} ${style.b}`}>
+                                4
+                                </Typography>
+                            </Grid>
+                        </Grid>            
+                    </ListItem>
+                </List>
             </div>
         </div>
+    )
+}
+
+const DeptNotice = () => {
+    return (
+        <Routes>
+            <Route path='/' element={<DeptNoticeList/>}></Route>
+            <Route path='write_notice' element={<DeptNoticeWrite/>}></Route>
+        </Routes>
     )
 }
 export default DeptNotice;
