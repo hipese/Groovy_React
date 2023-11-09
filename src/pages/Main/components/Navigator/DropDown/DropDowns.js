@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import admin from "./assets/admin.svg";
 import approval from "./assets/approval.png";
 import board from "./assets/board.png";
 import calendar from "./assets/calendar.svg";
@@ -198,6 +199,14 @@ class Dropdown extends Component {
                 <Link to="/Groovy/attendence" style={styles.link}>
                     <img src={setting} alt="" width={"15px"} height={"15px"} />{" "}
                     근태관리
+                </Link>
+              </Item>
+            </List>
+            <List style={styles.item} onClick={this.toggleState}>
+              <Item>
+                <Link to="/Groovy/admin" style={styles.link}>
+                    <img src={admin} alt="" width={"15px"} height={"15px"} />{" "}
+                    관리
                 </Link>
               </Item>
             </List>
