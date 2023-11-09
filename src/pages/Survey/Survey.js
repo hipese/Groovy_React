@@ -3,6 +3,8 @@ import {Grid, IconButton, Typography } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
+import { Link, Route, Routes } from 'react-router-dom';
+import SurveyWrite from './SurveyWrite/SurveyWrite';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -44,7 +46,7 @@ color: 'inherit',
 },
 }));
 
-const Survey=()=>{
+const SurveyList = () => {
     return(
         <div className={`${style.surveyContents}`}>
             <div className={`${style.padding10}`}>
@@ -66,7 +68,7 @@ const Survey=()=>{
                         </Search>
                     </Grid>
                     <Grid item xs={1} className={`${style.vcenter}`}>
-                        <button>설문생성</button>
+                        <Link to="survey_write"><button>설문생성</button></Link>
                     </Grid>
                 </Grid>
             </div>
@@ -97,30 +99,18 @@ const Survey=()=>{
             </div>
             <hr></hr>
             <div id='list'>
-            <Grid container rowSpacing={2}>
-                    <Grid xs={1} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                            번호
-                        </Typography>
-                    </Grid>
-                    <Grid xs={6} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                            제목
-                        </Typography>
-                    </Grid>
-                    <Grid xs={3} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                            작성일자
-                        </Typography>
-                    </Grid>
-                    <Grid xs={2} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                            상태
-                        </Typography>
-                    </Grid>
-                </Grid>
+
             </div>
         </div>
+    )
+}
+
+const Survey=()=>{
+    return(
+        <Routes>
+            <Route path='/' element={<SurveyList/>}></Route>
+            <Route path='survey_write' element={<SurveyWrite/>}></Route>
+        </Routes>
     )
 }
 
