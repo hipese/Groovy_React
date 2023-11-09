@@ -233,11 +233,11 @@ const Calandarsection = () => {
 const ProjectSection = () => {
     const {loginID} = React.useContext(LoginContext);
     const {project,setProject} = React.useContext(ProjectContext);
-    React.useEffect(()=>{
-        axios.get(`/api/project/${loginID}`).then(res=>{
-            setProject(res.data);
-        });
-    },[]);
+    // React.useEffect(()=>{
+    //     axios.get(`/api/project/${loginID}`).then(res=>{
+    //         setProject(res.data);
+    //     });
+    // },[]);
     return (
         <div className={style.projectsection}>
             <div className={`${style.padding10} ${style.borderbtm}`}>
@@ -281,7 +281,7 @@ const ProjectSection = () => {
                 </Grid>
             </div>
             <div>
-                    {project.map((e,i)=>{
+                    {/* {project.map((e,i)=>{
                         return(          
                             <List sx={style} component="nav" aria-label="mailbox folders">
                                 <Link to={`/groovy/dashboard/project/content/${e.pseq}`}><ListItem button>
@@ -315,7 +315,7 @@ const ProjectSection = () => {
                                 
                             </List>
                         )
-                    })}
+                    })} */}
                 
             </div>
         </div>
