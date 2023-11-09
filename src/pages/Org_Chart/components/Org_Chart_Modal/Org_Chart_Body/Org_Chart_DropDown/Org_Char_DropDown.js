@@ -73,7 +73,7 @@ const Org_Chart_DropDown = ({ employees, setEmployees, backUpEmployees }) => {
                             </li>
                         ))}
                         <li  onClick={() => handlereset()}>
-                                리셋
+                               전체목록 보기
                         </li>
                     </ul>
                 </div>
