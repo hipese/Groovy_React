@@ -12,8 +12,8 @@ import { MemberContext } from "../../../../Groovy/Groovy";
 const StyledBadge = styled(Badge)(({ theme }) => ({
   // 색상 지정
   "& .MuiBadge-badge": {
-    backgroundColor: "red",
-    color: "red",
+    backgroundColor: "limegreen",
+    color: "limegreen",
     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
 
     // 뱃지 css 위치 및 크기 지정
