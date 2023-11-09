@@ -28,7 +28,7 @@ const MypageDropDown = ({ closeDropdown }) => {
 
             axios.post("/auth/logout").then(resp=>{
                 console.log(resp.data);
-                // setLoginID(null);
+                setLoginID("");
                 navigate("/");
             })
 
