@@ -3,7 +3,6 @@ import { styled } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
-import { Link } from 'react-router-dom';
 import { MemberContext } from "../../../../Groovy/Groovy";
 import MypageDropDown from "../DropDown/MypageDropDown";
 
@@ -81,12 +80,27 @@ function BadgeAvatars() {
 
   const members = React.useContext(MemberContext);
   const [showDropdown, setShowDropdown] = React.useState(false); // 드롭다운 상태
+  const dropdownRef = React.useRef(null); // 드롭다운 참조를 위한 ref
 
   // 드롭다운 표시를 토글하는 함수
   const handleAvatarClick = () => {
-    console.log(showDropdown);
     setShowDropdown((prev) => !prev);
   };
+
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setShowDropdown(false); // 드롭다운을 닫습니다.
+    }
+  };
+
+  //범위를 벗어나면 닫히도록 하는 Effect
+  React.useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <Stack direction="row" spacing={2}>
@@ -102,7 +116,7 @@ function BadgeAvatars() {
             onClick={handleAvatarClick} // 클릭 이벤트 핸들러 추가
           />
           {showDropdown && (
-            <DropdownContainer>
+            <DropdownContainer ref={dropdownRef}>
               <MypageDropDown closeDropdown={handleAvatarClick} />
             </DropdownContainer>
           )}
