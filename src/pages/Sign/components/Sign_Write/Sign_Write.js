@@ -62,6 +62,10 @@ const Sign_Write = (props) => {
     };
 
     const handleSubmit = () => {
+
+        //approver이 없으면 선택하라고 알려주는 경고창 띄우기
+
+
         const submitFormData = new FormData();
 
         // Append the additional data to the submitFormData object
