@@ -27,7 +27,7 @@ const BellIcon = styled("img")({
 const BellContainer = styled(Box)({
   position: "absolute",
   top: "15px",
-  right: "65px",
+  right: "70px",
 });
 
 function DotBadge() {

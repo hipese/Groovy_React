@@ -15,7 +15,6 @@ const Sign_Detail = () => {
     useEffect(e => {
         axios.get(`/api/signlist/${seq}`).then(resp => {
             setSign_list(resp.data);
-            console.log(resp.data);
         });
 
         axios.get(`/api/signfiles/${seq}`).then(resp1 => {
@@ -50,8 +49,13 @@ const Sign_Detail = () => {
             });
     };
 
+    const handleCommentChange = (e) => {
+        const { name, value } = e.target;
+        setSign_list(prev => ({ ...prev, [name]: value }))
+    }
+
     const handleAccept = (e) => {
-        axios.put(`/api/signlist/accept/${seq}`).then(resp => {
+        axios.put(`/api/signlist/accept/${seq}`, sign_list).then(resp => {
             navi("/Groovy/signlist/wait");
         }).catch(e => {
 
@@ -59,7 +63,7 @@ const Sign_Detail = () => {
     }
 
     const handleReject = (e) => {
-        axios.put(`/api/signlist/reject/${seq}`).then(resp => {
+        axios.put(`/api/signlist/reject/${seq}`, sign_list).then(resp => {
             navi("/Groovy/signlist/wait");
         }).catch(e => {
 
@@ -174,6 +178,10 @@ const Sign_Detail = () => {
                     <div className={style.buttons}>
                         {loginID == `${sign_list.recipient}` ? (
                             <div>
+                                <div className={style.comment}>
+                                    <input type="text" name="comment" placeholder="코멘트 입력" className={style.input} value={sign_list.comment}
+                                        onChange={handleCommentChange}></input>
+                                </div>
                                 <button onClick={handleAccept}>승인</button>
                                 <button onClick={handleReject}>반려</button>
                             </div>

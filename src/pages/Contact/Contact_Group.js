@@ -13,6 +13,10 @@ const Contact_Group = () => {
 
     useEffect(() => {
         axios.get("/api/contact/selectGroup").then((resp) => {
+            resp.data.forEach((member) => {
+                if(member.group_name == null)
+                    member.group_name = "-";
+            })
             setContacts(resp.data);
             axios.get("/api/contact/favorite").then((resp2) => {
                 setFavorite(resp2.data);

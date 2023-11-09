@@ -1,8 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Col } from "reactstrap";
 import styles from "./SlideBar.module.css";
-import { Routes, Route, Link } from "react-router-dom";
-
+import { Routes, Route } from "react-router-dom";
 import AdminSlide from "./Admin/AdminSlide";
 import AttendenceSlide from "./Attendence/AttendenceSlide";
 import BoardSlide from "./Board/BoardSlide";
@@ -17,7 +15,7 @@ import ToDoListSlide from "./ToDoList/ToDoListSlide";
 import MypageSlide from "./Mypage/MypageSlide";
 
 
-const SlideBar = () => {
+const SlideBar = ({ refreshList }) => {
   return (
     <div className={styles.slide}>
       <Routes>
@@ -25,7 +23,7 @@ const SlideBar = () => {
         <Route path="/admin/*" element={<AdminSlide />} />
         <Route path="/attendence/*" element={<AttendenceSlide />} />
         <Route path="/board/*" element={<BoardSlide />} />
-        <Route path="/calendar/*" element={<CalendarSlide />} />
+        <Route path="/calendar/*" element={<CalendarSlide refreshList={refreshList}/>} />
         <Route path="/contacts/*" element={<ContactsSlide />} />
         <Route path="/mail/*" element={<EMailSlide />} />
         <Route path="/message/*" element={<MessageSlide />} />
