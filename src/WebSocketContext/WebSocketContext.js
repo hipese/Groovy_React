@@ -35,7 +35,7 @@ const WebSocketProvider = ({ children }) => {
         stompClient.disconnect();
       }
     };
-  }, []);
+  }, [loginID]);
 
   const sendMessage = (message) => {
     if (stompClient) {
