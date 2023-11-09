@@ -11,7 +11,7 @@ import Clock from 'react-live-clock';
 import axios from 'axios';
 import { LoginContext } from '../../App';
 import { async } from 'q';
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Routes, useNavigate } from 'react-router-dom';
 import ProjectList from './ProjectList/ProjectList';
 import DeptNotice from './DeptNotice/DeptNotice';
 import { format } from 'date-fns';
@@ -20,7 +20,16 @@ import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ControlCameraSharp } from '@mui/icons-material';
 
+const Loading = () => {
+return(
+    <div>
+    Loding......
+    </div>
+)
+}
+
 const Worksection = () => {
+    const {isLoading,setLoading} = React.useContext(ProjectContext);
     const {loginID} = React.useContext(LoginContext);
     const [working,setWorking] = React.useState(false);
     const [workState,setWorkstate] = React.useState("");
@@ -28,7 +37,7 @@ const Worksection = () => {
     const [checkInTime, setCheckIn] = React.useState("00:00:00");
     const [checkOutTime, setCheckOut] = React.useState("00:00:00");
     const [workname, setWorkname] = React.useState("");
-    console.log(loginID);
+    const navi = useNavigate();
     const handleCheckIn = async () => {
         //axios해서 res로 정상 출근인정되면 setworiking으로 버튼 활성화 되도록.
         setWorkstate("출근");
@@ -92,20 +101,10 @@ const Worksection = () => {
         }).catch((e)=>{
             console.log(e);
             setWorking(false);
-        }) : axios.get(`/api/dash/workstart/test`).then(res=>{
-            console.log(res.data);
-            
-            if(res.data){
-                setWorking(true);
-                setCheckIn(res.data.workstart);
-                setWorkstate("출근");
-            }else{
-                setWorking(false);
-            }
-            
-        }).catch((e)=>{
-            console.log(e);
-        });}
+            setLoading(true);
+        }).finally(()=>{
+            setLoading(false);
+        }) : navi("/");}
     },[]);
     
     return(
@@ -234,8 +233,11 @@ const ProjectSection = () => {
     const {loginID} = React.useContext(LoginContext);
     const {project,setProject} = React.useContext(ProjectContext);
     React.useEffect(()=>{
+        
         axios.get(`/api/project/${loginID}`).then(res=>{
             setProject(res.data);
+        }).catch((e)=>{
+            console.log(e);
         });
     },[]);
     return (
@@ -365,12 +367,21 @@ export const ProjectContext = React.createContext();
 
 const DashBoard=()=>{
     const [project,setProject] = React.useState([{}]);
+    const [isLoading, setLoading] = React.useState(false);
+    const {loginID} = React.useContext(LoginContext);
+    React.useEffect(()=>{
+        console.log(loginID);
+    },[]);    
+    
+    if(isLoading){
+        return(<Loading></Loading>);
+    }
     return(
-        <ProjectContext.Provider value={{project,setProject}}>
+        <ProjectContext.Provider value={{project,setProject,isLoading,setLoading}}>
             <Routes>
                 <Route path='/' element={<DashPageOne/>}></Route>
                     <Route path='project/*' element={<ProjectList/>}></Route>
-                <Route path='notice' element={<DeptNotice/>}></Route>
+                <Route path='notice/*' element={<DeptNotice/>}></Route>
             </Routes>        
         </ProjectContext.Provider>
     )

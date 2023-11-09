@@ -41,6 +41,10 @@
 .padding40{
     padding: 40px;
 }
+
+.marginT20{
+    margin-top: 20px;
+}
 .marginT50{
     margin-top: 50px;
 }
@@ -61,7 +65,9 @@
 .bold{
     font-weight: bold;
 }
-
+.border{
+    border: 1px solid black;
+}
 /* Write Content */
 
 .writeSection{
