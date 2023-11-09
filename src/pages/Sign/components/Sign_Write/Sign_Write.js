@@ -100,11 +100,13 @@ const Sign_Write = () => {
     const stompClient = useWebSocket();
 
     const sendMessage = () => {
-      if (stompClient) {
-        const message = "안녕하세요";
-        stompClient.send("/app/user", {}, JSON.stringify(message));
-      }
-    };
+        if (stompClient) {
+          const message = "안녕하세요";
+          const messageObject = { message, recipient };
+          stompClient.send("/app/user", {}, JSON.stringify(messageObject));
+        }
+      };
+      
 
 
     return (
