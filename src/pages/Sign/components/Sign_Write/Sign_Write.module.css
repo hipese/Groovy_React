@@ -77,7 +77,7 @@ select {
 }
 
 .signline {
-    margin-left: 100px;
+    margin-left: 300px;
 }
 
 .tableHead {
@@ -87,7 +87,7 @@ select {
 .tableRow {
     clear: both;
     /* 이전 요소들과의 float 해제 */
-    width: 900px;
+    width: 600px;
     /* 테이블 행을 100% 너비로 설정 */
     overflow: hidden;
     /* 플로팅된 요소들을 감춤 */
@@ -214,9 +214,6 @@ select {
     height: 40px;
 }
 
-.texteditor{
- 
-}
 
 .fileRow {
     clear: both;

@@ -47,6 +47,9 @@
 .border{
     border: 1px solid black;
 }
+.borderRad10{
+    border-radius: 10px;
+}
 .btnEven{
     display: flex;
     justify-content: space-evenly;
@@ -90,6 +93,13 @@
 
 
 /* ProjectCreate */
+
+.projectCreateContents{
+    width: 1300px;
+    height: 600px;
+    margin-left: 50px;
+    margin-top: 50px;
+}
 
 /* ProjectCreate */
 

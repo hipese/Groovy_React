@@ -53,7 +53,11 @@
     height: 100%;
     width: 25%;
 }
-
+.nullDiv{
+    font-size: 25px;
+    text-align: center;
+    margin: 20px;
+}
 
 .highlight {
     background-color: blueviolet; /* 또는 원하는 강조 색상 */
