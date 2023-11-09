@@ -13,7 +13,7 @@ const WebSocketProvider = ({ children }) => {
 
     client.connect({}, (frame) => {
       console.log('Connected: ' + frame);
-      client.subscribe('/topic/users', (response) => {
+      client.subscribe('/topic/a', (response) => {
         console.log(response);
         console.log(JSON.parse(response.body));
       });

@@ -66,8 +66,8 @@ const DropdownContainer = styled("div")({
   position: "absolute",
   top: "30px", // 버튼의 바닥에서 얼마나 떨어져 나타낼지
   right: "30px", // 오른쪽 끝에서 얼마나 떨어져 나타낼지
-  width: "300px",
-  height: "200px",
+  width: "400px",
+  height: "500px",
   backgroundColor: "white",
   boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)",
   padding: "12px 16px",
