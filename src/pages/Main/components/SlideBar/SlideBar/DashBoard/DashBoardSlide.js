@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import style from "./DashBoardSlide.module.css";
 
 const DashBoardSlide = () => {
@@ -15,12 +15,16 @@ const DashBoardSlide = () => {
             </button></Link>
             </div>
             <div className={style.DashBoardSlide}>
+                <Link to="/Groovy/dashboard/project/create"><button className={style.btn}>
+                프로젝트 생성
+            </button></Link>
+            </div>
+            <div className={style.DashBoardSlide}>
             <Link to="notice"><button className={style.btn}>
                 부서 내 소식 보기
             </button></Link>
             </div>
-        </div>
-        
+        </div>        
         
     );
 };
