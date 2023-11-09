@@ -31,10 +31,7 @@ const Sign_Write = () => {
     // 모달을 키거나 끌때 필요한 놈
     const [isModalOpen, setModalOpen] = useState(false);
 
-    const toggleModal = () => {
-        console.log(approver.id);
-        setModalOpen(!isModalOpen);
-    };
+  
 
 
     const navi = useNavigate();
@@ -48,6 +45,11 @@ const Sign_Write = () => {
     const [formdata, setFormData] = useState({
         files: []
     });
+
+
+    const toggleModal = () => {
+        setModalOpen(!isModalOpen);
+    };
 
 
     const handleFileChange = (e) => {
