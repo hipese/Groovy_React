@@ -15,11 +15,7 @@ const WebSocketProvider = ({ children }) => {
 
     client.connect({}, (frame) => {
       console.log('Connected: ' + frame);
-<<<<<<< HEAD
       client.subscribe('/topic/' + loginID, (response) => {
-=======
-      client.subscribe('/topic/a', (response) => {
->>>>>>> 3a00c98f1e2cab0f4bd9c42901d2cdacfae5d292
         console.log(response);
         console.log(JSON.parse(response.body));
       });
@@ -39,7 +35,7 @@ const WebSocketProvider = ({ children }) => {
         stompClient.disconnect();
       }
     };
-  }, []);
+  }, [loginID]);
 
   const sendMessage = (message) => {
     if (stompClient) {
