@@ -66,11 +66,11 @@ const DropdownContainer = styled("div")({
   position: "absolute",
   top: "30px", // 버튼의 바닥에서 얼마나 떨어져 나타낼지
   right: "30px", // 오른쪽 끝에서 얼마나 떨어져 나타낼지
-  width: "400px",
-  height: "500px",
+  width: "300px",
+  height: "100px",
   backgroundColor: "white",
   boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)",
-  padding: "12px 16px",
+  padding: "0px 0px",
   zIndex: 1000, // 다른 요소들 위에 나타나게 하기 위함
   border: "1px solid #ddd", // 테두리 추가
   borderRadius: "8px", // 모서리 둥글기 조절
@@ -103,7 +103,7 @@ function BadgeAvatars() {
           />
           {showDropdown && (
             <DropdownContainer>
-              <MypageDropDown />
+              <MypageDropDown closeDropdown={handleAvatarClick} />
             </DropdownContainer>
           )}
         </StyledBadge>
