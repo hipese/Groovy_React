@@ -95,6 +95,43 @@ const ProjectProgress = () => {
     )
 }
 
+const UpdateState = ({handleClose}) => {
+    const navi = useNavigate();
+    const {seq} = useParams();
+    const {member, setMember} = useContext(MemberContext);
+    const [newMember,setNewMember] = useState({pmember_seq:0,pseq:0,group_name:"",name:""});
+    const handleChange = (e) => {
+        const {name,value} = e.target;
+        
+        setNewMember(prev=>({...prev,[name]:value}));
+    }
+
+    const handleAdd = () => {
+        setMember(prev=>([...prev,newMember]));
+        console.log(newMember);
+        axios.post(`/api/project/addMember/${seq}`,newMember).then(res=>{
+            setMember(prev=>([...prev,member]));
+            handleClose();
+        });
+    }
+    return(
+        <div>
+            <div className={`${style.border}`}>
+                이름
+                <input type="text" name="name" onChange={handleChange}/>
+            </div>
+            <div className={`${style.border}`}>
+                부서
+                <input type="text" name="group_name" onChange={handleChange}/>
+            </div>
+            <div className={`${style.border} ${style.btnEven}`}>
+                <button onClick={handleClose}>취소</button>
+                <button onClick={handleAdd}>추가</button>
+            </div>
+        </div>
+    )
+}
+
 const ProjectTodo = () => {
     const {todo,setTodo} = useContext(AddScheduleContext);
     const [open, setOpen] = useState(false);
@@ -173,9 +210,9 @@ const ProjectTodo = () => {
                                             {e.pschedule_importance}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={1} className={style.center}>
+                                        <Grid xs={1} className={style.center} button>
                                             <Typography className={`${style.fs} ${style.b}`}>
-                                            {e.pschedule_state}
+                                            {e.pschedule_state != '2' ? e.pschedule_state != '1' ? "해야할 일" : "진행중" : "완료"}
                                             </Typography>
                                         </Grid>
                                     </Grid>            
@@ -189,12 +226,66 @@ const ProjectTodo = () => {
     )
 }
 
-const ProjectMember = ({member,setMember}) => {
+const AddMember = ({handleClose}) => {
+    const navi = useNavigate();
+    const {seq} = useParams();
+    const {member, setMember} = useContext(MemberContext);
+    const [newMember,setNewMember] = useState({pmember_seq:0,pseq:0,group_name:"",name:""});
+    const handleChange = (e) => {
+        const {name,value} = e.target;
+        
+        setNewMember(prev=>({...prev,[name]:value}));
+    }
+
+    const handleAdd = () => {
+        setMember(prev=>([...prev,newMember]));
+        console.log(newMember);
+        axios.post(`/api/project/addMember/${seq}`,newMember).then(res=>{
+            setMember(prev=>([...prev,member]));
+            handleClose();
+        });
+    }
+    return(
+        <div>
+            <div className={`${style.border}`}>
+                이름
+                <input type="text" name="name" onChange={handleChange}/>
+            </div>
+            <div className={`${style.border}`}>
+                부서
+                <input type="text" name="group_name" onChange={handleChange}/>
+            </div>
+            <div className={`${style.border} ${style.btnEven}`}>
+                <button onClick={handleClose}>취소</button>
+                <button onClick={handleAdd}>추가</button>
+            </div>
+        </div>
+    )
+}
+
+const ProjectMember = () => {
+    const {member,setMember} = useContext(MemberContext);
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     return(
         <div className={`${style.membersection}`}>
             <div className={`${style.borderbtm} ${style.padding10} ${style.center}`}>
-                프로젝트 멤버
+            프로젝트 멤버
+                <IconButton aria-label="add" onClick={handleOpen}>
+                    <AddIcon fontSize='small'/>
+                </IconButton>
             </div>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={Modalstyle} className={`${style.bgwhite}`}>
+                    <AddMember handleClose={handleClose}/>
+                </Box>
+            </Modal>
             <table border="1" className={`${style.list}`}>
                 <thead>
                     <tr>
@@ -219,6 +310,7 @@ const ProjectMember = ({member,setMember}) => {
 
 export const progressContext = createContext();
 const AddScheduleContext = createContext();
+const MemberContext = createContext();
 
 const ProjectContent = () => {
     const {seq} = useParams();
@@ -259,7 +351,9 @@ const ProjectContent = () => {
             </Grid>
 
             <Grid item xs={12}>
-                <ProjectMember member={member} setMember={setMember}/>
+                <MemberContext.Provider value={{member,setMember}}>
+                    <ProjectMember/>
+                </MemberContext.Provider>
             </Grid>
         </Grid>
         </div>
