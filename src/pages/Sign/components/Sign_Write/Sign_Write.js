@@ -29,7 +29,7 @@ const Sign_Write = (props) => {
     const [isModalOpen, setModalOpen] = useState(false);
 
     const toggleModal = () => {
-        console.log(approver);
+        console.log(approver.id);
         setModalOpen(!isModalOpen);
     };
 
@@ -39,13 +39,13 @@ const Sign_Write = (props) => {
     const [document_type, setDocument_type] = useState("품의서");
     const [title, setTitle] = useState("");
     const [recipient, setRecipient] = useState("1002");
+    const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
     const [accept, setAccept] = useState(1);
     const [comment, setComment] = useState("");
     const [formdata, setFormData] = useState({
         files: []
     });
 
-    const [approver, setApprover] = useState({});
 
     const handleFileChange = (e) => {
         setFormData(prev => ({ ...prev, files: [...e.target.files] }))
@@ -67,7 +67,7 @@ const Sign_Write = (props) => {
         // Append the additional data to the submitFormData object
         submitFormData.append("document_type", document_type);
         submitFormData.append("contents", contents);
-        submitFormData.append("recipient", recipient);
+        submitFormData.append("recipient", approver.id);
         submitFormData.append("accept", accept);
         submitFormData.append("comment", comment);
         submitFormData.append("title", title);
