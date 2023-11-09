@@ -30,7 +30,7 @@ const AttendenceStatus = () => {
                 const workStartDateString = workstartDate.toLocaleDateString(undefined, dateFormatOptions);
                 const workStartTimeString = workstartDate.toLocaleTimeString(undefined, timeFormatOptions);
                 const workEndDateString = workendDate.toLocaleDateString(undefined, dateFormatOptions);
-                const workEndTimeString = workendDate.toLocaleTimeString(undefined, timeFormatOptions);
+                const workEndTimeString = item.workend !== null ? workendDate.toLocaleTimeString(undefined, timeFormatOptions) : null;
                 const totalWorkTimeInMinutes = (workendDate - workstartDate) / (1000 * 60); // 분 단위로 변환
                 const totalWorkHours = Math.floor(totalWorkTimeInMinutes / 60);
                 const totalWorkMinutes = totalWorkTimeInMinutes % 60;
@@ -66,15 +66,26 @@ const AttendenceStatus = () => {
                         </div>
 
                         {attendence.map((e, i) => {
-                            return(
-                            <div className={style.tableRow} key={i}>
-                                <div>{e.workStartDate}</div>
-                                <div>{e.workStartTime}</div>
-                                <div>{e.workEndTime}</div>
-                                <div>{e.totalWorkHours}시간 {e.totalWorkMinutes.toFixed(0)}분</div>
-                            </div>
+                            return (
+                                <div className={style.tableRow} key={i}>
+                                    <div>{e.workStartDate}</div>
+                                    <div>{e.workStartTime}</div>
+                                    {e.workEndTime !== null ? (
+                                        <>
+                                            <div>{e.workEndTime}.</div>
+                                            <div>{e.totalWorkHours}시간 {e.totalWorkMinutes.toFixed(0)}분</div>
+                                        </>
+                                    ) : (
+                                        // If there is no workend, set to an empty string or any desired placeholder
+                                        <>
+                                            <div>근무중</div>
+                                            <div>근무중</div>
+                                        </>
+                                    )}
+                                </div>
                             );
                         })}
+
 
                     </div>
                 </div>
