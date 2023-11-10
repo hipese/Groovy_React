@@ -6,6 +6,7 @@ import { MemberContext } from "../../Groovy/Groovy";
 import { styled } from "@mui/material/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey } from '@fortawesome/free-solid-svg-icons';
+import Modal from "../ToDoListModal/ToDoListModal";
 
 const StyledAvatar = styled(Avatar)({
     width: "100%",
@@ -55,11 +56,15 @@ const StarIcon = ({onClick}) => {
 
 const ToDoListMain = () => {
   const members = useContext(MemberContext);
-  const [starActive, setStarActive] = useState(false);
-
+  const [starActive, setStarActive] = useState(false); // 즐겨찾기 활성화 여부
   const toggleStar = () => {
     setStarActive(!starActive);
   }
+  const [showModal, setShowModal] = useState(false); // 모달창 활성화 여부
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  }
+
 
 
   return (
@@ -75,6 +80,9 @@ const ToDoListMain = () => {
         <div className={styles.tdlBoardsTitle}>Boards</div>
         <ul className={styles.tdlul}>
           <li className={styles.tdlli}>
+            <div className={styles.tdlInsert} onClick={toggleModal}>Create New Board </div>
+          </li>
+          <li className={styles.tdlli}>
             <div className={styles.tdlInsert}>Create New Board <div className={`${styles.starimg} ${starActive ? styles.starActive : ''}`}><StarIcon onClick={toggleStar} /></div></div>
           </li>
           <li className={styles.tdlli}>
@@ -86,15 +94,9 @@ const ToDoListMain = () => {
           <li className={styles.tdlli}>
             <div className={styles.tdlInsert}>Create New Board</div>
           </li>
-          <li className={styles.tdlli}>
-            <div className={styles.tdlInsert}>Create New Board</div>
-          </li>
-          <li>
-            
-          </li>
         </ul>
-        
       </div>
+      <Modal showModal={showModal} setShowModal={setShowModal} />
     </div>
   );
 };
