@@ -37,15 +37,10 @@ const Org_Chart = ({ isOpen, close ,approver,setApprover}) => {
         console.log("선택한 놈의 아이디: "+selectedRow);
 
         //조건식을 설정하는 부분
-        if(members.member.id===selectedRow){
-            alert("다른 결재자를 선택하세요");
-            return;
-        }
-
-        if(approver.id===selectedRow){
-            alert("이미 선택된 결제자 입니다.");
-            return;
-        }
+        // if(members.member.id===selectedRow){
+        //     alert("다른 결재자를 선택하세요");
+        //     return;
+        // }
 
 
         axios.get(`/api/member/${selectedRow}`).then(resp=>{
