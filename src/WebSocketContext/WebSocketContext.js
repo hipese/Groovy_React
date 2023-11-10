@@ -37,12 +37,6 @@ const WebSocketProvider = ({ children }) => {
     };
   }, [loginID]);
 
-  const sendMessage = (message) => {
-    if (stompClient) {
-      stompClient.send("/app/user", {}, JSON.stringify(message));
-    }
-  };
-
   return (
     <WebSocketContext.Provider value={stompClient}>
       {children}
