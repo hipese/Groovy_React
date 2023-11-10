@@ -21,14 +21,14 @@ const UpdateContact = ({onClose}) => {
 
     const [contact, setContact] = useState(members.member.contact || "");
 
-    const handleChangeText = (e) => {
+    const handleChangeContact = (e) => {
         const { name, value } = e.target;
         setContact(value);
     }
 
     const handleConfirm = () => {
         // 멤버 상태를 업데이트하는 로직
-        axios.put(`/api/member/${contact}`).then(resp => {
+        axios.put(`/api/member/ContactUpdate/${contact}`).then(resp => {
             onClose();
         }).catch(error => {
             // 오류 처리 로직
@@ -49,7 +49,7 @@ const UpdateContact = ({onClose}) => {
                 변경 후 전화번호
             </div>
             <div className={style.inputDiv}>
-                <input className={style.inputs} type="text" placeholder="전화번호를 입력하세요(-는 입력하지 마세요)" name="contact" value={contact} onChange={handleChangeText} />
+                <input className={style.inputs} type="text" placeholder="전화번호를 입력하세요(-는 입력하지 마세요)" name="contact" value={contact} onChange={handleChangeContact} />
             </div>
             <div className={style.contentsDiv}>
                 {formatContact(contact)}

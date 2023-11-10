@@ -9,6 +9,7 @@ import { MemberContext } from "../../../../Groovy/Groovy";
 import UpdateContact from "./Update/UpdateContact";
 import UpdateGroup_Name from "./Update/UpdateGroup_Name";
 import UpdatePosition from "./Update/UpdatePosition";
+import UpdateEmail from "./Update/UpdateEmail";
 
 
 const StyledAvatar = styled(Avatar)({
@@ -77,7 +78,7 @@ const MemberInfo = () => {
                             <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" onClick={() => handleEdit('imageChage')} />
                         </ProfileContainer>}
                         <Modal
-                            open={openModal && editingField === 'imageChage'} 
+                            open={openModal && editingField === 'imageChage'}
                             onClose={handleCloseModal} // 모달을 닫는 함수를 지정
                         ><ImageChange onClose={handleCloseModal} /></Modal>
 
@@ -90,7 +91,18 @@ const MemberInfo = () => {
                         </div>
 
                         <div className={style.email}>
-                            {members.member.email}
+                            <div className={style.textdiv}>
+                                {members.member.email}
+                            </div>
+                            <div className={style.emailbtndiv}>
+                                <button className={style.emailbtn} onClick={() => handleEdit('email')}>수정</button>
+                                <Modal
+                                    open={openModal && editingField === 'email'} // 'group_name' 필드를 편집할 때만 모달을 열기
+                                    onClose={handleCloseModal}
+                                >
+                                    <UpdateEmail onClose={handleCloseModal} />
+                                </Modal>
+                            </div>
                         </div>
 
                     </div>
@@ -107,7 +119,7 @@ const MemberInfo = () => {
                             open={openModal && editingField === 'contact'} // 'group_name' 필드를 편집할 때만 모달을 열기
                             onClose={handleCloseModal}
                         >
-                        <UpdateContact onClose={handleCloseModal}/>
+                            <UpdateContact onClose={handleCloseModal} />
                         </Modal>
                     </div>
                 </div>
@@ -123,7 +135,7 @@ const MemberInfo = () => {
                             open={openModal && editingField === 'group_name'} // 'group_name' 필드를 편집할 때만 모달을 열기
                             onClose={handleCloseModal}
                         >
-                        <UpdateGroup_Name/>
+                            <UpdateGroup_Name />
                         </Modal>
                     </div>
                 </div>
@@ -138,7 +150,7 @@ const MemberInfo = () => {
                             open={openModal && editingField === 'position'} // 'group_name' 필드를 편집할 때만 모달을 열기
                             onClose={handleCloseModal}
                         >
-                        <UpdatePosition/>
+                            <UpdatePosition />
                         </Modal>
                     </div>
 

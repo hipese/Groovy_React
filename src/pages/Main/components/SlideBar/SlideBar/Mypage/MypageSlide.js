@@ -1,14 +1,21 @@
 import style from "./MypageSlide.module.css";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const MypageSlide = () => {
+
+    const navigat = useNavigate();
+
+
+    const handleHome = () => {
+        navigat("/Groovy/dashboard");
+    }
+
+
     return (
         <div className={style.SignSlide}>
 
             <div className={style.btndiv}>
-                <Link to="update">
-                    <button className={style.writeBtn}><strong>돌아가기</strong></button>
-                </Link>
+                <button className={style.writeBtn} onClick={handleHome}><strong>돌아가기</strong></button>
             </div>
 
         </div>

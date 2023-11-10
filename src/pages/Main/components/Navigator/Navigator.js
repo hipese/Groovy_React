@@ -7,6 +7,7 @@ import logo from "./assets/다운로드.png";
 import Avatar from "./Avatar/Avatar";
 import Badge from "./Badge/Badge";
 import { MemberContext } from "../../../Groovy/Groovy";
+import { Link } from "react-router-dom";
 
 const Navigator = () => {
   const members = useContext(MemberContext);
@@ -14,6 +15,7 @@ const Navigator = () => {
     <Container className={styles.container} fluid>
       <Row>
         <Col>
+          <Link to="/Groovy/dashboard">
           <img
             src={logo}
             alt="logo"
@@ -21,6 +23,7 @@ const Navigator = () => {
             height={"60px"}
             className={styles.logo}
           />
+          </Link>
           <div className="DropDown">
             <DropDowns />
           </div>
