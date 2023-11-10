@@ -6,6 +6,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Org_Chart from '../../../Org_Chart/components/Org_Chart_Modal/Org_Chart';
 import axios from 'axios';
 import { LoginContext } from "../../../../App";
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+import { useWebSocket } from "../../../../WebSocketContext/WebSocketContext";
 
 
 const modules = {
@@ -22,7 +25,7 @@ const formats = [
     'link',
 ];
 
-const Sign_Write = (props) => {
+const Sign_Write = () => {
 
     const { loginID } = useContext(LoginContext);
     // 모달을 키거나 끌때 필요한 놈
@@ -64,8 +67,11 @@ const Sign_Write = (props) => {
     const handleSubmit = () => {
 
         //approver이 없으면 선택하라고 알려주는 경고창 띄우기
-
-
+        if (Object.keys(approver).length === 0) {
+            alert("결재자를 선택해주세요");
+            return;
+        }
+    
         const submitFormData = new FormData();
 
         // Append the additional data to the submitFormData object
@@ -91,6 +97,16 @@ const Sign_Write = (props) => {
             });
     };
 
+    const stompClient = useWebSocket();
+
+    const sendMessage = () => {
+        if (stompClient) {
+          const message = "안녕하세요";
+          const messageObject = { message, recipient };
+          stompClient.send("/app/user", {}, JSON.stringify(messageObject));
+        }
+      };
+      
 
 
     return (
@@ -195,7 +211,7 @@ const Sign_Write = (props) => {
                     <button className={style.apply} onClick={handleSubmit}>신청</button>
                     <Link to="/Groovy/signlist"><button className={style.cancel}>취소</button></Link>
                 </div>
-
+                <button onClick={sendMessage}>Send Message</button>
             </div>
         </div>
 
