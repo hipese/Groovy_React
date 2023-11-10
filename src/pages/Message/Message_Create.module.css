@@ -126,6 +126,11 @@
     color: rgb(0, 0, 0);
 }
 
+.btn_create:active {
+    background-color: rgb(200, 200, 200);
+}
+
+
 path {
     pointer-events: none;
 }
