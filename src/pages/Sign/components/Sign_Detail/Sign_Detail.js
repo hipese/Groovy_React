@@ -4,14 +4,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { LoginContext } from "../../../../App";
 import { MemberContext } from "../../../Groovy/Groovy";
+import { useWebSocket } from "../../../../WebSocketContext/WebSocketContext";
 
 const Sign_Detail = ({ approver }) => {
 
     const { seq } = useParams();
-    const [sign_list, setSign_list] = useState({ seq: seq, writer: "", document_type: "", recipient: "", title: "", contents: "", accept: "", write_date: "", comment: "" });
+    const [sign_list, setSign_list] = useState();
     const [sign_files, setSign_files] = useState([]);
     const navi = useNavigate();
     const { loginID } = useContext(LoginContext);
+    const stompClient = useWebSocket();
 
     const members = useContext(MemberContext);
 
@@ -81,6 +83,12 @@ const Sign_Detail = ({ approver }) => {
         }).catch(e => {
 
         });
+
+        if (stompClient) {
+            const message = "보낸 결제가 승인되었습니다.";
+            const messageObject = { message, recipient: approver.id };
+            stompClient.send("/app/notice", {}, JSON.stringify(messageObject));
+        }
     }
 
     const handleReject = (e) => {

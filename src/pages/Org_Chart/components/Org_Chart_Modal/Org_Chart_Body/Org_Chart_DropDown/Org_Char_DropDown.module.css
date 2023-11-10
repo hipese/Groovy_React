@@ -16,7 +16,9 @@
     color: white;
     font-size: 20px;
 }
-
+.button:hover {
+    background-color: rgb(100, 180, 255);
+}
 .contents_div{
     width: 100%;
     height: 90%;

@@ -1,5 +1,3 @@
-// DotBadge.js
-
 import React, { useContext, useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -7,6 +5,7 @@ import Badge from "@mui/material/Badge";
 import Bell from "../assets/bell.png";
 import { useWebSocket } from "../../../../../WebSocketContext/WebSocketContext";
 import { LoginContext } from "../../../../../App";
+import axios from "axios";
 
 const StyledBadge = styled(Badge)({
   "& .MuiBadge-dot": {
@@ -33,34 +32,46 @@ const BellContainer = styled(Box)({
 });
 
 function DotBadge() {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState({ seq: "", recipient: "", contents: "", write_date: "" });
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const stompClient = useWebSocket();
   const { loginID } = useContext(LoginContext);
 
+  const fetchNotifications = () => {
+    axios.get('/api/realtime_notification')
+      .then(resp => {
+        setNotifications(prevNotifications => resp.data);
+        console.log(resp.data);
+      })
+      .catch(e => {
+        console.error(e);
+      });
+  };
+
   useEffect(() => {
-    // WebSocket으로부터 메시지를 받았을 때 실행되는 콜백 함수
     const handleWebSocketMessage = (message) => {
-      const parsedMessage = JSON.parse(message.body);
+      // WebSocket 메시지를 처리하고 상태를 업데이트
+      const receivedMessage = JSON.parse(message.body);
+      console.log(receivedMessage);
 
-      // 새로운 알림을 배열에 추가
-      setNotifications((prevNotifications) => [
-        ...prevNotifications,
-        parsedMessage.message,
-      ]);
+      // 서버에서 받은 메시지 구조를 클라이언트 상태 구조로 변환
+      const transformedMessage = {
+        seq: "",
+        recipient: receivedMessage.recipient,
+        contents: receivedMessage.message, // 서버의 'message'를 클라이언트의 'contents'로 변환
+        write_date: ""
+      };
+     
 
-
+      console.log(transformedMessage);
+      setNotifications((prevNotifications) => [...prevNotifications, transformedMessage]);
     };
 
-    // stompClient가 있을 때만 구독 설정
     if (stompClient) {
-      // /user/{loginID}/queue/notifications 라는 주제로 메시지를 받도록 설정
       const subscription = stompClient.subscribe('/topic/' + loginID, (response) => {
-        console.log(response);
-        console.log(JSON.parse(response.body));
         handleWebSocketMessage(response);
       });
-      // 컴포넌트가 언마운트 될 때 구독 취소
+
       return () => {
         subscription.unsubscribe();
       };
@@ -68,11 +79,25 @@ function DotBadge() {
   }, [stompClient, loginID]);
 
   const handleBellClick = () => {
-    // 알림창을 열 때 모든 알림 삭제
-
     // 알림창 열기/닫기 상태 변경
     setIsNotificationOpen(!isNotificationOpen);
+    console.log(isNotificationOpen);
+
+    if (isNotificationOpen) {
+      axios.put('/api/realtime_notification')
+        .then(resp => {
+          setNotifications([]);
+        })
+        .catch(e => {
+          console.error(e);
+        });
+    }
   };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
 
   return (
     <BellContainer>
@@ -80,7 +105,7 @@ function DotBadge() {
         <BellIcon src={Bell} alt="bell" onClick={handleBellClick} />
       </StyledBadge>
 
-      {isNotificationOpen && notifications.length > 0 && (
+      {isNotificationOpen && (
         <div
           style={{
             position: "absolute",
@@ -95,7 +120,7 @@ function DotBadge() {
           }}
         >
           {notifications.map((notification, index) => (
-            <div key={index}>{notification}</div>
+            <div key={index}>{notification.contents}</div>
           ))}
         </div>
       )}

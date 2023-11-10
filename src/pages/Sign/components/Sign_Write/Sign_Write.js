@@ -24,7 +24,7 @@ const formats = [
 ];
 
 const Sign_Write = () => {
-    
+
     const stompClient = useWebSocket();
     const { loginID } = useContext(LoginContext);
     // 모달을 키거나 끌때 필요한 놈
@@ -69,6 +69,15 @@ const Sign_Write = () => {
             return;
         }
 
+        if(!title){
+            alert("제목을 입력해주세요");
+            return;
+        }
+
+        if(!contents){
+            alert("내용을 입력해주세요");
+            return;
+        }
         const submitFormData = new FormData();
 
         // Append the additional data to the submitFormData object
@@ -129,9 +138,14 @@ const Sign_Write = () => {
                     </div>
                 </div>
                 <div className={style.signline}>
-                    <div className={style.titleText}>결제선 지정
-                        <button onClick={toggleModal}>조직도 검색</button>
-                        <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} />
+                    <div className={style.titleText}>
+                        <div className={style.textDiv}> 
+                            결제선 지정
+                        </div>
+                        <div className={style.buttonDiv}>
+                            <button onClick={toggleModal} className={style.btn}>조직도 검색</button>
+                            <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} />
+                        </div>
                     </div>
                     <div className={style.table}>
                         <div className={style.tableBox}>

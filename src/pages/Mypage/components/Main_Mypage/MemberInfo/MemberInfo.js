@@ -37,10 +37,6 @@ const MemberInfo = () => {
 
     const members = useContext(MemberContext);
 
-    // 모달을 열고 닫는 함수들
-    const handleOpenModal = () => {
-        setOpenModal(true);
-    };
 
     const handleEdit = (field) => {
         setEditingField(field); // 수정 중인 필드 설정
@@ -135,7 +131,7 @@ const MemberInfo = () => {
                             open={openModal && editingField === 'group_name'} // 'group_name' 필드를 편집할 때만 모달을 열기
                             onClose={handleCloseModal}
                         >
-                            <UpdateGroup_Name />
+                            <UpdateGroup_Name onClose={handleCloseModal} />
                         </Modal>
                     </div>
                 </div>
@@ -150,7 +146,7 @@ const MemberInfo = () => {
                             open={openModal && editingField === 'position'} // 'group_name' 필드를 편집할 때만 모달을 열기
                             onClose={handleCloseModal}
                         >
-                            <UpdatePosition />
+                            <UpdatePosition onClose={handleCloseModal} />
                         </Modal>
                     </div>
 

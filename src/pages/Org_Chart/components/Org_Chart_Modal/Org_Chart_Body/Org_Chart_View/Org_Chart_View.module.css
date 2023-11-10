@@ -13,7 +13,22 @@
   justify-content: center;
   align-items: center;
 }
-
+.table_row_head{
+  border: 1px solid black;
+  height: 20%;
+  width: 100%;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: aliceblue;
+}
+.table_col_head{
+  float: left;
+  height: 100%;
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .table_row {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
@@ -23,9 +38,17 @@
 
 .table_col {
   float: left;
+  height: 100%;
+  width: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  width: 25%;
+}
+.null{
+  height: 50%;
+  width: 100%;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

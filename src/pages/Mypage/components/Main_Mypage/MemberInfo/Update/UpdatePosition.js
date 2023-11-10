@@ -2,7 +2,7 @@ import { useContext } from "react";
 import style from "./UpdateModal.module.css"
 import { MemberContext } from "../../../../../Groovy/Groovy";
 
-const UpdatePosition = () => {
+const UpdatePosition = ({onClose}) => {
 
 
     const members = useContext(MemberContext)
@@ -26,7 +26,7 @@ const UpdatePosition = () => {
             </div>
             <div className={style.btnDiv}>
                 <button className={style.btn}>확인</button>
-                <button className={style.btn} >취소</button>
+                <button className={style.btn} onClick={() => { onClose() }} >취소</button>
             </div>
         </div>
     );
