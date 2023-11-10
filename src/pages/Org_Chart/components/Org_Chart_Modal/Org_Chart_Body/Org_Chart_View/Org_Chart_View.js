@@ -7,7 +7,7 @@ const Org_Chart_View = ({ approver }) => {
         <div className={style.view_div}>
 
             <div className={style.view}>
-                {!approver.id ? <div className={style.null}>
+                {/* {!approver.id ? <div className={style.null}>
                     결제자를 선택해주세요
                 </div> : <div className={style.table_row}>
                     <div className={style.table_col}>
@@ -22,7 +22,7 @@ const Org_Chart_View = ({ approver }) => {
                     <div className={style.table_col}>
                         {approver.id}
                     </div>
-                </div>}
+                </div>} */}
 
             </div>
 

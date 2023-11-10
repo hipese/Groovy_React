@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import style from "./Org_Chart.module.css"
 import Org_Chart_Table from "./Org_Chart_Body/Org_Chart_Table/Org_Chart_Table";
 import Org_Chart_DropDown from "./Org_Chart_Body/Org_Chart_DropDown/Org_Char_DropDown";
 import Org_Chart_View from "./Org_Chart_Body/Org_Chart_View/Org_Chart_View";
 import axios from "axios";
+import { MemberContext } from "../../../Groovy/Groovy";
 
-const Org_Chart = ({ isOpen, close ,approver,setApprover}) => {
+const Org_Chart = ({ isOpen, close, approver, setApprover }) => {
+
+
+    const members=useContext(MemberContext);
 
     const [employees, setEmployees] = useState({}); // 여기서 선택된 직원의 목록을 보여줍니다.
     const [backUpEmployees, setBackUpEmployees] = useState({}); // 원래 직원의 목록을 저장합니다
     const [selectedRow, setSelectedRow] = useState(null); //선택한 행의 값을 가져옵니다.
 
 
-    useEffect(() => { 
+    useEffect(() => {
         axios.get("/api/member/selectedEmployee").then(resp => {
             console.log(resp.data);
             setEmployees(resp.data)
@@ -30,11 +34,34 @@ const Org_Chart = ({ isOpen, close ,approver,setApprover}) => {
 
     // '중간결제자' 또는 '최종결제자' 버튼 클릭 시 처리할 함수
     const handleMidSelect = () => {
-        console.log("선택한 놈의 아이디: "+selectedRow);
-        axios.get(`/api/member/${selectedRow}`).then(resp=>{
-            console.log(resp.data);
-            setApprover(resp.data);
-        })
+        console.log("선택한 놈의 아이디: " + selectedRow);
+        console.log(approver);
+        if (selectedRow) {
+            axios.get(`/api/member/${selectedRow}`).then(resp => {
+                const newApprover=resp.data;
+
+                setApprover(prevApprovers => {
+
+                    const isExist = prevApprovers.some(approver => approver.id === newApprover.id);
+                    const isDuplicate=prevApprovers.some(approver => members.member.id === newApprover.id);
+
+                    if(isDuplicate){
+                        alert("자신을 승인자로 지정할 순 없습니다.")
+                        return prevApprovers;
+                    }
+
+                    if(!isExist){
+                        return [...prevApprovers, newApprover];
+                    }else{
+                        alert("같은 사람이 존재합니다. 다시 선택하세요");
+                    }
+                    return prevApprovers;
+                });
+            }).catch(error => {
+                console.error(error);
+            });
+        }
+
     };
 
     return (
@@ -55,8 +82,8 @@ const Org_Chart = ({ isOpen, close ,approver,setApprover}) => {
                             </div>
 
                             <div className={style.tablebox}>
-                                <Org_Chart_Table employees={employees} setEmployees={setEmployees} 
-                                selectedRow={selectedRow} setSelectedRow={setSelectedRow} setBackUpEmployees={setBackUpEmployees} />
+                                <Org_Chart_Table employees={employees} setEmployees={setEmployees}
+                                    selectedRow={selectedRow} setSelectedRow={setSelectedRow} setBackUpEmployees={setBackUpEmployees} />
                             </div>
 
                         </div>
@@ -73,7 +100,7 @@ const Org_Chart = ({ isOpen, close ,approver,setApprover}) => {
 
                         <div className={style.view_div}>
 
-                            <Org_Chart_View  approver={approver}/>
+                            <Org_Chart_View approver={approver} />
 
                         </div>
 
