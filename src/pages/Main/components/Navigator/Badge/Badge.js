@@ -32,7 +32,7 @@ const BellContainer = styled(Box)({
 });
 
 function DotBadge() {
-  const [notifications, setNotifications] = useState({ seq: "", recipient: "", title: "", contents: "", write_date: "" });
+  const [notifications, setNotifications] = useState({ seq: "", recipient: "", contents: "", write_date: "" });
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const stompClient = useWebSocket();
   const { loginID } = useContext(LoginContext);
@@ -41,7 +41,7 @@ function DotBadge() {
     axios.get('/api/realtime_notification')
       .then(resp => {
         setNotifications(prevNotifications => resp.data);
-        console.log(notifications);
+        console.log(resp.data);
       })
       .catch(e => {
         console.error(e);
@@ -49,20 +49,29 @@ function DotBadge() {
   };
 
   useEffect(() => {
-    // WebSocket으로부터 메시지를 받았을 때 실행되는 콜백 함수
     const handleWebSocketMessage = (message) => {
-      fetchNotifications();
-      console.log(notifications);
+      // WebSocket 메시지를 처리하고 상태를 업데이트
+      const receivedMessage = JSON.parse(message.body);
+      console.log(receivedMessage);
+
+      // 서버에서 받은 메시지 구조를 클라이언트 상태 구조로 변환
+      const transformedMessage = {
+        seq: "",
+        recipient: receivedMessage.recipient,
+        contents: receivedMessage.message, // 서버의 'message'를 클라이언트의 'contents'로 변환
+        write_date: ""
+      };
+     
+
+      console.log(transformedMessage);
+      setNotifications((prevNotifications) => [...prevNotifications, transformedMessage]);
     };
 
-    // stompClient가 있을 때만 구독 설정
     if (stompClient) {
       const subscription = stompClient.subscribe('/topic/' + loginID, (response) => {
-        // console.log(response);
-        // console.log(JSON.parse(response.body));
         handleWebSocketMessage(response);
       });
-      // 컴포넌트가 언마운트 될 때 구독 취소
+
       return () => {
         subscription.unsubscribe();
       };
@@ -87,7 +96,7 @@ function DotBadge() {
 
   useEffect(() => {
     fetchNotifications();
-  }, [notifications]);
+  }, []);
 
 
   return (
