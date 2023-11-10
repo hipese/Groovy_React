@@ -8,18 +8,7 @@ const Sign_Main = () => {
     const [sign_wait_list, setSign_wait_list] = useState([]);
     const [sign_progress_list, setSign_progress_list] = useState([]);
     const [sign_complete_list, setSign_complete_list] = useState([]);
-<<<<<<< HEAD
-    const [notification, setNotification] = useState("");
-
-
-    const handleSSE = (event) => {
-        const newNotification = event.data;
-        setNotification(newNotification);
-    };
-
-=======
     
->>>>>>> 9654a8c7069b82f3ff7dbb6d658addea0fc00df0
     useEffect(() => {
         axios.get("/api/signlist/wait").then((resp) => {
             setSign_wait_list(resp.data);
