@@ -1,5 +1,4 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
-import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { LoginContext } from "../App";
 
@@ -10,7 +9,7 @@ const WebSocketProvider = ({ children }) => {
   const [stompClient, setStompClient] = useState(null);
 
   const initializeWebSocket = useCallback(() => {
-    const socket = new SockJS('/ws-message');
+    const socket = new WebSocket('ws://10.2.15.215/ws-message');
     const client = Stomp.over(socket);
 
     client.connect({}, (frame) => {

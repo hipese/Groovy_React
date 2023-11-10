@@ -64,7 +64,7 @@ const MypageIndex = () => {
             <div className={style.footer}>
                 <ul>
                     <li><div>내 프로필</div></li>
-                    <li><div>보안설정</div></li>
+                    <li><div>구성원 목록</div></li>
                     <li><div>이력관리</div></li>
                 </ul>
 

@@ -69,6 +69,15 @@ const Sign_Write = () => {
             return;
         }
 
+        if(!title){
+            alert("제목을 입력해주세요");
+            return;
+        }
+
+        if(!contents){
+            alert("내용을 입력해주세요");
+            return;
+        }
         const submitFormData = new FormData();
 
         // Append the additional data to the submitFormData object

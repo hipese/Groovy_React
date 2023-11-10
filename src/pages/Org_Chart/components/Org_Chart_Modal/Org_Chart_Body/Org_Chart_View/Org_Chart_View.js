@@ -31,7 +31,7 @@ const Org_Chart_View = ({ approver }) => {
             </div>}
 
             {!approver.id?" ": <div>
-                여기에는 상세정보 뜨게 하던가 하자 ex 출근, 퇴근, 휴가 여부 등
+                으아악
             </div>}
            
 
