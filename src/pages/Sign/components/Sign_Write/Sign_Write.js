@@ -6,8 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Org_Chart from '../../../Org_Chart/components/Org_Chart_Modal/Org_Chart';
 import axios from 'axios';
 import { LoginContext } from "../../../../App";
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
 import { useWebSocket } from "../../../../WebSocketContext/WebSocketContext";
 
 

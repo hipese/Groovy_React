@@ -18,8 +18,6 @@ import Mypagelist from "../Mypage/components/Mypagelist";
 import axios from "axios";
 import Contact_Route from "../Contact/Contact_Route";
 import { formatISO, parseISO, addDays } from 'date-fns';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
 import WebSocketProvider from "../../WebSocketContext/WebSocketContext";
 
 export const ListContext = createContext();
@@ -27,7 +25,6 @@ const MemberContext = createContext();
 
 const Groovy = () => {
     const [member, setMember] = useState({});
-    const [stompClient, setStompClient] = useState(null);
 
     useEffect(() => {
         axios.get("/api/member").then(resp => {
@@ -86,21 +83,6 @@ const Groovy = () => {
     useEffect(() => {
         refreshList();
     }, []);
-
-    const initializeWebSocket = () => {
-        const socket = new SockJS('/ws-message');
-        const client = Stomp.over(socket);
-
-        client.connect({}, (frame) => {
-            console.log('Connected: ' + frame);
-            client.subscribe('/topic/users', (response) => {
-                console.log(response);
-                console.log(JSON.parse(response.body));
-            });
-
-            setStompClient(client); // 웹 소켓 클라이언트 설정
-        });
-    };
 
     return (
         <WebSocketProvider>
