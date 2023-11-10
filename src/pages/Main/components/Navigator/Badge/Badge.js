@@ -40,8 +40,8 @@ function DotBadge() {
   const fetchNotifications = () => {
     axios.get('/api/realtime_notification')
       .then(resp => {
-        setNotifications(resp.data);
-        console.log(resp.data);
+        setNotifications(prevNotifications => resp.data);
+        console.log(notifications);
       })
       .catch(e => {
         console.error(e);
@@ -50,8 +50,9 @@ function DotBadge() {
 
   useEffect(() => {
     // WebSocket으로부터 메시지를 받았을 때 실행되는 콜백 함수
-    const handleWebSocketMessage = () => {
+    const handleWebSocketMessage = (message) => {
       fetchNotifications();
+      console.log(notifications);
     };
 
     // stompClient가 있을 때만 구독 설정
@@ -59,7 +60,7 @@ function DotBadge() {
       const subscription = stompClient.subscribe('/topic/' + loginID, (response) => {
         // console.log(response);
         // console.log(JSON.parse(response.body));
-        handleWebSocketMessage();
+        handleWebSocketMessage(response);
       });
       // 컴포넌트가 언마운트 될 때 구독 취소
       return () => {
@@ -72,12 +73,11 @@ function DotBadge() {
     // 알림창 열기/닫기 상태 변경
     setIsNotificationOpen(!isNotificationOpen);
     console.log(isNotificationOpen);
-    fetchNotifications();
 
     if (isNotificationOpen) {
       axios.put('/api/realtime_notification')
         .then(resp => {
-
+          setNotifications([]);
         })
         .catch(e => {
           console.error(e);
@@ -87,7 +87,7 @@ function DotBadge() {
 
   useEffect(() => {
     fetchNotifications();
-  }, []);
+  }, [notifications]);
 
 
   return (
