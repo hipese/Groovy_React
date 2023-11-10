@@ -30,9 +30,6 @@ const Sign_Write = () => {
     // 모달을 키거나 끌때 필요한 놈
     const [isModalOpen, setModalOpen] = useState(false);
 
-  
-
-
     const navi = useNavigate();
     const [contents, setContents] = useState("");
     const [document_type, setDocument_type] = useState("품의서");
