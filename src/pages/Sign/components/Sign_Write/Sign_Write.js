@@ -24,22 +24,19 @@ const formats = [
 ];
 
 const Sign_Write = () => {
-
+    
+    const stompClient = useWebSocket();
     const { loginID } = useContext(LoginContext);
     // 모달을 키거나 끌때 필요한 놈
     const [isModalOpen, setModalOpen] = useState(false);
-
-  
-
 
     const navi = useNavigate();
     const [contents, setContents] = useState("");
     const [document_type, setDocument_type] = useState("품의서");
     const [title, setTitle] = useState("");
-    const [recipient, setRecipient] = useState("1002");
     const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
-    const [accept, setAccept] = useState(1);
-    const [comment, setComment] = useState("");
+    const [accept] = useState(1);
+    const [comment] = useState("");
     const [formdata, setFormData] = useState({
         files: []
     });
@@ -71,7 +68,7 @@ const Sign_Write = () => {
             alert("결재자를 선택해주세요");
             return;
         }
-    
+
         const submitFormData = new FormData();
 
         // Append the additional data to the submitFormData object
@@ -95,18 +92,13 @@ const Sign_Write = () => {
             .catch(e => {
                 console.error(e);
             });
-    };
 
-    const stompClient = useWebSocket();
-
-    const sendMessage = () => {
         if (stompClient) {
-          const message = "안녕하세요";
-          const messageObject = { message, recipient };
-          stompClient.send("/app/user", {}, JSON.stringify(messageObject));
+            const message = "전자결제가 도착했습니다.";
+            const messageObject = { message, recipient: approver.id };
+            stompClient.send("/app/notice", {}, JSON.stringify(messageObject));
         }
-      };
-      
+    };
 
 
     return (
@@ -156,7 +148,7 @@ const Sign_Write = () => {
                             <div className={style.tableRow}>
                                 <div>부서</div>
                                 <div>
-                                    {approver.group_name  ? approver.group_name : "부서을 선택하세요"}
+                                    {approver.group_name ? approver.group_name : "부서을 선택하세요"}
                                 </div>
                             </div>
                             <div className={style.tableRow}>
@@ -211,7 +203,6 @@ const Sign_Write = () => {
                     <button className={style.apply} onClick={handleSubmit}>신청</button>
                     <Link to="/Groovy/signlist"><button className={style.cancel}>취소</button></Link>
                 </div>
-                <button onClick={sendMessage}>Send Message</button>
             </div>
         </div>
 
