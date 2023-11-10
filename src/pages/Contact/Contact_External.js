@@ -51,7 +51,7 @@ const Contact_External = () => {
                             ?
                             contacts.map((member) => {
                                 return (
-                                    <Row className={style.contact_object} key={member.id}>
+                                    <Row className={style.contact_object} key={member.seq}>
                                         <Col xs={1} className={style.company_container}>
                                             {member.company}
                                         </Col>
@@ -78,7 +78,7 @@ const Contact_External = () => {
                             contacts.filter(member => member.company.includes(search) || member.group_name.includes(search) || member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search))
                             .map((member) => {
                                 return (
-                                    <Row className={style.contact_object} key={member.id}>
+                                    <Row className={style.contact_object} key={member.seq}>
                                         <Col xs={1} className={style.company_container}>
                                             {member.company}
                                         </Col>
