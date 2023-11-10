@@ -1,53 +1,108 @@
-.search_row {
-    padding-top: 10px;
-    padding-bottom: 10px;
+
+.container {
+    margin: 0px;
+    height: 100%;
+    min-width: 700px;
 }
 
-.input_search {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+.row_container {
+    height: 100%;
 }
 
-.input_search:focus {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+.chat_room_list_container {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+    padding: 0px;
 }
 
-.contacts_row {
-    border-top: 1px solid rgb(210, 210, 210);
+.chat_room_object {
+    min-height: 100px;
+    max-height: 150px;
+    padding-right: 0px;
+    padding-left: 25px;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 
-.contacts_list_container {
+.chat_room_object:hover {
+    background-color: rgb(240, 240, 240);
+    cursor: pointer;
+}
+
+.chat_room_object div {
+    box-sizing: border-box;
+    /* border: 1px solid rgb(240, 240, 240); */
+}
+.room_profile_container, .room_profile {
+    position: relative;
+    height: 100%;
+}
+.profile_box {
+    height: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
-.contacts_list {
-    margin-top: 15px;
-    border-top: 1px solid rgb(210, 210, 210);
-    min-width: 700px;
-    width: 80%;
-    margin-left: 0px;
-    margin-right: 0px;
+.profile_image {
+    width: 60%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    position: relative;
 }
 
-.contacts_list_header {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid black;
+.profile_multibox {
+    position: relative;
 }
 
-.header_favorite, .header_group, .header_name, .header_position, .header_contact, .header_email, .header_company
-.favorite_container, .group_container, .name_container, .position_container, .contact_container, .email_container, .company_container {
-    text-align: center;
+.profile_image1 {
+    width: 45%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    position: absolute;
+    top : 15%;
+    left : 15%;
+    z-index: 1;
 }
 
-.favorite_empty {
-    cursor: pointer;
+.profile_image2 {
+    width: 45%;
+    max-width: 50%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    position: absolute;
+    top : 35%;
+    left : 35%;
+    z-index: 2;
+    border: 1px solid white;
 }
 
-.favorite_filled {
-    cursor: pointer;
+.room_info_container {
+    height: 100%;
 }
 
-path {
-    pointer-events: none;
+.room_name_container ,.recent_message_container{
+    height: 50%;
+    display: flex;
+    justify-content: start;
+    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+}
+
+.room_name_container {
+    font-weight: bolder;
+    align-items: end;
+}
+
+.recent_message_container {
+    align-items: start;
+    color: rgb(120, 120, 120);
+}
+
+.chat_room_container {
+    padding: 0px;
+    min-width: 400px;
 }

@@ -1,12 +1,20 @@
 import { Button, Col, Container, Input, Row } from "reactstrap";
 import style from "./Message_Create.module.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import MuiButton  from '@mui/material/Button';
+import { useNavigate } from "react-router";
+import { LoginContext } from "../../App";
 
 let Message_Create = () => {
+    const navi = useNavigate();
+    const {loginID, setLoginID} = useContext(LoginContext)
     const [contacts, setContacts] = useState([]);
     const [checked, setChecked] = useState([]);
     const [search, setSearch] = useState("");
+    const [open, setOpen] = useState(false);
+    const [room_name, setRoom_name] = useState("");
 
     useEffect(() => {
         axios.get("/api/contact/selectAll").then((resp) => {
@@ -37,6 +45,31 @@ let Message_Create = () => {
         setSearch(e.target.value);
     }
 
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason && reason == "backdropClick") 
+            return;
+        setOpen(false);
+    };
+
+    const onClickHandler = () => {
+        if(room_name === "")
+            return;
+        axios.post("/api/message/createRoom",checked,{params:{room_name:room_name}}).then(resp=>{
+            navi("/Groovy/message");
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    const room_nameChangeHandler = (e) => {
+        setRoom_name(e.target.value);
+        console.log(room_name)
+    }
+
 
     return(
         <Container>
@@ -53,7 +86,7 @@ let Message_Create = () => {
                         let member_info = `${member.group_name} ${member.name} ${member.position}`;
                         
                         return (
-                            <div className={style.checked_member}>
+                            <div className={style.checked_member} key={member.id}>
                                 <div className={style.checked_member_profile_container}>
                                     {
                                         member.profile_image ?
@@ -77,7 +110,8 @@ let Message_Create = () => {
                         {
                             search == ""
                             ?
-                            contacts.map((member) => {
+                            contacts.filter(member => member.id != loginID)
+                            .map((member) => {
                                 let member_info = `${member.group_name} ${member.name} ${member.position}`;
                                 return (
                                     <Row className={style.member_object} key={member.id}>
@@ -99,7 +133,7 @@ let Message_Create = () => {
                                 )
                             })
                             :
-                            contacts.filter(member => member.group_name.includes(search) || member.name.includes(search) || member.position.includes(search))
+                            contacts.filter(member =>(member.id != loginID) && (member.group_name.includes(search) || member.name.includes(search) || member.position.includes(search)))
                             .map((member) => {
                                 let member_info = `${member.group_name} ${member.name} ${member.position}`;
                                 return (
@@ -127,7 +161,31 @@ let Message_Create = () => {
                 </Col>
             </Row>
             <Row className={style.btn_container}>
-                <Button color="primary" className={style.btn_create} style={checked.length == 0 ? {bottom:"-20%"} : {bottom:"5%"}}>채팅방 만들기</Button>
+                <Button className={style.btn_create} style={checked.length == 0 ? {bottom:"-20%"} : {bottom:"5%"}} onClick={handleClickOpen}>채팅방 만들기</Button>
+            </Row>
+            <Row>
+            <Dialog open={open} onClose={handleClose} keepMounted >
+        <DialogTitle>채팅방 이름 입력</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            사용하실 채팅방 이름을 입력해주세요.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="room_name"
+            label="채팅방 이름"
+            type="text"
+            fullWidth
+            variant="standard"
+            onChange={room_nameChangeHandler}
+          />
+        </DialogContent>
+        <DialogActions>
+          <MuiButton className={style.dialog_btn} onClick={handleClose}>취소</MuiButton>
+          <MuiButton className={style.dialog_btn} onClick={onClickHandler}>방 만들기</MuiButton>
+        </DialogActions>
+      </Dialog>
             </Row>
         </Container>
     );
