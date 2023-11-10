@@ -5,7 +5,7 @@ const DashBoardSlide = () => {
     return (
         <div>
             <div className={style.DashBoardSlide}>
-                <Link to="/"><button className={style.btn}>
+                <Link to=""><button className={style.btn}>
                 Home
             </button></Link>
             </div>
