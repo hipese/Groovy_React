@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { LoginContext } from "../App";
@@ -6,10 +6,10 @@ import { LoginContext } from "../App";
 const WebSocketContext = createContext();
 
 const WebSocketProvider = ({ children }) => {
+  const { loginID } = useContext(LoginContext);
   const [stompClient, setStompClient] = useState(null);
-  const { loginID, setLoginID } = useContext(LoginContext);
 
-  const initializeWebSocket = () => {
+  const initializeWebSocket = useCallback(() => {
     const socket = new SockJS('/ws-message');
     const client = Stomp.over(socket);
 
@@ -22,10 +22,10 @@ const WebSocketProvider = ({ children }) => {
 
       setStompClient(client);
     });
-  };
+  }, [loginID, setStompClient]);
+
 
   useEffect(() => {
-
     if (loginID) {
       initializeWebSocket();
     }
