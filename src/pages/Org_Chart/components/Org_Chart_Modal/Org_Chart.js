@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import style from "./Org_Chart.module.css"
 import Org_Chart_Table from "./Org_Chart_Body/Org_Chart_Table/Org_Chart_Table";
 import Org_Chart_DropDown from "./Org_Chart_Body/Org_Chart_DropDown/Org_Char_DropDown";
 import Org_Chart_View from "./Org_Chart_Body/Org_Chart_View/Org_Chart_View";
 import axios from "axios";
+import { MemberContext } from "../../../Groovy/Groovy";
 
 const Org_Chart = ({ isOpen, close ,approver,setApprover}) => {
+
+
+    const members=useContext(MemberContext);
 
     const [employees, setEmployees] = useState({}); // 여기서 선택된 직원의 목록을 보여줍니다.
     const [backUpEmployees, setBackUpEmployees] = useState({}); // 원래 직원의 목록을 저장합니다
@@ -31,6 +35,19 @@ const Org_Chart = ({ isOpen, close ,approver,setApprover}) => {
     // '중간결제자' 또는 '최종결제자' 버튼 클릭 시 처리할 함수
     const handleMidSelect = () => {
         console.log("선택한 놈의 아이디: "+selectedRow);
+
+        //조건식을 설정하는 부분
+        if(members.member.id===selectedRow){
+            alert("다른 결재자를 선택하세요");
+            return;
+        }
+
+        if(approver.id===selectedRow){
+            alert("이미 선택된 결제자 입니다.");
+            return;
+        }
+
+
         axios.get(`/api/member/${selectedRow}`).then(resp=>{
             console.log(resp.data);
             setApprover(resp.data);
@@ -65,7 +82,9 @@ const Org_Chart = ({ isOpen, close ,approver,setApprover}) => {
                         <div className={style.select_div}>
 
                             <div className={style.select_btndiv}>
+
                                 <button className={style.modal_close_button} onClick={handleMidSelect}>결제자 선택</button>
+                            
                             </div>
 
                         </div>
