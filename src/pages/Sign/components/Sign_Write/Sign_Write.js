@@ -29,15 +29,12 @@ const Sign_Write = () => {
     // 모달을 키거나 끌때 필요한 놈
     const [isModalOpen, setModalOpen] = useState(false);
 
-  
-
-
     const navi = useNavigate();
     const [contents, setContents] = useState("");
     const [document_type, setDocument_type] = useState("품의서");
     const [title, setTitle] = useState("");
     const [recipient, setRecipient] = useState("1002");
-    const [approver, setApprover] = useState([]); //승인자의 정보을 저장하는 useState 
+    const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
     const [accept, setAccept] = useState(1);
     const [comment, setComment] = useState("");
     const [formdata, setFormData] = useState({
@@ -142,7 +139,7 @@ const Sign_Write = () => {
                         <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} />
                     </div>
                     <div className={style.table}>
-                        {/* <div className={style.tableBox}>
+                        <div className={style.tableBox}>
                             <div className={`${style.tableRow} ${style.tableHead}`}>
                                 <div>구분</div>
                                 <div>결재자</div>
@@ -165,7 +162,7 @@ const Sign_Write = () => {
                                     {approver.position ? approver.position : "직급을 선택하세요"}
                                 </div>
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                 </div>
                 <div className={style.signwrite}>
