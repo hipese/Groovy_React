@@ -15,11 +15,6 @@ const WebSocketProvider = ({ children }) => {
 
     client.connect({}, (frame) => {
       console.log('Connected: ' + frame);
-      client.subscribe('/topic/' + loginID, (response) => {
-        console.log(response);
-        console.log(JSON.parse(response.body));
-      });
-
       setStompClient(client);
     });
   }, [loginID, setStompClient]);
