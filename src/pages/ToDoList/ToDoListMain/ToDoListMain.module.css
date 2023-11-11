@@ -66,16 +66,33 @@
 .tdlInsert {
     height: 100px;
     background-color: whitesmoke;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .tdlInsert:hover {
     cursor: pointer;
     background-color: #e9ecef;
+}
+
+.tdlDBInsert {
+    height: 100px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: rgb(0, 128, 255);
+}
+
+.tdltitle {
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    position: relative;
+    top: 5px;
+    left: 5px;
 }
 
 .starimg {
@@ -85,7 +102,7 @@
     transition: right 0.3s ease-in-out;
 }
 
-.tdlInsert:hover .starimg {
+.tdlDBInsert:hover .starimg {
     right: 5px;
 }
 
@@ -105,7 +122,6 @@
 .ratingStarStroke {
     stroke: Gold;
 }
-
 
 .ratingStarFilled {
     fill: Gold;

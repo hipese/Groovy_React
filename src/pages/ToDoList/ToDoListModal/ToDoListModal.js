@@ -4,21 +4,25 @@ import axios from 'axios';
 import Dropdown from './ToDoListDrop';
 
 
-const ToDoListModal = ({ showModal, setShowModal }) => {
+const ToDoListModal = ({ showModal, setShowModal, ListAdded }) => {
   const [isTitleEmpty, setIsTitleEmpty] = useState(false);
+  const [selectedBackground, setSelectedBackground] = useState("white");
+  const options = ["내 워크스페이스", "팀원 전체"];
+  const defaultBackground = 'white';
   const [formData, setFormData] = useState({
     title: "",
+    background: defaultBackground,
+    workspace: "내 워크스페이스",
+    bgimg: `/TDL/${defaultBackground}.jpg`,
   });
-  const [selectedBackground, setSelectedBackground] = useState("");
-  const options = ["내 워크스페이스", "팀원 전체"]
 
   if (!showModal) return null;
   
   const closeModal = (e) => {
     setShowModal(false);
-    setFormData({ title: "" });
+    setFormData({ title: "", background: "white", workspace: "내 워크스페이스", bgimg: `/TDL/${defaultBackground}.jpg` });
     setIsTitleEmpty(false);
-    setSelectedBackground("");
+    setSelectedBackground("white");
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,20 +35,31 @@ const ToDoListModal = ({ showModal, setShowModal }) => {
     }
   }
 
-  const SubmitButton = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title.trim()) {
       setIsTitleEmpty(true);
       document.getElementById('titleInput').focus();
       return;
-    } else {
-      setIsTitleEmpty(false);
+    }
+    try {
+      await axios.post("/api/tdList", formData);
+      ListAdded();
+      closeModal();
+    } catch (error) {
+      console.log(error);
     }
   }
 
   const selectBackground = (background) => {
+    const backgroundUrl = `/TDL/${background}.jpg`;
     setSelectedBackground(background);
+    setFormData({
+      ...formData,
+      bgimg: backgroundUrl,
+    });
   }
+
 
 
 
@@ -65,7 +80,9 @@ const ToDoListModal = ({ showModal, setShowModal }) => {
                         className={`${styles.backgroundimg} ${isSelected ? styles.backgroundimgSelected : ''}`}
                         type='button'
                         title={background}
-                        onClick={() => selectBackground(isSelected ? "" : background)}
+                        name='bgimg'
+                        value={formData.bgimg}
+                        onClick={() => selectBackground(background)}
                         style={{
                           backgroundColor: backgroundStyles[background].backgroundColor,
                           backgroundImage: `url(/TDL/${background}.jpg)`,
@@ -86,10 +103,10 @@ const ToDoListModal = ({ showModal, setShowModal }) => {
               </div>
               <div>
                 <div className={styles.selecttitle}>공유범위 <span>*</span></div>
-                <Dropdown options={options} />
+                <Dropdown options={options} name='workspace' value={formData.workspace} onChange={handleChange} />
               </div>
               <div className={styles.buttonbox}>
-                <button className={styles.submitButton} onClick={SubmitButton}>생성</button>
+                <button className={styles.submitButton} onClick={handleSubmit}>생성</button>
                 <button className={styles.cancelButton} onClick={closeModal}>닫기</button>
                 </div>
             </div>

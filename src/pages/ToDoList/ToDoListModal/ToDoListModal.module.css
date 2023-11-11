@@ -165,9 +165,16 @@
     background-color: #f2f2f2;
 }
 
+.arrow {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+}
 
-
-
+.arrow img {
+    width: 20px;
+    height: 20px;
+}
 
 .buttonbox {
     width: 100%;

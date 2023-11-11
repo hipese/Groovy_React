@@ -36,7 +36,7 @@ const Dropdown = ({ options }) => {
   return (
       <div className={styles.dropdown} ref={dropdownRef}>
         <div className={`${styles[`dropdown-header`]} ${isFocused ? styles.focused : ''}`} tabIndex={0} onFocus={handleFocus} onBlur={handleBlur} onClick={toggling}>
-        {selectedOption || "내 워크스페이스"}
+        {selectedOption || options[0]} <span className={styles.arrow}><img src={`/TDL/down.svg`} alt="" /></span>
       </div>
       {isOpen && (
         <div className={styles[`dropdown-list`]}>

@@ -19,19 +19,13 @@ const ProfileContainer = styled("div")({
     maxHeight: "70px",
 });
 
-const StarIcon = ({onClick}) => {
-  const [isFilled, setIsFilled] = useState(false);
-
-  const toggleFill = () => {
-    setIsFilled(!isFilled);
-    if(onClick) onClick();
-  };
-  const strokeColor = isFilled ? "#FFD700" : "#000";
-  const fillClass = isFilled ? styles.ratingStarFilled : styles.ratingStarNotFilled;
+const StarIcon = ({id, isActive, onClick}) => {
+  const strokeColor = isActive ? "#FFD700" : "white";
+  const fillClass = isActive ? styles.ratingStarFilled : styles.ratingStarNotFilled;
 
 
   return (
-    <label htmlFor="rating-2" className={styles.ratingLabel} onClick={toggleFill}>
+    <label htmlFor="rating-2" className={styles.ratingLabel} onClick={() => onClick(id)}>
       <svg className={styles.ratingStar} width="15px" height="15px" viewBox="0 0 32 32" aria-hidden="true">
         <g transform="translate(16,16)">
           <circle className={styles.ratingStarRing} fill="none" stroke="#000" strokeWidth="16" r="8" transform="scale(0)" />
@@ -57,12 +51,33 @@ const StarIcon = ({onClick}) => {
 const ToDoListMain = () => {
   const members = useContext(MemberContext);
   const [starActive, setStarActive] = useState(false); // 즐겨찾기 활성화 여부
-  const toggleStar = () => {
-    setStarActive(!starActive);
-  }
   const [showModal, setShowModal] = useState(false); // 모달창 활성화 여부
   const toggleModal = () => {
     setShowModal(!showModal);
+    getTodoList();
+  }
+  const [todoList, setTodoList] = useState([]);
+  const toggleStar = (id) => {
+    setTodoList(prevList => prevList.map((todo, index) => {
+      if (index === id) {
+        return { ...todo, isActive: !todo.isActive };
+      }
+      return todo;
+    }));
+  }
+
+
+    const getTodoList = async () => {
+      await axios.get("/api/tdList").then((res) => {
+        setTodoList(res.data);
+      });
+    };
+  useEffect(() => {
+    getTodoList();
+  }, []);
+  const ListAdded = () => {
+    getTodoList();
+    setShowModal(false);
   }
 
 
@@ -82,21 +97,21 @@ const ToDoListMain = () => {
           <li className={styles.tdlli}>
             <div className={styles.tdlInsert} onClick={toggleModal}>Create New Board </div>
           </li>
-          <li className={styles.tdlli}>
-            <div className={styles.tdlInsert}>Create New Board <div className={`${styles.starimg} ${starActive ? styles.starActive : ''}`}><StarIcon onClick={toggleStar} /></div></div>
-          </li>
-          <li className={styles.tdlli}>
-            <div className={styles.tdlInsert}>Create New Board</div>
-          </li>
-          <li className={styles.tdlli}>
-            <div className={styles.tdlInsert}>Create New Board</div>
-          </li>
-          <li className={styles.tdlli}>
-            <div className={styles.tdlInsert}>Create New Board</div>
-          </li>
+          {todoList.map((todo, index) => {
+            return (
+              <li className={styles.tdlli} key={index}>
+                <div className={styles.tdlDBInsert} style={{backgroundImage: `url(${todo.bgimg})`, backgroundSize: 'cover'}}>
+                  <div className={styles.tdltitle}>{todo.title}</div> 
+                  <div className={`${styles.starimg} ${todo.isActive ? styles.starActive : ''}`}>
+                    <StarIcon id={index} isActive={todo.isActive} onClick={toggleStar} />
+                  </div>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </div>
-      <Modal showModal={showModal} setShowModal={setShowModal} />
+      <Modal showModal={showModal} setShowModal={setShowModal} ListAdded={ListAdded} />
     </div>
   );
 };
