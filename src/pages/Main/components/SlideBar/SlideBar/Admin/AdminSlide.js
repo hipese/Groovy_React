@@ -35,6 +35,11 @@ const AdminSlide = () => {
                             사용자 관리
                         </button>
                     </Link>
+                    <Link to="/Groovy/admin/password">
+                        <button className={style.btn}>
+                            비밀번호 관리
+                        </button>
+                    </Link>
                     <Link to="/Groovy/admin/inactive">
                         <button className={style.btn}>
                             비활성 사용자

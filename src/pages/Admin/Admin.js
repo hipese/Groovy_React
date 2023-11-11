@@ -5,6 +5,7 @@ import Inactive from './Inactive';
 import AccessTime from './AccessTime';
 import User from './User';
 import Manage from './Manage';
+import Password from './Password';
 
 function Admin() {
     return (
@@ -14,6 +15,7 @@ function Admin() {
                 <Route path="/inactive" element={<Inactive />} />
                 <Route path="/time" element={<AccessTime />} />
                 <Route path="/user" element={<User />} />
+                <Route path="/password" element={<Password />} />
             </Routes>
         </div>
     )
