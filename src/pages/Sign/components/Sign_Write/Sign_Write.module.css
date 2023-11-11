@@ -260,4 +260,39 @@ select {
 .apply {
     margin-left: 420px;
     margin-right: 10px;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    border-radius: 5px;
+    border: none;
+}
+.textDiv{
+    float: left;
+    margin: 10px;
+    margin-top: 30px;
+}
+.buttonDiv{
+    margin: 10px;
+    float: left;
+}
+.btn{
+    width: 120px;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 20px;
+    position: relative;
+    z-index: 1;
+}
+.cancel{
+    background-color: rgb(130, 200, 255);
+    color: white;
+    border-radius: 5px;
+    border: none;
+}
+.btn:hover,
+.apply:hover,
+.cancel:hover {
+    background-color: rgb(100, 180, 255);
 }

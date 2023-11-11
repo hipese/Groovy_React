@@ -8,13 +8,6 @@ const Sign_Main = () => {
     const [sign_wait_list, setSign_wait_list] = useState([]);
     const [sign_progress_list, setSign_progress_list] = useState([]);
     const [sign_complete_list, setSign_complete_list] = useState([]);
-    const [notification, setNotification] = useState("");
-
-
-    const handleSSE = (event) => {
-        const newNotification = event.data;
-        setNotification(newNotification);
-    };
     
     useEffect(() => {
         axios.get("/api/signlist/wait").then((resp) => {
@@ -40,7 +33,11 @@ const Sign_Main = () => {
 
             <div className={style.documents}>
                 <div className={style.titleText}>결제 대기중 문서</div>
-                <div className={style.text}>{`승인할 문서가 ${sign_wait_list.length}건이 있습니다.`}</div>
+                <div className={style.text}>
+                <Link to="/Groovy/signlist/wait">
+                    {`승인할 문서가 ${sign_wait_list.length}건이 있습니다.`}
+                </Link>
+                </div>
                 <div className={`${style.tableRow} ${style.tableHead}`}>
                     <div>문서번호</div>
                     <div>기안일</div>
@@ -68,7 +65,11 @@ const Sign_Main = () => {
 
             <div className={style.documents}>
                 <div className={style.titleText}>결제 진행중인 문서</div>
-                <div className={style.text}>{`진행중 문서가 ${sign_progress_list.length}건이 있습니다.`}</div>
+                <div className={style.text}>
+                <Link to="/Groovy/signlist/progress">
+                    {`진행중 문서가 ${sign_progress_list.length}건이 있습니다.`}
+                </Link>
+                </div>
                 <div className={`${style.tableRow} ${style.tableHead}`}>
                     <div>문서번호</div>
                     <div>기안일</div>
@@ -96,7 +97,11 @@ const Sign_Main = () => {
 
             <div className={style.documents}>
                 <div className={style.titleText}>완료된 문서</div>
-                <div className={style.text}>{`완료된 문서가 ${sign_complete_list.length}건이 있습니다.`}</div>
+                <div className={style.text}>
+                    <Link to="/Groovy/signlist/complete">
+                        {`완료된 문서가 ${sign_complete_list.length}건이 있습니다.`}
+                    </Link>
+                </div>
                 <div className={`${style.tableRow} ${style.tableHead}`}>
                     <div>문서번호</div>
                     <div>기안일</div>
