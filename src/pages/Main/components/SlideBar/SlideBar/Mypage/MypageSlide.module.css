@@ -28,6 +28,9 @@
     top: 30px;
     z-index: 1;
 }
+.writeBtn:hover {
+    background-color: rgb(100, 180, 255);
+}
 
 .btndiv{
     display: flex;

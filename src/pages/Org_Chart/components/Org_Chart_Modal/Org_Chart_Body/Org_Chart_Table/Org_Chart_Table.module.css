@@ -14,6 +14,9 @@
     font-size: 15px;
     top: 30px;
 }
+.btn:hover{
+    background-color: rgb(100, 180, 255);
+}
 .table_header{
     height: 10%;
     display: flex;
