@@ -12,7 +12,7 @@ const ToDoListModal = ({ showModal, setShowModal, ListAdded }) => {
   const [formData, setFormData] = useState({
     title: "",
     background: defaultBackground,
-    workspace: "내 워크스페이스",
+    workspace: "option[0]",
     bgimg: `/TDL/${defaultBackground}.jpg`,
   });
 
@@ -20,7 +20,7 @@ const ToDoListModal = ({ showModal, setShowModal, ListAdded }) => {
   
   const closeModal = (e) => {
     setShowModal(false);
-    setFormData({ title: "", background: "white", workspace: "내 워크스페이스", bgimg: `/TDL/${defaultBackground}.jpg` });
+    setFormData({ title: "", background: "white", workspace: "option[0]", bgimg: `/TDL/${defaultBackground}.jpg` });
     setIsTitleEmpty(false);
     setSelectedBackground("white");
   };
