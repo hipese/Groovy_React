@@ -51,8 +51,7 @@ const Password = () => {
                     [id]: '',
                 }));
             })
-            .catch(error => {
-                console.error(error);
+            .catch(() => {
             });
     };
 

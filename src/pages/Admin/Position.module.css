@@ -1,0 +1,93 @@
+.search {
+    display: flex;
+    justify-content: flex-end;
+    margin: 30px;
+}
+
+hr {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.margin {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.position{
+    width: 270px;
+    margin: auto;
+}
+
+.pos {
+    width: 100px;
+    padding: 5px;
+}
+
+.save {
+    width: 60px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+    margin-left: 10px;
+}
+
+.save:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.cancel {
+    width: 60px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    margin-left: 10px;
+    z-index: 1;
+}
+
+.cancel:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.edit {
+    width: 130px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    margin-left: 10px;
+    z-index: 1;
+}
+
+.edit:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.del {
+    width: 130px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+    margin-left: 10px;
+}
+
+.del:hover {
+    background-color: rgb(100, 180, 255);
+}

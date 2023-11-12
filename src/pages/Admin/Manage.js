@@ -11,6 +11,8 @@ const Manage = () => {
     const [editUserId, setEditUserId] = useState(null);
     const [newUser, setNewUser] = useState({ name: '', id: '', password: '', department: '', position: '', contact: '', email: '' });
     const [editedUser, setEditedUser] = useState({});
+    const [userCount, setUserCount] = useState(0);
+    const [inactiveCount, setInactiveCount] = useState(0);
 
     const COUNT_PER_PAGE = 10;
 
@@ -23,6 +25,12 @@ const Manage = () => {
         });
         axios.get("/api/admin/position").then(resp => {
             setPosition(resp.data);
+        });
+        axios.get("/api/admin/countUser").then(resp => {
+            setUserCount(resp.data);
+        });
+        axios.get("/api/admin/countInactive").then(resp => {
+            setInactiveCount(resp.data);
         });
     }, []);
 
@@ -77,8 +85,7 @@ const Manage = () => {
                 });
                 setNewUser({ name: '', id: '', password: '', department: '', position: '', contact: '', email: '' });
             })
-            .catch(error => {
-                console.error(error);
+            .catch(() => {
             });
     };
 
@@ -104,8 +111,11 @@ const Manage = () => {
     };
 
     const handleDel = (id) => {
-        const confirmDelete = window.confirm(`${newUser.name}(사번: ${newUser.id})님을 진짜로 삭제하시겠습니까? 
-삭제된 사용자는 더이상 로그인 할 수 없으며, 데이터가 즉시 삭제됩니다.`);
+        const userToDelete = users.find((user) => user.id === id);
+
+        const confirmDelete = window.confirm(`${userToDelete.name}(사번: ${userToDelete.id})님을 진짜로 삭제하시겠습니까? 
+삭제된 사용자는 더이상 로그인 할 수 없으며, 
+데이터가 즉시 삭제됩니다.`);
 
         if (confirmDelete) {
             axios
@@ -114,8 +124,7 @@ const Manage = () => {
                     setUsers(prevUsers => prevUsers.filter(user => user.id !== id));
                     setCurrentPage(currentPage);
                 })
-                .catch((error) => {
-                    console.error(error);
+                .catch(() => {
                 });
         }
     };
@@ -135,8 +144,7 @@ const Manage = () => {
                 setEditedUser({});
                 setEditUserId(null);
             })
-            .catch((error) => {
-                console.error(error);
+            .catch(() => {
             });
     };
 
@@ -155,7 +163,7 @@ const Manage = () => {
                     <div className={style.margin}>
                         • 사용자
                     </div>
-                    <div>11명 (사용: 11 / 일시정지: 0)</div>
+                    <div>{`총 ${userCount}명 (사용: ${userCount - inactiveCount} / 일시정지: ${inactiveCount})`}</div>
                 </div>
                 <br></br>
                 <hr></hr>

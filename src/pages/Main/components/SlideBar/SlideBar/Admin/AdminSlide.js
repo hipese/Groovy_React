@@ -48,19 +48,19 @@ const AdminSlide = () => {
                 </>
             )}
             <button className={style.btn2} onClick={handleHid2}>
-                사용자 접속 내역
+                직위/직무 관리
                 <img src={down} alt="" width={"20px"} height={"15px"} />
             </button>
             {isHidden2 && (
                 <>
-                    <Link to="/Groovy/admin/time">
+                    <Link to="/Groovy/admin/position">
                         <button className={style.btn}>
-                            접속시간별
+                            직위 관리
                         </button>
                     </Link>
-                    <Link to="/Groovy/admin/user">
+                    <Link to="/Groovy/admin/dept">
                         <button className={style.btn}>
-                            사용자별
+                            직무 관리
                         </button>
                     </Link>
                 </>
