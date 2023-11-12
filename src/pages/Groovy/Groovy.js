@@ -21,6 +21,7 @@ import { formatISO, parseISO, addDays } from 'date-fns';
 import WebSocketProvider from "../../WebSocketContext/WebSocketContext";
 
 export const ListContext = createContext();
+export const ToDoListContext = createContext();
 const MemberContext = createContext();
 
 const Groovy = () => {
@@ -52,6 +53,7 @@ const Groovy = () => {
         }
     }, []);
 
+    // Calendar 상위 컴포넌트에서 사용할 상태와 함수
     const refreshList = () => {
         axios.get("/api/calendar").then((res) => {
             const NewEvents = res.data.map(transformEventDataToCalendarEvent);
@@ -83,6 +85,35 @@ const Groovy = () => {
     useEffect(() => {
         refreshList();
     }, []);
+    // ToDoList 상위 컴포넌트에서 사용할 상태와 함수
+    const [todoList, setTodoList] = useState([]);
+    const getTodoList = async () => {
+        try {
+            const res = await axios.get("/api/tdList");
+            let updatedTodoList = res.data.map(todo => ({ ...todo, isActive: false }));
+
+            const bookmarksRes = await axios.get("/api/tdlbookmark");
+            const bookmarks = bookmarksRes.data;
+
+            // 즐겨찾기 목록과 현재 todo 목록 매핑
+            updatedTodoList = updatedTodoList.map(todo => {
+                const isBookmarked = bookmarks.some(bookmark => bookmark.parent_seq === todo.seq);
+                return { ...todo, isActive: isBookmarked };
+            });
+            setTodoList(updatedTodoList);
+
+        } catch (error) {
+            console.error("Error fetching data from server:", error);
+        }
+    }
+    useEffect(() => {
+        getTodoList();
+    }, []);
+    const ListAdded = () => { 
+        getTodoList();
+    }
+
+
 
     return (
         <WebSocketProvider>
@@ -94,7 +125,6 @@ const Groovy = () => {
                     <ListContext.Provider value={{ refreshList }}>
                         <div className="SlideContainer">
                             <SlideBar refreshList={refreshList} />
-
                         </div>
                     </ListContext.Provider>
 
@@ -116,7 +146,11 @@ const Groovy = () => {
                             <Route path="mypagelist/*" element={<Mypagelist />} />
                             <Route path="signlist/*" element={<Sign_List />} />
                             <Route path="survey/*" element={<Survey />} />
-                            <Route path="list/*" element={<ToDoList />} />
+                            <Route path="list/*" element={
+                                <ToDoListContext.Provider value={{ todoList, setTodoList, ListAdded }}>
+                                    <ToDoList />
+                                </ToDoListContext.Provider>
+                                } />
                         </Routes>
 
                     </div>

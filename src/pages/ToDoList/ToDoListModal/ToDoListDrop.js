@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './ToDoListModal.module.css';
 
-const Dropdown = ({ options }) => {
+const Dropdown = ({ options, onChange }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
     const [isFocused, setIsFocused] = useState(false);
@@ -12,6 +12,7 @@ const Dropdown = ({ options }) => {
     const onOptionClicked = value => () => {
         setSelectedOption(value);
         setIsOpen(false);
+        onChange(value);
     };
     const handleFocus = () => {
         setIsFocused(true);

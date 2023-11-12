@@ -1,12 +1,16 @@
 import styles from "./ToDoListMain.module.css";
 import { useContext, useEffect, useState } from "react"
-import axios from "axios";
+import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import { MemberContext } from "../../Groovy/Groovy";
 import { styled } from "@mui/material/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey } from '@fortawesome/free-solid-svg-icons';
 import Modal from "../ToDoListModal/ToDoListModal";
+import axios from "axios";
+import { ToDoListContext } from "../../Groovy/Groovy";
+import { List } from "reactstrap";
+import { on } from "npm";
 
 const StyledAvatar = styled(Avatar)({
     width: "100%",
@@ -22,10 +26,14 @@ const ProfileContainer = styled("div")({
 const StarIcon = ({id, isActive, onClick}) => {
   const strokeColor = isActive ? "#FFD700" : "white";
   const fillClass = isActive ? styles.ratingStarFilled : styles.ratingStarNotFilled;
+  const handleClick = (event) => {
+    event.stopPropagation();
+    onClick(id);
+  }
 
 
   return (
-    <label htmlFor="rating-2" className={styles.ratingLabel} onClick={() => onClick(id)}>
+    <label htmlFor="rating-2" className={styles.ratingLabel} onClick={handleClick}>
       <svg className={styles.ratingStar} width="15px" height="15px" viewBox="0 0 32 32" aria-hidden="true">
         <g transform="translate(16,16)">
           <circle className={styles.ratingStarRing} fill="none" stroke="#000" strokeWidth="16" r="8" transform="scale(0)" />
@@ -50,13 +58,12 @@ const StarIcon = ({id, isActive, onClick}) => {
 
 const ToDoListMain = () => {
   const members = useContext(MemberContext);
-  const [starActive, setStarActive] = useState(false); // 즐겨찾기 활성화 여부
   const [showModal, setShowModal] = useState(false); // 모달창 활성화 여부
+  const { todoList, setTodoList, ListAdded } = useContext(ToDoListContext);
   const toggleModal = () => {
     setShowModal(!showModal);
-    getTodoList();
+    ListAdded();
   }
-  const [todoList, setTodoList] = useState([]);
 
   const toggleStar = async (id) => {
     const updatedList = todoList.map((todo, index) => {
@@ -87,36 +94,6 @@ const ToDoListMain = () => {
     }
 };
 
-  const getTodoList = async () => {
-  try {
-    const res = await axios.get("/api/tdList");
-    let updatedTodoList = res.data.map(todo => ({ ...todo, isActive: false }));
-
-    const bookmarksRes = await axios.get("/api/tdlbookmark");
-    const bookmarks = bookmarksRes.data;
-
-    // 즐겨찾기 목록과 현재 todo 목록 매핑
-    updatedTodoList = updatedTodoList.map(todo => {
-      const isBookmarked = bookmarks.some(bookmark => bookmark.parent_seq === todo.seq);
-      return { ...todo, isActive: isBookmarked };
-    });
-    setTodoList(updatedTodoList);
-
-  } catch (error) {
-    console.error("Error fetching data from server:", error);
-  }
-};
-
-useEffect(() => {
-  getTodoList();
-}, []);
-  const ListAdded = () => {
-    getTodoList();
-    setShowModal(false);
-  }
-
-
-
   return (
     <div className={styles.tdl}>
       <div className={styles.tdlMain}>
@@ -132,10 +109,11 @@ useEffect(() => {
           <li className={styles.tdlli}>
             <div className={styles.tdlInsert} onClick={toggleModal}>Create New Board </div>
           </li>
+          <Link to="ToDoListBoard">
           {todoList.map((todo, index) => {
             return (
               <li className={styles.tdlli} key={index}>
-                <div className={styles.tdlDBInsert} style={{backgroundImage: `url(${todo.bgimg})`, backgroundSize: 'cover'}}>
+                <div className={styles.tdlDBInsert} style={{backgroundImage: `url(${todo.bgimg})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
                   <div className={styles.tdltitle}>{todo.title}</div> 
                   <div className={`${styles.starimg} ${todo.isActive ? styles.starActive : ''}`}>
                     <StarIcon id={index} isActive={todo.isActive} onClick={toggleStar} />
@@ -144,6 +122,7 @@ useEffect(() => {
               </li>
             );
           })}
+          </Link>
         </ul>
       </div>
       <Modal showModal={showModal} setShowModal={setShowModal} ListAdded={ListAdded} />

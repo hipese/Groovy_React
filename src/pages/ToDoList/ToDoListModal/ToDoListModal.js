@@ -8,11 +8,11 @@ const ToDoListModal = ({ showModal, setShowModal, ListAdded }) => {
   const [isTitleEmpty, setIsTitleEmpty] = useState(false);
   const [selectedBackground, setSelectedBackground] = useState("white");
   const options = ["내 워크스페이스", "팀원 전체"];
-  const defaultBackground = 'white';
+  const defaultBackground = 'StarryNight';
   const [formData, setFormData] = useState({
     title: "",
     background: defaultBackground,
-    workspace: "option[0]",
+    workspace: "내 워크스페이스",
     bgimg: `/TDL/${defaultBackground}.jpg`,
   });
 
@@ -20,7 +20,7 @@ const ToDoListModal = ({ showModal, setShowModal, ListAdded }) => {
   
   const closeModal = (e) => {
     setShowModal(false);
-    setFormData({ title: "", background: "white", workspace: "option[0]", bgimg: `/TDL/${defaultBackground}.jpg` });
+    setFormData({ title: "", background: "white", workspace: "내 워크스페이스", bgimg: `/TDL/${defaultBackground}.jpg` });
     setIsTitleEmpty(false);
     setSelectedBackground("white");
   };
@@ -59,9 +59,18 @@ const ToDoListModal = ({ showModal, setShowModal, ListAdded }) => {
       bgimg: backgroundUrl,
     });
   }
-
-
-
+  const backgroundNames = {
+  StarryNight: "별이 빛나는 밤",
+  TheGleaners: "이삭 줍는 여인들",
+  LibertyLeadingthePeople: "자유를 인도하는 자유의 여신",
+  Sunrise: "일출",
+  TheSchoolofAthens: "아테네 학당",
+  StarryNightOvertheRhone: "론 강가의 별이 빛나는 밤",
+  CafeTerraceatNight: "밤의 카페 테라스",
+  TheNightWatch: "밤의 감시",
+  TheRaftoftheMedusa: "메두사의 뗏목",
+  LasMeninas: "라스 메니나스",
+};
 
     return (
     <div id='modalOverlay' className={styles.modalOverlay} onClick={(e) => { if(e.target.id === "modalOverlay") closeModal(); }}>
@@ -72,21 +81,21 @@ const ToDoListModal = ({ showModal, setShowModal, ListAdded }) => {
               <div className={styles.tdlHeadertitle}>Background</div>
               <div className={styles.backgroundPicker}>
                <ul>
-                {['white', 'Blacksmoke', 'BlueRed', 'Daeliseok', 'GoldStar', 'Milkyway', 'Pastel', 'Rainbow', 'Rainbowvali', 'Blacklight'].map((background, index) => {
+                {['StarryNight', 'TheGleaners', 'LibertyLeadingthePeople', 'Sunrise', 'TheSchoolofAthens', 'StarryNightOvertheRhone', 'CafeTerraceatNight', 'TheNightWatch', 'TheRaftoftheMedusa', 'LasMeninas'].map((background, index) => {
                   const isSelected = selectedBackground === background;
                   return (
                     <li key={index}>
                       <button
                         className={`${styles.backgroundimg} ${isSelected ? styles.backgroundimgSelected : ''}`}
                         type='button'
-                        title={background}
+                        title={backgroundNames[background]}
                         name='bgimg'
                         value={formData.bgimg}
                         onClick={() => selectBackground(background)}
                         style={{
                           backgroundColor: backgroundStyles[background].backgroundColor,
                           backgroundImage: `url(/TDL/${background}.jpg)`,
-                          backgroundSize: 'cover',
+                          backgroundSize: 'cover'
                         }}
                       ></button>
                     </li>
@@ -103,7 +112,7 @@ const ToDoListModal = ({ showModal, setShowModal, ListAdded }) => {
               </div>
               <div>
                 <div className={styles.selecttitle}>공유범위 <span>*</span></div>
-                <Dropdown options={options} name='workspace' value={formData.workspace} onChange={handleChange} />
+                <Dropdown options={options} name='workspace' value={formData.workspace} onChange={value => handleChange({ target: {name: 'workspace', value}})} />
               </div>
               <div className={styles.buttonbox}>
                 <button className={styles.submitButton} onClick={handleSubmit}>생성</button>
@@ -117,15 +126,15 @@ const ToDoListModal = ({ showModal, setShowModal, ListAdded }) => {
 }
 
 const backgroundStyles = {
-  white : { backgroundColor: "white" },
-  Blacksmoke: { backgroundColor: "black" },
-  BlueRed: { backgroundColor: "blue" },
-  Daeliseok: { backgroundColor: "whitesmoke" },
-  GoldStar: { backgroundColor: "gold" },
-  Milkyway: { backgroundColor: "white" },
-  Pastel: { backgroundColor: "skyblue" },
-  Rainbow: { backgroundColor: "coral" },
-  Rainbowvali: { backgroundColor: "purple" },
-  Blacklight: { backgroundColor: "black" },
+  StarryNight : { backgroundColor: "white" },
+  TheGleaners: { backgroundColor: "black" },
+  LibertyLeadingthePeople: { backgroundColor: "blue" },
+  Sunrise: { backgroundColor: "whitesmoke" },
+  TheSchoolofAthens: { backgroundColor: "gold" },
+  StarryNightOvertheRhone: { backgroundColor: "white" },
+  CafeTerraceatNight: { backgroundColor: "skyblue" },
+  TheNightWatch: { backgroundColor: "coral" },
+  TheRaftoftheMedusa: { backgroundColor: "purple" },
+  LasMeninas: { backgroundColor: "black" },
 };
 export default ToDoListModal;
