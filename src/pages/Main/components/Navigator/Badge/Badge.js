@@ -3,10 +3,12 @@ import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Badge from "@mui/material/Badge";
 import Bell from "../assets/bell.png";
+import Alert from '@mui/material/Alert';
 import { useWebSocket } from "../../../../../WebSocketContext/WebSocketContext";
 import { LoginContext } from "../../../../../App";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import style from "./Badge.module.css";
 
 const StyledBadge = styled(Badge)({
   "& .MuiBadge-dot": {
@@ -80,18 +82,18 @@ function DotBadge() {
   const handleBellClick = () => {
     // 알림창 열기/닫기 상태 변경
     setIsNotificationOpen(!isNotificationOpen);
-    console.log(isNotificationOpen);
-
-    if (isNotificationOpen) {
-      axios.put('/api/realtime_notification')
-        .then(resp => {
-          setNotifications([]);
-        })
-        .catch(e => {
-          console.error(e);
-        });
-    }
   };
+
+  const handleNotificationCheck = (parent_seq) => {
+    axios.put(`/api/realtime_notification/${parent_seq}`)
+      .then(resp => {
+        fetchNotifications();
+      })
+      .catch(e => {
+        console.error(e);
+      });
+    setIsNotificationOpen(!isNotificationOpen);
+  }
 
   useEffect(() => {
     fetchNotifications();
@@ -105,21 +107,23 @@ function DotBadge() {
       </StyledBadge>
 
       {isNotificationOpen && (
-        <div
-          style={{
-            position: "absolute",
-            top: "50px",
-            right: "10px",
-            width: "300px",
-            padding: "20px",
-            background: "#fff",
-            border: "1px solid #ddd",
-            borderRadius: "5px",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-          }}
-        >
+        <div className={style.noticeContainer}>
           {notifications.map((notification, index) => (
-            <div key={index}><Link to={`/Groovy/signlist/detail/${notification.parent_seq}`}>{notification.contents}</Link></div>
+            <div key={index} className={style.notice} onClick={() => handleNotificationCheck(notification.parent_seq)}>
+              <Link to={`/Groovy/signlist/detail/${notification.parent_seq}`}>
+                {notification.contents.includes("승인") ? (
+                  <Alert severity="success">{notification.contents}</Alert>
+                ) : notification.contents.includes("반려") ? (
+                  <Alert severity="error">{notification.contents}</Alert>
+                ) : notification.contents.includes("도착") ? (
+                  <Alert severity="info">{notification.contents}</Alert>
+                ) : (
+                  // 모든 조건을 만족하지 않는 경우에 대한 처리
+                  // 예를 들면, 기본적인 알림 메시지를 보여줄 수 있습니다.
+                  <Alert>{notification.contents}</Alert>
+                )}
+              </Link>
+            </div>
           ))}
         </div>
       )}
