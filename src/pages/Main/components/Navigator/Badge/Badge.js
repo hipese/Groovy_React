@@ -83,27 +83,13 @@ function DotBadge() {
     }
   }, [stompClient, loginID]);
 
-<<<<<<< HEAD
   const handleBellClick = (event) => {
     event.stopPropagation();
     if (isNotificationOpen) {
-      // 열려있다면, 알림창을 닫고 알림을 초기화하는 API 호출
-      axios.put('/api/realtime_notification')
-        .then(resp => {
-          setNotifications([]);
-          setIsNotificationOpen(false); // 알림창 상태를 닫힌 상태로 변경
-        })
-        .catch(e => {
-          console.error(e);
-        });
+      setIsNotificationOpen(false);
     } else {
       setIsNotificationOpen(true);
     }
-=======
-  const handleBellClick = () => {
-    // 알림창 열기/닫기 상태 변경
-    setIsNotificationOpen(!isNotificationOpen);
->>>>>>> dcb0e217bbee3795d59ec2a5c5d4d9298a72f9d8
   };
 
   const handleNotificationCheck = (parent_seq) => {
@@ -147,7 +133,7 @@ function DotBadge() {
    
     document.removeEventListener('click', handleClickOutside);
   };
-}, [isNotificationOpen]); 
+}, []); 
 
   
   return (
@@ -157,24 +143,7 @@ function DotBadge() {
       </StyledBadge>
 
       {isNotificationOpen && (
-<<<<<<< HEAD
-        <div
-          ref={dropdownRef} 
-          style={{
-            position: "absolute",
-            top: "40px",
-            right: "5px",
-            width: "300px",
-            padding: "20px",
-            background: "#fff",
-            border: "1px solid #ddd",
-            borderRadius: "5px",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-=======
         <div className={style.noticeContainer}>
->>>>>>> dcb0e217bbee3795d59ec2a5c5d4d9298a72f9d8
           {notifications.map((notification, index) => (
             <div key={index} className={style.notice} onClick={() => handleNotificationCheck(notification.parent_seq)}>
               <Link to={`/Groovy/signlist/detail/${notification.parent_seq}`}>
