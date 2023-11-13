@@ -80,5 +80,6 @@
     z-index: 1;
     margin: 10px;
   }
-  
-  /* 나머지 스타일 */
+  .modal_close_button:hover{
+    background-color: rgb(100, 180, 255);
+  }

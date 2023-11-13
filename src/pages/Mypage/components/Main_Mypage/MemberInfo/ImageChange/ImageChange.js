@@ -24,8 +24,6 @@ const ImageChange = ({ onClose }) => {
 
     const members = useContext(MemberContext);
 
-    console.log(members.profile_scr);
-
     const [previewSrc, setPreviewSrc] = useState(null);// 미리보기를 위한 변수
     const [fileName, setFileName] = useState(""); // 파일 이름을 위한 상태
 

@@ -22,11 +22,16 @@ const UpdateContact = ({onClose}) => {
     const [contact, setContact] = useState(members.member.contact || "");
 
     const handleChangeContact = (e) => {
-        const { name, value } = e.target;
-        setContact(value);
+        const { value } = e.target;
+        // 입력값이 숫자만 포함되어 있는지 확인합니다.
+        if (value === '' || /^[0-9\b]+$/.test(value)&&value.length<=11) {
+            setContact(value);
+        }
+        // 숫자가 아닌 다른 값이 입력되면 상태를 업데이트하지 않습니다.
     }
 
     const handleConfirm = () => {
+
         // 멤버 상태를 업데이트하는 로직
         axios.put(`/api/member/ContactUpdate/${contact}`).then(resp => {
             onClose();

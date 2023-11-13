@@ -40,7 +40,6 @@ const Calendar = () => {
     const [weekendsVisible, setWeekendsVisible] = useState(true);
     const [events, setEvents] = useState([]);
     const [highlightDates, setHighlightDates] = useState([]);
-    const [calendarData, setCalendarData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [eventModalOpen, setEventModalOpen] = useState(false);
