@@ -1,21 +1,24 @@
 import { Route, Routes } from "react-router-dom";
-import Main_Mypage from  "../components/Main_Mypage/Main_Mypage"
-
-
-const MypageM=()=>{
-    return(
-      <Main_Mypage/>
-    );
-  }
+import style from "./MyPagelist.module.css"
+import MypageIndex from "./Main_Mypage/MypageIndex/MypageIndex";
+import MemberInfo from "./Main_Mypage/MemberInfo/MemberInfo";
+import SurveyList from "./SurveyList/SurveyList";
 
 
 const Mypagelist = () => {
-    return (
+  return (
+    <div className={style.container}>
+      <div className={style.index}>
+        <MypageIndex />
+      </div>
+      <div className={style.contents}>
         <Routes>
-            <Route path="/" element={<MypageM />} />
-            <Route path="/update" element={<MypageM />} />
+          <Route path="/" element={<MemberInfo />} />
+          <Route path="/surveyList" element={<SurveyList />} />
         </Routes>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default Mypagelist;

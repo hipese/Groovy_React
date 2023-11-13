@@ -1,0 +1,212 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    max-width: 300px;
+    width: 100%;
+}
+
+.modalHeader {
+    font-size: 20px;
+    margin-bottom: 30px;
+    color: rgb(100, 100, 100);
+    display: flex;
+    justify-content: center;
+}
+
+.tdlHeadertitle {
+    font-size: 15px;
+}
+
+.backgroundPicker ul {
+    list-style: none;
+    width: 100%;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.backgroundPicker ul li {
+    width: 45px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.backgroundimg {
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgb(200, 200, 200);
+}
+
+.backgroundimg:hover {
+    filter: brightness(80%);
+}
+
+.backgroundimgSelected {
+    filter: brightness(80%);
+    position: relative;
+}
+
+.backgroundimgSelected::after {
+    content: "";
+    display: block;
+    width: 25px;
+    height: 25px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M6.73534 12.3223C6.36105 11.9162 5.72841 11.8904 5.3223 12.2647C4.91619 12.639 4.89039 13.2716 5.26467 13.6777L8.87678 17.597C9.41431 18.1231 10.2145 18.1231 10.7111 17.6264C10.7724 17.5662 10.7724 17.5662 11.0754 17.2683C11.3699 16.9785 11.6981 16.6556 12.0516 16.3075C13.0614 15.313 14.0713 14.3169 15.014 13.3848L15.0543 13.3449C16.7291 11.6887 18.0004 10.4236 18.712 9.70223C19.0998 9.30904 19.0954 8.67589 18.7022 8.28805C18.309 7.90022 17.6759 7.90457 17.2881 8.29777C16.5843 9.01131 15.3169 10.2724 13.648 11.9228L13.6077 11.9626C12.6662 12.8937 11.6572 13.8889 10.6483 14.8825C10.3578 15.1685 10.0845 15.4375 9.83288 15.6851L6.73534 12.3223Z'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-left: 4px;
+}
+
+.modalTitle {
+    font-size: 15px;
+}
+
+.modalTitle span {
+    color: coral;
+}
+
+.modalInput {
+    width: 100%;
+    height: 35px;
+    padding: 0px 10px 0px 10px;
+    border: 3px solid rgb(200, 200, 200);
+    border-radius: 3px;
+}
+
+.modalInput:focus {
+    outline: none;
+    border: 3px solid rgb(0, 155, 255);
+}
+
+.modalNoInput:focus {
+    outline: none;
+    border: 3px solid rgb(255, 55, 0);
+}
+
+.notitle {
+    font-size: 12px;
+    color: rgb(255, 0, 0);
+    margin-bottom: 20px;
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+.selecttitle {
+    font-size: 15px;
+    margin-top: 20px;
+}
+
+.selecttitle span {
+    color: coral;
+}
+
+.dropdown {
+    position: relative;
+    max-width: 260px;
+}
+
+.dropdown-header {
+    background: white;
+    border: 3px solid rgb(200, 200, 200);
+    padding: 4px 10px 4px 10px;
+    height: 35px;
+    cursor: pointer;
+}
+
+.dropdown-list {
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 5;
+}
+
+.dropdown-header.focused {
+    border: 3px solid rgb(0, 155, 255);
+}
+
+.dropdown-listitem {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-listitem:hover {
+    background-color: #f2f2f2;
+}
+
+.arrow {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+}
+
+.arrow img {
+    width: 20px;
+    height: 20px;
+}
+
+.buttonbox {
+    width: 100%;
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.submitButton {
+    width: 70px;
+    height: 35px;
+    font-size: 15px;
+    border: none;
+    background-color: skyblue;
+    color: white;
+    margin: 0px 2px 0px 2px;
+}
+
+.submitButton:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.cancelButton {
+    width: 70px;
+    height: 35px;
+    font-size: 15px;
+    border: none;
+    background-color: coral;
+    color: white;
+    margin: 0px 2px 0px 2px;
+}
+
+.cancelButton:hover {
+    background-color: rgb(255, 100, 100);
+}

@@ -2,7 +2,7 @@ import BtnDiv from "./BtnDiv/BtnDiv";
 import styles from "./ImageChange.module.css"
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useContext,forwardRef } from 'react';
 import { MemberContext } from "../../../../../Groovy/Groovy";
 
 
@@ -20,11 +20,10 @@ const ProfileContainer = styled("div")({
     height: "240px",
 });
 
-const ImageChange = ({ onClose }) => {
+const ImageChange = forwardRef((props, ref) => {
 
+    const { onClose } = props;
     const members = useContext(MemberContext);
-
-    console.log(members.profile_scr);
 
     const [previewSrc, setPreviewSrc] = useState(null);// 미리보기를 위한 변수
     const [fileName, setFileName] = useState(""); // 파일 이름을 위한 상태
@@ -97,6 +96,6 @@ const ImageChange = ({ onClose }) => {
 
         </div>
     );
-}
+});
 
 export default ImageChange;

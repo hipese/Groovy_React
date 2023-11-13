@@ -60,25 +60,25 @@
 
 .modaltitle {
     width: 75%;
-    height: 25px;
+    min-height: 25px;
     float: left;
 }
 
 .modaltime {
     width: 75%;
-    height: 25px;
+    min-height: 25px;
     float: left;
 }
 
 .modalwrite {
     width: 75%;
-    height: 25px;
+    min-height: 25px;
     float: left;
 }
 
 .modalcontents {
     width: 75%;
-    height: 25px;
+    min-height: 25px;
     float: left;
 }
 

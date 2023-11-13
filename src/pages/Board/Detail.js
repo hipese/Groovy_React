@@ -22,17 +22,16 @@ const Detail = () => {
 
     const handleDelete = () => {
         axios
-            .delete(`/api/boards/${seq}`)
+            .delete(`/api/boards/com/${seq}`)
             .then((resp) => {
                 navi("/groovy/board");
             })
-            .catch((error) => {
-                console.error("삭제중 오류 발생", error);
+            .catch(() => {
             });
     };
 
     useEffect(() => {
-        axios.get(`/api/boards/${seq}`).then((resp) => {
+        axios.get(`/api/boards/com/${seq}`).then((resp) => {
             setBoard(resp.data);
         });
     }, [seq]);

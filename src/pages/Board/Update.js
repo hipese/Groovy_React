@@ -73,11 +73,8 @@ function Update() {
                 <hr></hr>
                 카테고리
                 <select name="category" onChange={handleChange} value={board.category} className={style.category}>
-                    <option value="">선택</option>
-                    <option value="전사 공지">전사 공지</option>
-                    <option value="전사 자유">전사 자유</option>
-                    <option value="부서 공지">부서 공지</option>
-                    <option value="부서 자유">부서 자유</option>
+                    <option value="공지">공지</option>
+                    <option value="자유">자유</option>
                 </select>
             </div>
             <hr></hr>
