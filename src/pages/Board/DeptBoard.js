@@ -1,17 +1,21 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import style from "./Board.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
+import { MemberContext } from '../Groovy/Groovy';
 
 const DeptBoard = () => {
+
+    const { member } = useContext(MemberContext);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [boards, setBoards] = useState([]);
     const COUNT_PER_PAGE = 10;
 
     useEffect(() => {
-        axios.get("/api/boards/dept").then(resp => {
+        const dept = member.group_name;
+        axios.get(`/api/boards/deptCom/${dept}`).then(resp => {
             setBoards(resp.data);
         })
     }, []);

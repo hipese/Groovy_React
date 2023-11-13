@@ -1,11 +1,11 @@
-import { useContext, useState } from "react";
+import { useContext, useState,forwardRef  } from "react";
 import style from "./UpdateModal.module.css"
 import { MemberContext } from "../../../../../Groovy/Groovy";
 import axios from "axios";
 
 
-const UpdateEmail=({onClose})=>{
-
+const UpdateEmail = forwardRef((props, ref)=>{
+    const { onClose } = props;
     const members=useContext(MemberContext);
 
     const [email,setEmail]=useState(members.member.email||"");
@@ -60,6 +60,6 @@ const UpdateEmail=({onClose})=>{
             </div>
         </div>
     );
-}
+});
 
 export default UpdateEmail;

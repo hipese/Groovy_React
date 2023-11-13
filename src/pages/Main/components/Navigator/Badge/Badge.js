@@ -45,6 +45,9 @@ function DotBadge() {
   const { loginID } = useContext(LoginContext);
   const [open, setOpen] = React.useState(false);
 
+  const dropdownRef = React.useRef(null); // 드롭다운 참조를 위한 ref
+
+
   const fetchNotifications = () => {
     axios.get('/api/realtime_notification')
       .then(resp => {
@@ -55,6 +58,7 @@ function DotBadge() {
         console.error(e);
       });
   };
+
 
   useEffect(() => {
     const handleWebSocketMessage = (message) => {
@@ -85,10 +89,33 @@ function DotBadge() {
     }
   }, [stompClient, loginID]);
 
-  const handleBellClick = () => {
-    // 알림창 열기/닫기 상태 변경
-    setIsNotificationOpen(!isNotificationOpen);
+
+  //아이콘을 클릭하여 창을 닫음
+  const handleBellClick = (event) => {
+    event.stopPropagation();
+    if (isNotificationOpen) {
+      setIsNotificationOpen(false);
+    } else {
+      setIsNotificationOpen(true);
+    }
   };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsNotificationOpen(false);
+      }
+    }
+    
+    if (isNotificationOpen) {
+      document.addEventListener('click', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isNotificationOpen]);
+
+
 
   const handleNotificationCheck = (parent_seq) => {
     axios.put(`/api/realtime_notification/${parent_seq}`)
@@ -130,9 +157,6 @@ function DotBadge() {
   }, []);
 
 
-
-
-
   return (
     <BellContainer>
       <StyledBadge color="error" badgeContent={notifications.length} showZero>
@@ -140,7 +164,7 @@ function DotBadge() {
       </StyledBadge>
 
       {isNotificationOpen && (
-        <div className={style.noticeContainer}>
+        <div ref={dropdownRef} className={style.noticeContainer}>
           {notifications.map((notification, index) => (
             <div key={index} className={style.notice} onClick={() => handleNotificationCheck(notification.parent_seq)}>
               <Link to={`/Groovy/signlist/detail/${notification.parent_seq}`}>
@@ -170,7 +194,7 @@ function DotBadge() {
           anchorOrigin={{
             vertical: "bottom",
             horizontal: "right"
-         }}
+          }}
         />
       </div>
     </BellContainer>
