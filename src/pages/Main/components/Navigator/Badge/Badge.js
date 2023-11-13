@@ -89,6 +89,8 @@ function DotBadge() {
     }
   }, [stompClient, loginID]);
 
+
+  //아이콘을 클릭하여 창을 닫음
   const handleBellClick = (event) => {
     event.stopPropagation();
     if (isNotificationOpen) {
@@ -97,6 +99,23 @@ function DotBadge() {
       setIsNotificationOpen(true);
     }
   };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsNotificationOpen(false);
+      }
+    }
+    
+    if (isNotificationOpen) {
+      document.addEventListener('click', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isNotificationOpen]);
+
+
 
   const handleNotificationCheck = (parent_seq) => {
     axios.put(`/api/realtime_notification/${parent_seq}`)
@@ -136,42 +155,8 @@ function DotBadge() {
   useEffect(() => {
     fetchNotifications();
   }, []);
-  
-  //알림창 범위를 벗어나는 부분을 클릭하면 닫히게 하는 코드
-  useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsNotificationOpen(false);
-
-      // 상태가 변경되었을 때만 API 호출
-      if (isNotificationOpen) {
-        axios.put('/api/realtime_notification')
-          .then(resp => {
-            setNotifications([]);
-          })
-          .catch(e => {
-            console.error(e);
-          });
-      }
-    }
-  };
-
-<<<<<<< HEAD
-  document.addEventListener('click', handleClickOutside);
-  
-  // 클린업 함수
-  return () => {
-   
-    document.removeEventListener('click', handleClickOutside);
-  };
-}, []); 
-
-  
-=======
 
 
-
->>>>>>> a551600397459d2833aecf90f06edc4fb9f5c343
   return (
     <BellContainer>
       <StyledBadge color="error" badgeContent={notifications.length} showZero>
@@ -179,7 +164,7 @@ function DotBadge() {
       </StyledBadge>
 
       {isNotificationOpen && (
-        <div className={style.noticeContainer}>
+        <div ref={dropdownRef} className={style.noticeContainer}>
           {notifications.map((notification, index) => (
             <div key={index} className={style.notice} onClick={() => handleNotificationCheck(notification.parent_seq)}>
               <Link to={`/Groovy/signlist/detail/${notification.parent_seq}`}>
@@ -209,7 +194,7 @@ function DotBadge() {
           anchorOrigin={{
             vertical: "bottom",
             horizontal: "right"
-         }}
+          }}
         />
       </div>
     </BellContainer>
