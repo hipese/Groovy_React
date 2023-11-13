@@ -17,10 +17,12 @@ import Sign_List from "../Sign/components/Sign_List/Sign_List";
 import Mypagelist from "../Mypage/components/Mypagelist";
 import axios from "axios";
 import Contact_Route from "../Contact/Contact_Route";
-import { formatISO, parseISO, addDays } from 'date-fns';
 import WebSocketProvider from "../../WebSocketContext/WebSocketContext";
+import { useCalendar } from "./useCalendar";
+import { useToDoList } from "./useToDoList";
 
 export const ListContext = createContext();
+export const ToDoListContext = createContext();
 const MemberContext = createContext();
 
 const Groovy = () => {
@@ -35,7 +37,6 @@ const Groovy = () => {
     const location = useLocation();
     const navi = useNavigate();
     const { loginID, setLoginID } = useContext(LoginContext);
-    const [dbList, setdbList] = useState([{}]);
 
     useEffect(() => {
         axios.get("/auth/isLogined").then((resp) => {
@@ -52,37 +53,12 @@ const Groovy = () => {
         }
     }, []);
 
-    const refreshList = () => {
-        axios.get("/api/calendar").then((res) => {
-            const NewEvents = res.data.map(transformEventDataToCalendarEvent);
-            setdbList(NewEvents);
-        });
+    // Calendar 상위 컴포넌트에서 사용할 상태와 함수
+    const { dbList, refreshList } = useCalendar();
+    
+    // ToDoList 상위 컴포넌트에서 사용할 상태와 함수
+    const { todoList, setTodoList, toggleStar ,ListAdded } = useToDoList();
 
-        function transformEventDataToCalendarEvent(event) {
-            return {
-                extendedProps: {
-                    seq: event.seq,
-                    write_date: event.write_date,
-                    contents: event.contents,
-                    title: event.title,
-                    start: event.starttime,
-                    end: formatISO(addDays(parseISO(event.endtime), 1)),
-                },
-                title: event.title,
-                start: event.starttime,
-                end: formatISO(addDays(parseISO(event.endtime), 1)),
-                color: "white",
-                textColor: "black",
-                borderColor: "black",
-                allDay: true,
-                classNames: ['myData-event'],
-            };
-        }
-    };
-
-    useEffect(() => {
-        refreshList();
-    }, []);
 
     return (
         <WebSocketProvider>
@@ -92,10 +68,11 @@ const Groovy = () => {
                         <Navigator />
                     </Container>
                     <ListContext.Provider value={{ refreshList }}>
+                    <ToDoListContext.Provider value={{ todoList, setTodoList, toggleStar, ListAdded }}>
                         <div className="SlideContainer">
                             <SlideBar refreshList={refreshList} />
-
                         </div>
+                    </ToDoListContext.Provider>
                     </ListContext.Provider>
 
                     <div className="MainContainer">
@@ -105,7 +82,7 @@ const Groovy = () => {
                             <Route path="attendence/*" element={<Attendence />} />
                             <Route path="board/*" element={<Board />} />
                             <Route path="calendar/*" element={
-                                <ListContext.Provider value={{ dbList, setdbList, refreshList }}>
+                                <ListContext.Provider value={{ dbList, refreshList }}>
                                     <Calendar />
                                 </ListContext.Provider>
                             } />
@@ -116,7 +93,11 @@ const Groovy = () => {
                             <Route path="mypagelist/*" element={<Mypagelist />} />
                             <Route path="signlist/*" element={<Sign_List />} />
                             <Route path="survey/*" element={<Survey />} />
-                            <Route path="list/*" element={<ToDoList />} />
+                            <Route path="list/*" element={
+                                <ToDoListContext.Provider value={{ todoList, setTodoList, toggleStar ,ListAdded }}>
+                                    <ToDoList />
+                                </ToDoListContext.Provider>
+                                } />
                         </Routes>
 
                     </div>
