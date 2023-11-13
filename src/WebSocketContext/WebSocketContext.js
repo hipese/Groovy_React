@@ -9,11 +9,7 @@ const WebSocketProvider = ({ children }) => {
   const [stompClient, setStompClient] = useState(null);
 
   const initializeWebSocket = useCallback(() => {
-<<<<<<< HEAD
     const socket = new WebSocket('ws://10.2.1.206/ws-message');
-=======
-    const socket = new WebSocket('ws://192.168.0.9/ws-message');
->>>>>>> 0f09581a12f64c2ed2c03b2db55ebbbde8ddb268
     const client = Stomp.over(socket);
 
     client.connect({}, (frame) => {
