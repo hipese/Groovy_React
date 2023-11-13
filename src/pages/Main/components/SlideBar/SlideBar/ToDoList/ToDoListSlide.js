@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
 import styles from "./ToDoListSlide.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import calendar from "./assets/calendar.png";
 import grid from "./assets/grid.png";
 import { MemberContext } from "../../../../../Groovy/Groovy";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
+import StarIcon from "../../../../../ToDoList/ToDoListMain/StarIcon";
+import { ToDoListContext } from "../../../../../Groovy/Groovy";
 
 const StyledAvatar = styled(Avatar)({
     width: "100%",
@@ -20,6 +22,15 @@ const ProfileContainer = styled("div")({
 
 const ToDoListSlide = () => {
     const members = useContext(MemberContext);
+    const { todoList, setTodoList, toggleStar, ListAdded } = useContext(ToDoListContext);
+    const navigate = useNavigate();
+    const handleListClick = (event) => {
+        if (!event.target.closest('.starimg')) {
+            navigate(`ToDoListBoard`);
+        }
+    };
+    
+
     return (
         <div>
             <div className={styles.workspace}>
@@ -53,11 +64,21 @@ const ToDoListSlide = () => {
             <div className={styles.selectTitle}>
                 Your Boards <span className={styles.selectDown}><button className={styles.btn}>+</button></span>
             </div>
-            <Link to="ToDoListBoard">
-                <div className={styles.select}>
-                    <div className={styles.colorbox}></div> <span className={styles.selectMenu}>My Board</span>
-                </div>
-            </Link>
+            <ul className={styles.tdlul}>
+                {todoList.map((todo, index) => {
+                    return (
+                        <li className={styles.tdlli} key={index} onClick={e => handleListClick(e, todo)}>
+                            <div className={styles.tdlDBInsert} style={{ backgroundImage: `url(${todo.bgimg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                                <div className={styles.tdltitle}>{todo.title}</div>
+                                <div className={`${styles.starimg} ${todo.isActive ? styles.starActive : ''}`}>
+                                    <StarIcon id={index} isActive={todo.isActive} onClick={toggleStar} />
+                                </div>
+                            </div>
+                        </li>
+                    )
+                })}
+            </ul>
+
         </div>
     );
 };

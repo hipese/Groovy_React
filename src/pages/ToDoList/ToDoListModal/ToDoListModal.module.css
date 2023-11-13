@@ -92,7 +92,6 @@
     padding: 0px 10px 0px 10px;
     border: 3px solid rgb(200, 200, 200);
     border-radius: 3px;
-    margin-bottom: 20px;
 }
 
 .modalInput:focus {
@@ -122,6 +121,7 @@
 
 .selecttitle {
     font-size: 15px;
+    margin-top: 20px;
 }
 
 .selecttitle span {

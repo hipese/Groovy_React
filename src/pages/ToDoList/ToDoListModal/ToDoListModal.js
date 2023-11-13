@@ -37,7 +37,11 @@ const ToDoListModal = ({ showModal, setShowModal, ListAdded }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title.trim()) {
+    if (formData.title.trim().length > 30) {
+      alert("제목은 30자 이내로 입력해주세요");
+      return;
+    }
+    else if (!formData.title.trim()) {
       setIsTitleEmpty(true);
       document.getElementById('titleInput').focus();
       return;
