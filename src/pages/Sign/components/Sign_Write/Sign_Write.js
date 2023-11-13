@@ -95,18 +95,22 @@ const Sign_Write = () => {
 
         // Send the data to the server
         axios.post('/api/signlist', submitFormData)
-            .then(resp => {
+            .then(response => {
+                const parentSeq = response.data; // 서버에서 반환한 값으로 설정
+                const message = "전자결제가 도착했습니다.";
+                const messageObject = { message, recipient: approver.id, parent_seq: parentSeq };
+
+                // Stomp를 통해 메시지 전송
+                if (stompClient) {
+                    stompClient.send("/app/notice", {}, JSON.stringify(messageObject));
+                }
+
                 navi("/Groovy/signlist");
             })
-            .catch(e => {
-                console.error(e);
+            .catch(error => {
+                console.error(error);
             });
 
-        if (stompClient) {
-            const message = "전자결제가 도착했습니다.";
-            const messageObject = { message, recipient: approver.id };
-            stompClient.send("/app/notice", {}, JSON.stringify(messageObject));
-        }
     };
 
 
