@@ -22,25 +22,25 @@ const Sign_Detail = ({ approver }) => {
 
     useEffect(() => {
         axios.get(`/api/signlist/${seq}`).then(resp => {
-          setSign_list(resp.data);
-          
-          if (resp.data.recipient) {
-            axios.get(`/api/member/signWriterInfo/${resp.data.writer}`).then(resp2 => {
-              console.log(resp2.data);
-              setSignWriterInfo(resp2.data);
-            });
-      
-            axios.get(`/api/member/signReceiverInfo/${resp.data.recipient}`).then(resp2 => {
-              console.log(resp2.data);
-              setSignReceiverInfo(resp2.data);
-            });
-          }
+            setSign_list(resp.data);
+
+            if (resp.data.recipient) {
+                axios.get(`/api/member/signWriterInfo/${resp.data.writer}`).then(resp2 => {
+                    console.log(resp2.data);
+                    setSignWriterInfo(resp2.data);
+                });
+
+                axios.get(`/api/member/signReceiverInfo/${resp.data.recipient}`).then(resp2 => {
+                    console.log(resp2.data);
+                    setSignReceiverInfo(resp2.data);
+                });
+            }
         });
-      
+
         axios.get(`/api/signfiles/${seq}`).then(resp1 => {
-          setSign_files(resp1.data);
+            setSign_files(resp1.data);
         });
-      }, [seq]); 
+    }, [seq]);
 
 
     const downloadFile = (file) => {
@@ -76,20 +76,32 @@ const Sign_Detail = ({ approver }) => {
 
     const handleAccept = (e) => {
         axios.put(`/api/signlist/accept/${seq}`, sign_list).then(resp => {
+            const parentSeq = resp.data;
+            const message = "보낸 결제가 승인되었습니다.";
+            const messageObject = { message, recipient: sign_list.writer, parent_seq: parentSeq };
+           
+            if (stompClient) {
+                stompClient.send("/app/notice", {}, JSON.stringify(messageObject));
+            }
+
             navi("/Groovy/signlist/wait");
         }).catch(e => {
 
         });
 
-        if (stompClient) {
-            const message = "보낸 결제가 승인되었습니다.";
-            const messageObject = { message, recipient: approver.id };
-            stompClient.send("/app/notice", {}, JSON.stringify(messageObject));
-        }
+
     }
 
     const handleReject = (e) => {
         axios.put(`/api/signlist/reject/${seq}`, sign_list).then(resp => {
+            const parentSeq = resp.data;
+            const message = "보낸 결제가 반려되었습니다.";
+            const messageObject = { message, recipient: sign_list.writer, parent_seq: parentSeq };
+           
+            if (stompClient) {
+                stompClient.send("/app/notice", {}, JSON.stringify(messageObject));
+            }
+            
             navi("/Groovy/signlist/wait");
         }).catch(e => {
 
