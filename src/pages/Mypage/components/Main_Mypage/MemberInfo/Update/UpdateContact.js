@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState,forwardRef } from "react";
 import style from "./UpdateModal.module.css"
 import { MemberContext } from "../../../../../Groovy/Groovy";
 import axios from "axios";
@@ -14,9 +14,9 @@ const formatContact = (contact) => {
 };
 
 
-const UpdateContact = ({onClose}) => {
-
-
+const UpdateContact = forwardRef((props,ref) => {
+    
+    const { onClose } = props; 
     const members = useContext(MemberContext)
 
     const [contact, setContact] = useState(members.member.contact || "");
@@ -65,5 +65,5 @@ const UpdateContact = ({onClose}) => {
             </div>
         </div>
     );
-}
+});
 export default UpdateContact;

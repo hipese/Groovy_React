@@ -38,13 +38,21 @@
 }
 .alarmsDiv{width: 100%;height: 20%;}
 .alarms{
-    width: 80%;
+    width: 90%;
     height: 100%;
     border: 2px solid rgb(0, 7, 7);
     background-color: rgb(199, 220, 233);
     border-radius: 20px;
     color: black;
     font-weight: bold;
+}
+.alarmsText{
+    width: 80%;
+    float: left;
+}
+.iconDiv{
+    width: 20%;
+    float: left;
 }
 .iconDiv{
     width: 10%;
@@ -86,5 +94,6 @@
     align-items: center;
 }
 .biggerIcon {
+    text-align: center;
     font-size: 30px; 
   }

@@ -100,7 +100,8 @@ function DotBadge() {
   useEffect(() => {
     fetchNotifications();
   }, []);
-
+  
+  //알림창 범위를 벗어나는 부분을 클릭하면 닫히게 하는 코드
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
