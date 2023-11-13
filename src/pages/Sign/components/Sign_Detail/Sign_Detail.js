@@ -9,7 +9,7 @@ import { useWebSocket } from "../../../../WebSocketContext/WebSocketContext";
 const Sign_Detail = ({ approver }) => {
 
     const { seq } = useParams();
-    const [sign_list, setSign_list] = useState();
+    const [sign_list, setSign_list] = useState({});
     const [sign_files, setSign_files] = useState([]);
     const navi = useNavigate();
     const { loginID } = useContext(LoginContext);
@@ -20,30 +20,27 @@ const Sign_Detail = ({ approver }) => {
     const [signWriterInfo, setSignWriterInfo] = useState({});
     const [signReceiverInfo, setSignReceiverInfo] = useState({});
 
-    useEffect(e => {
-        axios.get(`/api/signlist/${seq}`).then(resp => {
-            setSign_list(resp.data);
-
-        });
-
-        axios.get(`/api/signfiles/${seq}`).then(resp1 => {
-            setSign_files(resp1.data);
-        });
-    }, []);
-
     useEffect(() => {
-        if (sign_list.recipient) {
-            axios.get(`/api/member/signWriterInfo/${sign_list.writer}`).then(resp2 => {
-                console.log(resp2.data);
-                setSignWriterInfo(resp2.data);
+        axios.get(`/api/signlist/${seq}`).then(resp => {
+          setSign_list(resp.data);
+          
+          if (resp.data.recipient) {
+            axios.get(`/api/member/signWriterInfo/${resp.data.writer}`).then(resp2 => {
+              console.log(resp2.data);
+              setSignWriterInfo(resp2.data);
             });
-
-            axios.get(`/api/member/signReceiverInfo/${sign_list.recipient}`).then(resp2 => {
-                console.log(resp2.data);
-                setSignReceiverInfo(resp2.data);
+      
+            axios.get(`/api/member/signReceiverInfo/${resp.data.recipient}`).then(resp2 => {
+              console.log(resp2.data);
+              setSignReceiverInfo(resp2.data);
             });
-        }
-    }, [sign_list.recipient]);
+          }
+        });
+      
+        axios.get(`/api/signfiles/${seq}`).then(resp1 => {
+          setSign_files(resp1.data);
+        });
+      }, [seq]); 
 
 
     const downloadFile = (file) => {
