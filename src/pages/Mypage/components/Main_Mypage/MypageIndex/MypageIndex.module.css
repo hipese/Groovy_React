@@ -85,3 +85,6 @@
     justify-content: center;
     align-items: center;
 }
+.biggerIcon {
+    font-size: 30px; 
+  }

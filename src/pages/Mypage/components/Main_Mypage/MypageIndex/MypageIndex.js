@@ -54,7 +54,7 @@ const MypageIndex = () => {
                     <div className={style.alarms}>
                         새로운 결재, 메일, 채팅이 도착했습니다.
                         <div className={style.iconDiv}>
-                            <FontAwesomeIcon icon={faBell} />
+                            <FontAwesomeIcon icon={faBell} className={style.biggerIcon} />
                         </div>
                     </div>
                 </div>
@@ -69,13 +69,12 @@ const MypageIndex = () => {
                 </ul>
 
                 <div>
-                    <div>
+                    <div className={style.logoutText}>
                         로그 아웃
                     </div>
-                    <div>
+                    <div className={style.test}>
                         고객샌터
                     </div>
-
                 </div>
 
                 <div className={style.endTitle}>

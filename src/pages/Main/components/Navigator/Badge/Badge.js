@@ -38,6 +38,9 @@ function DotBadge() {
   const stompClient = useWebSocket();
   const { loginID } = useContext(LoginContext);
 
+  const dropdownRef = React.useRef(null); // 드롭다운 참조를 위한 ref
+
+
   const fetchNotifications = () => {
     axios.get('/api/realtime_notification')
       .then(resp => {
@@ -48,6 +51,7 @@ function DotBadge() {
         console.error(e);
       });
   };
+
 
   useEffect(() => {
     const handleWebSocketMessage = (message) => {
@@ -97,7 +101,21 @@ function DotBadge() {
     fetchNotifications();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsNotificationOpen(false); 
+      }
+    };
 
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  
   return (
     <BellContainer>
       <StyledBadge color="error" badgeContent={notifications.length} showZero>
@@ -106,10 +124,11 @@ function DotBadge() {
 
       {isNotificationOpen && (
         <div
+          ref={dropdownRef} 
           style={{
             position: "absolute",
-            top: "50px",
-            right: "10px",
+            top: "40px",
+            right: "5px",
             width: "300px",
             padding: "20px",
             background: "#fff",
