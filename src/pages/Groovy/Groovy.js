@@ -18,8 +18,6 @@ import Mypagelist from "../Mypage/components/Mypagelist";
 import axios from "axios";
 import Contact_Route from "../Contact/Contact_Route";
 import { formatISO, parseISO, addDays } from 'date-fns';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
 import WebSocketProvider from "../../WebSocketContext/WebSocketContext";
 
 export const ListContext = createContext();
@@ -27,7 +25,6 @@ const MemberContext = createContext();
 
 const Groovy = () => {
     const [member, setMember] = useState({});
-    const [stompClient, setStompClient] = useState(null);
 
     useEffect(() => {
         axios.get("/api/member").then(resp => {
@@ -86,34 +83,6 @@ const Groovy = () => {
     useEffect(() => {
         refreshList();
     }, []);
-
-    const initializeWebSocket = () => {
-        const socket = new SockJS('/ws-message');
-        const client = Stomp.over(socket);
-
-        client.connect({}, (frame) => {
-            console.log('Connected: ' + frame);
-            client.subscribe('/topic/users', (response) => {
-                console.log(response);
-                console.log(JSON.parse(response.body));
-            });
-
-            setStompClient(client); // 웹 소켓 클라이언트 설정
-        });
-    };
-
-    useEffect(() => {
-        initializeWebSocket();
-
-        // 컴포넌트가 언마운트될 때 웹 소켓 연결 해제 (clean-up 함수)
-        return () => {
-            if (stompClient) {
-                stompClient.disconnect();
-            }
-        };
-    }, []); // 빈 배열을 전달하여 처음 마운트될 때만 실행
-
-
 
     return (
         <WebSocketProvider>

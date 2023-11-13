@@ -7,7 +7,7 @@ const SignSlide = () => {
 
             <div className={style.btndiv}>
                 <Link to="write">
-                    <button className={style.writeBtn}><strong>전자 결재 작성</strong></button>
+                    <button className={style.btn}><strong>전자 결재 작성</strong></button>
                 </Link>
             </div>
 

@@ -1,42 +1,35 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import SockJS from 'sockjs-client';
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import Stomp from 'stompjs';
+import { LoginContext } from "../App";
 
 const WebSocketContext = createContext();
 
 const WebSocketProvider = ({ children }) => {
+  const { loginID } = useContext(LoginContext);
   const [stompClient, setStompClient] = useState(null);
 
-  const initializeWebSocket = () => {
-    const socket = new SockJS('/ws-message');
+  const initializeWebSocket = useCallback(() => {
+    const socket = new WebSocket('ws://192.168.0.9/ws-message');
     const client = Stomp.over(socket);
 
     client.connect({}, (frame) => {
       console.log('Connected: ' + frame);
-      client.subscribe('/topic/a', (response) => {
-        console.log(response);
-        console.log(JSON.parse(response.body));
-      });
-
       setStompClient(client);
     });
-  };
+  }, [loginID, setStompClient]);
+
 
   useEffect(() => {
-    initializeWebSocket();
+    if (loginID) {
+      initializeWebSocket();
+    }
 
     return () => {
       if (stompClient) {
         stompClient.disconnect();
       }
     };
-  }, []);
-
-  const sendMessage = (message) => {
-    if (stompClient) {
-      stompClient.send("/app/user", {}, JSON.stringify(message));
-    }
-  };
+  }, [loginID]);
 
   return (
     <WebSocketContext.Provider value={stompClient}>
