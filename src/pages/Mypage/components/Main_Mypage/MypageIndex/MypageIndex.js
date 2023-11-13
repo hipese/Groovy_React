@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 import { Avatar } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const StyledAvatar = styled(Avatar)({
     width: "100%",
@@ -16,8 +17,8 @@ const StyledAvatar = styled(Avatar)({
     },
 });
 const ProfileContainer = styled("div")({
-    width: "280px",
-    height: "280px",
+    width: "250px",
+    height: "250px",
 });
 
 const MypageIndex = () => {
@@ -52,10 +53,15 @@ const MypageIndex = () => {
 
                 <div className={style.alarmsDiv}>
                     <div className={style.alarms}>
-                        새로운 결재, 메일, 채팅이 도착했습니다.
-                        <div className={style.iconDiv}>
-                            <FontAwesomeIcon icon={faBell} />
+
+                        <div className={style.alarmsText}>
+                            새로운 결재, 메일, 채팅이 도착했습니다.
                         </div>
+
+                        <div className={style.iconDiv}>
+                            <FontAwesomeIcon icon={faBell} className={style.biggerIcon} />
+                        </div>
+
                     </div>
                 </div>
 
@@ -63,19 +69,18 @@ const MypageIndex = () => {
 
             <div className={style.footer}>
                 <ul>
-                    <li><div>내 프로필</div></li>
-                    <li><div>구성원 목록</div></li>
+                    <li><div><Link to="">내 프로필 수정</Link></div></li>
+                    <li><div><Link to="surveyList">설문 목록</Link></div></li>
                     <li><div>이력관리</div></li>
                 </ul>
 
                 <div>
-                    <div>
+                    <div className={style.logoutText}>
                         로그 아웃
                     </div>
-                    <div>
+                    <div className={style.test}>
                         고객샌터
                     </div>
-
                 </div>
 
                 <div className={style.endTitle}>

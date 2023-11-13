@@ -1,9 +1,10 @@
-import { useContext } from "react";
+import { useContext,forwardRef } from "react";
 import style from "./UpdateModal.module.css"
 import { MemberContext } from "../../../../../Groovy/Groovy";
 
-const UpdatePosition = ({onClose}) => {
+const UpdatePosition = forwardRef((props,ref) => {
 
+    const { onClose } = props;
 
     const members = useContext(MemberContext)
 
@@ -30,5 +31,5 @@ const UpdatePosition = ({onClose}) => {
             </div>
         </div>
     );
-}
+})
 export default UpdatePosition;

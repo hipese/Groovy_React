@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import style from "./MemberInfo.module.css"
-import axios from "axios";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
 import { Modal } from "@mui/material";
@@ -48,13 +47,6 @@ const MemberInfo = () => {
         setOpenModal(false);
         setEditingField(null); // 수정 중인 필드 상태를 초기화
     };
-
-
-    // 수정모드 
-    const [isEdit, setEdit] = useState(false);
-    // 수정시 데이터를 임시로 저장하는 변수
-    const [backUpMember, setBackUpMember] = useState({});
-
 
     return (
         <div className={style.contanier}>

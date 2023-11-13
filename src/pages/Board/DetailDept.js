@@ -5,7 +5,7 @@ import style from "./Detail.module.css";
 
 import { LoginContext } from '../../App';
 
-const Detail = () => {
+const DetailDept = () => {
     const { loginID } = useContext(LoginContext);
     const { seq } = useParams();
     const navi = useNavigate();
@@ -22,7 +22,7 @@ const Detail = () => {
 
     const handleDelete = () => {
         axios
-            .delete(`/api/boards/com/${seq}`)
+            .delete(`/api/boards/dept/${seq}`)
             .then((resp) => {
                 navi("/groovy/board");
             })
@@ -31,7 +31,7 @@ const Detail = () => {
     };
 
     useEffect(() => {
-        axios.get(`/api/boards/com/${seq}`).then((resp) => {
+        axios.get(`/api/boards/dept/${seq}`).then((resp) => {
             setBoard(resp.data);
         });
     }, [seq]);
@@ -71,7 +71,7 @@ const Detail = () => {
                                         <button>Back</button>
                                     </Link>
                                     <button onClick={handleDelete}>Del</button>
-                                    <Link to={`/groovy/board/update/${seq}`}>
+                                    <Link to={`/groovy/board/updateDept/${seq}`}>
                                         <button>Edit</button>
                                     </Link>
                                 </>
@@ -90,4 +90,4 @@ const Detail = () => {
     );
 };
 
-export default Detail;
+export default DetailDept;

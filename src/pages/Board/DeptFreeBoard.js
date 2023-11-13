@@ -1,20 +1,24 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import style from "./Board.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
+import { MemberContext } from '../Groovy/Groovy';
 
 const DeptFreeBoard = () => {
+
+    const { member } = useContext(MemberContext);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [boards, setBoards] = useState([]);
     const COUNT_PER_PAGE = 10;
 
     useEffect(() => {
-        axios.get("/api/boards/deptfree").then(resp => {
+        const dept = member.group_name;
+        axios.get(`/api/boards/deptfree/${dept}`).then((resp) => {
             setBoards(resp.data);
-        })
-    }, []);
+        });
+    }, [member]);
 
     const totalItems = boards.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
@@ -67,20 +71,20 @@ const DeptFreeBoard = () => {
                 </div>
                 <hr></hr>
                 <div className={style.margin}>
-                <Pagination
-                    count={totalPages}
-                    page={currentPage}
-                    onChange={onPageChange}
-                    size="medium"
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        padding: "15px 0",
-                    }}
-                    renderItem={(item) => (
-                        <PaginationItem {...item} sx={{ fontSize: 15 }} />
-                    )}
-                />
+                    <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={onPageChange}
+                        size="medium"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: "15px 0",
+                        }}
+                        renderItem={(item) => (
+                            <PaginationItem {...item} sx={{ fontSize: 15 }} />
+                        )}
+                    />
                 </div>
             </div>
         </div>

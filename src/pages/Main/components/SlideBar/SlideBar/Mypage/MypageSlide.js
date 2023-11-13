@@ -12,7 +12,7 @@ const MypageSlide = () => {
 
 
     return (
-        <div className={style.SignSlide}>
+        <div>
 
             <div className={style.btndiv}>
                 <button className={style.writeBtn} onClick={handleHome}><strong>돌아가기</strong></button>
