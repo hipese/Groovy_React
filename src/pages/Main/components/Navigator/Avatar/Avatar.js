@@ -83,7 +83,10 @@ function BadgeAvatars() {
   const dropdownRef = React.useRef(null); // 드롭다운 참조를 위한 ref
 
   // 드롭다운 표시를 토글하는 함수
-  const handleAvatarClick = () => {
+  const handleAvatarClick = (event) => {
+    if (event) {
+      event.stopPropagation();
+    }
     setShowDropdown((prev) => !prev);
   };
 
@@ -96,9 +99,9 @@ function BadgeAvatars() {
 
   //범위를 벗어나면 닫히도록 하는 Effect
   React.useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, []);
 

@@ -17,9 +17,7 @@ const Mypagelist = () => {
           <Route path="/surveyList" element={<SurveyList />} />
         </Routes>
       </div>
-
     </div>
-
   );
 }
 
