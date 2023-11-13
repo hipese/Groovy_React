@@ -14,19 +14,19 @@ const SignSlide = () => {
 
             <div className={style.btndiv}>
                 <Link to="">
-                    <button className={style.btn}>전자결제 홈</button>
+                    <button className={style.btn}>전자결재 홈</button>
                 </Link>
             </div>
 
             <div className={style.btndiv}>
                 <Link to="write">
-                    <button className={style.btn}>새결제 진행</button>
+                    <button className={style.btn}>새결재 진행</button>
                 </Link>
             </div>
 
             <div className={style.btndiv}>
                 <Link to="wait">
-                    <button className={style.btn}>결제대기중</button>
+                    <button className={style.btn}>결재대기중</button>
                 </Link>
             </div>
 
