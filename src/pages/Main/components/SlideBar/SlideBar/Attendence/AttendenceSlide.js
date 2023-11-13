@@ -5,7 +5,7 @@ const AttendenceSlide = () => {
     return (
         <div className={style.AttendenceSlide}>
             <div className={style.btndiv}>
-                <Link to="/Groovy">
+                <Link to="/Groovy/dashboard">
                     <button className={style.writeBtn}>
                         <strong>홈</strong>
                     </button>
