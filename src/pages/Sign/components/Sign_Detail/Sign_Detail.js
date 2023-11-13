@@ -77,7 +77,7 @@ const Sign_Detail = ({ approver }) => {
     const handleAccept = (e) => {
         axios.put(`/api/signlist/accept/${seq}`, sign_list).then(resp => {
             const parentSeq = resp.data;
-            const message = "보낸 결제가 승인되었습니다.";
+            const message = "보낸 결재가 승인되었습니다.";
             const messageObject = { message, recipient: sign_list.writer, parent_seq: parentSeq };
            
             if (stompClient) {
@@ -95,7 +95,7 @@ const Sign_Detail = ({ approver }) => {
     const handleReject = (e) => {
         axios.put(`/api/signlist/reject/${seq}`, sign_list).then(resp => {
             const parentSeq = resp.data;
-            const message = "보낸 결제가 반려되었습니다.";
+            const message = "보낸 결재가 반려되었습니다.";
             const messageObject = { message, recipient: sign_list.writer, parent_seq: parentSeq };
            
             if (stompClient) {

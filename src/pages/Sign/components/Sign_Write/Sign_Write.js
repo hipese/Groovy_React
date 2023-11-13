@@ -97,7 +97,7 @@ const Sign_Write = () => {
         axios.post('/api/signlist', submitFormData)
             .then(response => {
                 const parentSeq = response.data; // 서버에서 반환한 값으로 설정
-                const message = "전자결제가 도착했습니다.";
+                const message = "전자결재가 도착했습니다.";
                 const messageObject = { message, recipient: approver.id, parent_seq: parentSeq };
 
                 // Stomp를 통해 메시지 전송
