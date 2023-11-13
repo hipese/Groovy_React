@@ -39,10 +39,17 @@ const Modal = ({ showModal, setShowModal, selectedDate, onEventAdded }) => {
 
     if (!showModal) return null;
 
-    const closeModal = (e) => {
-        if (e.target.id === "modalOverlay") {
-            setShowModal(false);
-        }
+    const closeModal = () => {
+        setShowModal(false);
+        // Reset the form data
+        setFormData({
+            project: "나의 프로젝트",
+            title: "",
+            starttime: new Date(todayStr),
+            endtime: new Date(todayStr),
+            alarm: "15분 전",
+            contents: "",
+        });
     };
 
     const handleChange = (e) => {
@@ -80,7 +87,7 @@ const Modal = ({ showModal, setShowModal, selectedDate, onEventAdded }) => {
 
 
     return (
-        <div id="modalOverlay" className={styles.modalOverlay} onClick={closeModal}>
+        <div id="modalOverlay" className={styles.modalOverlay} onClick={(e) => { if(e.target.id === "modalOverlay") closeModal(); }}>
             <div className={styles.modal}>
                 <div className={styles.scheduleTitle}>일정 추가</div>
                 <div className={styles.ModalBody}>
@@ -134,7 +141,7 @@ const Modal = ({ showModal, setShowModal, selectedDate, onEventAdded }) => {
                 </div>
                 <div className={styles.buttonbox}>
                     <button className={styles.submitButton} onClick={handleSubmit}>추가</button>
-                    <button className={styles.cancelButton} onClick={() => setShowModal(false)}>닫기</button>
+                    <button className={styles.cancelButton} onClick={closeModal}>닫기</button>
                 </div>
             </div>
         </div>

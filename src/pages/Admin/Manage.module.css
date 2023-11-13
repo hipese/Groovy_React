@@ -1,0 +1,158 @@
+.search {
+    display: flex;
+    justify-content: flex-end;
+    margin: 30px;
+}
+
+hr {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.text {
+    display: flex;
+    float: left;
+    margin-top: 10px;
+}
+
+.margin {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.btn {
+    width: 120px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+    margin-left: 30px;
+    top: 5px;
+}
+
+.btn:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.name {
+    width: 130px;
+    padding: 5px;
+}
+
+.id {
+    width: 150px;
+    padding: 5px;
+}
+
+.pw {
+    width: 150px;
+    padding: 5px;
+}
+
+.dept {
+    width: 100px;
+    padding: 5px;
+    border: 1px solid black;
+}
+
+.position {
+    width: 100px;
+    padding: 5px;
+    border: 1px solid black;
+}
+
+.contact {
+    width: 150px;
+    padding: 5px;
+}
+
+.email {
+    width: 200px;
+    padding: 5px;
+}
+
+.add {
+    width: 150px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.add:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.save {
+    width: 60px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+    margin-left: 10px;
+}
+
+.save:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.cancel {
+    width: 80px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.cancel:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.edit {
+    width: 70px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.edit:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.del {
+    width: 70px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+    margin-left: 10px;
+}
+
+.del:hover {
+    background-color: rgb(100, 180, 255);
+}
