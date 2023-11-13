@@ -81,19 +81,20 @@ function DotBadge() {
     }
   }, [stompClient, loginID]);
 
-  const handleBellClick = () => {
-    // 알림창 열기/닫기 상태 변경
-    setIsNotificationOpen(!isNotificationOpen);
-    console.log(isNotificationOpen);
-
+  const handleBellClick = (event) => {
+    event.stopPropagation();
     if (isNotificationOpen) {
+      // 열려있다면, 알림창을 닫고 알림을 초기화하는 API 호출
       axios.put('/api/realtime_notification')
         .then(resp => {
           setNotifications([]);
+          setIsNotificationOpen(false); // 알림창 상태를 닫힌 상태로 변경
         })
         .catch(e => {
           console.error(e);
         });
+    } else {
+      setIsNotificationOpen(true);
     }
   };
 
@@ -103,18 +104,31 @@ function DotBadge() {
   
   //알림창 범위를 벗어나는 부분을 클릭하면 닫히게 하는 코드
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsNotificationOpen(false); 
-      }
-    };
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsNotificationOpen(false);
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+      // 상태가 변경되었을 때만 API 호출
+      if (isNotificationOpen) {
+        axios.put('/api/realtime_notification')
+          .then(resp => {
+            setNotifications([]);
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+    }
+  };
+
+  document.addEventListener('click', handleClickOutside);
+  
+  // 클린업 함수
+  return () => {
+   
+    document.removeEventListener('click', handleClickOutside);
+  };
+}, [isNotificationOpen]); 
 
   
   return (

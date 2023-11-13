@@ -1,11 +1,12 @@
-import { useContext } from "react";
+import { useContext,forwardRef } from "react";
 import { MemberContext } from "../../../../../Groovy/Groovy";
 import style from "./UpdateModal.module.css"
-const UpdateGroup_Name = ({onClose}) => {
 
+
+const UpdateGroup_Name = forwardRef((props,ref) => {
+
+    const { onClose } = props; 
     const members = useContext(MemberContext)
-
-
 
     return (
         <div className={style.modalContent}>
@@ -30,5 +31,6 @@ const UpdateGroup_Name = ({onClose}) => {
             </div>
         </div>
     );
-}
+    
+});
 export default UpdateGroup_Name;
