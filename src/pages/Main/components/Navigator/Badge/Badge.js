@@ -6,6 +6,7 @@ import Bell from "../assets/bell.png";
 import { useWebSocket } from "../../../../../WebSocketContext/WebSocketContext";
 import { LoginContext } from "../../../../../App";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const StyledBadge = styled(Badge)({
   "& .MuiBadge-dot": {
@@ -32,7 +33,7 @@ const BellContainer = styled(Box)({
 });
 
 function DotBadge() {
-  const [notifications, setNotifications] = useState({ seq: "", recipient: "", contents: "", write_date: "" });
+  const [notifications, setNotifications] = useState([]);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const stompClient = useWebSocket();
   const { loginID } = useContext(LoginContext);
@@ -56,13 +57,11 @@ function DotBadge() {
 
       // 서버에서 받은 메시지 구조를 클라이언트 상태 구조로 변환
       const transformedMessage = {
-        seq: "",
-        recipient: receivedMessage.recipient,
+        parent_seq: receivedMessage.parent_seq,
+        // recipient: receivedMessage.recipient,
         contents: receivedMessage.message, // 서버의 'message'를 클라이언트의 'contents'로 변환
-        write_date: ""
+        // write_date: receivedMessage.write_date,
       };
-     
-
       console.log(transformedMessage);
       setNotifications((prevNotifications) => [...prevNotifications, transformedMessage]);
     };
@@ -120,7 +119,7 @@ function DotBadge() {
           }}
         >
           {notifications.map((notification, index) => (
-            <div key={index}>{notification.contents}</div>
+            <div key={index}><Link to={`/Groovy/signlist/detail/${notification.parent_seq}`}>{notification.contents}</Link></div>
           ))}
         </div>
       )}
