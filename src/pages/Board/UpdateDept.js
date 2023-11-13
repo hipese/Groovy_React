@@ -4,26 +4,16 @@ import style from './Write.module.css';
 import axios from 'axios';
 import ReactQuill from './ReactQuill';
 
-function Update() {
-    const [board, setBoard] = useState({
-        seq: "",
-        title: "",
-        file: null, 
-        contents: "",
-        category: "",
-    });
+function UpdateDept() {
+    const [board, setBoard] = useState({});
     const navi = useNavigate();
     const { seq } = useParams();
 
     useEffect(() => {
-        axios.get(`/api/boards/update/${seq}`)
+        axios.get(`/api/boards/updateDept/${seq}`)
             .then((resp) => {
                 const boardData = resp.data;
-                setBoard({
-                    seq: boardData.seq,
-                    title: boardData.title,
-                    contents: boardData.contents,
-                    category: boardData.category,
+                setBoard({seq: boardData.seq, title: boardData.title,contents: boardData.contents, category: boardData.category,
                 });
             })
             .catch((error) => {
@@ -41,7 +31,7 @@ function Update() {
     };
 
     const handleCancel = () => {
-        navi(`/groovy/board/detail/${seq}`);
+        navi(`/groovy/board/detailDept/${seq}`);
     };
 
     const handleUpdate = () => {
@@ -51,9 +41,9 @@ function Update() {
         formData.append('category', board.category);
         formData.append('files', board.file);
 
-        axios.put(`/api/boards/update/${seq}`, formData, {})
+        axios.put(`/api/boards/updateDept/${seq}`, formData, {})
             .then((resp) => {
-                navi(`/groovy/board/detail/${seq}`);
+                navi(`/groovy/board/detailDept/${seq}`);
             })
             .catch((e) => {
                 console.error(e);
@@ -94,4 +84,4 @@ function Update() {
     );
 }
 
-export default Update;
+export default UpdateDept;
