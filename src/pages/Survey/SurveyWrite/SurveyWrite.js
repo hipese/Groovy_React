@@ -6,7 +6,14 @@ import { useEffect, useState } from 'react';
 import { createContext } from 'react';
 import { useContext } from 'react';
 import axios from 'axios';
-const SurveyContent = () => {
+import { useNavigate } from 'react-router-dom';
+import { LoginContext } from '../../../App';
+const SurveyContent = ({survey,setSurvey}) => {
+    //const [survey,setSurvey] = useState({title:"",contents:""});
+    const handleChange = (e) =>{
+        const {name,value} = e.target;
+        setSurvey(prev=>({...prev,[name]:value}));
+    };
     return(
         <div className={`${style.writeSection}`}>
             <Grid container spacing={2} sx={{
@@ -16,7 +23,7 @@ const SurveyContent = () => {
                     제목 : 
                 </Grid>
                 <Grid item xs={10}>
-                    <TextField id="outlined-basic" label="제목" variant="outlined" sx={{width:"80%"}}/>
+                    <TextField id="outlined-basic" label="제목" variant="outlined" sx={{width:"80%"}} name='surtitle' onChange={handleChange}/>
                 </Grid>
             </Grid>
             <Divider sx={{bgcolor:"black"}}/>
@@ -33,6 +40,8 @@ const SurveyContent = () => {
                             width:"90%",
                             height:450
                         }}
+                        name='surcontents'
+                        onChange={handleChange}
                         />
                 </Grid>
             </Grid>
@@ -188,30 +197,49 @@ const SurveySubmit = () => {
 const QuestionContext = createContext();
 
 const SurveyWrite = () => {
+    const {loginID} = useContext(LoginContext);
     const [result,setResult] = useState([]);
     const [shrtAns,setShrtAns] = useState({type:"subjective",questions:""});
     const [formedAns, setFormedAns] = useState({ type: "multi", questions: [] });
+    const [survey,setSurvey] = useState({surtitle:"",surcontents:"",surwriter:loginID});
 
     const [shortAnswers,setShortAnswers] = useState([]); //주관식 질문들을 담는 state
     const [multiAnswers,setMultiAnswers] = useState([]); //객관식 질문들을 담는 state
     
+    const navi = useNavigate();
     
-    const handleAllData = () => {
-        
+    const handleAllData = async () => {
+        const updateResult = [survey,...shortAnswers.filter(Boolean),...multiAnswers.filter(Boolean)];
+
+        await new Promise((res)=>{
+            setResult(prev=>[...prev,...updateResult]);
+            res();
+        });
+    }
+
+    const sendData = async () => {
+        try{
+            console.log(result);
+            await axios.post("/api/survey",result).then(res=>{
+                navi("/Groovy/survey");
+                console.log("post 성공");
+            }).catch((e)=>{
+                console.log("survey error : "+e);
+            });
+        }catch(e){
+
+        }
     }
 
     useEffect(()=>{
+        if(result.length>0){
+            sendData();
+        }
         setResult([]);
-        setShortAnswers([]);
-        setMultiAnswers([]);
-    },[]);
+    },[result]);
 
-    const resultshow = () => {
-        setResult(prev=>[...prev,...shortAnswers.filter(Boolean),...multiAnswers.filter(Boolean)]);
-        console.log(result);
-        axios.post("/api/survey",result).then(res=>{
-
-        });
+    const resultshow = async () => {
+        await handleAllData();
     }
 
     const ts = () => {
@@ -225,11 +253,11 @@ const SurveyWrite = () => {
             <QuestionContext.Provider value={{result,setResult,shrtAns,setShrtAns,formedAns, setFormedAns,shortAnswers,setShortAnswers,multiAnswers,setMultiAnswers}}>
                 <Grid container spacing={5}>
                     <Grid item xs={12}>
-                        <SurveyContent/>
+                        <SurveyContent survey={survey} setSurvey={setSurvey}/>
                     </Grid>
                     <Grid item xs={12}>
                         <SurveyQuestion/>
-                        <Stack direction="row" spacing={5}>
+                        <Stack direction="row" spacing={5} className={`${style.center}`}>
                             <Button variant="outlined" startIcon={<DeleteIcon />} onClick={ts}>
                                 취소
                             </Button>
