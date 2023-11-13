@@ -4,6 +4,10 @@ import Box from "@mui/material/Box";
 import Badge from "@mui/material/Badge";
 import Bell from "../assets/bell.png";
 import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import { useWebSocket } from "../../../../../WebSocketContext/WebSocketContext";
 import { LoginContext } from "../../../../../App";
 import axios from "axios";
@@ -39,6 +43,7 @@ function DotBadge() {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const stompClient = useWebSocket();
   const { loginID } = useContext(LoginContext);
+  const [open, setOpen] = React.useState(false);
 
   const fetchNotifications = () => {
     axios.get('/api/realtime_notification')
@@ -71,6 +76,7 @@ function DotBadge() {
     if (stompClient) {
       const subscription = stompClient.subscribe('/topic/' + loginID, (response) => {
         handleWebSocketMessage(response);
+        setOpen(true);
       });
 
       return () => {
@@ -95,9 +101,36 @@ function DotBadge() {
     setIsNotificationOpen(!isNotificationOpen);
   }
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleClose}>
+        확인
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
   useEffect(() => {
     fetchNotifications();
   }, []);
+
+
+
 
 
   return (
@@ -127,6 +160,19 @@ function DotBadge() {
           ))}
         </div>
       )}
+      <div>
+        <Snackbar
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message="알림이 도착했습니다."
+          action={action}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right"
+         }}
+        />
+      </div>
     </BellContainer>
   );
 }
