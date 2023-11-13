@@ -69,7 +69,13 @@ const MypageIndex = () => {
                 </ul>
 
                 <div>
-                    로그 아웃 고객샌터
+                    <div>
+                        로그 아웃
+                    </div>
+                    <div>
+                        고객샌터
+                    </div>
+
                 </div>
 
                 <div className={style.endTitle}>
