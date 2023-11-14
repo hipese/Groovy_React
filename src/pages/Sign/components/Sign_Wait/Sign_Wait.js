@@ -3,8 +3,17 @@ import style from "./Sign_Wait.module.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Pagination, PaginationItem } from "@mui/material";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { blue } from '@mui/material/colors';
+import InsertLinkIcon from '@mui/icons-material/InsertLink';
 
-const Sign_Wait=()=>{
+const Sign_Wait = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [sign_list, setSign_list] = useState([]);
     const COUNT_PER_PAGE = 10;
@@ -35,45 +44,53 @@ const Sign_Wait=()=>{
             <div className={style.documents}>
                 <div className={style.titleText}>결제 대기중 문서</div>
                 <div className={style.text}>{`승인할 문서가 ${sign_list.length}건이 있습니다.`}</div>
-                <div className={`${style.tableRow} ${style.tableHead}`}>
-                    <div>문서번호</div>
-                    <div>기안일</div>
-                    <div>결제양식</div>
-                    <div>기안자</div>
-                    <div>제목</div>
-                    <div>첨부</div>
-                </div>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '21px', fontWeight: 'bold' }, backgroundColor: blue[200] }}>
+                                <TableCell align="center">문서번호</TableCell>
+                                <TableCell align="center">결제양식</TableCell>
+                                <TableCell align="center">제목</TableCell>
+                                <TableCell align="center">기안자</TableCell>
+                                <TableCell align="center">기안일</TableCell>
+                            </TableRow>
+                        </TableHead>
 
-                {visibleSignList.map((e, i) => {
-                    return (
-                        <div className={style.tableRow} key={i}>
-                            <div>{e.seq}</div>
-                            <div>{e.write_date}</div>
-                            <div>{e.document_type}</div>
-                            <div>{e.writer}</div>
-                            <div className={style.titleContainer}>
-                                <Link to={`/Groovy/signlist/detail/${e.seq}`}>{e.title}</Link>
-                            </div>
-                            <div>파일 아이콘</div>
-                        </div>
-                    );
-                })}
-            </div>
-            <div className={style.pagenation}>
-                <Pagination
-                    count={totalPages}
-                    page={currentPage}
-                    onChange={onPageChange}
-                    size="medium"
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        padding: "15px 0",
-                    }}
-                    renderItem={(item) => (
-                        <PaginationItem {...item} sx={{ fontSize: 12 }} />
-                    )}
-                />
+                        <TableBody>
+                            {visibleSignList.map((e, i) => (
+                                <TableRow className={style.hoverEffect}
+                                    key={i}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }
+                                    }
+                                >
+                                    <TableCell component="th" scope="row" align="center">
+                                        {e.seq}
+                                    </TableCell>
+                                    <TableCell align="center">{e.document_type}</TableCell>
+                                    <TableCell align="center"><Link to={`/Groovy/signlist/detail/${e.seq}`}><InsertLinkIcon sx={{ color: blue[200] }} /> {e.title}</Link></TableCell>
+                                    <TableCell align="center">{e.writer}</TableCell>
+                                    <TableCell align="center">{e.write_date}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <div className={style.pagenation}>
+                    <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={onPageChange}
+                        size="medium"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: "15px 0",
+                        }}
+                        renderItem={(item) => (
+                            <PaginationItem {...item} sx={{ fontSize: 12 }} />
+                        )}
+                    />
+                </div>
             </div>
         </div>
     );
