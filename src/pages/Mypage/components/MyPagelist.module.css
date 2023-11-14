@@ -3,13 +3,14 @@
     height: 100%;
 }
 .index{
-    width: 40%;
+    width: 25%;
     height: 100%;
     float: left;
+    border-left: 1px solid ghostwhite;
 }
 
 .contents{
-    width: 60%;
+    width: 75%;
     height: 100%;
     float: left;
 }

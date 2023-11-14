@@ -26,66 +26,13 @@
     padding: 10px;
 }
 
-.tableBox {
-    width: 100%;
-    background-color: aliceblue;
-}
-
-.tableHead {
-    background-color: whitesmoke;
-}
-
-.tableRow {
-    float: left;
-    width: 100%;
-
-}
-
-.tableRow>div {
-    display: flex;
-    float: left;
-    justify-content: center;
-    border: 1px solid black;
-    font-size: 20px;
-}
-
-.tableRow>div:nth-child(1) {
-    width: 10%;
-    /* 문서번호 넓이 */
-}
-
-.tableRow>div:nth-child(2) {
-    width: 20%;
-    /* 기안일 넓이 */
-}
-
-.tableRow>div:nth-child(3) {
-    width: 10%;
-    /* 결제양식 넓이 */
-}
-
-.tableRow>div:nth-child(4) {
-    width: 10%;
-    /* 기안자 넓이 */
-}
-
-.tableRow>div:nth-child(5) {
-    width: 40%;
-    /* 제목 넓이 */
-}
-
-.tableRow>div:nth-child(6) {
-    width: 10%;
-    /* 첨부 넓이 */
-}
-
-.titleContainer {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .pagenation {
-    margin-top: 500px;
-    margin-left: 100px;
+    margin-top: 30px;
+}
+
+.hoverEffect {
+    &:hover {
+        background-color: #e0e0e0;
+        cursor: pointer;
+    }
 }

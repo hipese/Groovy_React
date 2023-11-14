@@ -1,6 +1,6 @@
 .container{
     width: 100%;
-    float: left;
+    height: 100%;
 }
 
 .memberInfo{
@@ -9,8 +9,6 @@
     border-radius: 5px;
     border: 1px solid black;
     margin: auto;
-    margin-top: 50px;
-   
 }
 
 .infoHeader{
