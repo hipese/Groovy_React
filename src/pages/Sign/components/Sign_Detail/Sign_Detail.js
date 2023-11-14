@@ -52,12 +52,10 @@ const Sign_Detail = ({ approver }) => {
 
             if (resp.data.recipient) {
                 axios.get(`/api/member/signWriterInfo/${resp.data.writer}`).then(resp2 => {
-                    console.log(resp2.data);
                     setSignWriterInfo(resp2.data);
                 });
 
                 axios.get(`/api/member/signReceiverInfo/${resp.data.recipient}`).then(resp2 => {
-                    console.log(resp2.data);
                     setSignReceiverInfo(resp2.data);
                 });
             }
