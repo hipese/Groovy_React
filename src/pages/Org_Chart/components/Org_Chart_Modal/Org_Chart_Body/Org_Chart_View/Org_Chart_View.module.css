@@ -13,41 +13,49 @@
   justify-content: center;
   align-items: center;
 }
-.table_row_head{
-  border: 1px solid black;
-  height: 20%;
+
+.title {
   width: 100%;
-  font-size: 20px;
-  font-weight: bold;
-  background-color: aliceblue;
-}
-.table_col_head{
-  float: left;
-  height: 100%;
-  width: 25%;
+  height: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.table_row {
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  height: 10%;
-  width: 100%;
+  font-size: 40px;
+  font-weight: bold;
 }
 
-.table_col {
-  float: left;
-  height: 100%;
-  width: 25%;
+.imageDiv {
+  width: 100%;
+  height: 50%;
+}
+
+.footer {
+  width: 100%;
+  height: 30%;
+}
+
+.email {
+  width: 100%;
+  height: 60%;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 25px;
 }
-.null{
-  height: 50%;
+
+.idname {
   width: 100%;
-  font-size: 30px;
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  font-size: 20px;
+}
+
+.null {
+  height: 100%;
+  width: 100%;
+  font-size: 35px;
   display: flex;
   justify-content: center;
   align-items: center;
