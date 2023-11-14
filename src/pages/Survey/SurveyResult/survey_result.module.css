@@ -1,3 +1,7 @@
+*{
+    box-sizing: border-box;
+}
+
 .contentDiv{
     max-width: 1100px;
     max-height: 790px;

@@ -131,7 +131,7 @@ const SurveyList = () => {
                 {visibleSignList.map((e,i)=>{
                         return(
                             <List sx={style} component="nav" aria-label="mailbox folders">
-                                <Link to={`/Groovy/survey/survey_content/${e.surseq}`}>
+                                <Link to={e.surstate == 0 ? `/Groovy/survey/survey_content/${e.surseq}` : ""}>
                                     <ListItem button disabled={e.surstate == 0 ? false : true}>
                                     <Grid container key={i}> 
                                         <Grid xs={1} className={style.center}>

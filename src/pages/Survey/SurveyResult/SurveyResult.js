@@ -1,4 +1,4 @@
-import { Divider, Grid, Typography } from '@mui/material';
+import { Button, Divider, Grid, Typography } from '@mui/material';
 import style from './survey_result.module.css'
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -11,18 +11,17 @@ import { ResponsiveBar } from '@nivo/bar'
 import Piechart from './Piechart';
 
 const SurveyTitle = () => {
-    const {contextData} = useContext(SurveyContext);
+    const {contextData} = useContext(SurveyContext);    
     const titleData = contextData ? contextData[0] : {title:"",writer:"",contents:""};
-    
     return(
         <div className={`${style.contentDiv} ${style.border} ${style.borderRad10}`}>
 
             <div className={`${style.borderbtm} ${style.padding10}`}>
                 <Grid container spacing={2}>
-                    <Grid item xs={1} className={`${style.center}`}>
+                    <Grid item xs={2} className={`${style.center}`}>
                         
                     </Grid>
-                    <Grid item xs={8} className={`${style.center}`}>
+                    <Grid item xs={7} className={`${style.center}`}>
                         <Typography sx={{fontWeight:"bold"}}>
                             {titleData.title}
                         </Typography>
@@ -106,11 +105,22 @@ const SurveyResult = () => {
                     질문
                 </Typography>                
             </div>
-            <div className={`${style.padding40}`}>
-                <button onClick={show}>asd</button>
+            <div>
                 {array.map((e,i)=>{
                     return(
-                        <Piechart array={e}/>
+                        <div>
+                            <div className={`${style.padding20}`}>
+                                <Typography sx={{fontWeight:"bold"}}>
+                                    {`${i+1}번째 객관식 질문`}
+                                </Typography>
+                            </div>
+                            <Divider sx={{bgcolor:"black"}}/>
+                            <div>
+                                <Piechart array={e}/>       
+                            </div>                        
+                            <Divider sx={{bgcolor:"black"}}/>
+                        </div>
+                        
                     )
                 })}
             </div>
