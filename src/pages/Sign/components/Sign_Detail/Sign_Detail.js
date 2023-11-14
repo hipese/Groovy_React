@@ -324,7 +324,7 @@ const Sign_Detail = ({ approver }) => {
                                 <Button variant="outlined" color="error" onClick={handleReject}>반려</Button>
                             </div>
                         ) : (
-                            <div>
+                            <div className={style.commentText}>
                                 {sign_list.comment ? sign_list.comment : ''}
                             </div>
                         )}
