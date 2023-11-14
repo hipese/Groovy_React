@@ -1,5 +1,5 @@
 import style from './survey.module.css';
-import {Divider, Grid, IconButton, List, ListItem, Typography } from '@mui/material';
+import {Divider, Grid, IconButton, List, ListItem, Pagination, PaginationItem, Typography } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
@@ -9,6 +9,9 @@ import SurveyContent from './SurveyContent/SurveyContent';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
+import BarChart from './SurveyResult/BarChart'
+import Piechart from './SurveyResult/Piechart';
+import SurveyResult from './SurveyResult/SurveyResult.js'
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -52,11 +55,26 @@ color: 'inherit',
 
 const SurveyList = () => {
     const [survey,setSurvey] = useState([]);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const COUNT_PER_PAGE = 10;
+
+    const totalItems = survey.length;
+    const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
+
+    const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
+    const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
+    const visibleSignList = survey.slice(startIndex, endIndex);
+
     useEffect(()=>{
         axios.get("/api/survey/list").then(res=>{
             setSurvey(res.data);
         });
     },[]);
+
+    const onPageChange = (e, page) => {
+        setCurrentPage(page);
+    };
 
     return(
         <div className={`${style.surveyContents}`}>
@@ -83,8 +101,8 @@ const SurveyList = () => {
                     </Grid>
                 </Grid>
             </div>
-            <hr></hr>
-            <div className={`${style.marginT50}`}>
+            <Divider sx={{bgcolor:"black"}}/>
+            <div className={`${style.marginTB40}`}>
                 <Grid container rowSpacing={2}>
                     <Grid xs={1} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
@@ -108,13 +126,13 @@ const SurveyList = () => {
                     </Grid>
                 </Grid>
             </div>
-            <hr></hr>
-            <div id='list'>
-                {survey.map((e,i)=>{
+            <Divider sx={{bgcolor:"black"}}/>
+            <div id='list' className={`${style.list}`}>
+                {visibleSignList.map((e,i)=>{
                         return(
                             <List sx={style} component="nav" aria-label="mailbox folders">
-                                <Link to={`/Groovy/survey/survey_content/${e.surseq}`}>
-                                    <ListItem button>
+                                <Link to={e.surstate == 0 ? `/Groovy/survey/survey_content/${e.surseq}` : ""}>
+                                    <ListItem button disabled={e.surstate == 0 ? false : true}>
                                     <Grid container key={i}> 
                                         <Grid xs={1} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
@@ -132,7 +150,7 @@ const SurveyList = () => {
                                             </Typography>
                                         </Grid>
                                         <Grid xs={2} className={style.center}>
-                                            {e.surstate}
+                                            {e.surstate == 0 ? "설문진행중" : "설문종료"}
                                         </Grid>
                                     </Grid>            
                                 </ListItem></Link>
@@ -142,6 +160,23 @@ const SurveyList = () => {
                         )
                     })}
             </div>
+            <div>
+            <Pagination
+                    count={totalPages}
+                    page={currentPage}
+                    onChange={onPageChange}
+                    size="medium"
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        padding: "15px 0",
+                    }}
+                    renderItem={(item) => (
+                        <PaginationItem {...item} sx={{ fontSize: 12 }} />
+                    )}
+                />
+            </div>
+            <Link to="survey_result/2">asd</Link>
         </div>
     )
 }
@@ -152,6 +187,7 @@ const Survey=()=>{
             <Route path='/' element={<SurveyList/>}></Route>
             <Route path='survey_write' element={<SurveyWrite/>}></Route>
             <Route path='survey_content/:seq' element={<SurveyContent/>}></Route>
+            <Route path='survey_result/:seq' element={<SurveyResult/>}></Route>
         </Routes>
     )
 }
