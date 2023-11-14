@@ -10,12 +10,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { grey, blue } from '@mui/material/colors';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import PendingIcon from '@mui/icons-material/Pending';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
-import { red } from '@mui/material/colors';
+import { red, blue } from '@mui/material/colors';
 
 
 const Sign_Complete = () => {
@@ -53,7 +52,7 @@ const Sign_Complete = () => {
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
-                            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }, backgroundColor: blue[200] }}>
+                            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '21px', fontWeight: 'bold' }, backgroundColor: blue[200] }}>
                                 <TableCell align="center">문서번호</TableCell>
                                 <TableCell align="center">결제양식</TableCell>
                                 <TableCell align="center">제목</TableCell>
@@ -77,7 +76,7 @@ const Sign_Complete = () => {
                                     <TableCell align="center"><Link to={`/Groovy/signlist/detail/${e.seq}`}>{e.title}</Link></TableCell>
                                     <TableCell align="center">{e.writer}</TableCell>
                                     <TableCell align="center">{e.write_date}</TableCell>
-                                    <TableCell align="center">{e.accept === 0 ? <DoneIcon style={{ color: 'green' }}/> : e.accept === 1 ? <PendingIcon/> : e.accept === 2 ? <CloseIcon style={{ color: red[600] }}/> : <QuestionMarkIcon/>}</TableCell>
+                                    <TableCell align="center">{e.accept === 0 ? <DoneIcon style={{ color: 'green' }}/> : e.accept === 1 ? <PendingIcon style={{ color: blue[200] }}/> : e.accept === 2 ? <CloseIcon style={{ color: red[600] }}/> : <QuestionMarkIcon/>}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
