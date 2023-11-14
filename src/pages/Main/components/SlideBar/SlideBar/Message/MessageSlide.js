@@ -5,11 +5,11 @@ const MessageSlide = () => {
     return (
         <div>
             <div className={style.mainbtn_container}>
-                <button className={style.mainbtn}>
-                    <Link to="/Groovy/message/create">
+                <Link to="/Groovy/message/create">
+                    <button className={style.mainbtn}>
                         <strong className={style.strong_main}>+ 새 메시지 생성</strong>
-                    </Link>
-                </button>
+                    </button>
+                </Link>
             </div>
             <div className={style.subbtn_container}>
                 <div className={style.subbtn_wrapper}>
