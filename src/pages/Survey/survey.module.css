@@ -5,6 +5,10 @@
     margin-left: 50px;
     margin-top: 50px;
 }
+.list{
+    height: 100%;
+    max-height: 570px;
+}
 
 .vcenter{
     display: flex;
@@ -29,12 +33,21 @@
     padding: 15px;
 }
 
-.marginT50{
-    margin-top: 50px;
+.marginT30{
+    margin-top: 30px;
+}
+
+.marginT40{
+    margin-top: 40px;
 }
 
 .marginB50{
     margin-bottom: 50px;
+}
+
+.marginTB40{
+    margin-top: 40px;
+    margin-bottom: 20px;
 }
 
 .marginTB50{
