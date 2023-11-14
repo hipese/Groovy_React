@@ -69,12 +69,12 @@ const Sign_Write = () => {
             return;
         }
 
-        if(!title){
+        if (!title) {
             alert("제목을 입력해주세요");
             return;
         }
 
-        if(!contents){
+        if (!contents) {
             alert("내용을 입력해주세요");
             return;
         }
@@ -143,7 +143,7 @@ const Sign_Write = () => {
                 </div>
                 <div className={style.signline}>
                     <div className={style.titleText}>
-                        <div className={style.textDiv}> 
+                        <div className={style.textDiv}>
                             결제선 지정
                         </div>
                         <div className={style.buttonDiv}>
@@ -160,19 +160,19 @@ const Sign_Write = () => {
                             <div className={style.tableRow}>
                                 <div>이름</div>
                                 <div>
-                                    {approver.name ? approver.name : "맴버을 선택하세요"}
+                                    {approver && approver.name ? approver.name : "맴버을 선택하세요"}
                                 </div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>부서</div>
                                 <div>
-                                    {approver.group_name ? approver.group_name : "부서을 선택하세요"}
+                                    {approver &&approver.group_name ? approver.group_name : "부서을 선택하세요"}
                                 </div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>직급</div>
                                 <div>
-                                    {approver.position ? approver.position : "직급을 선택하세요"}
+                                    {approver &&approver.position ? approver.position : "직급을 선택하세요"}
                                 </div>
                             </div>
                         </div>
