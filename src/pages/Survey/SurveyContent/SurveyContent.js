@@ -1,4 +1,4 @@
-import { Divider, Grid, Typography } from '@mui/material';
+import { Button, Divider, Grid, Typography } from '@mui/material';
 import style from './survey_content.module.css'
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -10,17 +10,28 @@ import { LoginContext } from '../../../App';
 
 const SurveyTitle = () => {
     const {contextData} = useContext(SurveyContext);
+    const {seq} = useParams();
+    const {loginID} = useContext(LoginContext);
     const titleData = contextData ? contextData[0] : {title:"",writer:"",contents:""};
+
+    const navi = useNavigate();
     console.log(titleData);
+
+    const handleSurveyClose = () => {
+        axios.put(`/api/survey/close/${seq}`).then(res=>{
+            navi("/Groovy/survey");
+        })
+    }
+
     return(
         <div className={`${style.contentDiv} ${style.border} ${style.borderRad10}`}>
 
             <div className={`${style.borderbtm} ${style.padding10}`}>
                 <Grid container spacing={2}>
-                    <Grid item xs={1} className={`${style.center}`}>
-                        
+                    <Grid item xs={2} className={`${style.center}`}>
+                    {loginID == titleData.writer ? <Button variant="outlined" size='small' onClick={handleSurveyClose}>설문종료</Button> : ""}
                     </Grid>
-                    <Grid item xs={8} className={`${style.center}`}>
+                    <Grid item xs={7} className={`${style.center}`}>
                         <Typography sx={{fontWeight:"bold"}}>
                             {titleData.title}
                         </Typography>

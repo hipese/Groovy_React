@@ -1,6 +1,14 @@
 import axios from "axios";
 import style from "./AttendenceStatus.module.css";
 import { useEffect, useState } from "react";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { grey, blue } from '@mui/material/colors';
 
 const AttendenceStatus = () => {
 
@@ -53,44 +61,58 @@ const AttendenceStatus = () => {
         <div>
             <div>
                 <div className={style.header}>
-                    출퇴근 현황
-                    <hr />
-                </div><div className={style.documents1}>
+                    출퇴근 현황<hr />
+                </div>
+
+                <div className={style.documents1}>
                     <div className={style.titleText}>내 출퇴근 내역</div>
-                    <div className={style.tableBox}>
-                        <div className={`${style.tableRow} ${style.tableHead}`}>
-                            <div>업무일자</div>
-                            <div>출근시간</div>
-                            <div>퇴근시간</div>
-                            <div>총근무시간</div>
-                        </div>
-
-                        {attendence.map((e, i) => {
-                            return (
-                                <div className={style.tableRow} key={i}>
-                                    <div>{e.workStartDate}</div>
-                                    <div>{e.workStartTime}</div>
-                                    {e.workEndTime !== null ? (
-                                        <>
-                                            <div>{e.workEndTime}.</div>
-                                            <div>{e.totalWorkHours}시간 {e.totalWorkMinutes.toFixed(0)}분</div>
-                                        </>
-                                    ) : (
-                                        // If there is no workend, set to an empty string or any desired placeholder
-                                        <>
-                                            <div>근무중</div>
-                                            <div>근무중</div>
-                                        </>
-                                    )}
-                                </div>
-                            );
-                        })}
-
-
+                    <div className={style.text}>
+                        출석일수를 구해는 로직을 만들어보자
                     </div>
+                    <TableContainer component={Paper}>
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                            <TableHead>
+                                <TableRow sx={{ backgroundColor: blue[200] }}>
+                                    <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">업무일자</TableCell>
+                                    <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">출근시간</TableCell>
+                                    <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">퇴근시간</TableCell>
+                                    <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">총근무시간</TableCell>
+                                </TableRow>
+                            </TableHead>
+
+                            <TableBody>
+                                {attendence.map((e, i) => (
+                                    <TableRow className={style.hoverEffect}
+                                        key={i}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }
+                                        }
+                                    >
+                                        <TableCell style={{ fontSize: '15px' }} align="center">{e.workStartDate}</TableCell>
+                                        <TableCell style={{ fontSize: '15px' }} align="center">{e.workStartTime}</TableCell>
+
+                                        {e.workEndTime !== null ? (
+                                            <>
+                                                <TableCell style={{ fontSize: '15px' }} align="center">{e.workEndTime}.</TableCell>
+                                                <TableCell style={{ fontSize: '15px' }} align="center">{e.totalWorkHours}시간 {e.totalWorkMinutes.toFixed(0)}분</TableCell>
+                                            </>
+                                        ) : (
+                                            // If there is no workend, set to an empty string or any desired placeholder
+                                            <>
+                                                <TableCell style={{ fontSize: '15px' }} align="center">근무중</TableCell>
+                                                <TableCell style={{ fontSize: '15px' }} align="center">근무중</TableCell>
+                                            </>
+                                        )}
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+
+
                 </div>
             </div>
-        </div>
+        </div >
+
     );
 }
 
