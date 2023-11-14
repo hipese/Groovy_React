@@ -2,23 +2,23 @@ import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import style from "./Detail.module.css";
+import { Pagination, PaginationItem } from "@mui/material";
 
 import { LoginContext } from '../../App';
 
 const DetailDept = () => {
     const { loginID } = useContext(LoginContext);
+
     const { seq } = useParams();
     const navi = useNavigate();
-    const [Board, setBoard] = useState({
-        seq: "",
-        title: "",
-        writer: "",
-        contents: "",
-        file: "",
-        view_count: "",
-        category: "",
-        write_date: ""
-    });
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const COUNT_PER_PAGE = 4;
+
+    const [Board, setBoard] = useState({ seq: "", title: "", writer: "", contents: "", file: "", view_count: "", category: "", write_date: "" });
+    const [Reply, setReply] = useState([]);
+    const [newReply, setNewReply] = useState('');
+    const [showReply, setShowReply] = useState(false);
 
     const handleDelete = () => {
         axios
@@ -35,6 +35,49 @@ const DetailDept = () => {
             setBoard(resp.data);
         });
     }, [seq]);
+
+    useEffect(() => {
+        if (Board.category === "자유") {
+            axios.get(`/api/reply/dept/${seq}`).then((resp) => {
+                setReply(resp.data);
+                setShowReply(true);
+            });
+        }
+    }, [Board]);
+
+
+    const handleAddReply = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // 엔터 키 기본 동작 방지
+
+            const formData = new FormData();
+            formData.append('writer', loginID);
+            formData.append('contents', newReply);
+            formData.append('parent_seq', Board.seq);
+
+            axios.post(`/api/reply/dept`, formData)
+                .then((resp) => {
+                    axios.get(`/api/reply/dept/${seq}`).then((resp) => {
+                        setReply(resp.data);
+                    });
+                    setNewReply('');
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    };
+
+    const totalItems = Reply.length;
+    const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
+
+    const onPageChange = (e, page) => {
+        setCurrentPage(page);
+    };
+
+    const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
+    const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
+    const visibleReply = Reply.slice(startIndex, endIndex);
 
     return (
         <div className={style.boardContainer}>
@@ -71,7 +114,7 @@ const DetailDept = () => {
                                         <button>Back</button>
                                     </Link>
                                     <button onClick={handleDelete}>Del</button>
-                                    <Link to={`/groovy/board/updateDept/${seq}`}>
+                                    <Link to={`/groovy/board/update/${seq}`}>
                                         <button>Edit</button>
                                     </Link>
                                 </>
@@ -84,8 +127,54 @@ const DetailDept = () => {
                     </tr>
                 </tbody>
             </table>
-            <hr></hr>
-            {/* 댓글 */}
+            {showReply && (
+                <>
+                    <hr />
+                    <div>
+                        <div className={style.reply}>
+                            <textarea
+                                className={style.replyForm}
+                                rows="4"
+                                placeholder="댓글을 입력하세요."
+                                value={newReply}
+                                onChange={(e) => setNewReply(e.target.value)}
+                                onKeyDown={handleAddReply}
+                            />
+                        </div>
+                        <div className={style.reply}>
+                            {visibleReply.map(reply => (
+                                <div key={reply.seq} className={style.replyDiv}>
+                                    <div className={style.profile}>
+                                        <img src={reply.profile_image ? `/profiles/${reply.profile_image}` : `/assets/Default_pfp.svg`} alt="profile" />
+                                    </div>
+                                    <div className={style.text}>
+                                        <p>{reply.name}  {reply.position}</p>
+                                        <p>{reply.contents}</p>
+                                        <p>{reply.write_date}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <hr></hr>
+                        <div className={style.margin}>
+                            <Pagination
+                                count={totalPages}
+                                page={currentPage}
+                                onChange={onPageChange}
+                                size="medium"
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    padding: "15px 0",
+                                }}
+                                renderItem={(item) => (
+                                    <PaginationItem {...item} sx={{ fontSize: 15 }} />
+                                )}
+                            />
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
 };
