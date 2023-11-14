@@ -51,9 +51,7 @@ const MemberInfo = () => {
     return (
         <div className={style.contanier}>
 
-
             <div className={style.memberInfo}>
-
 
                 <div className={style.infoHeader}>
 
@@ -144,7 +142,15 @@ const MemberInfo = () => {
 
                 </div>
             </div>
-
+            <div>
+                여기에 출책정보등 여러가지를 넣을 예정
+            </div>
+            <div>
+                여기에 출책정보등 여러가지를 넣을 예정
+            </div>
+            <div>
+                여기에 출책정보등 여러가지를 넣을 예정
+            </div>
         </div>
     );
 }

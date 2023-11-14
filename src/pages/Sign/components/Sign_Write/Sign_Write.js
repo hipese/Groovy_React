@@ -7,7 +7,32 @@ import Org_Chart from '../../../Org_Chart/components/Org_Chart_Modal/Org_Chart';
 import axios from 'axios';
 import { LoginContext } from "../../../../App";
 import { useWebSocket } from "../../../../WebSocketContext/WebSocketContext";
-
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import { InputAdornment, TextField } from "@mui/material";
+import { AccountCircle } from "@mui/icons-material";
+import Table from '@mui/material/Table';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { blue } from '@mui/material/colors';
+import Button from '@mui/material/Button';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import FolderIcon from '@mui/icons-material/Folder';
 
 const modules = {
     toolbar: [
@@ -29,6 +54,11 @@ const Sign_Write = () => {
     const { loginID } = useContext(LoginContext);
     // 모달을 키거나 끌때 필요한 놈
     const [isModalOpen, setModalOpen] = useState(false);
+    const [open, setOpen] = React.useState(true);
+
+    const handleClick = () => {
+        setOpen(!open);
+    };
 
     const navi = useNavigate();
     const [contents, setContents] = useState("");
@@ -46,9 +76,14 @@ const Sign_Write = () => {
         setModalOpen(!isModalOpen);
     };
 
+    const handleChange = (event) => {
+        setDocument_type(event.target.value);
+    };
+
 
     const handleFileChange = (e) => {
         setFormData(prev => ({ ...prev, files: [...e.target.files] }))
+        setOpen(true);
     }
     // const handleQuillChange = (content, delta, source, editor) => {
     //     setQuillValue(editor.getContents());
@@ -69,12 +104,12 @@ const Sign_Write = () => {
             return;
         }
 
-        if(!title){
+        if (!title) {
             alert("제목을 입력해주세요");
             return;
         }
 
-        if(!contents){
+        if (!contents) {
             alert("내용을 입력해주세요");
             return;
         }
@@ -123,27 +158,42 @@ const Sign_Write = () => {
             <div className={style.documents1}>
                 <div className={style.titleText}>기본설정</div>
                 <div className={style.setting}>
-                    <div className={style.label}>
-                        문서종류
-                    </div>
-                    <div className={style.dropbox}>
-                        <select name="doc" onChange={(e) => setDocument_type(e.target.value)}>
-                            <option value="품의서">품의서</option>
-                            <option value="휴가신청서">휴가신청서</option>
-                        </select>
+                    <div className={style.leftContainer}>
+                        <Box sx={{ width: '200px' }}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">문서종류</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={document_type}
+                                    label="문서종류"
+                                    onChange={handleChange}
+                                >
+                                    <MenuItem value="품의서">품의서</MenuItem>
+                                    <MenuItem value="휴가신청서">휴가신청서</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
                     </div>
                     <div className={style.rightContainer}>
-                        <div className={style.writer}>
-                            기안작성자
-                        </div>
-                        <div className={style.name}>
-                            {`${loginID}`}
-                        </div>
+                        <TextField
+                            id="outlined-read-only-input"
+                            label="기안작성자"
+                            value={loginID}
+                            InputProps={{
+                                readOnly: true,
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <AccountCircle />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
                     </div>
                 </div>
                 <div className={style.signline}>
                     <div className={style.titleText}>
-                        <div className={style.textDiv}> 
+                        <div className={style.textDiv}>
                             결제선 지정
                         </div>
                         <div className={style.buttonDiv}>
@@ -160,19 +210,19 @@ const Sign_Write = () => {
                             <div className={style.tableRow}>
                                 <div>이름</div>
                                 <div>
-                                    {approver.name ? approver.name : "맴버을 선택하세요"}
+                                    {approver && approver.name ? approver.name : "맴버을 선택하세요"}
                                 </div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>부서</div>
                                 <div>
-                                    {approver.group_name ? approver.group_name : "부서을 선택하세요"}
+                                    {approver &&approver.group_name ? approver.group_name : "부서을 선택하세요"}
                                 </div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>직급</div>
                                 <div>
-                                    {approver.position ? approver.position : "직급을 선택하세요"}
+                                    {approver &&approver.position ? approver.position : "직급을 선택하세요"}
                                 </div>
                             </div>
                         </div>
@@ -180,31 +230,39 @@ const Sign_Write = () => {
                 </div>
                 <div className={style.signwrite}>
                     <div className={style.title}>결제 작성</div>
-                    <div className={style.tableBox}>
-                        <div className={`${style.writeRow} ${style.writeHead}`}>
-                            <div>기안부서</div>
-                            <div>마케팅</div>
-                            <div>기안일</div>
-                            <div>2023-11-03</div>
-                            <div>기안문서</div>
-                            <div>자동설정</div>
-                        </div>
+                    <div className={style.tableBox2}>
+                        <TableContainer component={Paper}>
+                            <Table sx={{ minWidth: 650, width: '100%' }} aria-label="simple table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안부서</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">마케팅</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안일</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">2023-11-03</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안문서</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">자동설정</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                            </Table>
+                        </TableContainer>
                         <div className={style.titleRow}>
                             <div>제목</div>
                             <div>
-                                <input
-                                    type="text"
-                                    style={{ width: '100%' }}
-                                    placeholder="제목입력"
+                                <TextField
+                                    sx={{ width: '100%' }}
+                                    hiddenLabel
+                                    id="filled-hidden-label-normal"
+                                    placeholder="제목을 입력해주세요"
+                                    variant="filled"
                                     value={title}
                                     onChange={handleTitleChange}
                                 />
                             </div>
                         </div>
                     </div>
-                    <div className="textEditor">
+                    <div className={style.textEditor}>
                         <ReactQuill
-                            style={{ height: "200px", width: "1000px" }}
+                            style={{ height: "100%", width: "100%" }}
                             theme="snow"
                             modules={modules}
                             formats={formats}
@@ -214,8 +272,57 @@ const Sign_Write = () => {
                     </div>
                 </div>
                 <div className={style.fileRow}>
-                    <div>파일첨부</div>
-                    <div><input type="file" onChange={handleFileChange} multiple></input></div>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
+                        <Button
+                            sx={{ width: '20%' }}
+                            component="label"
+                            variant="contained"
+                            startIcon={<CloudUploadIcon />}
+                        >
+                            Upload file
+                            <input
+                                type="file"
+                                onChange={handleFileChange}
+                                style={{ display: 'none' }}
+                                multiple
+                            />
+                        </Button>
+                        <List
+                            sx={{ width: '80%', bgcolor: 'background.paper' }}
+                            component="nav"
+                            aria-labelledby="nested-list-subheader"
+                        >
+                            <ListItemButton onClick={handleClick}>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="업로드 파일 목록" />
+                                {open ? <ExpandLess /> : <ExpandMore />}
+                            </ListItemButton>
+                            <Collapse in={open} timeout="auto" unmountOnExit>
+                                <List component="div" disablePadding>
+                                    {formdata.files.length > 0 && (
+                                        <ListItemButton sx={{ pl: 4 }}>
+                                            <ListItemIcon>
+                                                <FolderIcon />
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={
+                                                    <React.Fragment>
+                                                        {formdata.files.map((file, index) => (
+                                                            <ListItemButton key={index} sx={{ pl: 4 }}>
+                                                                <ListItemText primary={file.name} />
+                                                            </ListItemButton>
+                                                        ))}
+                                                    </React.Fragment>
+                                                }
+                                            />
+                                        </ListItemButton>
+                                    )}
+                                </List>
+                            </Collapse>
+                        </List>
+                    </div>
                 </div>
                 <div className={style.buttons}>
                     <button className={style.apply} onClick={handleSubmit}>신청</button>
