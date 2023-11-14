@@ -210,19 +210,19 @@ const Sign_Write = () => {
                             <div className={style.tableRow}>
                                 <div>이름</div>
                                 <div>
-                                    {approver.name ? approver.name : "맴버을 선택하세요"}
+                                    {approver && approver.name ? approver.name : "맴버을 선택하세요"}
                                 </div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>부서</div>
                                 <div>
-                                    {approver.group_name ? approver.group_name : "부서을 선택하세요"}
+                                    {approver &&approver.group_name ? approver.group_name : "부서을 선택하세요"}
                                 </div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>직급</div>
                                 <div>
-                                    {approver.position ? approver.position : "직급을 선택하세요"}
+                                    {approver &&approver.position ? approver.position : "직급을 선택하세요"}
                                 </div>
                             </div>
                         </div>

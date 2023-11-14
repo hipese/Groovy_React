@@ -1,7 +1,6 @@
 .table{
     width: 100%;
     height: 100%;
-    background-color: rgb(121, 162, 199);
     margin: auto;
 }
 .btn{
@@ -20,7 +19,7 @@
 .table_header{
     height: 10%;
     display: flex;
-    justify-content: center;
+    justify-content: end;
     align-items: center;
     margin-bottom: 5px;
 }

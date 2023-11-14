@@ -46,6 +46,9 @@
     float: left;
     width: 20%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .select_btndiv{
     display: flex;
@@ -82,4 +85,13 @@
   }
   .modal_close_button:hover{
     background-color: rgb(100, 180, 255);
+  }
+  .image{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .image>img{
+    width: 50%;
+    height: 25%;
   }
