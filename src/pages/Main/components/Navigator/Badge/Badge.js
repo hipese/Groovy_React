@@ -13,6 +13,7 @@ import { LoginContext } from "../../../../../App";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import style from "./Badge.module.css";
+import Grow from '@mui/material/Grow';
 
 const StyledBadge = styled(Badge)({
   "& .MuiBadge-dot": {
@@ -78,7 +79,7 @@ function DotBadge() {
     };
 
     if (stompClient) {
-      const subscription = stompClient.subscribe('/topic/' + loginID, (response) => {
+      const subscription = stompClient.subscribe('/queue/' + loginID, (response) => {
         handleWebSocketMessage(response);
         setOpen(true);
       });
@@ -163,7 +164,7 @@ function DotBadge() {
         <BellIcon src={Bell} alt="bell" onClick={handleBellClick} />
       </StyledBadge>
 
-      {isNotificationOpen && (
+      <Grow in={isNotificationOpen}>
         <div ref={dropdownRef} className={style.noticeContainer}>
           {notifications.map((notification, index) => (
             <div key={index} className={style.notice} onClick={() => handleNotificationCheck(notification.parent_seq)}>
@@ -175,15 +176,13 @@ function DotBadge() {
                 ) : notification.contents.includes("도착") ? (
                   <Alert severity="info">{notification.contents}</Alert>
                 ) : (
-                  // 모든 조건을 만족하지 않는 경우에 대한 처리
-                  // 예를 들면, 기본적인 알림 메시지를 보여줄 수 있습니다.
                   <Alert>{notification.contents}</Alert>
                 )}
               </Link>
             </div>
           ))}
         </div>
-      )}
+      </Grow>
       <div>
         <Snackbar
           open={open}

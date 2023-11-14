@@ -54,12 +54,12 @@ const Sign_Main = () => {
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
-                            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '21px', fontWeight: 'bold' }, backgroundColor: blue[200] }}>
-                                <TableCell align="center">문서번호</TableCell>
-                                <TableCell align="center">결제양식</TableCell>
-                                <TableCell align="center">제목</TableCell>
-                                <TableCell align="center">기안자</TableCell>
-                                <TableCell align="center">기안일</TableCell>
+                            <TableRow sx={{ backgroundColor: blue[200] }}>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">문서번호</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결제양식</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">제목</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안자</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안일</TableCell>
                             </TableRow>
                         </TableHead>
 
@@ -94,12 +94,12 @@ const Sign_Main = () => {
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
-                            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '21px', fontWeight: 'bold' }, backgroundColor: blue[200] }}>
-                                <TableCell align="center">문서번호</TableCell>
-                                <TableCell align="center">결제양식</TableCell>
-                                <TableCell align="center">제목</TableCell>
-                                <TableCell align="center">기안자</TableCell>
-                                <TableCell align="center">기안일</TableCell>
+                            <TableRow sx={{ backgroundColor: blue[200] }}>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">문서번호</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결제양식</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">제목</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안자</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안일</TableCell>
                             </TableRow>
                         </TableHead>
 
@@ -134,13 +134,13 @@ const Sign_Main = () => {
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
-                            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '21px', fontWeight: 'bold' }, backgroundColor: blue[200] }}>
-                                <TableCell align="center">문서번호</TableCell>
-                                <TableCell align="center">결제양식</TableCell>
-                                <TableCell align="center">제목</TableCell>
-                                <TableCell align="center">기안자</TableCell>
-                                <TableCell align="center">기안일</TableCell>
-                                <TableCell align="center">결재여부</TableCell>
+                            <TableRow sx={{ backgroundColor: blue[200] }}>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">문서번호</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결제양식</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">제목</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안자</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안일</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결재여부</TableCell>
                             </TableRow>
                         </TableHead>
 
