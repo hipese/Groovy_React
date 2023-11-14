@@ -1,7 +1,78 @@
-.chatting_room_box {
+.alert_no_room_choose {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    border: 1px solid black;
     margin: 0px;
+    font-weight: bolder;
+}
+
+.alert_no_room_choose_title {
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+.alert_no_room_choose_btn {
+    padding-top: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}
+
+.btn_gotocreate {
+    background-color: #1380dd;
+    border: 0px;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    box-shadow: 0 8px 9px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.btn_gotocreate:hover {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.chatting_room_box {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    box-sizing: border-box;
+    margin: 0px;
+}
+
+.chat_area_container {
+    display: flex;
+    min-height: 80%;
+    height: 88%;
+    overflow-y: auto;
+    align-content: flex-start;
+}
+
+.input_area_container {
+    height: 10%;
+}
+
+.input_area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    max-height: 100%;
+}
+
+.input_my_message {
+    max-height: 100%;
+    height: fit-content;
+    width: 95%;
+    overflow-y: auto;
+    border: 1px solid rgb(180, 180, 180);
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    resize: none;
+}
+
+.input_my_message:focus {
+    outline: none;
 }
