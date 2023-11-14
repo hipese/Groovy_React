@@ -251,7 +251,7 @@ const Sign_Detail = ({ approver }) => {
                                 </ListItemAvatar>
                                 <ListItemText
                                     primaryTypographyProps={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold' }}
-                                    primary={signWriterInfo.name}
+                                    primary={signReceiverInfo.name}
                                 />
                             </ListItem>
                             <Divider variant="inset" component="li" />
@@ -312,7 +312,7 @@ const Sign_Detail = ({ approver }) => {
                         </div>
                     </div>
                     <div className={style.buttons}>
-                        {loginID == `${sign_list.recipient}` ? (
+                        {loginID == sign_list.recipient && sign_list.accept === 1 ? (
                             <div>
                                 <div className={style.comment}>
                                     <input type="text" name="comment" placeholder="코멘트 입력" className={style.input} value={sign_list.comment}
@@ -321,7 +321,11 @@ const Sign_Detail = ({ approver }) => {
                                 <Button variant="outlined" onClick={handleAccept}>승인</Button>
                                 <Button variant="outlined" color="error" onClick={handleReject}>반려</Button>
                             </div>
-                        ) : null}
+                        ) : (
+                            <div className={style.commentText}>
+                                {sign_list.comment ? sign_list.comment : ''}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

@@ -1,10 +1,12 @@
 import { ResponsivePie } from '@nivo/pie'
-import { useContext, useEffect } from 'react';
-import { AddScheduleContext, progressContext } from './ProjectContent';
 import axios from 'axios';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-const Piechart = () => {
-    const {progress,setProgress,todo,setTodo,seq} = useContext(progressContext);
+const Piechart = ({array}) => {
+    if(!array){
+        return;
+    }
     const handle = {
         padClick: (data) => {
             console.log(data);
@@ -14,13 +16,7 @@ const Piechart = () => {
             console.log(data);
         },
     };
-    useEffect(()=>{
-        axios.get(`/api/project/progress/${seq}`).then(res=>{
-            setProgress(res.data);
-        }).catch((e)=>{
-            console.log(e);
-        });
-    },[todo]);
+
     return (
         // chart height이 100%이기 때문이 chart를 덮는 마크업 요소에 height 설정
         <div style={{ width: '800px', height: '500px', margin: '0 auto' }}>
@@ -28,7 +24,7 @@ const Piechart = () => {
                 /**
                  * chart에 사용될 데이터
                  */
-                data={progress}
+                data={array}
                 /**
                  * chart margin
                  */
@@ -48,7 +44,7 @@ const Piechart = () => {
                 /**
                  * chart 색상
                  */
-                colors={['#2196f3', '#fff9c4', '#64ffda']} // 커스터하여 사용할 때
+                colors={['#2196f3', '#fff9c4', '#64ffda','#fff9c4','#ffa726']} // 커스터하여 사용할 때
                 // colors={{ scheme: 'nivo' }} // nivo에서 제공해주는 색상 조합 사용할 때
                 /**
                  * pad border 두께 설정

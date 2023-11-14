@@ -3,6 +3,15 @@ import DocumentList from "../../Components/Table/DocumentList";
 import style from "./AttendenceMain.module.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { grey, blue } from '@mui/material/colors';
+
 
 const AttendenceMain = () => {
 
@@ -24,7 +33,9 @@ const AttendenceMain = () => {
             <div className={style.header}>
                 근태관리 홈
                 <hr />
-            </div><div className={style.documents1}>
+            </div>
+
+            <div className={style.documents1}>
                 <div className={style.titleText}>내 연차 내역</div>
                 <div className={style.vacationStatus}>
                     <div className={style.name}>
@@ -44,58 +55,86 @@ const AttendenceMain = () => {
                         <div>5.5일</div>
                     </div>
                 </div>
-            </div><div className={style.documents2}>
+            </div>
+
+            <div className={style.documents2}>
                 <div className={style.titleText}>휴가신청 완료</div>
-                <div className={style.text}>{`완료된 문서가 ${vacation_complete_list.length}건이 있습니다.`}</div>
-                <div className={`${style.tableRow} ${style.tableHead}`}>
-                    <div>문서번호</div>
-                    <div>기안일</div>
-                    <div>결제양식</div>
-                    <div>기안자</div>
-                    <div>제목</div>
-                    <div>승인여부</div>
+                <div className={style.text}>
+                    <Link to="/Groovy/signlist/wait">
+                        {`완료된 문서가 ${vacation_complete_list.length}건이 있습니다.`}
+                    </Link>
                 </div>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow sx={{ backgroundColor: blue[200] }}>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">문서번호</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결제양식</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">제목</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안자</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안일</TableCell>
+                            </TableRow>
+                        </TableHead>
 
-                {vacation_complete_list.slice(0, 3).map((e, i) => {
-                    return (
-                        <div className={style.tableRow} key={i}>
-                            <div>{e.seq}</div>
-                            <div>{e.write_date}</div>
-                            <div>{e.document_type}</div>
-                            <div>{e.writer}</div>
-                            <div className={style.titleContainer}>
-                                <Link to={`/Groovy/signlist/detail/${e.seq}`}>{e.title}</Link>
-                            </div>
-                            <div>{e.accept === 0 ? "승인" : e.accept === 1 ? "미승인" : e.accept === 2 ? "반려" : "알 수 없음"}</div>
-                        </div>
-                    );
-                })}
-            </div><div className={style.documents3}>
+                        <TableBody>
+                            {vacation_complete_list.slice(0, 3).map((e, i) => (
+                                <TableRow className={style.hoverEffect}
+                                    key={i}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }
+                                    }
+                                >
+                                    <TableCell component="th" scope="row" align="center">
+                                        {e.seq}
+                                    </TableCell>
+                                    <TableCell align="center">{e.document_type}</TableCell>
+                                    <TableCell align="center"><Link to={`/Groovy/signlist/detail/${e.seq}`}>{e.title}</Link></TableCell>
+                                    <TableCell align="center">{e.writer}</TableCell>
+                                    <TableCell align="center">{e.write_date}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </div>
+
+            <div className={style.documents3}>
                 <div className={style.titleText}>휴가신청 진행중</div>
-                <div className={style.text}>{`진행중 문서가 ${vacation_wait_list.length}건이 있습니다.`}</div>
-                <div className={`${style.tableRow} ${style.tableHead}`}>
-                    <div>문서번호</div>
-                    <div>기안일</div>
-                    <div>결제양식</div>
-                    <div>기안자</div>
-                    <div>제목</div>
-                    <div>결제자</div>
+                <div className={style.text}>
+                    <Link to="/Groovy/signlist/wait">
+                        {`진행중인 문서가 ${vacation_wait_list.length}건이 있습니다.`}
+                    </Link>
                 </div>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow sx={{ backgroundColor: blue[200] }}>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">문서번호</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결제양식</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">제목</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안자</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안일</TableCell>
+                            </TableRow>
+                        </TableHead>
 
-                {vacation_wait_list.slice(0, 3).map((e, i) => {
-                    return (
-                        <div className={style.tableRow} key={i}>
-                            <div>{e.seq}</div>
-                            <div>{e.write_date}</div>
-                            <div>{e.document_type}</div>
-                            <div>{e.writer}</div>
-                            <div className={style.titleContainer}>
-                                <Link to={`/Groovy/signlist/detail/${e.seq}`}>{e.title}</Link>
-                            </div>
-                            <div>{e.recipient}</div>
-                        </div>
-                    );
-                })}
+                        <TableBody>
+                            {vacation_wait_list.slice(0, 3).map((e, i) => (
+                                <TableRow className={style.hoverEffect}
+                                    key={i}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }
+                                    }
+                                >
+                                    <TableCell component="th" scope="row" align="center">
+                                        {e.seq}
+                                    </TableCell>
+                                    <TableCell align="center">{e.document_type}</TableCell>
+                                    <TableCell align="center"><Link to={`/Groovy/signlist/detail/${e.seq}`}>{e.title}</Link></TableCell>
+                                    <TableCell align="center">{e.writer}</TableCell>
+                                    <TableCell align="center">{e.write_date}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </div>
         </div>
 
