@@ -1,4 +1,4 @@
-.buttons button{
+.buttons button {
     margin: 5px;
     width: 70px;
     height: 30px;
@@ -15,7 +15,7 @@
     background-color: rgb(100, 180, 255);
 }
 
-.boardContainer{
+.boardContainer {
     margin-top: 30px;
 }
 
@@ -24,7 +24,46 @@ hr {
     margin-right: 30px;
 }
 
-table{
+table {
     margin: auto;
     width: 90%;
+}
+
+.reply {
+    width: 90%;
+    margin: auto;
+}
+
+.replyDiv {
+    display: flex;
+    align-self: center;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.replyForm {
+    width: 100%;
+}
+
+p {
+    margin: 5px;
+}
+
+.profile {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-self: center;
+}
+
+.profile img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.text {
+    flex: 1;
 }
