@@ -19,17 +19,8 @@ const Detail = () => {
     const [Reply, setReply] = useState([]);
     const [newReply, setNewReply] = useState('');
     const [showReply, setShowReply] = useState(false);
-    const [editingReplyIndex, setEditingReplyIndex] = useState(null);
+    const [editingReply, setEditingReply] = useState(null);
     const [editedReply, setEditedReply] = useState('');
-
-    const handleDelete = () => {
-        axios
-            .delete(`/api/boards/com/${seq}`)
-            .then((resp) => {
-                navi("/groovy/board");
-            })
-            .catch(() => { });
-    };
 
     useEffect(() => {
         axios.get(`/api/boards/com/${seq}`).then((resp) => {
@@ -45,6 +36,26 @@ const Detail = () => {
             });
         }
     }, [Board]);
+
+    const handleDelete = () => {
+        axios
+            .delete(`/api/boards/com/${seq}`)
+            .then((resp) => {
+                navi("/groovy/board");
+            })
+            .catch(() => { });
+    };
+
+    const handleDelete2 = (replySeq) => {
+        axios
+            .delete(`/api/reply/com/${replySeq}`)
+            .then((resp) => {
+                axios.get(`/api/reply/com/${seq}`).then((resp) => {
+                    setReply(resp.data);
+                });
+            })
+            .catch(() => { });
+    };
 
 
     const handleAddReply = (e) => {
@@ -69,19 +80,35 @@ const Detail = () => {
         }
     };
 
-    const handleEditClick = (index) => {
-        setEditingReplyIndex(index);
-        setEditedReply(Reply[index].contents);
+    const handleEditClick = (seq) => {
+        setEditingReply(seq);
+        const editingIndex = Reply.findIndex((reply) => reply.seq === seq);
+        setEditedReply(Reply[editingIndex].contents);
     };
 
     const handleCancelEdit = () => {
-        setEditingReplyIndex(null);
+        setEditingReply(null);
         setEditedReply('');
     };
 
-    const handleSaveEdit = (editedContents) => {
-        setEditingReplyIndex(null);
-        setEditedReply('');
+    const handleSaveEdit = () => {
+        if (!editedReply.trim()) {
+            alert("댓글 내용을 입력하세요.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('contents', editedReply);
+
+        axios.put(`/api/reply/update/${editingReply}`, formData)
+            .then((resp) => {
+                setEditingReply(null);
+                setEditedReply('');
+                axios.get(`/api/reply/com/${seq}`).then((resp) => {
+                    setReply(resp.data);
+                });
+            })
+            .catch(() => { });
     };
 
     const totalItems = Reply.length;
@@ -158,18 +185,18 @@ const Detail = () => {
                             />
                         </div>
                         <div className={style.reply}>
-                            {visibleReply.map((reply, index) => (
+                            {visibleReply.map((reply) => (
                                 <div key={reply.seq} className={style.replyDiv}>
                                     <div className={style.profile}>
                                         <img src={reply.profile_image ? `/profiles/${reply.profile_image}` : `/assets/Default_pfp.svg`} alt="profile" />
                                     </div>
                                     <div className={style.text}>
                                         <p>{reply.name} {reply.group_name} {reply.position}</p>
-                                        {editingReplyIndex === index ? (
+                                        {editingReply === reply.seq ? (
                                             <>
                                                 <textarea className={style.replyForm} rows="4" value={editedReply} onChange={(e) => setEditedReply(e.target.value)} />
                                                 <div className={style.btn}>
-                                                    <button onClick={() => handleSaveEdit(editedReply)}>완료</button>
+                                                    <button onClick={handleSaveEdit}>완료</button>
                                                     <button onClick={handleCancelEdit}>취소</button>
                                                 </div>
                                             </>
@@ -177,10 +204,11 @@ const Detail = () => {
                                         <p>{reply.write_date}</p>
                                     </div>
                                     <div className={style.btn}>
-                                        {editingReplyIndex !== index && loginID == reply.writer && (
+                                        {editingReply !== reply.seq && loginID == reply.writer && (
                                             <>
-                                                <button onClick={() => handleEditClick(index)}>수정</button>
-                                                <button>삭제</button>
+                                                <button onClick={() => handleEditClick(reply.seq)}>수정</button>
+                                                <button onClick={() => handleDelete2(reply.seq)}>삭제</button>
+
                                             </>
                                         )}
                                     </div>
