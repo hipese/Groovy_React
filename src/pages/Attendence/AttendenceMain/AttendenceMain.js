@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import DocumentList from "../../Components/Table/DocumentList";
+import { useContext, useEffect, useState } from "react";
 import style from "./AttendenceMain.module.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -10,15 +9,26 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { grey, blue } from '@mui/material/colors';
+import { blue } from '@mui/material/colors';
+import { MemberContext, VacationContext } from "../../Groovy/Groovy";
 
 
 const AttendenceMain = () => {
 
+    const members = useContext(MemberContext);
+    const vacations = useContext(VacationContext);
+
+
     const [vacation_complete_list, setVacation_complete_list] = useState([]);
     const [vacation_wait_list, setVacation_wait_list] = useState([]);
+    const [myVacation, setMyVacation] = useState({}); //나중에 년도 검색할거면 이거 배열로 바꾸고 로직 추가해야함
 
     useEffect(() => {
+
+        const fVacation = vacations.vacation.find(vacation => vacation.memberId === members.member.id);
+        setMyVacation(fVacation);
+        console.log(myVacation);
+
         axios.get("/api/signlist/vacation_complete").then((resp) => {
             setVacation_complete_list(resp.data);
         });
@@ -26,7 +36,7 @@ const AttendenceMain = () => {
         axios.get("/api/signlist/vacation_wait").then((resp1) => {
             setVacation_wait_list(resp1.data);
         });
-    }, []);
+    }, [members, vacations]);
 
     return (
         <div>
@@ -38,13 +48,15 @@ const AttendenceMain = () => {
             <div className={style.documents1}>
                 <div className={style.titleText}>내 연차 내역</div>
                 <div className={style.vacationStatus}>
+
                     <div className={style.name}>
-                        <div>김민아 과장</div>
-                        <div>마케팅팀</div>
+                        <div>{`${members.member.name} ${members.member.position}`}</div>
+                        <div>{members.member.group_name}</div>
                     </div>
+
                     <div className={style.all}>
                         <div>총연차</div>
-                        <div>15일</div>
+                        <div>{`일`}</div>
                     </div>
                     <div className={style.use}>
                         <div>사용연차</div>

@@ -23,10 +23,20 @@ import { useToDoList } from "./useToDoList";
 
 export const ListContext = createContext();
 export const ToDoListContext = createContext();
+
 const MemberContext = createContext();
+const VacationContext = createContext();
 
 const Groovy = () => {
     const [member, setMember] = useState({});
+    const [vacation, setVacation] = useState([]);
+
+    useEffect(() => {
+        axios.get("/api/vacation").then(resp => {
+            setVacation(resp.data);
+            console.log(resp.data);
+        })
+    },[])
 
     useEffect(() => {
         axios.get("/api/member").then(resp => {
@@ -55,58 +65,59 @@ const Groovy = () => {
 
     // Calendar 상위 컴포넌트에서 사용할 상태와 함수
     const { dbList, refreshList } = useCalendar();
-    
+
     // ToDoList 상위 컴포넌트에서 사용할 상태와 함수
-    const { todoList, setTodoList, toggleStar ,ListAdded } = useToDoList();
+    const { todoList, setTodoList, toggleStar, ListAdded } = useToDoList();
 
 
     return (
         <WebSocketProvider>
             <MemberContext.Provider value={{ member, setMember }}>
-                <div>
-                    <Container className="NaviContainer g-0" fluid>
-                        <Navigator />
-                    </Container>
-                    <ListContext.Provider value={{ refreshList }}>
-                    <ToDoListContext.Provider value={{ todoList, setTodoList, toggleStar, ListAdded }}>
-                        <div className="SlideContainer">
-                            <SlideBar refreshList={refreshList} />
-                        </div>
-                    </ToDoListContext.Provider>
-                    </ListContext.Provider>
+                <VacationContext.Provider value={{ vacation, setVacation }}>
+                    <div>
+                        <Container className="NaviContainer g-0" fluid>
+                            <Navigator />
+                        </Container>
+                        <ListContext.Provider value={{ refreshList }}>
+                            <ToDoListContext.Provider value={{ todoList, setTodoList, toggleStar, ListAdded }}>
+                                <div className="SlideContainer">
+                                    <SlideBar refreshList={refreshList} />
+                                </div>
+                            </ToDoListContext.Provider>
+                        </ListContext.Provider>
 
-                    <div className="MainContainer">
-                        <Routes>
-                            <Route path="dashboard/*" element={<DashBoard />} />
-                            <Route path="admin/*" element={<Admin />} />
-                            <Route path="attendence/*" element={<Attendence />} />
-                            <Route path="board/*" element={<Board />} />
-                            <Route path="calendar/*" element={
-                                <ListContext.Provider value={{ dbList, refreshList }}>
-                                    <Calendar />
-                                </ListContext.Provider>
-                            } />
-                            <Route path="contacts/*" element={<Contact_Route />} />
-                            <Route path="dashboard/*" element={<DashBoard />} />
-                            <Route path="mail/*" element={<Email />} />
-                            <Route path="message/*" element={<Message_Route />} />
-                            <Route path="mypagelist/*" element={<Mypagelist />} />
-                            <Route path="signlist/*" element={<Sign_List />} />
-                            <Route path="survey/*" element={<Survey />} />
-                            <Route path="list/*" element={
-                                <ToDoListContext.Provider value={{ todoList, setTodoList, toggleStar ,ListAdded }}>
-                                    <ToDoList />
-                                </ToDoListContext.Provider>
+                        <div className="MainContainer">
+                            <Routes>
+                                <Route path="dashboard/*" element={<DashBoard />} />
+                                <Route path="admin/*" element={<Admin />} />
+                                <Route path="attendence/*" element={<Attendence />} />
+                                <Route path="board/*" element={<Board />} />
+                                <Route path="calendar/*" element={
+                                    <ListContext.Provider value={{ dbList, refreshList }}>
+                                        <Calendar />
+                                    </ListContext.Provider>
                                 } />
-                        </Routes>
+                                <Route path="contacts/*" element={<Contact_Route />} />
+                                <Route path="dashboard/*" element={<DashBoard />} />
+                                <Route path="mail/*" element={<Email />} />
+                                <Route path="message/*" element={<Message_Route />} />
+                                <Route path="mypagelist/*" element={<Mypagelist />} />
+                                <Route path="signlist/*" element={<Sign_List />} />
+                                <Route path="survey/*" element={<Survey />} />
+                                <Route path="list/*" element={
+                                    <ToDoListContext.Provider value={{ todoList, setTodoList, toggleStar, ListAdded }}>
+                                        <ToDoList />
+                                    </ToDoListContext.Provider>
+                                } />
+                            </Routes>
 
+                        </div>
                     </div>
-                </div>
-
+                </VacationContext.Provider>
             </MemberContext.Provider>
         </WebSocketProvider>
     );
 };
 
 export default Groovy;
-export { MemberContext };
+export { MemberContext, VacationContext};
