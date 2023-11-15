@@ -25,18 +25,9 @@ export const ListContext = createContext();
 export const ToDoListContext = createContext();
 
 const MemberContext = createContext();
-const VacationContext = createContext();
 
 const Groovy = () => {
     const [member, setMember] = useState({});
-    const [vacation, setVacation] = useState([]);
-
-    useEffect(() => {
-        axios.get("/api/vacation").then(resp => {
-            setVacation(resp.data);
-            console.log(resp.data);
-        })
-    },[])
 
     useEffect(() => {
         axios.get("/api/member").then(resp => {
@@ -73,7 +64,6 @@ const Groovy = () => {
     return (
         <WebSocketProvider>
             <MemberContext.Provider value={{ member, setMember }}>
-                <VacationContext.Provider value={{ vacation, setVacation }}>
                     <div>
                         <Container className="NaviContainer g-0" fluid>
                             <Navigator />
@@ -113,11 +103,10 @@ const Groovy = () => {
 
                         </div>
                     </div>
-                </VacationContext.Provider>
             </MemberContext.Provider>
         </WebSocketProvider>
     );
 };
 
 export default Groovy;
-export { MemberContext, VacationContext};
+export { MemberContext};

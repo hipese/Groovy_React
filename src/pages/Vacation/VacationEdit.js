@@ -26,6 +26,7 @@ const VacationEdit = forwardRef((props, ref) => {
     useEffect(() => {
         axios.get("/api/vacation").then(resp => {
             setVacation(resp.data);
+            console.log(resp.data);
         })
     },[])
 
