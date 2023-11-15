@@ -11,24 +11,48 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { blue } from '@mui/material/colors';
 import { MemberContext, VacationContext } from "../../Groovy/Groovy";
+import VacationEdit from "../../Vacation/VacationEdit";
+import { Modal } from "@mui/material";
 
 
 const AttendenceMain = () => {
 
     const members = useContext(MemberContext);
-    const vacations = useContext(VacationContext);
-
 
     const [vacation_complete_list, setVacation_complete_list] = useState([]);
     const [vacation_wait_list, setVacation_wait_list] = useState([]);
     const [myVacation, setMyVacation] = useState({}); //나중에 년도 검색할거면 이거 배열로 바꾸고 로직 추가해야함
 
+
+    //=========================================================================
+
+
+    const [openModal, setOpenModal] = useState(false); // 모달 상태
+    const [editingField, setEditingField] = useState(null);// 모달 제어용 
+
+    const handleEdit = (field) => {
+        setEditingField(field); // 수정 중인 필드 설정
+        setOpenModal(true); // 모달 열기
+    };
+
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+        setEditingField(null); // 수정 중인 필드 상태를 초기화
+    };
+
+    //=========================================================================
+
     useEffect(() => {
+        if (members.member) {
+            axios.get(`/api/vacation/myVacation/${members.member.id}`).then(resp=>{
+                setMyVacation(resp.data || {}); // find가 undefined를 반환할 경우 빈 객체를 사용합니다.
+            })
+        }
+    }, [members,myVacation]);
 
-        const fVacation = vacations.vacation.find(vacation => vacation.memberId === members.member.id);
-        setMyVacation(fVacation);
-        console.log(myVacation);
 
+    useEffect(() => {
         axios.get("/api/signlist/vacation_complete").then((resp) => {
             setVacation_complete_list(resp.data);
         });
@@ -36,7 +60,7 @@ const AttendenceMain = () => {
         axios.get("/api/signlist/vacation_wait").then((resp1) => {
             setVacation_wait_list(resp1.data);
         });
-    }, [members, vacations]);
+    }, []);
 
     return (
         <div>
@@ -55,18 +79,27 @@ const AttendenceMain = () => {
                     </div>
 
                     <div className={style.all}>
-                        <div>총연차</div>
-                        <div>{`일`}</div>
+                        <div>{`${myVacation.year} 총연차`}</div>
+                        <div>{`${myVacation.totalAnnualEntitlement}일`}</div>
                     </div>
                     <div className={style.use}>
-                        <div>사용연차</div>
-                        <div>9.5일</div>
+                        <div>{`${myVacation.year}년 사용연차`}</div>
+                        <div>{`${myVacation.usedDays}일`}</div>
                     </div>
                     <div className={style.left}>
-                        <div>잔여연차</div>
-                        <div>5.5일</div>
+                        <div>{`${myVacation.year}년 잔여연차`}</div>
+                        <div>{`${myVacation.remainingDays}일`}</div>
                     </div>
                 </div>
+            </div>
+            <div>
+                <button className={style.btn} onClick={() => handleEdit('vacation')}>휴가조절(관리자만 사용하세요)</button>
+                <Modal
+                    open={openModal && editingField === 'vacation'} 
+                    onClose={handleCloseModal}
+                >
+                    <VacationEdit onClose={handleCloseModal} />
+                </Modal>
             </div>
 
             <div className={style.documents2}>

@@ -61,3 +61,17 @@
     z-index: 1;
     margin: 5px;
 }
+
+/* 아래에는 휴가모달 UI 입니다. 일단 여기 작성하고 분할할때 나중에 분할 ㄱㄱ */
+.vacationContent{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 800px;
+    background-color: #fff;
+    border: 2px solid #000;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+    padding: 16px;
+}
