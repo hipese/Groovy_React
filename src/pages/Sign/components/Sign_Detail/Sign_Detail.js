@@ -31,6 +31,18 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import Button from '@mui/material/Button';
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+
+const CircularIndeterminate = () => {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <CircularProgress />
+      </Box>
+    );
+  };
+
 
 const Sign_Detail = ({ approver }) => {
 
@@ -40,6 +52,7 @@ const Sign_Detail = ({ approver }) => {
     const navi = useNavigate();
     const { loginID } = useContext(LoginContext);
     const stompClient = useWebSocket();
+    const [loading, setLoading] = useState(true);
 
     const members = useContext(MemberContext);
 
@@ -63,6 +76,7 @@ const Sign_Detail = ({ approver }) => {
 
         axios.get(`/api/signfiles/${seq}`).then(resp1 => {
             setSign_files(resp1.data);
+            setLoading(false);
         });
     }, [seq]);
 
@@ -138,6 +152,11 @@ const Sign_Detail = ({ approver }) => {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}년 ${month}월 ${day}일`;
     };
+
+    if (loading) {
+        // 데이터 로딩 중에는 로딩창을 표시
+        return <CircularIndeterminate />;
+      }
 
     return (
         <div>
