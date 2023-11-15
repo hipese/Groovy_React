@@ -45,11 +45,11 @@ const AttendenceMain = () => {
 
     useEffect(() => {
         if (members.member) {
-            axios.get(`/api/vacation/myVacation/${members.member.id}`).then(resp=>{
+            axios.get(`/api/vacation/myVacation/${members.member.id}`).then(resp => {
                 setMyVacation(resp.data || {}); // find가 undefined를 반환할 경우 빈 객체를 사용합니다.
             })
         }
-    }, [members,myVacation]);
+    }, [members, myVacation]);
 
 
     useEffect(() => {
@@ -71,31 +71,40 @@ const AttendenceMain = () => {
 
             <div className={style.documents1}>
                 <div className={style.titleText}>내 연차 내역</div>
-                <div className={style.vacationStatus}>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow sx={{ backgroundColor: blue[200] }}>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{members.member.group_name}</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year} 총연차`}</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year}년 사용연차`}</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year}년 잔여연차`}</TableCell>
+                            </TableRow>
+                        </TableHead>
 
-                    <div className={style.name}>
-                        <div>{`${members.member.name} ${members.member.position}`}</div>
-                        <div>{members.member.group_name}</div>
-                    </div>
-
-                    <div className={style.all}>
-                        <div>{`${myVacation.year} 총연차`}</div>
-                        <div>{`${myVacation.totalAnnualEntitlement}일`}</div>
-                    </div>
-                    <div className={style.use}>
-                        <div>{`${myVacation.year}년 사용연차`}</div>
-                        <div>{`${myVacation.usedDays}일`}</div>
-                    </div>
-                    <div className={style.left}>
-                        <div>{`${myVacation.year}년 잔여연차`}</div>
-                        <div>{`${myVacation.remainingDays}일`}</div>
-                    </div>
-                </div>
+                        <TableBody>
+                            {members.member.id ?
+                                <TableRow className={style.hoverEffect}
+                                    key={99}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }
+                                    }
+                                >
+                                    <TableCell component="th" scope="row" align="center">
+                                        {`${members.member.name} ${members.member.position}`}
+                                    </TableCell>
+                                    <TableCell align="center">{`${myVacation.totalAnnualEntitlement}일`}</TableCell>
+                                    <TableCell align="center">{`${myVacation.usedDays}일`}</TableCell>
+                                    <TableCell align="center">{`${myVacation.remainingDays}일`}</TableCell>
+                                </TableRow>
+                                : "사용자를 불러오지 못하였습니다."}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </div>
             <div>
                 <button className={style.btn} onClick={() => handleEdit('vacation')}>휴가조절(관리자만 사용하세요)</button>
                 <Modal
-                    open={openModal && editingField === 'vacation'} 
+                    open={openModal && editingField === 'vacation'}
                     onClose={handleCloseModal}
                 >
                     <VacationEdit onClose={handleCloseModal} />

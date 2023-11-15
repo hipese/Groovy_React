@@ -1,8 +1,16 @@
-import {  forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import style from "./VacationEdit.module.css"
 import axios from "axios";
 import Org_Chart from "../Org_Chart/components/Org_Chart_Modal/Org_Chart";
-
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { blue } from '@mui/material/colors';
+import SpinButton from "./SpinButton";
 
 const VacationEdit = forwardRef((props, ref) => {
 
@@ -28,7 +36,7 @@ const VacationEdit = forwardRef((props, ref) => {
             setVacation(resp.data);
             console.log(resp.data);
         })
-    },[])
+    }, [])
 
     useEffect(() => {
         if (approver) {
@@ -43,6 +51,13 @@ const VacationEdit = forwardRef((props, ref) => {
         const vacationValue = action === 'add'
             ? document.getElementById('addVacation').value
             : document.getElementById('subtractVacation').value;
+
+
+        console.log("버튼 눌리냐고")
+        if (!approver.id) {
+            alert("직원들 선택해주세요.");
+            return;
+        }
 
         if (!vacationValue) {
             // 값이 없으면 경고하고 함수 종료
@@ -86,52 +101,57 @@ const VacationEdit = forwardRef((props, ref) => {
                     </div>
 
                     <div className={style.selectMemberVeiws}>
-                        {myVacation.memberID ? <div className={style.documents1}>
-                            <div className={style.titleText}>연차내역</div>
-                            <div className={style.vacationStatus}>
+                        {myVacation.memberID ? <TableContainer component={Paper}>
+                            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                <TableHead>
+                                    <TableRow sx={{ backgroundColor: blue[200] }}>
+                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">이름</TableCell>
+                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year} 총연차`}</TableCell>
+                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year}년 사용연차`}</TableCell>
+                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year}년 잔여연차`}</TableCell>
+                                    </TableRow>
+                                </TableHead>
 
-                                <div className={style.name}>
-                                    <div>{`${selectMemberdetail.name} ${selectMemberdetail.position}`}</div>
-                                    <div>{selectMemberdetail.group_name}</div>
-                                </div>
-
-                                <div className={style.all}>
-                                    <div>{`${myVacation.year} 총연차`}</div>
-                                    <div>{`${myVacation.totalAnnualEntitlement}일`}</div>
-                                </div>
-                                <div className={style.use}>
-                                    <div>{`${myVacation.year}년 사용연차`}</div>
-                                    <div>{`${myVacation.usedDays}일`}</div>
-                                </div>
-                                <div className={style.left}>
-                                    <div>{`${myVacation.year}년 잔여연차`}</div>
-                                    <div>{`${myVacation.remainingDays}일`}</div>
-                                </div>
-                            </div>
-                        </div> : "검색결과 없음"}
+                                <TableBody>
+                                    {myVacation.memberID ?
+                                        <TableRow className={style.hoverEffect}
+                                            key={55}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }
+                                            }
+                                        >
+                                            <TableCell style={{ fontSize: '15px' }} component="th" scope="row" align="center">
+                                                {`${approver.name} ${approver.position}`}
+                                            </TableCell>
+                                            <TableCell style={{ fontSize: '15px' }} align="center">{`${myVacation.totalAnnualEntitlement}일`}</TableCell>
+                                            <TableCell style={{ fontSize: '15px' }} align="center">{`${myVacation.usedDays}일`}</TableCell>
+                                            <TableCell style={{ fontSize: '15px' }} align="center">{`${myVacation.remainingDays}일`}</TableCell>
+                                        </TableRow>
+                                        : "사용자를 불러오지 못하였습니다."}
+                                </TableBody>
+                            </Table>
+                        </TableContainer> : <div className={style.noneData}> "직원을 검색해주세요"</div>}
                     </div>
 
                     <div className={style.vacationEditDiv}>
-                        <button className={style.btn} data-action="add" onClick={handleVacation}>
-                            휴가 추가
-                        </button>
-                        <input type="text" placeholder="증가시키려는 휴가를 입력" id="addVacation" />
-                        <button className={style.btn} data-action="subtract" onClick={handleVacation}>
-                            휴가 차감
-                        </button>
-                        <input type="text" placeholder="차감시키려는 휴가를 입력" id="subtractVacation" />
+                        <div className={style.editRow} >
+                            <button className={style.btn} data-action="add" onClick={handleVacation}>
+                                휴가 추가
+                            </button>
+                            <SpinButton id="addVacation"/>
+                        </div>
+                        <div className={style.editRow} >
+                            <button className={style.btn} data-action="subtract" onClick={handleVacation}>
+                                휴가 차감
+                            </button>
+                            <SpinButton id="subtractVacation"/>
+                        </div>
                     </div>
                 </div>
 
                 <div className={style.footer}>
-                    <button className={style.btn}>
-                        확인
-                    </button>
-                    <button className={style.btn}>
-                        나가기
-                    </button>
+                    <button onClick={() => { onClose() }} className={style.btn}>확인</button>
+                    <button onClick={() => { onClose() }} className={style.btn}>닫기</button>
                 </div>
-
 
             </div>
         </div>

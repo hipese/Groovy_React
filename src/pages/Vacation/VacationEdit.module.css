@@ -13,7 +13,8 @@
 .headerTextDiv{
     height: 10%;
     width: 100%;
-    font-size: 20px;
+    font-size: 40px;
+    font-weight: bold;
 }
 .body{
     height: 70%;
@@ -23,10 +24,19 @@
     height: 20%;
     width: 100%;
 }
-
+.noneData{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    font-weight: bold;
+}
 .selectMemberVeiws{
     height: 50%;
     width: 100%;
+    border: 1px solid black;
 }
 .vacationEditDiv{
     height: 30%;
@@ -40,6 +50,7 @@
     background-color: rgb(130, 200, 255);
     color: white;
     z-index: 1;
+    margin: 20px;
   }
   .btn:hover{
     background-color: rgb(100, 180, 255);
@@ -48,8 +59,16 @@
   .footer{
     height: 20%;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items:center
+    
   }
-
+  .footer>div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   .documents2{
     margin-bottom:100px;
@@ -85,4 +104,7 @@
     width: 100%;
     float: none;
   }
-  
+.editRow{
+    width: 100%;
+    height: 50%;
+}
