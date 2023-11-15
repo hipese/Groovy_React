@@ -11,15 +11,27 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { blue } from '@mui/material/colors';
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 const Sign_Progress = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [sign_list, setSign_list] = useState([]);
+    const [loading, setLoading] = useState(true);
     const COUNT_PER_PAGE = 10;
 
     useEffect(() => {
         axios.get("/api/signlist").then((resp) => {
             setSign_list(resp.data);
+            setLoading(false);
         });
     }, []);
 
@@ -33,6 +45,11 @@ const Sign_Progress = () => {
     const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
     const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
     const visibleSignList = sign_list.slice(startIndex, endIndex);
+
+    if (loading) {
+        // 데이터 로딩 중에는 로딩창을 표시
+        return <CircularIndeterminate />;
+    }
 
     return (
         <div className={style.sign_container}>

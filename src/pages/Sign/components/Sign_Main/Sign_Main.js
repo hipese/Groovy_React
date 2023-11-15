@@ -15,12 +15,23 @@ import CloseIcon from '@mui/icons-material/Close';
 import PendingIcon from '@mui/icons-material/Pending';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { red } from '@mui/material/colors';
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 const Sign_Main = () => {
 
     const [sign_wait_list, setSign_wait_list] = useState([]);
     const [sign_progress_list, setSign_progress_list] = useState([]);
     const [sign_complete_list, setSign_complete_list] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         axios.get("/api/signlist/wait").then((resp) => {
@@ -33,8 +44,14 @@ const Sign_Main = () => {
 
         axios.get("/api/signlist/complete").then((resp2) => {
             setSign_complete_list(resp2.data);
+            setLoading(false);
         });
     }, []);
+
+    if (loading) {
+        // 데이터 로딩 중에는 로딩창을 표시
+        return <CircularIndeterminate />;
+    }
 
     return (
 
