@@ -177,6 +177,7 @@ const Sign_Write = () => {
                     </div>
                     <div className={style.rightContainer}>
                         <TextField
+                            sx={{ width: '200px' }}
                             id="outlined-read-only-input"
                             label="기안작성자"
                             value={loginID}
@@ -216,13 +217,13 @@ const Sign_Write = () => {
                             <div className={style.tableRow}>
                                 <div>부서</div>
                                 <div>
-                                    {approver &&approver.group_name ? approver.group_name : "부서을 선택하세요"}
+                                    {approver && approver.group_name ? approver.group_name : "부서을 선택하세요"}
                                 </div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>직급</div>
                                 <div>
-                                    {approver &&approver.position ? approver.position : "직급을 선택하세요"}
+                                    {approver && approver.position ? approver.position : "직급을 선택하세요"}
                                 </div>
                             </div>
                         </div>
