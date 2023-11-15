@@ -17,7 +17,12 @@
 
 .leftContainer {
     float: left;
-    margin-right: 750px;
+}
+
+.rightContainer {
+    position: relative; 
+    left: 750px; 
+ 
 }
 
 .signline {
