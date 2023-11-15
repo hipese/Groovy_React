@@ -16,19 +16,19 @@ const WebSocketProvider = ({ children }) => {
       console.log('Connected: ' + frame);
       setStompClient(client);
     });
-  }, [setStompClient]);
+  }, [loginID, setStompClient]);
 
 
   useEffect(() => {
     if (loginID) {
       initializeWebSocket();
     }
+
     return () => {
       if (stompClient) {
         stompClient.disconnect();
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginID]);
 
   return (
