@@ -74,7 +74,7 @@ function DotBadge() {
         contents: receivedMessage.message, // 서버의 'message'를 클라이언트의 'contents'로 변환
       };
       console.log(transformedMessage);
-      setNotifications((prevNotifications) => [...prevNotifications, transformedMessage]);
+      setNotifications((prevNotifications) => [transformedMessage, ...prevNotifications]);
     };
 
     if (stompClient) {
