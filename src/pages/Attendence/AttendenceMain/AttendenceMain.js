@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import DocumentList from "../../Components/Table/DocumentList";
+import { useContext, useEffect, useState } from "react";
 import style from "./AttendenceMain.module.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -10,13 +9,48 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { grey, blue } from '@mui/material/colors';
+import { blue } from '@mui/material/colors';
+import { MemberContext, VacationContext } from "../../Groovy/Groovy";
+import VacationEdit from "../../Vacation/VacationEdit";
+import { Modal } from "@mui/material";
 
 
 const AttendenceMain = () => {
 
+    const members = useContext(MemberContext);
+
     const [vacation_complete_list, setVacation_complete_list] = useState([]);
     const [vacation_wait_list, setVacation_wait_list] = useState([]);
+    const [myVacation, setMyVacation] = useState({}); //나중에 년도 검색할거면 이거 배열로 바꾸고 로직 추가해야함
+
+
+    //=========================================================================
+
+
+    const [openModal, setOpenModal] = useState(false); // 모달 상태
+    const [editingField, setEditingField] = useState(null);// 모달 제어용 
+
+    const handleEdit = (field) => {
+        setEditingField(field); // 수정 중인 필드 설정
+        setOpenModal(true); // 모달 열기
+    };
+
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+        setEditingField(null); // 수정 중인 필드 상태를 초기화
+    };
+
+    //=========================================================================
+
+    useEffect(() => {
+        if (members.member) {
+            axios.get(`/api/vacation/myVacation/${members.member.id}`).then(resp => {
+                setMyVacation(resp.data || {}); // find가 undefined를 반환할 경우 빈 객체를 사용합니다.
+            })
+        }
+    }, [members, myVacation]);
+
 
     useEffect(() => {
         axios.get("/api/signlist/vacation_complete").then((resp) => {
@@ -37,24 +71,44 @@ const AttendenceMain = () => {
 
             <div className={style.documents1}>
                 <div className={style.titleText}>내 연차 내역</div>
-                <div className={style.vacationStatus}>
-                    <div className={style.name}>
-                        <div>김민아 과장</div>
-                        <div>마케팅팀</div>
-                    </div>
-                    <div className={style.all}>
-                        <div>총연차</div>
-                        <div>15일</div>
-                    </div>
-                    <div className={style.use}>
-                        <div>사용연차</div>
-                        <div>9.5일</div>
-                    </div>
-                    <div className={style.left}>
-                        <div>잔여연차</div>
-                        <div>5.5일</div>
-                    </div>
-                </div>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow sx={{ backgroundColor: blue[200] }}>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{members.member.group_name}</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year} 총연차`}</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year}년 사용연차`}</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year}년 잔여연차`}</TableCell>
+                            </TableRow>
+                        </TableHead>
+
+                        <TableBody>
+                            {members.member.id ?
+                                <TableRow className={style.hoverEffect}
+                                    key={99}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }
+                                    }
+                                >
+                                    <TableCell component="th" scope="row" align="center">
+                                        {`${members.member.name} ${members.member.position}`}
+                                    </TableCell>
+                                    <TableCell align="center">{`${myVacation.totalAnnualEntitlement}일`}</TableCell>
+                                    <TableCell align="center">{`${myVacation.usedDays}일`}</TableCell>
+                                    <TableCell align="center">{`${myVacation.remainingDays}일`}</TableCell>
+                                </TableRow>
+                                : "사용자를 불러오지 못하였습니다."}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </div>
+            <div>
+                <button className={style.btn} onClick={() => handleEdit('vacation')}>휴가조절(관리자만 사용하세요)</button>
+                <Modal
+                    open={openModal && editingField === 'vacation'}
+                    onClose={handleCloseModal}
+                >
+                    <VacationEdit onClose={handleCloseModal} />
+                </Modal>
             </div>
 
             <div className={style.documents2}>

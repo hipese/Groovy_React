@@ -4,14 +4,13 @@ import Org_Chart_Table from "./Org_Chart_Body/Org_Chart_Table/Org_Chart_Table";
 import Org_Chart_DropDown from "./Org_Chart_Body/Org_Chart_DropDown/Org_Char_DropDown";
 import Org_Chart_View from "./Org_Chart_Body/Org_Chart_View/Org_Chart_View";
 import axios from "axios";
-import { MemberContext } from "../../../Groovy/Groovy";
 
-const Org_Chart = ({ isOpen, close, approver, setApprover }) => {
+const Org_Chart = ({ isOpen, close, approver, setApprover ,selectMemberdetail,setSelectMemberdetail}) => {
 
     const [employees, setEmployees] = useState({}); // 여기서 선택된 직원의 목록을 보여줍니다.
     const [backUpEmployees, setBackUpEmployees] = useState({}); // 원래 직원의 목록을 저장합니다
     const [selectedRow, setSelectedRow] = useState(null); //선택한 행의 값을 가져옵니다.
-    const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상새정보를 가져옵니다.
+    // const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상새정보를 가져옵니다.
 
     useEffect(() => {
         axios.get("/api/member/selectedEmployee").then(resp => {
@@ -24,35 +23,7 @@ const Org_Chart = ({ isOpen, close, approver, setApprover }) => {
 
     if (!isOpen) return null;
 
-    // 선택된 직원을 업데이트하는 함수
-    const handleEmployeeSelect = (employee) => {
-        setEmployees(employee);
-    };
-
-    // '중간결제자' 또는 '최종결제자' 버튼 클릭 시 처리할 함수
-    const handleSelect = () => {
-        console.log("선택한 놈의 아이디: " + selectedRow);
-
-        if (selectedRow == null) {
-            return;
-        }
-
-        //조건식을 설정하는 부분
-        // if(members.member.id===selectedRow){
-        //     alert("다른 결재자를 선택하세요");
-        //     return;
-        // }
-
-        axios.get(`/api/member/${selectedRow}`).then(resp => {
-            console.log(resp.data);
-            setApprover(resp.data);
-        })
-
-        axios.get(`/api/member/detail/${selectedRow}`).then(resp => {
-            console.log(resp.data);
-            setSelectMemberdetail(resp.data);
-        })
-    };
+    
 
     return (
         <div>

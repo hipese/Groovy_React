@@ -56,6 +56,8 @@ const Sign_Write = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [open, setOpen] = React.useState(true);
 
+    const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상새정보를 가져옵니다.
+
     const handleClick = () => {
         setOpen(!open);
     };
@@ -199,7 +201,8 @@ const Sign_Write = () => {
                         </div>
                         <div className={style.buttonDiv}>
                             <button onClick={toggleModal} className={style.btn}>조직도 검색</button>
-                            <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} />
+                            <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} 
+                            selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
                         </div>
                     </div>
                     <div className={style.table}>
