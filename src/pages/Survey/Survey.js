@@ -187,9 +187,6 @@ const SurveyList = () => {
                     )}
                 />
             </div>
-            <Link to="survey_result/33">asd</Link>
-            &nbsp;
-            <Link to="result_list">res</Link>
         </div>
     )
 }

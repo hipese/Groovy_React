@@ -1,17 +1,19 @@
-import { Divider, Grid, IconButton, List, ListItem, Typography } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { Button, Divider, Grid, IconButton, List, ListItem, Typography } from "@mui/material";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import style from './project.module.css';
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Piechart from './Piechart.js'
 import AddIcon from '@mui/icons-material/Add';
 import Modal from '@mui/material/Modal';
-import { Box } from "@mui/system";
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { Box, width } from "@mui/system";
+import { DatePicker, DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { format } from 'date-fns';
 import Org_Chart from "../../Org_Chart/components/Org_Chart_Modal/Org_Chart.js";
+import { LoginContext } from "../../../App";
+import RemoveIcon from '@mui/icons-material/Remove';
 
 const Modalstyle = {
     position: 'absolute',
@@ -23,15 +25,18 @@ const Modalstyle = {
     p: 4,
   };
 
-const AddSchedule = ({handleClose}) => {
+  const AddSchedule = ({handleClose}) => {
     const navi = useNavigate();
     const {seq} = useParams();
     const {todo,setTodo} = useContext(AddScheduleContext);
     const [schedule,setSchedule] = useState({pschedule_start: '', pschedule_end: "", pschedule_contents: "", pschedule_importance: 'High',pschedule_state:0});
     const handleChange = (e) => {
-        const {name,value} = e.target;
+        console.log(e);
+        console.log(e.$d);
+        console.log(e.name);
+        //const {name,value} = e.target;
         
-        setSchedule(prev=>({...prev,[name]:value}));
+        //setSchedule(prev=>({...prev,[name]:value}));
     }
 
     const handleAdd = () => {
@@ -40,25 +45,28 @@ const AddSchedule = ({handleClose}) => {
         });
     }
     return(
-        <div>
-            <div className={`${style.border}`}>
+        <div style={{width:"500px"}} className={`${style.border}`}>
+            <div className={`${style.padding20} ${style.center}`}>
                 시작일 : 
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['DateTimePicker']}>
-                        <DateTimePicker label="시작일" name="pschedule_start" onChange={handleChange}/>
-                    </DemoContainer>
-                </LocalizationProvider> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker']}>
+                    <DatePicker label="Basic date picker" onChange={handleChange}/>
+                </DemoContainer>
+                </LocalizationProvider>
                 <input type="date" name="pschedule_start" onChange={handleChange}/>
             </div>
-            <div className={`${style.border}`}>
+            <Divider sx={{bgcolor:"black"}}/>
+            <div className={`${style.padding20} ${style.center}`}>
                 종료일 : 
                 <input type="date" name="pschedule_end" onChange={handleChange}/>
             </div>
-            <div className={`${style.border}`}>
+            <Divider sx={{bgcolor:"black"}}/>
+            <div className={`${style.padding20} ${style.center}`}>
                 할일 : 
                 <input type="text" name="pschedule_contents" onChange={handleChange}/>
             </div>
-            <div className={`${style.border}`}>
+            <Divider sx={{bgcolor:"black"}}/>
+            <div className={`${style.padding20} ${style.center}`}>
                 중요도
                 <select name="pschedule_importance" id="importance" onChange={handleChange}>
                     <option value="High" name="importance">High</option>
@@ -66,7 +74,8 @@ const AddSchedule = ({handleClose}) => {
                     <option value="Low" name="importance">Low</option>
                 </select>
             </div>
-            <div className={`${style.border}`}>
+            <Divider sx={{bgcolor:"black"}}/>
+            <div className={`${style.padding20} ${style.center}`}>
                 상태 - 
                 <select name="pschedule_state" id="state" onChange={handleChange}>
                     <option value="0" name="state">해야할 일</option>
@@ -74,9 +83,20 @@ const AddSchedule = ({handleClose}) => {
                     <option value="2" name="state">완료</option>
                 </select>
             </div>
-            <div className={`${style.border} ${style.btnEven}`}>
-                <button onClick={handleClose}>취소</button>
-                <button onClick={handleAdd}>추가</button>
+            <Divider sx={{bgcolor:"black"}}/>
+            <div className={`${style.btnEven} ${style.padding10}`}>
+                <IconButton aria-label="remove" onClick={handleClose} sx={{color:"black"}}>
+                    <RemoveIcon />
+                    <Typography sx={{fontSize:"14"}}>
+                        취소
+                    </Typography>
+                </IconButton>
+                <IconButton aria-label="add" onClick={handleAdd} sx={{color:"black"}}>
+                    <AddIcon/>
+                    <Typography sx={{fontSize:"14"}}>
+                        추가하기
+                    </Typography>                    
+                </IconButton>
             </div>
         </div>
     )
@@ -347,26 +367,55 @@ const ProjectMember = () => {
                     <AddMember handleClose={handleClose}/>
                 </Box>
             </Modal>
-            <table border="1" className={`${style.list}`}>
-                <thead>
-                    <tr>
-                        <th>사원번호</th>
-                        <th>이름</th>
-                        <th>부서</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {member.map((e,i)=>{
+            <div>
+                <Grid container className={`${style.marginTB20}`}> 
+                    <Grid xs={4} className={style.center}>
+                        <Typography className={`${style.fs} ${style.b}`}>
+                            사원번호
+                        </Typography>
+                    </Grid>
+                    <Grid xs={4} className={style.center}>
+                        <Typography className={`${style.fs} ${style.b}`}>
+                            이름
+                        </Typography>
+                    </Grid>
+                    <Grid xs={4} className={style.center}>
+                        <Typography className={`${style.fs} ${style.b}`}>
+                        부서
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <Divider sx={{bgcolor:"black"}}/>
+                {member.map((e,i)=>{
                         return(
-                            <tr key={i}>
-                                <td>{e.id}</td>
-                                <td>{e.name}</td>
-                                <td>{e.group_name}</td>
-                            </tr>
+                            <List sx={style} component="nav" aria-label="mailbox folders">
+                                <ListItem>
+                                    <Grid container key={i} className={`${style.marginT10}`}> 
+                                        <Grid xs={4} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.id}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={4} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                                {e.name}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={4} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.group_name}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>            
+                                </ListItem>
+                                
+                            <Divider />
+                                
+                            </List>
                         )
                     })}
-                </tbody>
-            </table>
+            </div>
+            
         </div>
     )
 }
@@ -377,9 +426,12 @@ const MemberContext = createContext();
 
 const ProjectContent = () => {
     const {seq} = useParams();
+    const {loginID} = useContext(LoginContext);
     const [todo,setTodo] = useState([{}]);
     const [member,setMember] = useState([{}]);
     const [progress,setProgress] = useState([{}]);
+    const [manager,setManager] = useState("");
+    const navi = useNavigate();
 
     useEffect(()=>{
         axios.get(`/api/project/todo/${seq}`).then(res=>{
@@ -397,7 +449,21 @@ const ProjectContent = () => {
         }).catch((e)=>{
             console.log(e);
         });
+
+        axios.get(`/api/project/getManager/${seq}`).then(res=>{
+            setManager(res.data);
+        }).catch((e)=>{
+            console.log(e);
+        });
     },[]);
+
+    const deleteContents = () =>{
+        axios.delete(`/api/project/delete/${seq}`).then(res=>{
+            navi("/groovy/dashboard/project");
+        }).catch((e)=>{
+            console.log(e);
+        });
+    }
     return(
         <div className={`${style.padding40} ${style.contentDiv}`}>
         <Grid container spacing={2}>
@@ -417,6 +483,17 @@ const ProjectContent = () => {
                 <MemberContext.Provider value={{member,setMember}}>
                     <ProjectMember/>
                 </MemberContext.Provider>
+            </Grid>
+
+            <Grid item xs={12}>
+                <div className={`${style.border} ${style.borderRad10} ${style.btnEven} ${style.padding10}`}>
+                    <Link to="/groovy/dashboard/project"><Button variant="outlined">
+                        목록으로
+                    </Button></Link>
+                    {
+                        loginID == manager ? <Button variant="outlined" color="error" onClick={deleteContents}>삭제하기</Button> : ""
+                    }            
+                </div>
             </Grid>
         </Grid>
         </div>

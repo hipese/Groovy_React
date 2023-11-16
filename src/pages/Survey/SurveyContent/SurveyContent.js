@@ -53,6 +53,7 @@ const SurveyTitle = () => {
 const SurveyQuestion = () => {
     const {seq} = useParams();
     const {contextData} = useContext(SurveyContext);
+    const titleData = contextData ? contextData[0] : {title:"",writer:"",contents:""};
     const {loginID} = useContext(LoginContext);
     const questionData = contextData ? contextData.slice(1) : [{}];
     const [response,setResponse] = useState([]);
@@ -82,6 +83,12 @@ const SurveyQuestion = () => {
     const show = () =>{
         console.log(response);
         axios.post(`/api/survey/response/${seq}`,response).then(res=>{
+            navi("/Groovy/survey");
+        });
+    }
+
+    const deleteContents = () => {
+        axios.delete(`/api/survey/delete/${seq}`).then(res=>{
             navi("/Groovy/survey");
         });
     }
@@ -128,6 +135,9 @@ const SurveyQuestion = () => {
                 <Link to="/Groovy/survey"><Button variant="outlined">
                     뒤로가기
                 </Button></Link>
+                {
+                    loginID == titleData.writer ? <Button variant="outlined" color="error" onClick={deleteContents}>삭제하기</Button> : ""
+                }
                 <Button variant="contained" onClick={show}  endIcon={<SendIcon />}>
                     제출
                 </Button>
