@@ -54,13 +54,20 @@ const AttendenceMain = () => {
 
     //=========================================================================
 
+   
     useEffect(() => {
         if (members.member) {
-            axios.get(`/api/vacation/myVacation/${members.member.id}`).then(resp => {
-                setMyVacation(resp.data || {}); // find가 undefined를 반환할 경우 빈 객체를 사용합니다.
-            })
+          const url = total_vactionDate 
+            ? `/api/vacation/myVacation/${members.member.id}/${total_vactionDate}`
+            : `/api/vacation/myVacation/${members.member.id}`;
+      
+          axios.get(url).then(resp => {
+            setMyVacation(resp.data || {});
+          }).catch(error => {
+            console.error('There was an error fetching the vacation data', error);
+          });
         }
-    }, [members]);
+      }, [members, total_vactionDate]);
 
 
     useEffect(() => {
@@ -82,7 +89,6 @@ const AttendenceMain = () => {
         // 데이터 로딩 중에는 로딩창을 표시
         return <CircularIndeterminate />;
     }
-
     return (
         <div>
             <div className={style.header}>
@@ -114,7 +120,7 @@ const AttendenceMain = () => {
                                         {`${members.member.name} ${members.member.position}`}
                                     </TableCell>
                                     <TableCell align="center">{`${myVacation.totalAnnualEntitlement}일`}</TableCell>
-                                    <TableCell align="center">{total_vactionDate + '일'}</TableCell>
+                                    <TableCell align="center">{`${myVacation.usedDays}일`}</TableCell>
                                     <TableCell align="center">{`${myVacation.totalAnnualEntitlement - total_vactionDate}일`}</TableCell>
                                 </TableRow>
                                 : "사용자를 불러오지 못하였습니다."}
