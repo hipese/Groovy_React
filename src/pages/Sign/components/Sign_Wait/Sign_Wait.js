@@ -59,7 +59,7 @@ const Sign_Wait = () => {
                 <hr />
             </div>
             <div className={style.documents}>
-                <div className={style.titleText}>결제 대기중 문서</div>
+                <div className={style.titleText}>결재 대기중 문서</div>
                 <div className={style.text}>{`승인할 문서가 ${sign_list.length}건이 있습니다.`}</div>
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
