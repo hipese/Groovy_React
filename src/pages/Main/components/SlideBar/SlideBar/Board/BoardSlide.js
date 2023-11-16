@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import style from "./BoardSlide.module.css";
 import down from "./assets/down.svg";
-import { useState } from "react"; // useState 추가
+import { useState, useContext } from "react";
+import { MemberContext } from '../../../../../Groovy/Groovy';
 
 const BoardSlide = () => {
+    const { member } = useContext(MemberContext);
+
     const [isHidden, setIsHidden] = useState(false);
 
     const handleHid = () => {
@@ -28,11 +31,6 @@ const BoardSlide = () => {
                     최근 게시물
                 </button>
             </Link>
-            <Link to="">
-                <button className={style.btn}>
-                    중요 게시물
-                </button>
-            </Link>
             <button className={style.btn2} onClick={handleHid}>
                 전사 게시판
                 <img src={down} alt="" width={"20px"} height={"15px"} />
@@ -51,10 +49,14 @@ const BoardSlide = () => {
                     </Link>
                 </>
             )}
-            <button className={style.btn2} onClick={handleHid2}>
-                부서 게시판
-                <img src={down} alt="" width={"20px"} height={"15px"} />
-            </button>
+            {member.group_name !== null && (
+                <>
+                    <button className={style.btn2} onClick={handleHid2}>
+                        부서 게시판
+                        <img src={down} alt="" width={"20px"} height={"15px"} />
+                    </button>
+                </>
+            )}
             {isHidden2 && (
                 <>
                     <Link to="/groovy/board/dept">
@@ -69,11 +71,6 @@ const BoardSlide = () => {
                     </Link>
                 </>
             )}
-            <Link to="/groovy/board/temp">
-                <button className={style.btn}>
-                    임시 저장함
-                </button>
-            </Link>
         </div>
     );
 };
