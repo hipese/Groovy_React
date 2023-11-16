@@ -2,11 +2,13 @@
 .container {
     margin: 0px;
     height: 100%;
-    min-width: 700px;
+    min-width: 724px;
+    overflow-x: auto;
 }
 
 .row_container {
     height: 100%;
+    width: 100%;
 }
 
 .chat_room_list_container {
@@ -20,6 +22,7 @@
 }
 
 .chat_room_object {
+    position: relative;
     min-height: 100px;
     max-height: 150px;
     padding-right: 0px;
@@ -103,7 +106,7 @@
     align-items: end;
 }
 
-.room_name {
+.room_name_object {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -123,6 +126,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left: 0px;
+}
+
+.is_read {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background-color: rgb(230, 20, 20);
+    padding: 0%;
+    border-radius: 50%;
+    top: 10%;
+    left: 10%;
 }
 
 .chat_room_container {
