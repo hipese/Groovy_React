@@ -21,9 +21,33 @@ const AttendenceSlide = () => {
             </div>
 
             <div className={style.btndiv}>
-                <Link to="/Groovy/signlist/write">
+                <Link to="attendenceWrite">
                     <button className={style.btn}>
                         연차신청하기
+                    </button>
+                </Link>
+            </div>
+
+            <div className={style.btndiv}>
+                <Link to="attendenceProgress">
+                    <button className={style.btn}>
+                        휴가신청처리
+                    </button>
+                </Link>
+            </div>
+
+            <div className={style.btndiv}>
+                <Link to="attendenceWait">
+                    <button className={style.btn}>
+                        휴가신청진행중
+                    </button>
+                </Link>
+            </div>
+
+            <div className={style.btndiv}>
+                <Link to="attendenceComplete">
+                    <button className={style.btn}>
+                        휴가신청완료
                     </button>
                 </Link>
             </div>

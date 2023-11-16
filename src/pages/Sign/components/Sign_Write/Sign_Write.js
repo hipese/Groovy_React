@@ -69,6 +69,8 @@ const Sign_Write = () => {
     const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
     const [accept] = useState(1);
     const [comment] = useState("");
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
     const [formdata, setFormData] = useState({
         files: []
     });
@@ -171,7 +173,7 @@ const Sign_Write = () => {
                                     onChange={handleChange}
                                 >
                                     <MenuItem value="품의서">품의서</MenuItem>
-                                    <MenuItem value="휴가신청서">휴가신청서</MenuItem>
+                                    <MenuItem value="휴가신청서">증명서</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>
@@ -200,8 +202,8 @@ const Sign_Write = () => {
                         </div>
                         <div className={style.buttonDiv}>
                             <button onClick={toggleModal} className={style.btn}>조직도 검색</button>
-                            <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} 
-                            selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
+                            <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover}
+                                selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
                         </div>
                     </div>
                     <div className={style.table}>
@@ -241,7 +243,7 @@ const Sign_Write = () => {
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안부서</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">마케팅</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안일</TableCell>
-                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">2023-11-03</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">{formattedDate}</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안문서</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">자동설정</TableCell>
                                     </TableRow>
