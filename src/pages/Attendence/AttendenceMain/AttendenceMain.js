@@ -10,7 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { blue } from '@mui/material/colors';
-import { MemberContext } from "../../Groovy/Groovy";
+import { MemberContext, VacationContext } from "../../Groovy/Groovy";
 import VacationEdit from "../../Vacation/VacationEdit";
 import { Modal } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -27,10 +27,10 @@ const CircularIndeterminate = () => {
 const AttendenceMain = () => {
 
     const members = useContext(MemberContext);
+    const {myVacation,setMyVacation, addVacation, setAddVacation}=useContext(VacationContext);
 
     const [vacation_complete_list, setVacation_complete_list] = useState([]);
     const [vacation_wait_list, setVacation_wait_list] = useState([]);
-    const [myVacation, setMyVacation] = useState({}); //나중에 년도 검색할거면 이거 배열로 바꾸고 로직 추가해야함
     const [total_vactionDate, setTotal_vactionDate] = useState();
     const [loading, setLoading] = useState(true);
 
@@ -84,7 +84,7 @@ const AttendenceMain = () => {
             setVacation_wait_list(resp1.data);
         });
     }, []);
-    
+
     if (loading) {
         // 데이터 로딩 중에는 로딩창을 표시
         return <CircularIndeterminate />;
@@ -134,7 +134,7 @@ const AttendenceMain = () => {
                     open={openModal && editingField === 'vacation'}
                     onClose={handleCloseModal}
                 >
-                    <VacationEdit onClose={handleCloseModal} />
+                    <VacationEdit onClose={handleCloseModal}  />
                 </Modal>
             </div>
 
