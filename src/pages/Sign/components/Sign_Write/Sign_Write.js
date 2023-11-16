@@ -194,7 +194,7 @@ const Sign_Write = () => {
                                     onChange={handleChange}
                                 >
                                     <MenuItem value="품의서">품의서</MenuItem>
-                                    <MenuItem value="휴가신청서">증명서</MenuItem>
+                                    <MenuItem value="증명서">증명서</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>
@@ -264,11 +264,7 @@ const Sign_Write = () => {
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안부서</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center"> {signWriterInfo && signWriterInfo.group_name ? signWriterInfo.group_name : "부서선택"}</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안일</TableCell>
-<<<<<<< HEAD
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">{formattedDate}</TableCell>
-=======
-                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">{todayDate}</TableCell>
->>>>>>> 3bde5a507661abd731386f8d8059d2d981484e47
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안문서</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">{document_type}</TableCell>
                                     </TableRow>
