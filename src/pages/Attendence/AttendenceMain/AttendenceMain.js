@@ -58,12 +58,14 @@ const AttendenceMain = () => {
     useEffect(() => {
         if (members.member) {
           let url = `/api/vacation/myVacation/${members.member.id}`;
-          if (total_vactionDate) {
-            url += `/${total_vactionDate}`;
-          }
+          
           if (addVacation && addVacation > 0) {
             url += `/${addVacation}`;
             setAddVacation(0);
+          }
+
+          if (total_vactionDate) {
+            url += `/${total_vactionDate}`;
           }
       
           axios.get(url).then(resp => {
