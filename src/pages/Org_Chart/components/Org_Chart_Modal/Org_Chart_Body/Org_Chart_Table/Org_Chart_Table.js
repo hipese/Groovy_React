@@ -1,6 +1,6 @@
 import axios from "axios";
 import style from "./Org_Chart_Table.module.css"
-import React, { useEffect, useState } from 'react';
+import  { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -33,8 +33,8 @@ const columns = [
 
 const Org_Chart_Table = ({ setEmployees, employees, selectedRow, setSelectedRow, setApprover, setSelectMemberdetail }) => {
 
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
