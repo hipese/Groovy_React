@@ -57,9 +57,14 @@ const AttendenceMain = () => {
    
     useEffect(() => {
         if (members.member) {
-          const url = total_vactionDate 
-            ? `/api/vacation/myVacation/${members.member.id}/${total_vactionDate}`
-            : `/api/vacation/myVacation/${members.member.id}`;
+          let url = `/api/vacation/myVacation/${members.member.id}`;
+          if (total_vactionDate) {
+            url += `/${total_vactionDate}`;
+          }
+          if (addVacation && addVacation > 0) {
+            url += `/${addVacation}`;
+            setAddVacation(0);
+          }
       
           axios.get(url).then(resp => {
             setMyVacation(resp.data || {});
@@ -67,7 +72,7 @@ const AttendenceMain = () => {
             console.error('There was an error fetching the vacation data', error);
           });
         }
-      }, [members, total_vactionDate]);
+      }, [members, total_vactionDate, addVacation]);
 
 
     useEffect(() => {
