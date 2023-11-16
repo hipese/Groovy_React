@@ -1,13 +1,16 @@
 import axios from 'axios';
 import React, { useState, useContext, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import style from "./Board.module.css";
+import { blue } from '@mui/material/colors';
+import InsertLinkIcon from '@mui/icons-material/InsertLink';
+import style from "./List.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
 import { MemberContext } from '../Groovy/Groovy';
+import { Input } from "reactstrap";
 
 const DeptBoard = () => {
-
     const { member } = useContext(MemberContext);
+    const [search, setSearch] = useState('');
 
     const [currentPage, setCurrentPage] = useState(1);
     const [boards, setBoards] = useState([]);
@@ -17,8 +20,8 @@ const DeptBoard = () => {
         const dept = member.group_name;
         axios.get(`/api/boards/deptCom/${dept}`).then(resp => {
             setBoards(resp.data);
-        })
-    }, []);
+        });
+    }, [member]);
 
     const totalItems = boards.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
@@ -31,11 +34,14 @@ const DeptBoard = () => {
     const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
     const visibleBoard = boards.slice(startIndex, endIndex);
 
+    const inputChangeHandler = (e) => {
+        setSearch(e.target.value);
+    };
+
     return (
         <div className="Boardcontainer">
             <div className={style.search}>
-                <input type="text" placeholder='게시글 검색'></input>
-                <button>검색</button>
+                <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
             </div>
             <hr></hr>
             <div className="body">
@@ -44,51 +50,81 @@ const DeptBoard = () => {
                 </div>
                 <hr></hr>
                 <div className={style.margin}>
-                    <table border="1">
-                        <tbody>
-                            <tr>
-                                <th>Seq</th>
-                                <th>Writer</th>
-                                <th>Title</th>
-                                <th>View_Count</th>
-                                <th>Category</th>
-                                <th>Write_Date</th>
-                            </tr>
-                            {visibleBoard.map((e) => (
-                                <tr key={e.seq}>
-                                    <td>{e.seq}</td>
-                                    <td>{e.writer}</td>
-                                    <td>
+                    <div className={style.boardContainer}>
+                        <div className={style.tableRow + ' ' + style.tableHeader}>
+                            <div className={style.tableHeader}>작성자</div>
+                            <div className={style.tableHeader}>파일</div>
+                            <div className={style.tableHeader}>제목</div>
+                            <div className={style.tableHeader}>조회수</div>
+                            <div className={style.tableHeader}>카테고리</div>
+                            <div className={style.tableHeader}>작성일</div>
+                        </div>
+                        {search === ''
+                            ? visibleBoard.map((e) => (
+                                <div key={e.seq} className={style.tableRow}>
+                                    <div className={style.tableCell}>
+                                        {e.name} {e.position}
+                                    </div>
+                                    <div className={style.tableCell}>
+                                        {e.fseq !== 0 && (
+                                            <InsertLinkIcon sx={{ color: blue[200] }} />
+                                        )}
+                                    </div>
+                                    <div className={style.tableCell}>
                                         <Link to={`/groovy/board/detailDept/${e.seq}`}>{e.title}</Link>
-                                    </td>
-                                    <td>{e.view_count}</td>
-                                    <td>{e.category}</td>
-                                    <td>{e.write_date}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                    </div>
+                                    <div className={style.tableCell}>{e.view_count}</div>
+                                    <div className={style.tableCell}>{e.category}</div>
+                                    <div className={style.tableCell}>{e.write_date}</div>
+                                </div>
+                            ))
+                            : visibleBoard
+                                .filter(
+                                    (e) =>
+                                        e.name.includes(search) ||
+                                        e.contents.includes(search) ||
+                                        e.title.includes(search)
+                                )
+                                .map((e) => (
+                                    <div key={e.seq} className={style.tableRow}>
+                                        <div className={style.tableCell}>
+                                            {e.name} {e.position}
+                                        </div>
+                                        <div className={style.tableCell}>
+                                            {e.fseq !== 0 && (
+                                                <InsertLinkIcon sx={{ color: blue[200] }} />
+                                            )}
+                                        </div>
+                                        <div className={style.tableCell}>
+                                            <Link to={`/groovy/board/detailDept/${e.seq}`}>{e.title}</Link>
+                                        </div>
+                                        <div className={style.tableCell}>{e.view_count}</div>
+                                        <div className={style.tableCell}>{e.category}</div>
+                                        <div className={style.tableCell}>{e.write_date}</div>
+                                    </div>
+                                ))}
+                    </div>
                 </div>
                 <hr></hr>
                 <div className={style.margin}>
-                <Pagination
-                    count={totalPages}
-                    page={currentPage}
-                    onChange={onPageChange}
-                    size="medium"
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        padding: "15px 0",
-                    }}
-                    renderItem={(item) => (
-                        <PaginationItem {...item} sx={{ fontSize: 15 }} />
-                    )}
-                />
+                    <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={onPageChange}
+                        size="medium"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: "15px 0",
+                        }}
+                        renderItem={(item) => (
+                            <PaginationItem {...item} sx={{ fontSize: 15 }} />
+                        )}
+                    />
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default DeptBoard;

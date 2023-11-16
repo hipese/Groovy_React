@@ -63,6 +63,15 @@
     border-radius: 15px;
 }
 
+.msg_left_time_container {
+    width: fit-content;
+    padding-left: 3px;
+    font-size: xx-small;
+    display: flex;
+    align-items: end;
+    padding-bottom: 7px;
+}
+
 .msg_right_container {
     display: flex;
     justify-content: end;
@@ -72,10 +81,26 @@
 }
 
 .msg_right {
+    justify-content: end;
+    width: 100%;
+    margin-right: 0px;
+}
+
+.msg_right_time_container {
+    width: fit-content;
+    padding-right: 3px;
+    font-size: xx-small;
+    display: flex;
+    align-items: end;
+    padding-bottom: 0px;
+}
+
+.msg_right_contents {
     word-break: break-all;
     width: fit-content;
     max-width: 50%;
     height: fit-content;
+    width: fit-content;
     /* border: 1px solid rgb(140, 140, 140); */
     background-color: rgb(55,151,240);
     color: white;

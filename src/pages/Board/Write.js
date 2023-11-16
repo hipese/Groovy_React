@@ -5,67 +5,108 @@ import axios from 'axios';
 import ReactQuill from './ReactQuill';
 import { LoginContext } from '../../App';
 import { MemberContext } from '../Groovy/Groovy';
+import Button from '@mui/material/Button';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import FolderIcon from '@mui/icons-material/Folder';
 
 function Write() {
   const { member } = useContext(MemberContext);
 
-  const [board, setBoard] = useState({ seq: "", title: "", writer: "", contents: "", file: "", view_count: "", category: "", write_date: "", dept: "" });
-  const [file, setFile] = useState(null);
+  const [board, setBoard] = useState({});
+  const [files, setFiles] = useState([]);
   const navi = useNavigate();
   const { loginID } = useContext(LoginContext);
 
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setBoard(prev => ({ ...prev, [name]: value }));
-  }
+    setBoard((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  }
+    const selectedFiles = e.target.files;
+    setFiles(Array.from(selectedFiles));
+  };
 
-  const handleAdd = (isTemp) => {
-    if (isTemp) {
-    } else {
-      const formData = new FormData();
-      formData.append('writer', loginID);
-      formData.append('title', board.title);
-      formData.append('contents', board.contents);
-      formData.append('category', board.category);
-      formData.append('dept', member.group_name);
+  const handleAdd = () => {
 
-      if (file) {
-        formData.append('files', file);
-      }
-
-      if (board.comDept === 'com') {
-        axios.post('/api/boards', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-          .then(resp => {
-            navi('/groovy/board');
-            console.log(resp.data);
-          })
-          .catch(e => {
-            console.error(e);
-          });
-      } else if (board.comDept === 'dept') {
-        axios.post('/api/boards/dept', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-          .then(resp => {
-            navi('/groovy/board');
-            console.log(resp.data);
-          })
-          .catch(e => {
-            console.error(e);
-          });
-      }
+    if (!board.title) {
+      alert("제목을 입력하세요.");
+      return;
     }
-  }
+
+    if (!board.comDept) {
+      alert("전사/부서를 선택하세요.");
+      return;
+    }
+
+    if (!board.category) {
+      alert("공지/자유를 선택하세요.");
+      return;
+    }
+
+    console.log('Before trim:', board.contents);
+    const trimContent = board.contents.trim();
+    console.log('After trim:', trimContent);
+    if (!trimContent) {
+      alert("내용을 입력하세요.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('writer', loginID);
+    formData.append('title', board.title);
+    formData.append('contents', trimContent);
+    formData.append('category', board.category);
+    formData.append('dept', member.group_name);
+
+    files.forEach((file) => {
+      formData.append(`files`, file);
+    });
+
+    if (board.comDept === 'com') {
+      axios
+        .post('/api/boards', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((resp) => {
+          navi('/groovy/board');
+          console.log(resp.data);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    } else if (board.comDept === 'dept') {
+      axios
+        .post('/api/boards/dept', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((resp) => {
+          navi('/groovy/board');
+          console.log(resp.data);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }
+  };
 
   return (
     <div className="boardContainer">
@@ -73,37 +114,97 @@ function Write() {
       <hr></hr>
       <div className={style.margin}>
         제목
-        <input type="text" placeholder="제목" name="title" onChange={handleChange} value={board.title} className={style.title} /><br />
+        <input
+          type="text"
+          placeholder="제목"
+          name="title"
+          onChange={handleChange}
+          value={board.title}
+          className={style.title}
+        />
+        <br />
         <hr></hr>
-        파일 첨부
-        <input type="file" onChange={handleFileChange} className={style.file} /><br />
+        <div className={style.fileList}>
+          파일 첨부
+          <Button
+            sx={{ width: '10%', marginLeft: '29px' }}
+            component="label"
+            variant="contained"
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload
+            <input
+              type="file"
+              onChange={handleFileChange}
+              className={style.file}
+              style={{ display: 'none' }}
+              multiple
+            />
+          </Button>
+          <List
+            sx={{ width: '50%', bgcolor: 'background.paper', marginLeft: "30px" }}
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+          >
+            <ListItemButton onClick={handleClick}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="업로드 파일 목록" />
+              {open ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {files.length > 0 && (
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <FolderIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        <React.Fragment>
+                          {files.map((file, index) => (
+                            <ListItemButton key={index} sx={{ pl: 4 }}>
+                              <ListItemText primary={file.name} />
+                            </ListItemButton>
+                          ))}
+                        </React.Fragment>
+                      }
+                    />
+                  </ListItemButton>
+                )}
+              </List>
+            </Collapse>
+          </List>
+        </div>
         <hr></hr>
-        전사/부서
-        <select name="comDept" onChange={handleChange} value={board.comDept} className={style.category}>
-          <option value="">선택</option>
-          <option value="com">전사</option>
-          <option value="dept">부서</option>
-        </select>
-        <hr></hr>
-        공지/자유
-        <select name="category" onChange={handleChange} value={board.category} className={style.category}>
-          <option value="">선택</option>
-          <option value="공지">공지</option>
-          <option value="자유">자유</option>
-        </select>
+        <div className={style.select}>
+          <div>
+            전사/부서
+            <select name="comDept" onChange={handleChange} value={board.comDept} className={style.category}>
+              <option value="">선택</option>
+              <option value="com">전사</option>
+              <option value="dept">부서</option>
+            </select>
+          </div>
+          <div className={style.comFree}>
+            공지/자유
+            <select name="category" onChange={handleChange} value={board.category} className={style.category}>
+              <option value="">선택</option>
+              <option value="공지">공지</option>
+              <option value="자유">자유</option>
+            </select>
+          </div>
+        </div>
       </div>
       <hr></hr>
       <div className={style.editor}>
-        <ReactQuill
-          id="editor"
-          value={board.contents}
-          setValue={(value) => setBoard({ ...board, contents: value })}
-        />
+        <ReactQuill id="editor" value={board.contents} setValue={(value) => setBoard({ ...board, contents: value })} style={{ height: "325px", width: "100%" }} />
       </div>
       <hr></hr>
       <div className={style.btn}>
-        <button onClick={() => handleAdd(true)}>임시저장</button>
-        <button onClick={() => handleAdd(false)}>등록</button>
+        <button>취소</button>
+        <button onClick={handleAdd}>등록</button>
       </div>
     </div>
   );

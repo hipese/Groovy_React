@@ -194,7 +194,7 @@ const Sign_Write = () => {
                                     onChange={handleChange}
                                 >
                                     <MenuItem value="품의서">품의서</MenuItem>
-                                    <MenuItem value="휴가신청서">증명서</MenuItem>
+                                    <MenuItem value="증명서">증명서</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>

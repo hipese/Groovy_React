@@ -79,7 +79,7 @@ const AttendenceWrite = () => {
     });
     const [startDate, setStartDate] = React.useState(dayjs());
     const [endDate, setEndDate] = React.useState(dayjs());
-    const [total_date, setTotal_date] = useState();
+    const [total_date, setTotal_date] = useState(1);
     const currentDatePicker = dayjs();
 
 
