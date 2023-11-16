@@ -203,7 +203,7 @@ const Sign_Write = () => {
                             sx={{ width: '200px' }}
                             id="outlined-read-only-input"
                             label="기안작성자"
-                            value={loginID}
+                            value={signWriterInfo.name}
                             InputProps={{
                                 readOnly: true,
                                 startAdornment: (

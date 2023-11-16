@@ -37,6 +37,14 @@ const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, s
     }, []);
 
 
+    const closeOK = () => {
+        if (!approver || !approver.id) {
+            alert("승인자를 선택해주세요");
+            return;
+        }
+        close();
+    }
+
     if (!isOpen) return null;
 
     if (loading) {
@@ -94,6 +102,7 @@ const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, s
             </div>
 
             <div className={style.modal_footer}>
+                <button onClick={closeOK} className={style.modal_close_button}>확인</button>
                 <button onClick={close} className={style.modal_close_button}>닫기</button>
             </div>
         </div>
