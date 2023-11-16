@@ -3,7 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import style from "./Detail.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
-import ReactQuill from './ReactQuill.js';
+import ReactQuill from './ReactQuill.js'
 
 import { LoginContext } from '../../App';
 
@@ -209,14 +209,7 @@ const DetailDept = () => {
                     </div>
                         <hr></hr></>
                 )}
-                <div className={style.contents}>
-                    <ReactQuill
-                        id="editor"
-                        value={Board.contents}
-                        style={{ height: "440px", width: "100%" }}
-                        readOnly={true}
-                    />
-                </div>
+                <div className={style.contents} dangerouslySetInnerHTML={{ __html: Board.contents }}></div>
             </div>
             {showReply && (
                 <>

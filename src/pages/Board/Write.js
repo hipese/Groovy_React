@@ -47,18 +47,21 @@ function Write() {
       alert("제목을 입력하세요.");
       return;
     }
-  
+
     if (!board.comDept) {
       alert("전사/부서를 선택하세요.");
       return;
     }
-  
+
     if (!board.category) {
       alert("공지/자유를 선택하세요.");
       return;
     }
-  
-    if (!board.contents) {
+
+    console.log('Before trim:', board.contents);
+    const trimContent = board.contents.trim();
+    console.log('After trim:', trimContent);
+    if (!trimContent) {
       alert("내용을 입력하세요.");
       return;
     }
@@ -66,7 +69,7 @@ function Write() {
     const formData = new FormData();
     formData.append('writer', loginID);
     formData.append('title', board.title);
-    formData.append('contents', board.contents);
+    formData.append('contents', trimContent);
     formData.append('category', board.category);
     formData.append('dept', member.group_name);
 
@@ -196,7 +199,7 @@ function Write() {
       </div>
       <hr></hr>
       <div className={style.editor}>
-        <ReactQuill id="editor" value={board.contents} setValue={(value) => setBoard({ ...board, contents: value })} style={{ height: "325px", width: "100%" }}/>
+        <ReactQuill id="editor" value={board.contents} setValue={(value) => setBoard({ ...board, contents: value })} style={{ height: "325px", width: "100%" }} />
       </div>
       <hr></hr>
       <div className={style.btn}>
