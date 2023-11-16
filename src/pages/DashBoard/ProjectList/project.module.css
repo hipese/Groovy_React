@@ -1,11 +1,15 @@
+
 .list{
-    width: 1000px;
-    margin: auto;
+    height: 100%;
+    max-height: 570px;
 }
 
 .contentDiv{
     width: 1100px;
     height: 790px;
+}
+.padding5{
+    padding: 5px;
 }
 
 .padding10{

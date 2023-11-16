@@ -23,7 +23,7 @@ const ProjectCreate = () => {
 
     const handleChange = (e) => {
         const {name,value} = e.target;
-        setNewProject(prev=>({...prev,[name]:value}));
+        setNewProject(prev=>({...prev,[name]:value,pmanager:loginID}));
     }
 
     const handleProjectAdd = async () => {
