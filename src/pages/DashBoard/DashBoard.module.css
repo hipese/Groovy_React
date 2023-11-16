@@ -51,6 +51,10 @@ div{
     height: 290px;
 }
 
+.calendar{
+    height: 550px;
+}
+
 .projectsection{
     border: 1px solid black;
     border-radius: 10px;
