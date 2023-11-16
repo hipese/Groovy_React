@@ -211,14 +211,7 @@ const Detail = () => {
                         <hr></hr>
                     </>
                 )}
-                <div className={style.contents}>
-                    <ReactQuill
-                        id="editor"
-                        value={Board.contents}
-                        style={{ height: "440px", width: "100%" }}
-                        readOnly={true}
-                    />
-                </div>
+                <div className={style.contents} dangerouslySetInnerHTML={{ __html: Board.contents }}></div>
             </div>
             {showReply && (
                 <>
