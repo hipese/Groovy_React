@@ -74,7 +74,13 @@ function DotBadge() {
         contents: receivedMessage.message, // 서버의 'message'를 클라이언트의 'contents'로 변환
       };
       console.log(transformedMessage);
-      setNotifications((prevNotifications) => [...prevNotifications, transformedMessage]);
+      setNotifications((prevNotifications) => [transformedMessage, ...prevNotifications]);
+
+      if (transformedMessage.contents.includes("전자결재")) {
+        transformedMessage.link = `/Groovy/signlist/detail/${transformedMessage.parent_seq}`;
+      } else if (transformedMessage.contents.includes("휴가")) {
+        transformedMessage.link = `/Groovy/attendence/detail/${transformedMessage.parent_seq}`;
+      }
     };
 
     if (stompClient) {
@@ -167,7 +173,7 @@ function DotBadge() {
         <div ref={dropdownRef} className={style.noticeContainer}>
           {notifications.map((notification, index) => (
             <div key={index} className={style.notice} onClick={() => handleNotificationCheck(notification.parent_seq)}>
-              <Link to={`/Groovy/signlist/detail/${notification.parent_seq}`}>
+              <Link to={notification.link || "#"}>
                 {notification.contents.includes("승인") ? (
                   <Alert severity="success">{notification.contents}</Alert>
                 ) : notification.contents.includes("반려") ? (
