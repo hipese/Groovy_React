@@ -3,6 +3,8 @@ import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import style from "./Detail.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
+import ReactQuill from './ReactQuill.js'
+
 
 import { LoginContext } from '../../App';
 
@@ -15,12 +17,13 @@ const Detail = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const COUNT_PER_PAGE = 4;
 
-    const [Board, setBoard] = useState({ seq: "", title: "", writer: "", contents: "", file: "", view_count: "", category: "", write_date: "" });
+    const [Board, setBoard] = useState({});
     const [Reply, setReply] = useState([]);
     const [newReply, setNewReply] = useState('');
     const [showReply, setShowReply] = useState(false);
     const [editingReply, setEditingReply] = useState(null);
     const [editedReply, setEditedReply] = useState('');
+    const [files, setFiles] = useState([]);
 
     useEffect(() => {
         axios.get(`/api/boards/com/${seq}`).then((resp) => {
@@ -36,6 +39,16 @@ const Detail = () => {
             });
         }
     }, [Board]);
+
+    useEffect(() => {
+        axios.get(`/api/boardFile/${seq}`).then((resp) => {
+            setFiles(resp.data);
+        });
+    }, [seq]);
+
+    const handleBack = () => {
+        navi(-1);
+    };
 
     const handleDelete = () => {
         axios
@@ -56,7 +69,6 @@ const Detail = () => {
             })
             .catch(() => { });
     };
-
 
     const handleAddReply = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -111,6 +123,29 @@ const Detail = () => {
             .catch(() => { });
     };
 
+    const handleDownload = (sysName) => {
+        axios.get(`/api/boardFile/download/${sysName}`, {
+            responseType: 'blob',
+        })
+            .then((response) => {
+                const file = new Blob([response.data], { type: response.headers['content-type'] });
+                const fileURL = URL.createObjectURL(file);
+
+                const link = document.createElement('a');
+                link.href = fileURL;
+                link.setAttribute('download', sysName);
+                document.body.appendChild(link);
+
+                link.click();
+
+                link.parentNode.removeChild(link);
+                URL.revokeObjectURL(fileURL);
+            })
+            .catch((error) => {
+            });
+    };
+
+
     const totalItems = Reply.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
 
@@ -124,52 +159,67 @@ const Detail = () => {
 
     return (
         <div className={style.boardContainer}>
-            <table border={1}>
-                <thead>
-                    <tr>
-                        <th colSpan={7}>{`${Board.writer} 님의 메세지`}</th>
-                    </tr>
-                    <tr>
-                        <th>Seq</th>
-                        <th>Writer</th>
-                        <th>Title</th>
-                        <th>Contents</th>
-                        <th>View_Count</th>
-                        <th>Category</th>
-                        <th>Write_Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{Board.seq}</td>
-                        <td>{Board.writer}</td>
-                        <td>{Board.title}</td>
-                        <td>{Board.contents}</td>
-                        <td>{Board.view_count}</td>
-                        <td>{Board.category}</td>
-                        <td>{Board.write_date}</td>
-                    </tr>
-                    <tr>
-                        <td colSpan={7} align="end" className={style.buttons}>
+            <div>
+                <div className={style.title}>{Board.title}</div>
+                <div className={style.info}>
+                    <div className={style.left}>
+                        <div className={style.image}>
+                            <img src={Board.profile_image ? `/profiles/${Board.profile_image}` : `/assets/Default_pfp.svg`} alt="profile" />
+                        </div>
+                    </div>
+                    <div className={style.right}>
+                        <div className={style.writer}>{Board.name} {Board.group_name} {Board.position}</div>
+                        <div className={style.num}>
+                            <div className={style.write_date}>{Board.write_date}</div>
+                            <div className={style.view_count}>조회수 {Board.view_count}</div>
+                        </div>
+                    </div>
+                    <div className={style.end}>
+                        <div align="end" className={style.buttons}>
                             {loginID == Board.writer ? (
                                 <>
-                                    <Link to="/groovy/board">
-                                        <button>Back</button>
-                                    </Link>
+                                    <button onClick={handleBack}>Back</button>
                                     <button onClick={handleDelete}>Del</button>
                                     <Link to={`/groovy/board/update/${seq}`}>
                                         <button>Edit</button>
                                     </Link>
                                 </>
                             ) : (
-                                <Link to="/groovy/board">
-                                    <button>Back</button>
-                                </Link>
+                                <button onClick={handleBack}>Back</button>
                             )}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                        </div>
+                    </div>
+                </div>
+                <hr></hr>
+                {files.length > 0 && (
+                    <><div className={style.file}>
+                        첨부 파일 :
+                        <div className={style.files}>
+                            {files.map((file) => (
+                                <p key={file.file_seq}>
+                                    |{" "}
+                                    <span
+                                        style={{ color: "blue", cursor: "pointer" }}
+                                        onClick={() => handleDownload(file.sys_name)}
+                                    >
+                                        {file.ori_name}
+                                    </span>
+                                </p>
+                            ))}
+                        </div>
+                    </div>
+                        <hr></hr>
+                    </>
+                )}
+                <div className={style.contents}>
+                    <ReactQuill
+                        id="editor"
+                        value={Board.contents}
+                        style={{ height: "440px", width: "100%" }}
+                        readOnly={true}
+                    />
+                </div>
+            </div>
             {showReply && (
                 <>
                     <hr />
@@ -194,11 +244,12 @@ const Detail = () => {
                                         <p>{reply.name} {reply.group_name} {reply.position}</p>
                                         {editingReply === reply.seq ? (
                                             <>
-                                                <textarea className={style.replyForm} rows="4" value={editedReply} onChange={(e) => setEditedReply(e.target.value)} />
-                                                <div className={style.btn}>
-                                                    <button onClick={handleSaveEdit}>완료</button>
-                                                    <button onClick={handleCancelEdit}>취소</button>
-                                                </div>
+                                                <textarea className={style.replyForm} rows="4" value={editedReply} onChange={(e) => setEditedReply(e.target.value)}>
+                                                    <div className={style.btn}>
+                                                        <button onClick={handleSaveEdit}>완료</button>
+                                                        <button onClick={handleCancelEdit}>취소</button>
+                                                    </div>
+                                                </textarea>
                                             </>
                                         ) : (<p>{reply.contents}</p>)}
                                         <p>{reply.write_date}</p>

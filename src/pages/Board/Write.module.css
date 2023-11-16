@@ -1,13 +1,13 @@
-.buttons{
+.buttons {
     display: flex;
     justify-content: space-evenly;
 }
 
-.buttons button{
+.buttons button {
     margin: 5px;
 }
 
-.write{
+.write {
     margin-left: 30px;
     margin-right: 30px;
     margin-top: 30px;
@@ -15,33 +15,47 @@
     font-weight: bold;
 }
 
-hr{
+hr {
     margin-left: 30px;
     margin-right: 30px;
 }
 
-.title{
+.title {
     width: 84%;
     margin-left: 67px;
 }
 
-.file{
+.file {
     margin-left: 30px;
 }
 
-.category{
+.fileList {
+    display: flex;
+    align-items: center;
+}
+
+.select {
+    display: flex;
+    align-items: center;
+}
+
+.comFree {
+    margin-left: 30px;
+}
+
+.category {
     width: 100px;
     margin-left: 30px;
     border: 1px solid black;
 }
 
-.margin{
+.margin {
     margin-left: 30px;
     margin-right: 30px;
     margin-top: 15px;
 }
 
-.editor{
+.editor {
     margin-left: 30px;
     margin-right: 30px;
     margin-top: 15px;
@@ -57,7 +71,7 @@ hr{
     margin: 25px;
 }
 
-.btn button{
+.btn button {
     margin: 5px;
     width: 100px;
     height: 40px;
