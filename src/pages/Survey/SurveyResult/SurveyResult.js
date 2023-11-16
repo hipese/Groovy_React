@@ -50,8 +50,12 @@ const SurveyResult = () => {
     const navi = useNavigate();
 
     const [data,setData] = useState([]);
+    const [shortData,setShortData] = useState([]);
     const [multiCount,setMultiCount] = useState([]);
+
+    const [short,setShort] = useState([]);
     const [array,setArray] = useState([]);
+
     const [goUpate,setGoUpdate] = useState(0);
     
     const modifyMultiData = (ques) => {
@@ -63,8 +67,23 @@ const SurveyResult = () => {
         return multiChartData;
     };
 
+    const modifyShortData = () => {
+        const tempdata = {};
+        shortData.forEach((e)=>{
+            const {short_seq} = e;
+            if(!tempdata[short_seq]){
+                tempdata[short_seq] = [];
+            }
+            tempdata[short_seq].push(e);
+        });
+        return Object.values(tempdata);
+    };
+
     const getData = async () => {
-        const res = await axios.get(`/api/survey/result/${seq}`);
+        const res = await axios.get(`/api/survey/multiResult/${seq}`);
+        const shortres = await axios.get(`/api/survey/shortResult/${seq}`);
+        
+        setShortData(shortres.data);
         setData(res.data);
 
         const number = [...new Set(res.data.map(e => e.multi_seq))];
@@ -78,6 +97,10 @@ const SurveyResult = () => {
             })
         }
     }    
+    const updateShortArray = () => {
+        const newShortData = modifyShortData();
+        setShort(newShortData);
+    }
 
     useEffect(() => {
         
@@ -90,12 +113,14 @@ const SurveyResult = () => {
 
     useEffect(()=>{
         updateArray();
+        updateShortArray();
     },[goUpate]);
 
     const show = () =>{
         console.log(multiCount.length);
         console.log(data);
         console.log(array);
+        console.log(short);
     }
 
     return(
@@ -104,6 +129,29 @@ const SurveyResult = () => {
                 <Typography sx={{fontWeight:"bold"}}>
                     질문
                 </Typography>                
+            </div>
+            <div>
+                {short.map((element, index) => {
+                    const shortSeqNumber = element[index].short_seq;
+                    return (
+                        <div key={index} className={`${style.borderbtm}`}>
+                            <div className={`${style.padding20}`}>
+                                <Typography sx={{fontWeight:"bold"}}>
+                                    {`${shortSeqNumber}번째 주관식 질문`}
+                                </Typography>
+                            </div>
+                            <Divider sx={{bgcolor:"black"}}/>
+                            {element.map((e, i) => (
+                                <div key={i}>
+                                    <div className={`${style.padding10}`}>
+                                        {e.short_res_contents}
+                                        <Divider/>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    );
+                })}
             </div>
             <div>
                 {array.map((e,i)=>{

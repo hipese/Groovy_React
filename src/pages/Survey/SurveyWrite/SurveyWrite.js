@@ -57,15 +57,8 @@ const ShortAnswer = ({seq}) => {
     
     const handleChange = (e, seq) => {
         const {name,value} = e.target;
-        //const i = e.target.dataset.key;
 
-        //console.log(seq);
-
-        const tempList = [...shortAnswers];
-        console.log(tempList.length);
-        
-        
-
+        const tempList = [...shortAnswers];  
         tempList[seq] = {...tempList[seq], type:"short",[name]:value};
 
         setShortAnswers(tempList);
@@ -97,6 +90,7 @@ const LongAnswer = () => {
 }
 const MultipleChoice = ({seq}) => {
     const [newQuestions, setNewQuestions] = useState(['']);
+    const [multiContents,setMultiContents] = useState([]);
     
     const {result,setResult,formedAns, setFormedAns,multiAnswers,setMultiAnswers} = useContext(QuestionContext);
 
@@ -110,6 +104,13 @@ const MultipleChoice = ({seq}) => {
 
     }
 
+    const handleContentsChange = (e) => {
+        const {name,value} = e.target;
+
+        setMultiContents(prev=>({...prev,[name]:value}));
+        
+    }
+
     const addQuestion = () => {
     if (newQuestions.length > 4) {
         alert("질문은 5개 이상 작성할 수 없습니다.");
@@ -120,8 +121,8 @@ const MultipleChoice = ({seq}) => {
 
     const show = () => {
         const tempList = [...multiAnswers];
-
-        tempList[seq] = {type: "multi", questions:newQuestions};
+        const tempContents = multiContents.contents;
+        tempList[seq] = {type: "multi", questions:newQuestions, contents:tempContents};
 
         setMultiAnswers(tempList);
     }
@@ -129,17 +130,21 @@ const MultipleChoice = ({seq}) => {
     return (
     <div>
         <div className={`${style.border} ${style.center} ${style.marginT20}`}>
-        객관식 질문 <button onClick={addQuestion}>객관식 보기 추가</button>
-        {newQuestions.map((question, index) => (
-            <div key={index} className={`${style.padding10}`}>
-            <input
-                type="text"
-                value={question}
-                onChange={(e) => handleChange(e, index)}
-                onBlur={show}
-            />
+        객관식 질문 : <input type="text" name='contents' placeholder='객관식 질문 입력' onChange={(e)=>handleContentsChange(e)}/> 
+        <button onClick={addQuestion}>객관식 보기 추가</button>
+            <div>
+                {newQuestions.map((question, index) => (
+                    <div key={index} className={`${style.padding10}`}>
+                    <input
+                        type="text"
+                        value={question}
+                        placeholder={`${index+1}번 보기`}
+                        onChange={(e) => handleChange(e, index)}
+                        onBlur={show}
+                    />
+                    </div>
+                ))}
             </div>
-        ))}
         </div>
     </div>
     );
@@ -200,7 +205,7 @@ const SurveyWrite = () => {
     const {loginID} = useContext(LoginContext);
     const [result,setResult] = useState([]);
     const [shrtAns,setShrtAns] = useState({type:"subjective",questions:""});
-    const [formedAns, setFormedAns] = useState({ type: "multi", questions: [] });
+    const [formedAns, setFormedAns] = useState({ type: "multi", questions: [], contents : "" });
     const [survey,setSurvey] = useState({surtitle:"",surcontents:"",surwriter:loginID});
 
     const [shortAnswers,setShortAnswers] = useState([]); //주관식 질문들을 담는 state
