@@ -115,7 +115,7 @@ const AttendenceMain = () => {
                                     </TableCell>
                                     <TableCell align="center">{`${myVacation.totalAnnualEntitlement}일`}</TableCell>
                                     <TableCell align="center">{total_vactionDate + '일'}</TableCell>
-                                    <TableCell align="center">{`${myVacation.remainingDays - total_vactionDate}일`}</TableCell>
+                                    <TableCell align="center">{`${myVacation.totalAnnualEntitlement - total_vactionDate}일`}</TableCell>
                                 </TableRow>
                                 : "사용자를 불러오지 못하였습니다."}
                         </TableBody>

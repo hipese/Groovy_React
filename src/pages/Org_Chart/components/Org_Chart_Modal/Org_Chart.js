@@ -39,7 +39,7 @@ const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, s
 
     const closeOK = () => {
         if (!approver || !approver.id) {
-            alert("승인자를 선택해주세요");
+            alert("결재자를 선택해주세요");
             return;
         }
         close();

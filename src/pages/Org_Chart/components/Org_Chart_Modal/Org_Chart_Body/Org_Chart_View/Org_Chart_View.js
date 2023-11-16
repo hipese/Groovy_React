@@ -34,7 +34,7 @@ const Org_Chart_View = ({ approver, selectMemberdetail }) => {
             )} */}
 
             {approver && !approver.id ? <div className={style.null}>
-                결제자를 선택해주세요
+                결재자를 선택해주세요
             </div> : <div className={style.view_div}>
                 <div className={style.title}>
                     {approver.group_name ? `${approver.group_name} ${approver.position}` : `${approver.position}`}
