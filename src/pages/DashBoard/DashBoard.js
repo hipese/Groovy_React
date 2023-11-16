@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import style from './DashBoard.module.css';
-import { Button, ButtonGroup, Divider, Grid, IconButton, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Button, ButtonGroup, Divider, Grid, IconButton, List, ListItem, ListItemText, Pagination, PaginationItem, Typography } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
@@ -15,7 +15,7 @@ import { BrowserRouter, Link, Route, Routes, useNavigate } from 'react-router-do
 import ProjectList from './ProjectList/ProjectList';
 import DeptNotice from './DeptNotice/DeptNotice';
 import { format } from 'date-fns';
-import { DateCalendar, DatePicker, LocalizationProvider, StaticDatePicker } from '@mui/x-date-pickers';
+import { DateCalendar, DatePicker, LocalizationProvider, PickersDay, StaticDatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ControlCameraSharp } from '@mui/icons-material';
@@ -183,6 +183,13 @@ const Worksection = () => {
 }
 
 const Signsection = () => {
+    const navi = useNavigate();
+
+    const handleSignButton = (e) => {
+        const {name} = e.target;
+        navi(`/Groovy/signlist/${name}`);
+        
+    }
     return (
         <div className={style.signsection}>
             <div className={`${style.padding10}`}>
@@ -191,20 +198,29 @@ const Signsection = () => {
             <div className={`${style.signContents} ${style.center}`}>
                 <Box sx={{ '& button': { m: 1 } }}>
                     <div className={`${style.signBtns}`}>
-                        <Button variant="outlined" size="medium">
-                            대기
-                        </Button>
-                        <Button variant="outlined" size="medium">
-                            확인
-                        </Button>
+                        
+                            <Button variant="outlined" name="wait" size="medium" onClick={handleSignButton}>
+                                대기
+                            </Button>
+                        
+                        
+                            <Button variant="outlined" name="" size="medium" onClick={handleSignButton}>
+                                확인
+                            </Button>
+                        
+
                     </div>
                     <div className={`${style.signBtns}`}>
-                        <Button variant="outlined" size="medium">
-                        예정
-                        </Button>
-                        <Button variant="outlined" size="medium">
-                        진행
-                        </Button>
+                        
+                            <Button variant="outlined" name="progress" size="medium" onClick={handleSignButton}>
+                                진행
+                            </Button>
+                        
+                        
+                            <Button variant="outlined" name="complete" size="medium" onClick={handleSignButton}>
+                                완료
+                            </Button>
+                        
                     </div>
                 </Box>
             </div>
@@ -213,15 +229,72 @@ const Signsection = () => {
 }
 
 const Calandarsection = () => {
+    const {loginID} = React.useContext(LoginContext);
+    const HighlightedDay = styled(PickersDay)(({ theme }) => ({
+        "&.Mui-selected": {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+        },
+    }));
+    
+      //higlight the dates in highlightedDays arra
+    const ServerDay = (props) => {
+        const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
+    
+        const isSelected =
+        !props.outsideCurrentMonth &&
+        highlightedDays.includes(day.format("YYYY-MM-DD"));
+
+        return (
+            <HighlightedDay
+            {...other}
+            outsideCurrentMonth={outsideCurrentMonth}
+            day={day}
+            selected={isSelected}
+            />
+            );
+        };
+
+    const [highlightedDays, setHighlitedDays] = React.useState([]);
+    const [calendarData,setCalendarData] = React.useState([]);
+
+    React.useEffect(()=>{
+        const tempArray = [];
+        if(calendarData.length>0){
+            calendarData.map((e,i)=>{
+                tempArray.push(format(new Date(e.starttime), 'yyyy-MM-dd'));
+            });
+        }
+        setHighlitedDays(prev=>[...prev,...tempArray]);
+    },[calendarData]);
+
+    React.useEffect(()=>{
+        axios.get(`/api/dash/calendar/${loginID}`).then(res=>{
+                setCalendarData(res.data);
+        }).catch((e)=>{
+            console.log(e);
+        });
+    },[]);
     const handleDate = (e) => {
         const pickedDate = format(new Date(e.$d), 'yyyy-MM-dd')
         console.log(pickedDate);
+        console.log(calendarData);
+        console.log(highlightedDays);
     }
     return (
         <div className={style.calandarsection}>
-            <div className={style.padding10}>
+            <div className={`${style.padding5}`}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateCalendar onChange={handleDate} />
+                    <DateCalendar onChange={handleDate}                        
+                        slots={{
+                            day : ServerDay,
+                        }}
+                        slotProps={{
+                            day:{
+                                highlightedDays,
+                            },
+                        }}
+                    />
                 </LocalizationProvider>
             </div>
             
@@ -232,6 +305,18 @@ const Calandarsection = () => {
 const ProjectSection = () => {
     const {loginID} = React.useContext(LoginContext);
     const {project,setProject} = React.useContext(ProjectContext);
+    
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const COUNT_PER_PAGE = 3;
+    const totalItems = project.length;
+    const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
+    const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
+    const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
+    const visibleSignList = project.slice(startIndex, endIndex);
+    const onPageChange = (e, page) => {
+        setCurrentPage(page);
+    };
+
     React.useEffect(()=>{
         
         axios.get(`/api/project/${loginID}`).then(res=>{
@@ -283,7 +368,7 @@ const ProjectSection = () => {
                 </Grid>
             </div>
             <div>
-                    {project.map((e,i)=>{
+                    {visibleSignList.map((e,i)=>{
                         return(          
                             <List sx={style} component="nav" aria-label="mailbox folders">
                                 <Link to={`/groovy/dashboard/project/content/${e.pseq}`}><ListItem button>
@@ -318,6 +403,20 @@ const ProjectSection = () => {
                             </List>
                         )
                     })}
+                    <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={onPageChange}
+                        size="medium"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: "15px 0",
+                        }}
+                        renderItem={(item) => (
+                            <PaginationItem {...item} sx={{ fontSize: 12 }} />
+                        )}
+                    />
                 
             </div>
         </div>

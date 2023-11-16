@@ -4,16 +4,40 @@ import { useContext, useEffect, useState } from "react"
 import axios from "axios";
 import style from './project.module.css'
 import { ProjectContext } from "../DashBoard.js";
-import { Divider, Grid, List, ListItem, Typography, alpha } from "@mui/material";
+import { Divider, Grid, List, ListItem, Pagination, PaginationItem, Typography, alpha } from "@mui/material";
 import styled from "styled-components";
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import ProjectCreate from "./ProjectCreate.js";
 import { format } from "date-fns";
+import { LoginContext } from "../../../App.js";
 
 const ProjectList = () => {
-    const {project,setProject} = useContext(ProjectContext);
-    console.log(project);
+    const [project,setProject] = useState([{}]);
+    const {loginID} = useContext(LoginContext);
+    const [currentPage, setCurrentPage] = useState(1);
+    const COUNT_PER_PAGE = 10;
+
+    const totalItems = project.length;
+    const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
+
+    const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
+    const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
+    const visibleSignList = project.slice(startIndex, endIndex);
+
+    const onPageChange = (e, page) => {
+        setCurrentPage(page);
+    };
+
+    useEffect(()=>{
+        
+        axios.get(`/api/project/${loginID}`).then(res=>{
+            setProject(res.data);
+        }).catch((e)=>{
+            console.log(e);
+        });
+    },[]);
+
     return(
         <div className={`${style.projectListContents}`}>
             <div className={`${style.padding10}`}>
@@ -51,8 +75,8 @@ const ProjectList = () => {
                 </Grid>
             </div>
             <hr></hr>
-            <div id='list'>
-                {project.map((e,i)=>{
+            <div className={`${style.list}`}>
+                {visibleSignList.map((e,i)=>{
                         return(
                             <List sx={style} component="nav" aria-label="mailbox folders">
                                 <Link to={`/groovy/dashboard/project/content/${e.pseq}`}><ListItem button>
@@ -84,7 +108,22 @@ const ProjectList = () => {
                             </List>
                         )
                     })}
-                
+                <div>
+                    <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={onPageChange}
+                        size="medium"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: "15px 0",
+                        }}
+                        renderItem={(item) => (
+                            <PaginationItem {...item} sx={{ fontSize: 12 }} />
+                        )}
+                    />
+                </div>
             </div>
             
         </div>

@@ -19,8 +19,8 @@ const SignSlide = () => {
             </div>
 
             <div className={style.btndiv}>
-                <Link to="write">
-                    <button className={style.btn}>새결재 진행</button>
+                <Link to="review">
+                    <button className={style.btn}>중간검토문서</button>
                 </Link>
             </div>
 

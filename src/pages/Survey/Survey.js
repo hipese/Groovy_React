@@ -1,5 +1,5 @@
 import style from './survey.module.css';
-import {Divider, Grid, IconButton, List, ListItem, Pagination, PaginationItem, Typography } from '@mui/material';
+import {Button, Divider, Grid, IconButton, List, ListItem, Pagination, PaginationItem, Typography } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
@@ -9,9 +9,9 @@ import SurveyContent from './SurveyContent/SurveyContent';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
-import BarChart from './SurveyResult/BarChart'
-import Piechart from './SurveyResult/Piechart';
 import SurveyResult from './SurveyResult/SurveyResult.js'
+import SurveyResultList from './SurveyResultList/SurveyResultList.js'
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -55,6 +55,7 @@ color: 'inherit',
 
 const SurveyList = () => {
     const [survey,setSurvey] = useState([]);
+    const [search,setSearch] = useState("");
 
     const [currentPage, setCurrentPage] = useState(1);
     const COUNT_PER_PAGE = 10;
@@ -76,11 +77,16 @@ const SurveyList = () => {
         setCurrentPage(page);
     };
 
+    const handleSearchChange = (e) => {
+        const {value} = e.target;
+        setSearch(value);
+    }
+
     return(
         <div className={`${style.surveyContents}`}>
             <div className={`${style.padding10}`}>
                 <Grid container spacing={2}>
-                    <Grid item xs={8} className={`${style.vcenter}`}>
+                    <Grid item xs={7} className={`${style.vcenter}`}>
                         <Typography variant="h5" >
                             설문조사
                         </Typography>
@@ -93,11 +99,16 @@ const SurveyList = () => {
                             <StyledInputBase
                             placeholder="Search…"
                             inputProps={{ 'aria-label': 'search' }}
+                            onChange={handleSearchChange}
                             />
                         </Search>
                     </Grid>
-                    <Grid item xs={1} className={`${style.vcenter}`}>
-                        <Link to="survey_write"><button>설문생성</button></Link>
+                    <Grid item xs={2} className={`${style.center}`}>
+                        <Link to="survey_write">
+                            <Button variant="contained" size='small' endIcon={<AddBoxIcon />}>
+                                설문 생성
+                            </Button>
+                        </Link>
                     </Grid>
                 </Grid>
             </div>
@@ -116,7 +127,7 @@ const SurveyList = () => {
                     </Grid>
                     <Grid xs={3} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
-                            작성일자
+                            작성자
                         </Typography>
                     </Grid>
                     <Grid xs={2} className={style.center}>
@@ -128,7 +139,7 @@ const SurveyList = () => {
             </div>
             <Divider sx={{bgcolor:"black"}}/>
             <div id='list' className={`${style.list}`}>
-                {visibleSignList.map((e,i)=>{
+                {visibleSignList.filter(e=>e.surtitle.includes(search) || (e.surwriter.includes(search))).map((e,i)=>{
                         return(
                             <List sx={style} component="nav" aria-label="mailbox folders">
                                 <Link to={e.surstate == 0 ? `/Groovy/survey/survey_content/${e.surseq}` : ""}>
@@ -139,12 +150,12 @@ const SurveyList = () => {
                                             {e.surseq}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={5} className={style.center}>
+                                        <Grid xs={6} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                                 {e.surtitle}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={4} className={style.center}>
+                                        <Grid xs={3} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.surwriter}
                                             </Typography>
@@ -176,7 +187,9 @@ const SurveyList = () => {
                     )}
                 />
             </div>
-            <Link to="survey_result/2">asd</Link>
+            <Link to="survey_result/33">asd</Link>
+            &nbsp;
+            <Link to="result_list">res</Link>
         </div>
     )
 }
@@ -188,6 +201,7 @@ const Survey=()=>{
             <Route path='survey_write' element={<SurveyWrite/>}></Route>
             <Route path='survey_content/:seq' element={<SurveyContent/>}></Route>
             <Route path='survey_result/:seq' element={<SurveyResult/>}></Route>
+            <Route path='result_list' element={<SurveyResultList/>}></Route>
         </Routes>
     )
 }
