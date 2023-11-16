@@ -2,11 +2,12 @@ import { Button, Divider, Grid, Typography } from '@mui/material';
 import style from './survey_content.module.css'
 import { useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { createContext } from 'react';
 import { useContext } from 'react';
 import { useState } from 'react';
 import { LoginContext } from '../../../App';
+import SendIcon from '@mui/icons-material/Send';
 
 const SurveyTitle = () => {
     const {contextData} = useContext(SurveyContext);
@@ -95,8 +96,11 @@ const SurveyQuestion = () => {
             <div className={`${style.padding40}`}>
             {questionData.map((e, i) => (
                     <div key={i}>
-                        <Typography>
-                            {`${i+1} 번 질문`}
+                        <Typography sx={{fontSize:"18",fontWeight:"bold"}}>
+                            {/* {`${i+1} 번 질문 ${e.multi_contents}`} */}
+                            {
+                                e.multi_contents != undefined ? (i+1)+"번 질문 : "+e.multi_contents : (i+1)+"번 질문"
+                            }
                         </Typography>
                         {e.type === 'short' && (
                             <div>
@@ -119,7 +123,15 @@ const SurveyQuestion = () => {
                     </div>
                 ))}
             </div>
-            <button onClick={show}>asd</button>
+            <Divider sx={{bgcolor:"black"}}/>
+            <div className={`${style.center} ${style.padding10} ${style.btnEven}`}>
+                <Link to="/Groovy/survey"><Button variant="outlined">
+                    뒤로가기
+                </Button></Link>
+                <Button variant="contained" onClick={show}  endIcon={<SendIcon />}>
+                    제출
+                </Button>
+            </div>            
         </div>
     )
 }
