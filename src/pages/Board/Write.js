@@ -1,15 +1,18 @@
-import React, { useState, useContext } from 'react'; 
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from './Write.module.css';
 import axios from 'axios';
 import ReactQuill from './ReactQuill';
-import { LoginContext } from '../../App'; 
+import { LoginContext } from '../../App';
+import { MemberContext } from '../Groovy/Groovy';
 
 function Write() {
-  const [board, setBoard] = useState({ seq: "", title: "", writer: "", contents: "", file: "", view_count: "", category: "", write_date: "" });
+  const { member } = useContext(MemberContext);
+
+  const [board, setBoard] = useState({ seq: "", title: "", writer: "", contents: "", file: "", view_count: "", category: "", write_date: "", dept: "" });
   const [file, setFile] = useState(null);
   const navi = useNavigate();
-  const { loginID } = useContext(LoginContext); 
+  const { loginID } = useContext(LoginContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,23 +31,39 @@ function Write() {
       formData.append('title', board.title);
       formData.append('contents', board.contents);
       formData.append('category', board.category);
+      formData.append('dept', member.group_name);
 
       if (file) {
         formData.append('files', file);
       }
 
-      axios.post('/api/boards', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-        .then(resp => {
-          navi('/groovy/board');
-          console.log(resp.data);
+      if (board.comDept === 'com') {
+        axios.post('/api/boards', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         })
-        .catch(e => {
-          console.error(e);
-        });
+          .then(resp => {
+            navi('/groovy/board');
+            console.log(resp.data);
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      } else if (board.comDept === 'dept') {
+        axios.post('/api/boards/dept', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+          .then(resp => {
+            navi('/groovy/board');
+            console.log(resp.data);
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
     }
   }
 
@@ -59,13 +78,18 @@ function Write() {
         파일 첨부
         <input type="file" onChange={handleFileChange} className={style.file} /><br />
         <hr></hr>
-        카테고리
+        전사/부서
+        <select name="comDept" onChange={handleChange} value={board.comDept} className={style.category}>
+          <option value="">선택</option>
+          <option value="com">전사</option>
+          <option value="dept">부서</option>
+        </select>
+        <hr></hr>
+        공지/자유
         <select name="category" onChange={handleChange} value={board.category} className={style.category}>
           <option value="">선택</option>
-          <option value="전사 공지">전사 공지</option>
-          <option value="전사 자유">전사 자유</option>
-          <option value="부서 공지">부서 공지</option>
-          <option value="부서 자유">부서 자유</option>
+          <option value="공지">공지</option>
+          <option value="자유">자유</option>
         </select>
       </div>
       <hr></hr>

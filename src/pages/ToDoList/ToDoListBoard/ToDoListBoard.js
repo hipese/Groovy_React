@@ -1,12 +1,13 @@
 import styles from "./ToDoListBoard.module.css";
 import { useContext, useState } from "react"
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import StarIcon from "../ToDoListMain/StarIcon";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
 import { ToDoListContext } from "../../Groovy/Groovy";
 import { MemberContext } from "../../Groovy/Groovy";
 import Contents from "./ToDoListContents"
+import axios from "axios";
 
 
 const StyledAvatar = styled(Avatar)({
@@ -27,6 +28,17 @@ const ToDoListBoard = () => {
   const location = useLocation();
   const { seq } = location.state;
 
+  const navigate = useNavigate();
+  const handleDeletePage = (seq) => {
+    const result = window.confirm("정말 삭제하시겠습니까?");
+
+    if (result) {
+      const result = axios.delete(`/api/tdList/${seq}`, { params: { seq: seq } });
+      setTodoList(prev => prev.filter(todo => todo.seq !== seq));
+      navigate("/Groovy/list");
+    }
+
+  };
 
 
   return (
@@ -41,12 +53,13 @@ const ToDoListBoard = () => {
                   {members.member.profile_image ? <ProfileContainer><StyledAvatar src={`/profiles/${members.member.profile_image}`} alt="profile" /></ProfileContainer> : <ProfileContainer> <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile"/></ProfileContainer>}
                 </div>
                 <div className={styles.tdlsubmit}>
-                  <button className={styles.tdlsubmitbutton} type="button">작성</button>
+                  <button className={styles.tdlsubmitbutton} type="button" onClick={() => handleDeletePage(todo.seq)}>삭제</button>
                 </div>
               </div>);
-          }
+          }    
         })}
-        <Contents />
+        
+        <Contents parent_seq={seq} />
       
 
 

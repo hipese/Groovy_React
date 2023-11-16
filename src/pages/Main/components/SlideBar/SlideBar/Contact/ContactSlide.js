@@ -6,11 +6,11 @@ const ContactSlide = () => {
     return (
         <div>
             <div className={style.mainbtn_container}>
-                <button className={style.mainbtn}>
-                    <Link to="/Groovy/contacts">
+                <Link to="/Groovy/contacts">
+                    <button className={style.mainbtn}>
                         <strong className={style.strong_main}>회사 주소록</strong>
-                    </Link>
-                </button>
+                    </button>
+                </Link>
             </div>
             <div className={style.subbtn_container}>
                 <div className={style.subbtn_wrapper}>

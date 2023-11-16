@@ -8,6 +8,8 @@
 .title {
     width: 100%;
     height: 10%;
+    font-size: 30px;
+    font-weight: bold;
 }
 
 .body {
@@ -17,11 +19,7 @@
 
 .imageDiv {
     width: 100%;
-    height: 80%;
-    display: flex;
-    justify-content: center;
-    align-items: start;
-
+    height: 50%;
 }
 
 .nameText {
@@ -36,51 +34,81 @@
     width: 100%;
     height: 10%;
 }
-.alarmsDiv{width: 100%;height: 20%;}
-.alarms{
-    width: 80%;
+
+.alarmsDiv {
+    width: 100%;
+    height: 30%;
+}
+
+.alarms {
+    width: 90%;
     height: 100%;
-    border: 2px solid rgb(0, 7, 7);
-    background-color: rgb(199, 220, 233);
-    border-radius: 20px;
-    color: black;
     font-weight: bold;
 }
-.iconDiv{
+
+.alarmsText {
+    width: 80%;
+    float: left;
+}
+
+.iconDiv {
     width: 10%;
     height: 100%;
 }
-.footer{
+
+.footer {
     width: 100%;
     height: 40%;
 }
 
-.footer ul {
-    list-style: none; /* 기본 목록 스타일 제거 */
-    padding: 20px; /* 기본 패딩 제거 */
-  }
-  
-  .footer li {
-    margin-right: 0; /* 마지막 항목의 오른쪽 간격 제거 */
-    font-size: 30px;
-    width: 40%;
-  }
+.itemdiv {
+    width: 100%;
+    height: 40%;
+}
 
-  .footer li:hover{
-    cursor: pointer;
-  }
+.btndiv {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-  .endTitle{
-    width: 100%;;
+.endTitle {
+    width: 100%;
     height: 40%;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
+
+.endimage {
+    width: 240px;
+    height: 160px;
+}
+
+.endTitle>img {
+    width: 80%;
+    height: 100%;
+}
 
 .title,
 .nameText,
-.email,.alarmsDiv,.alarms{
+.email,
+.alarmsDiv,
+.alarms {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.biggerIcon {
+    text-align: center;
+    font-size: 30px;
+}
+.footerbtn{
+    float: left;
+    width: 50%;
     display: flex;
     justify-content: center;
     align-items: center;

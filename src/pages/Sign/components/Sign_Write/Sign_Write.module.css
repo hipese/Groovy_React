@@ -15,65 +15,9 @@
     padding: 10px;
 }
 
-select {
-    width: 100%;
-    height: 100%;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    outline: 0;
-    padding: 4px;
-    border: none;
-}
-
-.setting {
-    margin-bottom: 50px;
-}
-
-.label {
-    width: 200px;
-    height: 50px;
-    background-color: whitesmoke;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.leftContainer {
     float: left;
-}
-
-.dropbox {
-    width: 200px;
-    height: 50px;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    float: left;
-
-}
-
-.rightContainer {
-    display: flex;
-    padding-left: 500px;
-}
-
-.writer {
-    width: 200px;
-    height: 50px;
-    background-color: whitesmoke;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    float: left;
-}
-
-.name {
-    width: 200px;
-    height: 50px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin-right: 750px;
 }
 
 .signline {
@@ -120,73 +64,19 @@ select {
     height: 50px;
 }
 
-.signwrite {
-    margin-left: 100px;
-    margin-bottom: 50px;
-}
-
 .title {
     font-size: 20px;
     font-weight: bold;
     margin: 10px;
     padding: 10px;
-    margin-left: 450px;
+    margin-left: 550px;
+    margin-bottom: 30px;
     margin-top: 50px;
 }
 
-.writeHead div {
-    float: left;
-}
-
-.writeHead {
-    background-color: whitesmoke;
-}
-
-.writeRow {
-    clear: both;
-    /* 이전 요소들과의 float 해제 */
+.tableBox2 {
     width: 1000px;
-    overflow: hidden;
-    /* 플로팅된 요소들을 감춤 */
-}
-
-.writeRow>div {
-    display: flex;
-    float: left;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid black;
-    font-size: 20px;
-}
-
-.writeRow>div:nth-child(1) {
-    width: 15%;
-    height: 40px;
-}
-
-.writeRow>div:nth-child(2) {
-    width: 10%;
-    height: 40px;
-}
-
-.writeRow>div:nth-child(3) {
-    width: 10%;
-    height: 40px;
-}
-
-.writeRow>div:nth-child(4) {
-    width: 25%;
-    height: 40px;
-}
-
-.writeRow>div:nth-child(5) {
-    width: 15%;
-    height: 40px;
-}
-
-.writeRow>div:nth-child(6) {
-    width: 25%;
-    height: 40px;
+    margin-left: 100px;
 }
 
 .titleRow {
@@ -214,38 +104,19 @@ select {
     height: 40px;
 }
 
+.textEditor {
+    width: 1000px;
+    margin-left: 100px;
+    height: 200px;
+    margin-bottom: 50px;
+}
+
 
 .fileRow {
-    clear: both;
-    /* 이전 요소들과의 float 해제 */
     width: 1000px;
     overflow: hidden;
     margin-left: 100px;
     margin-bottom: 50px;
-}
-
-.fileRow>div {
-    float: left;
-    border: 1px solid black;
-    font-size: 20px;
-}
-
-.fileRow>div:nth-child(1) {
-    width: 15%;
-    height: 40px;
-    display: flex;
-    float: left;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid black;
-    font-size: 20px;
-}
-
-.fileRow>div:nth-child(2) {
-    width: 85%;
-    height: 40px;
-    display: flex;
-    align-items: center;
 }
 
 .buttons {
@@ -265,16 +136,19 @@ select {
     border-radius: 5px;
     border: none;
 }
-.textDiv{
+
+.textDiv {
     float: left;
     margin: 10px;
     margin-top: 30px;
 }
-.buttonDiv{
+
+.buttonDiv {
     margin: 10px;
     float: left;
 }
-.btn{
+
+.btn {
     width: 120px;
     height: 50px;
     border-radius: 5px;
@@ -285,12 +159,14 @@ select {
     position: relative;
     z-index: 1;
 }
-.cancel{
+
+.cancel {
     background-color: rgb(130, 200, 255);
     color: white;
     border-radius: 5px;
     border: none;
 }
+
 .btn:hover,
 .apply:hover,
 .cancel:hover {

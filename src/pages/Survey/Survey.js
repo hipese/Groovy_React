@@ -1,10 +1,14 @@
 import style from './survey.module.css';
-import {Grid, IconButton, Typography } from '@mui/material';
+import {Divider, Grid, IconButton, List, ListItem, Typography } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { Link, Route, Routes } from 'react-router-dom';
 import SurveyWrite from './SurveyWrite/SurveyWrite';
+import SurveyContent from './SurveyContent/SurveyContent';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -47,6 +51,13 @@ color: 'inherit',
 }));
 
 const SurveyList = () => {
+    const [survey,setSurvey] = useState([]);
+    useEffect(()=>{
+        axios.get("/api/survey/list").then(res=>{
+            setSurvey(res.data);
+        });
+    },[]);
+
     return(
         <div className={`${style.surveyContents}`}>
             <div className={`${style.padding10}`}>
@@ -99,7 +110,37 @@ const SurveyList = () => {
             </div>
             <hr></hr>
             <div id='list'>
-
+                {survey.map((e,i)=>{
+                        return(
+                            <List sx={style} component="nav" aria-label="mailbox folders">
+                                <Link to={`/Groovy/survey/survey_content/${e.surseq}`}>
+                                    <ListItem button>
+                                    <Grid container key={i}> 
+                                        <Grid xs={1} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.surseq}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={5} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                                {e.surtitle}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={4} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.surwriter}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={2} className={style.center}>
+                                            {e.surstate}
+                                        </Grid>
+                                    </Grid>            
+                                </ListItem></Link>
+                            <Divider />
+                                
+                            </List>
+                        )
+                    })}
             </div>
         </div>
     )
@@ -110,6 +151,7 @@ const Survey=()=>{
         <Routes>
             <Route path='/' element={<SurveyList/>}></Route>
             <Route path='survey_write' element={<SurveyWrite/>}></Route>
+            <Route path='survey_content/:seq' element={<SurveyContent/>}></Route>
         </Routes>
     )
 }

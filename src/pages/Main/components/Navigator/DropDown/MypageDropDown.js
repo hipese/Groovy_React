@@ -15,8 +15,8 @@ const MypageDropDown = ({ closeDropdown }) => {
     const { loginID, setLoginID }=useContext(LoginContext)
     const navigate = useNavigate();
 
-    const handleMypage=()=>{
-        closeDropdown();
+    const handleMypage=(event)=>{
+        closeDropdown(event);
         navigate("mypagelist");
     }
 
