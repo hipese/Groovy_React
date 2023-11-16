@@ -67,7 +67,7 @@ const AttendenceStatus = () => {
                 <div className={style.documents1}>
                     <div className={style.titleText}>내 출퇴근 내역</div>
                     <div className={style.text}>
-                        출석일수를 구해는 로직을 만들어보자
+                       {attendence.length}일 중 출석횟수를 구해라
                     </div>
                     <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -77,6 +77,7 @@ const AttendenceStatus = () => {
                                     <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">출근시간</TableCell>
                                     <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">퇴근시간</TableCell>
                                     <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">총근무시간</TableCell>
+                                    {/* <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">야근시간</TableCell> */}
                                 </TableRow>
                             </TableHead>
 

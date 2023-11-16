@@ -1,4 +1,3 @@
-import { useState } from "react";
 import style from "./Org_Chart_View.module.css"
 import { Avatar, styled } from "@mui/material";
 

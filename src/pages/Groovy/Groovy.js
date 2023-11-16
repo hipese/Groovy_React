@@ -25,8 +25,25 @@ export const ListContext = createContext();
 export const ToDoListContext = createContext();
 
 const MemberContext = createContext();
+const DepartmentContext = createContext({
+    department: [],
+    setDepartment: () => {},
+  });
 
 const Groovy = () => {
+
+    // 드롭다운의 표시 상태를 관리하는 state
+    const [department, setDepartment] = useState([]);
+
+    // 드롭다운 내용을 관리하는 배열
+    useEffect(() => {
+        axios.get("/api/member/department").then(resp => {
+            console.log(resp.data);
+            setDepartment(resp.data);
+        });
+    }, []);
+
+
     const [member, setMember] = useState({});
 
     useEffect(() => {
@@ -64,6 +81,7 @@ const Groovy = () => {
     return (
         <WebSocketProvider>
             <MemberContext.Provider value={{ member, setMember }}>
+                <DepartmentContext.Provider value={{ department, setDepartment }}>
                     <div>
                         <Container className="NaviContainer g-0" fluid>
                             <Navigator />
@@ -103,10 +121,11 @@ const Groovy = () => {
 
                         </div>
                     </div>
+                </DepartmentContext.Provider>
             </MemberContext.Provider>
         </WebSocketProvider>
     );
 };
 
 export default Groovy;
-export { MemberContext};
+export { MemberContext, DepartmentContext };

@@ -1,8 +1,8 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState,useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import style from "./Sign_Write.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import style from "./Sign_SeniorlReviewWrite.module.css";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Org_Chart from '../../../Org_Chart/components/Org_Chart_Modal/Org_Chart';
 import axios from 'axios';
 import { LoginContext } from "../../../../App";
@@ -33,7 +33,19 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FolderIcon from '@mui/icons-material/Folder';
+import CircularProgress from "@mui/material/CircularProgress";
 import { MemberContext } from "../../../Groovy/Groovy";
+
+
+
+const CircularIndeterminate = () => {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <CircularProgress />
+      </Box>
+    );
+  };
+
 
 const modules = {
     toolbar: [
@@ -49,35 +61,28 @@ const formats = [
     'link',
 ];
 
-const Sign_Write = () => {
+const Sign_SeniorReviewWrite = () => {
 
     const formatDate = (date) => {
         const d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
+              month = '' + (d.getMonth() + 1),
+              day = '' + d.getDate(),
+              year = d.getFullYear();
+      
         return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
-    };
-
+      };
+      
     const todayDate = formatDate(new Date());
 
+    const { seq } = useParams();
     const stompClient = useWebSocket();
     const { loginID } = useContext(LoginContext);
-    const members = useContext(MemberContext);
-
     // 모달을 키거나 끌때 필요한 놈
     const [isModalOpen, setModalOpen] = useState(false);
     const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상새정보를 가져옵니다.
     const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
     const [signWriterInfo, setSignWriterInfo] = useState({}); //사용자의 상세정보
-
-    useEffect(() => {
-        axios.get(`/api/member/signWriterInfo/${members.member.id}`).then(resp2 => {
-            setSignWriterInfo(resp2.data);
-        });
- 
-    }, []);
+    
 
     const toggleModal = () => {
         setModalOpen(!isModalOpen);
@@ -90,14 +95,54 @@ const Sign_Write = () => {
     };
 
     const navi = useNavigate();
+    const members =useContext(MemberContext);
+    const [loading, setLoading] = useState(true);
     const [contents, setContents] = useState("");
     const [document_type, setDocument_type] = useState("품의서");
     const [title, setTitle] = useState("");
+    
     const [accept] = useState(1);
     const [comment] = useState("");
     const [formdata, setFormData] = useState({
         files: []
     });
+
+
+    useEffect(() => {
+        axios.get(`/api/member/signWriterInfo/${members.member.id}`).then(resp2 => {
+            setSignWriterInfo(resp2.data);
+        });
+ 
+    }, []);
+    
+    useEffect(() => {
+        axios.get(`/api/signlist/documentInto/${seq}`).then((resp) => {
+        
+            setLoading(false);
+            setTitle(resp.data.title);
+            setDocument_type(resp.data.document_type);
+            setContents(resp.data.contents)
+        });
+    }, [seq]);
+
+    useEffect(() => {
+        axios.get(`/api/signfiles/documentInto_files/${seq}`).then(resp1 => {
+        
+          setLoading(false);
+          setFormData(prevFormData => ({
+            ...prevFormData,
+            files: resp1.data.map(file => ({
+              // Assuming file object has a property `name`
+              // You might need to adjust this based on the actual structure of your file object
+              seq: file.seq,
+              ori_name: file.ori_name,
+              sys_name: file.sys_name,
+              parent_seq: file.parent_seq,
+            })),
+          }));
+        });
+      }, [seq]);
+
 
     const handleChange = (event) => {
         setDocument_type(event.target.value);
@@ -151,6 +196,7 @@ const Sign_Write = () => {
             submitFormData.append("files", e);
         });
 
+
         // Send the data to the server
         axios.post('/api/signlist', submitFormData)
             .then(response => {
@@ -171,11 +217,15 @@ const Sign_Write = () => {
 
     };
 
+    if (loading) {
+        // 데이터 로딩 중에는 로딩창을 표시
+        return <CircularIndeterminate />;
+      }
 
     return (
         <div>
             <div className={style.header}>
-                새 결재 진행
+                상위 부서 결재 진행
                 <hr />
             </div>
             <div className={style.documents1}>
@@ -223,7 +273,7 @@ const Sign_Write = () => {
                         <div className={style.buttonDiv}>
                             <button onClick={toggleModal} className={style.btn}>조직도 검색</button>
                             <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover}
-                                selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
+                            selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
                         </div>
                     </div>
                     <div className={style.table}>
@@ -336,7 +386,7 @@ const Sign_Write = () => {
                                                     <React.Fragment>
                                                         {formdata.files.map((file, index) => (
                                                             <ListItemButton key={index} sx={{ pl: 4 }}>
-                                                                <ListItemText primary={file.name} />
+                                                                <ListItemText primary={file.ori_name} />
                                                             </ListItemButton>
                                                         ))}
                                                     </React.Fragment>
@@ -359,4 +409,4 @@ const Sign_Write = () => {
 
     );
 };
-export default Sign_Write;
+export default Sign_SeniorReviewWrite;
