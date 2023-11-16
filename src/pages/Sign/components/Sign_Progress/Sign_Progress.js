@@ -10,16 +10,28 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { grey, blue } from '@mui/material/colors';
+import { blue } from '@mui/material/colors';
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 const Sign_Progress = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [sign_list, setSign_list] = useState([]);
+    const [loading, setLoading] = useState(true);
     const COUNT_PER_PAGE = 10;
 
     useEffect(() => {
         axios.get("/api/signlist").then((resp) => {
             setSign_list(resp.data);
+            setLoading(false);
         });
     }, []);
 
@@ -34,6 +46,11 @@ const Sign_Progress = () => {
     const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
     const visibleSignList = sign_list.slice(startIndex, endIndex);
 
+    if (loading) {
+        // 데이터 로딩 중에는 로딩창을 표시
+        return <CircularIndeterminate />;
+    }
+
     return (
         <div className={style.sign_container}>
             <div className={style.header}>
@@ -46,12 +63,12 @@ const Sign_Progress = () => {
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
-                            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '21px', fontWeight: 'bold' }, backgroundColor: blue[200] }}>
-                                <TableCell align="center">문서번호</TableCell>
-                                <TableCell align="center">결제양식</TableCell>
-                                <TableCell align="center">제목</TableCell>
-                                <TableCell align="center">기안자</TableCell>
-                                <TableCell align="center">기안일</TableCell>
+                            <TableRow sx={{ backgroundColor: blue[200] }}>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">문서번호</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결제양식</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">제목</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안자</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안일</TableCell>
                             </TableRow>
                         </TableHead>
 
@@ -66,7 +83,7 @@ const Sign_Progress = () => {
                                         {e.seq}
                                     </TableCell>
                                     <TableCell align="center">{e.document_type}</TableCell>
-                                    <Link to={`/Groovy/signlist/detail/${e.seq}`}><TableCell align="center">{e.title}</TableCell></Link>
+                                    <TableCell align="center"><Link to={`/Groovy/signlist/detail/${e.seq}`}>{e.title}</Link></TableCell>
                                     <TableCell align="center">{e.writer}</TableCell>
                                     <TableCell align="center">{e.write_date}</TableCell>
                                 </TableRow>

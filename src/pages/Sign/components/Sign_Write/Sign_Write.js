@@ -56,6 +56,8 @@ const Sign_Write = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [open, setOpen] = React.useState(true);
 
+    const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상새정보를 가져옵니다.
+
     const handleClick = () => {
         setOpen(!open);
     };
@@ -177,6 +179,7 @@ const Sign_Write = () => {
                     </div>
                     <div className={style.rightContainer}>
                         <TextField
+                            sx={{ width: '200px' }}
                             id="outlined-read-only-input"
                             label="기안작성자"
                             value={loginID}
@@ -198,7 +201,8 @@ const Sign_Write = () => {
                         </div>
                         <div className={style.buttonDiv}>
                             <button onClick={toggleModal} className={style.btn}>조직도 검색</button>
-                            <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} />
+                            <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} 
+                            selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
                         </div>
                     </div>
                     <div className={style.table}>
@@ -216,13 +220,13 @@ const Sign_Write = () => {
                             <div className={style.tableRow}>
                                 <div>부서</div>
                                 <div>
-                                    {approver &&approver.group_name ? approver.group_name : "부서을 선택하세요"}
+                                    {approver && approver.group_name ? approver.group_name : "부서을 선택하세요"}
                                 </div>
                             </div>
                             <div className={style.tableRow}>
                                 <div>직급</div>
                                 <div>
-                                    {approver &&approver.position ? approver.position : "직급을 선택하세요"}
+                                    {approver && approver.position ? approver.position : "직급을 선택하세요"}
                                 </div>
                             </div>
                         </div>
