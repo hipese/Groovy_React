@@ -10,10 +10,19 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { blue } from '@mui/material/colors';
-import { MemberContext, VacationContext } from "../../Groovy/Groovy";
+import { MemberContext } from "../../Groovy/Groovy";
 import VacationEdit from "../../Vacation/VacationEdit";
 import { Modal } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 const AttendenceMain = () => {
 
@@ -22,6 +31,8 @@ const AttendenceMain = () => {
     const [vacation_complete_list, setVacation_complete_list] = useState([]);
     const [vacation_wait_list, setVacation_wait_list] = useState([]);
     const [myVacation, setMyVacation] = useState({}); //나중에 년도 검색할거면 이거 배열로 바꾸고 로직 추가해야함
+    const [total_vactionDate, setTotal_vactionDate] = useState();
+    const [loading, setLoading] = useState(true);
 
 
     //=========================================================================
@@ -49,18 +60,28 @@ const AttendenceMain = () => {
                 setMyVacation(resp.data || {}); // find가 undefined를 반환할 경우 빈 객체를 사용합니다.
             })
         }
-    }, [members, myVacation]);
+    }, [members]);
 
 
     useEffect(() => {
-        axios.get("/api/signlist/vacation_complete").then((resp) => {
+        axios.get(`/api/attend/vacation_complete`).then((resp) => {
             setVacation_complete_list(resp.data);
+    
+            // Calculate total used days for completed documents
+            const totalUsedDays = resp.data.reduce((acc, doc) => acc + doc.total_date, 0);
+            setTotal_vactionDate(totalUsedDays);
+            setLoading(false);
         });
-
-        axios.get("/api/signlist/vacation_wait").then((resp1) => {
+    
+        axios.get("/api/attend/vacation_wait").then((resp1) => {
             setVacation_wait_list(resp1.data);
         });
     }, []);
+    
+    if (loading) {
+        // 데이터 로딩 중에는 로딩창을 표시
+        return <CircularIndeterminate />;
+    }
 
     return (
         <div>
@@ -76,9 +97,9 @@ const AttendenceMain = () => {
                         <TableHead>
                             <TableRow sx={{ backgroundColor: blue[200] }}>
                                 <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{members.member.group_name}</TableCell>
-                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year} 총연차`}</TableCell>
-                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year}년 사용연차`}</TableCell>
-                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year}년 잔여연차`}</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`총연차`}</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`사용연차`}</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`잔여연차`}</TableCell>
                             </TableRow>
                         </TableHead>
 
@@ -93,8 +114,8 @@ const AttendenceMain = () => {
                                         {`${members.member.name} ${members.member.position}`}
                                     </TableCell>
                                     <TableCell align="center">{`${myVacation.totalAnnualEntitlement}일`}</TableCell>
-                                    <TableCell align="center">{`${myVacation.usedDays}일`}</TableCell>
-                                    <TableCell align="center">{`${myVacation.remainingDays}일`}</TableCell>
+                                    <TableCell align="center">{total_vactionDate + '일'}</TableCell>
+                                    <TableCell align="center">{`${myVacation.totalAnnualEntitlement - total_vactionDate}일`}</TableCell>
                                 </TableRow>
                                 : "사용자를 불러오지 못하였습니다."}
                         </TableBody>
@@ -114,7 +135,7 @@ const AttendenceMain = () => {
             <div className={style.documents2}>
                 <div className={style.titleText}>휴가신청 완료</div>
                 <div className={style.text}>
-                    <Link to="/Groovy/signlist/wait">
+                    <Link to="/Groovy/attend/attendenceComplete">
                         {`완료된 문서가 ${vacation_complete_list.length}건이 있습니다.`}
                     </Link>
                 </div>
@@ -127,6 +148,7 @@ const AttendenceMain = () => {
                                 <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">제목</TableCell>
                                 <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안자</TableCell>
                                 <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안일</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">일수</TableCell>
                             </TableRow>
                         </TableHead>
 
@@ -141,9 +163,10 @@ const AttendenceMain = () => {
                                         {e.seq}
                                     </TableCell>
                                     <TableCell align="center">{e.document_type}</TableCell>
-                                    <TableCell align="center"><Link to={`/Groovy/signlist/detail/${e.seq}`}>{e.title}</Link></TableCell>
+                                    <TableCell align="center"><Link to={`/Groovy/attendence/detail/${e.seq}`}>{e.title}</Link></TableCell>
                                     <TableCell align="center">{e.writer}</TableCell>
                                     <TableCell align="center">{e.write_date}</TableCell>
+                                    <TableCell align="center">{e.total_date}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -154,7 +177,7 @@ const AttendenceMain = () => {
             <div className={style.documents3}>
                 <div className={style.titleText}>휴가신청 진행중</div>
                 <div className={style.text}>
-                    <Link to="/Groovy/signlist/wait">
+                    <Link to="/Groovy/attend/attendenceWait">
                         {`진행중인 문서가 ${vacation_wait_list.length}건이 있습니다.`}
                     </Link>
                 </div>
@@ -181,7 +204,7 @@ const AttendenceMain = () => {
                                         {e.seq}
                                     </TableCell>
                                     <TableCell align="center">{e.document_type}</TableCell>
-                                    <TableCell align="center"><Link to={`/Groovy/signlist/detail/${e.seq}`}>{e.title}</Link></TableCell>
+                                    <TableCell align="center"><Link to={`/Groovy/attendence/detail/${e.seq}`}>{e.title}</Link></TableCell>
                                     <TableCell align="center">{e.writer}</TableCell>
                                     <TableCell align="center">{e.write_date}</TableCell>
                                 </TableRow>

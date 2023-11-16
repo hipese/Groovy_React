@@ -1,0 +1,179 @@
+.header {
+    font-size: 30px;
+    margin: 15px;
+}
+
+.documents1 {
+    margin-bottom: 50px;
+    margin-left: 100px;
+}
+
+.titleText {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px;
+    padding: 10px;
+}
+
+.leftContainer {
+    float: left;
+}
+
+.rightContainer {
+    position: relative; 
+    left: 750px; 
+ 
+}
+
+.signline {
+    margin-left: 300px;
+}
+
+.tableHead {
+    background-color: whitesmoke;
+}
+
+.tableRow {
+    clear: both;
+    /* 이전 요소들과의 float 해제 */
+    width: 600px;
+    /* 테이블 행을 100% 너비로 설정 */
+    overflow: hidden;
+    /* 플로팅된 요소들을 감춤 */
+}
+
+.tableRow>div {
+    display: flex;
+    float: left;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    font-size: 20px;
+    width: 300px;
+    height: 50px;
+}
+
+
+.tableRow>div:nth-child(1) {
+    width: 300px;
+    height: 50px;
+}
+
+.tableRow>div:nth-child(2) {
+    width: 300px;
+    height: 50px;
+}
+
+.tableRow>div:nth-child(3) {
+    width: 300px;
+    height: 50px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px;
+    padding: 10px;
+    margin-left: 550px;
+    margin-bottom: 30px;
+    margin-top: 50px;
+}
+
+.tableBox2 {
+    width: 1000px;
+    margin-left: 100px;
+}
+
+.titleRow {
+    clear: both;
+    width: 1000px;
+    overflow: hidden;
+}
+
+.titleRow>div {
+    display: flex;
+    float: left;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    font-size: 20px;
+}
+
+.titleRow>div:nth-child(1) {
+    width: 15%;
+    height: 40px;
+}
+
+.titleRow>div:nth-child(2) {
+    width: 85%;
+    height: 40px;
+}
+
+.textEditor {
+    width: 1000px;
+    margin-left: 100px;
+    height: 200px;
+    margin-bottom: 50px;
+}
+
+
+.fileRow {
+    width: 1000px;
+    overflow: hidden;
+    margin-left: 100px;
+    margin-bottom: 50px;
+}
+
+.buttons {
+    margin-left: 100px;
+}
+
+.buttons button {
+    width: 80px;
+    height: 40px;
+}
+
+.apply {
+    margin-left: 420px;
+    margin-right: 10px;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    border-radius: 5px;
+    border: none;
+}
+
+.textDiv {
+    float: left;
+    margin: 10px;
+    margin-top: 30px;
+}
+
+.buttonDiv {
+    margin: 10px;
+    float: left;
+}
+
+.btn {
+    width: 120px;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.cancel {
+    background-color: rgb(130, 200, 255);
+    color: white;
+    border-radius: 5px;
+    border: none;
+}
+
+.btn:hover,
+.apply:hover,
+.cancel:hover {
+    background-color: rgb(100, 180, 255);
+}

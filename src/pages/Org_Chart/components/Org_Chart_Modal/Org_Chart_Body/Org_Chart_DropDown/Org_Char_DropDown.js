@@ -1,25 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import style from "./Org_Char_DropDown.module.css"
-import axios from "axios";
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import * as React from 'react';
+import { DepartmentContext } from "../../../../../Groovy/Groovy";
 
 const Org_Chart_DropDown = ({ setEmployees, backUpEmployees }) => {
     // 드롭다운의 표시 상태를 관리하는 state
-    const [department, setDepartment] = useState([]); // 이름 변경
     const [selectedDepartment, setSelectedDepartment] = useState("");
-
-    // 드롭다운 내용을 관리하는 배열
-    useEffect(() => {
-        axios.get("/api/member/department").then(resp => {
-            console.log(resp.data);
-            setDepartment(resp.data); // 이름 변경
-        });
-    }, []);
+    // 드롭다운의 표시 상태를 관리하는 state
+    const { department } = useContext(DepartmentContext);
 
     const handleReset = () => {
         setSelectedDepartment(""); // 상태 초기화
@@ -43,7 +35,8 @@ const Org_Chart_DropDown = ({ setEmployees, backUpEmployees }) => {
         } else {
             setEmployees(backUpEmployees); // 상태 초기화
         }
-    }, [selectedDepartment, backUpEmployees]);
+        
+    }, [selectedDepartment, backUpEmployees, setEmployees]);
 
     return (
         <div className={style.main}>
@@ -57,7 +50,7 @@ const Org_Chart_DropDown = ({ setEmployees, backUpEmployees }) => {
                         label="Department"
                         onChange={handleChange}
                     >
-                        {department.map((dept,i) => (
+                        {department.map((dept, i) => (
                             <MenuItem key={i} value={dept.dept_name}>{dept.dept_name}</MenuItem>
                         ))}
                         <MenuItem key={"all"} value="" onClick={handleReset}>전체목록 보기</MenuItem>

@@ -19,17 +19,20 @@ const VacationEdit = forwardRef((props, ref) => {
 
     //직원검색 모달을 닫는 기능
     const [isModalOpen, setModalOpen] = useState(false);
+    const [approver, setApprover] = useState({}); //선택한 직원의 정보을 저장하는 useState 
+    const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상세정보를 가져옵니다.
 
     const toggleModal = () => {
         setModalOpen(!isModalOpen);
     };
 
+
+
     const [vacation, setVacation] = useState([]);
     const [myVacation, setMyVacation] = useState({}); //나중에 년도 검색할거면 이거 배열로 바꾸고 로직 추가해야함 
 
     //직원 검색을 위한 변수들
-    const [approver, setApprover] = useState({}); //선택한 직원의 정보을 저장하는 useState 
-    const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상세정보를 가져옵니다.
+    
 
     useEffect(() => {
         axios.get("/api/vacation").then(resp => {
@@ -53,7 +56,7 @@ const VacationEdit = forwardRef((props, ref) => {
             : document.getElementById('subtractVacation').value;
 
 
-        console.log("버튼 눌리냐고")
+        
         if (!approver.id) {
             alert("직원들 선택해주세요.");
             return;
@@ -141,7 +144,7 @@ const VacationEdit = forwardRef((props, ref) => {
                         </div>
                         <div className={style.editRow} >
                             <button className={style.btn} data-action="subtract" onClick={handleVacation}>
-                                휴가 차감
+                                휴가  사용
                             </button>
                             <SpinButton id="subtractVacation"/>
                         </div>
@@ -149,7 +152,6 @@ const VacationEdit = forwardRef((props, ref) => {
                 </div>
 
                 <div className={style.footer}>
-                    <button onClick={() => { onClose() }} className={style.btn}>확인</button>
                     <button onClick={() => { onClose() }} className={style.btn}>닫기</button>
                 </div>
 
