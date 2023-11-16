@@ -13,6 +13,8 @@ import { LoginContext } from "../../../../../App";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import style from "./Badge.module.css";
+import Grow from '@mui/material/Grow';
+import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 
 const StyledBadge = styled(Badge)({
   "& .MuiBadge-dot": {
@@ -69,16 +71,14 @@ function DotBadge() {
       // 서버에서 받은 메시지 구조를 클라이언트 상태 구조로 변환
       const transformedMessage = {
         parent_seq: receivedMessage.parent_seq,
-        // recipient: receivedMessage.recipient,
         contents: receivedMessage.message, // 서버의 'message'를 클라이언트의 'contents'로 변환
-        // write_date: receivedMessage.write_date,
       };
       console.log(transformedMessage);
       setNotifications((prevNotifications) => [...prevNotifications, transformedMessage]);
     };
 
     if (stompClient) {
-      const subscription = stompClient.subscribe('/topic/' + loginID, (response) => {
+      const subscription = stompClient.subscribe('/queue/' + loginID, (response) => {
         handleWebSocketMessage(response);
         setOpen(true);
       });
@@ -106,7 +106,7 @@ function DotBadge() {
         setIsNotificationOpen(false);
       }
     }
-    
+
     if (isNotificationOpen) {
       document.addEventListener('click', handleClickOutside);
     }
@@ -163,7 +163,7 @@ function DotBadge() {
         <BellIcon src={Bell} alt="bell" onClick={handleBellClick} />
       </StyledBadge>
 
-      {isNotificationOpen && (
+      <Grow in={isNotificationOpen}>
         <div ref={dropdownRef} className={style.noticeContainer}>
           {notifications.map((notification, index) => (
             <div key={index} className={style.notice} onClick={() => handleNotificationCheck(notification.parent_seq)}>
@@ -175,15 +175,19 @@ function DotBadge() {
                 ) : notification.contents.includes("도착") ? (
                   <Alert severity="info">{notification.contents}</Alert>
                 ) : (
-                  // 모든 조건을 만족하지 않는 경우에 대한 처리
-                  // 예를 들면, 기본적인 알림 메시지를 보여줄 수 있습니다.
-                  <Alert>{notification.contents}</Alert>
+                  <React.Fragment />
                 )}
               </Link>
             </div>
           ))}
+          {notifications.length === 0 && (
+            <div className={style.notice}>
+              <CommentsDisabledIcon /><br />
+              알림이 없습니다.
+            </div>
+          )}
         </div>
-      )}
+      </Grow>
       <div>
         <Snackbar
           open={open}

@@ -31,7 +31,7 @@ const columns = [
 ];
 
 
-const Org_Chart_Table = ({ setEmployees, employees, selectedRow, setSelectedRow, backUpEmployees, setApprover, setSelectMemberdetail }) => {
+const Org_Chart_Table = ({ setEmployees, employees, selectedRow, setSelectedRow, setApprover, setSelectMemberdetail }) => {
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -63,8 +63,8 @@ const Org_Chart_Table = ({ setEmployees, employees, selectedRow, setSelectedRow,
             });
 
             axios.get(`/api/member/detail/${id}`).then(resp => {
-                console.log(resp.data);
                 setSelectMemberdetail(resp.data);
+                console.log(resp.data);
             })
         }
     };

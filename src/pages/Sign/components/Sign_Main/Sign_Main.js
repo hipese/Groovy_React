@@ -9,18 +9,29 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { grey, blue } from '@mui/material/colors';
+import { blue } from '@mui/material/colors';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import PendingIcon from '@mui/icons-material/Pending';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { red } from '@mui/material/colors';
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 const Sign_Main = () => {
 
     const [sign_wait_list, setSign_wait_list] = useState([]);
     const [sign_progress_list, setSign_progress_list] = useState([]);
     const [sign_complete_list, setSign_complete_list] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         axios.get("/api/signlist/wait").then((resp) => {
@@ -33,8 +44,14 @@ const Sign_Main = () => {
 
         axios.get("/api/signlist/complete").then((resp2) => {
             setSign_complete_list(resp2.data);
+            setLoading(false);
         });
     }, []);
+
+    if (loading) {
+        // 데이터 로딩 중에는 로딩창을 표시
+        return <CircularIndeterminate />;
+    }
 
     return (
 
@@ -54,12 +71,12 @@ const Sign_Main = () => {
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
-                            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '21px', fontWeight: 'bold' }, backgroundColor: blue[200] }}>
-                                <TableCell align="center">문서번호</TableCell>
-                                <TableCell align="center">결제양식</TableCell>
-                                <TableCell align="center">제목</TableCell>
-                                <TableCell align="center">기안자</TableCell>
-                                <TableCell align="center">기안일</TableCell>
+                            <TableRow sx={{ backgroundColor: blue[200] }}>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">문서번호</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결제양식</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">제목</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안자</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안일</TableCell>
                             </TableRow>
                         </TableHead>
 
@@ -94,12 +111,12 @@ const Sign_Main = () => {
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
-                            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '21px', fontWeight: 'bold' }, backgroundColor: blue[200] }}>
-                                <TableCell align="center">문서번호</TableCell>
-                                <TableCell align="center">결제양식</TableCell>
-                                <TableCell align="center">제목</TableCell>
-                                <TableCell align="center">기안자</TableCell>
-                                <TableCell align="center">기안일</TableCell>
+                            <TableRow sx={{ backgroundColor: blue[200] }}>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">문서번호</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결제양식</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">제목</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안자</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안일</TableCell>
                             </TableRow>
                         </TableHead>
 
@@ -134,13 +151,13 @@ const Sign_Main = () => {
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
-                            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '21px', fontWeight: 'bold' }, backgroundColor: blue[200] }}>
-                                <TableCell align="center">문서번호</TableCell>
-                                <TableCell align="center">결제양식</TableCell>
-                                <TableCell align="center">제목</TableCell>
-                                <TableCell align="center">기안자</TableCell>
-                                <TableCell align="center">기안일</TableCell>
-                                <TableCell align="center">결재여부</TableCell>
+                            <TableRow sx={{ backgroundColor: blue[200] }}>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">문서번호</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결제양식</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">제목</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안자</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안일</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결재여부</TableCell>
                             </TableRow>
                         </TableHead>
 

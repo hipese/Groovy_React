@@ -31,6 +31,18 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import Button from '@mui/material/Button';
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+
+const CircularIndeterminate = () => {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <CircularProgress />
+      </Box>
+    );
+  };
+
 
 const Sign_Detail = ({ approver }) => {
 
@@ -40,6 +52,7 @@ const Sign_Detail = ({ approver }) => {
     const navi = useNavigate();
     const { loginID } = useContext(LoginContext);
     const stompClient = useWebSocket();
+    const [loading, setLoading] = useState(true);
 
     const members = useContext(MemberContext);
 
@@ -52,12 +65,10 @@ const Sign_Detail = ({ approver }) => {
 
             if (resp.data.recipient) {
                 axios.get(`/api/member/signWriterInfo/${resp.data.writer}`).then(resp2 => {
-                    console.log(resp2.data);
                     setSignWriterInfo(resp2.data);
                 });
 
                 axios.get(`/api/member/signReceiverInfo/${resp.data.recipient}`).then(resp2 => {
-                    console.log(resp2.data);
                     setSignReceiverInfo(resp2.data);
                 });
             }
@@ -65,6 +76,7 @@ const Sign_Detail = ({ approver }) => {
 
         axios.get(`/api/signfiles/${seq}`).then(resp1 => {
             setSign_files(resp1.data);
+            setLoading(false);
         });
     }, [seq]);
 
@@ -140,6 +152,11 @@ const Sign_Detail = ({ approver }) => {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}년 ${month}월 ${day}일`;
     };
+
+    if (loading) {
+        // 데이터 로딩 중에는 로딩창을 표시
+        return <CircularIndeterminate />;
+      }
 
     return (
         <div>
@@ -253,7 +270,7 @@ const Sign_Detail = ({ approver }) => {
                                 </ListItemAvatar>
                                 <ListItemText
                                     primaryTypographyProps={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold' }}
-                                    primary={signWriterInfo.name}
+                                    primary={signReceiverInfo.name}
                                 />
                             </ListItem>
                             <Divider variant="inset" component="li" />
@@ -314,7 +331,7 @@ const Sign_Detail = ({ approver }) => {
                         </div>
                     </div>
                     <div className={style.buttons}>
-                        {loginID == `${sign_list.recipient}` ? (
+                        {loginID == sign_list.recipient && sign_list.accept === 1 ? (
                             <div>
                                 <div className={style.comment}>
                                     <input type="text" name="comment" placeholder="코멘트 입력" className={style.input} value={sign_list.comment}
@@ -323,7 +340,11 @@ const Sign_Detail = ({ approver }) => {
                                 <Button variant="outlined" onClick={handleAccept}>승인</Button>
                                 <Button variant="outlined" color="error" onClick={handleReject}>반려</Button>
                             </div>
-                        ) : null}
+                        ) : (
+                            <div className={style.commentText}>
+                                {sign_list.comment ? sign_list.comment : ''}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

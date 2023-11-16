@@ -146,7 +146,7 @@ const MypageIndex = () => {
                 </div>
 
                 <div className={styles.endTitle}>
-                    <img src="/assets/Groovylogo.png" />
+                    <img src="/assets/Groovylogo.png"/>
                 </div>
             </div>
         </div>

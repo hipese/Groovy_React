@@ -59,7 +59,7 @@ const DeptBoard = () => {
                                     <td>{e.seq}</td>
                                     <td>{e.writer}</td>
                                     <td>
-                                        <Link to={`/groovy/board/detail/${e.seq}`}>{e.title}</Link>
+                                        <Link to={`/groovy/board/detailDept/${e.seq}`}>{e.title}</Link>
                                     </td>
                                     <td>{e.view_count}</td>
                                     <td>{e.category}</td>

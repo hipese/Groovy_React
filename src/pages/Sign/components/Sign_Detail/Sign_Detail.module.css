@@ -97,3 +97,10 @@
     font-size: 16px; 
     margin-left: -30px;
 }
+.commentText{
+    height: 100%;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
