@@ -8,7 +8,6 @@ function Reactquill({ id, value, setValue, isDisabled }) {
       [{ 'header': [1, 2, 3, false] }],
       ['bold', 'italic', 'underline', 'strike'],
       [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-      ['link', 'image'],
       [{ 'align': [] }, { 'color': [] }, { 'background': [] }],
       ['clean'],
     ],
@@ -34,13 +33,12 @@ function Reactquill({ id, value, setValue, isDisabled }) {
     <div>
       <ReactQuill
         id={id}
-        className="form-control text-editor"
         theme="snow"
         modules={modules}
         formats={formats}
         value={value || ''}
         onChange={(contents) => setValue(contents)}
-        style={{ height: "300px", width: "100%" }}
+        style={{ height: "325px", width: "100%" }}
         readOnly={isDisabled}
       />
     </div>

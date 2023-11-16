@@ -10,7 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { blue } from '@mui/material/colors';
-import { MemberContext } from "../../Groovy/Groovy";
+import { MemberContext, VacationContext } from "../../Groovy/Groovy";
 import VacationEdit from "../../Vacation/VacationEdit";
 import { Modal } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -27,10 +27,10 @@ const CircularIndeterminate = () => {
 const AttendenceMain = () => {
 
     const members = useContext(MemberContext);
+    const {myVacation,setMyVacation, addVacation, setAddVacation}=useContext(VacationContext);
 
     const [vacation_complete_list, setVacation_complete_list] = useState([]);
     const [vacation_wait_list, setVacation_wait_list] = useState([]);
-    const [myVacation, setMyVacation] = useState({}); //나중에 년도 검색할거면 이거 배열로 바꾸고 로직 추가해야함
     const [total_vactionDate, setTotal_vactionDate] = useState();
     const [loading, setLoading] = useState(true);
 
@@ -54,13 +54,27 @@ const AttendenceMain = () => {
 
     //=========================================================================
 
+   
     useEffect(() => {
         if (members.member) {
-            axios.get(`/api/vacation/myVacation/${members.member.id}`).then(resp => {
-                setMyVacation(resp.data || {}); // find가 undefined를 반환할 경우 빈 객체를 사용합니다.
-            })
+          let url = `/api/vacation/myVacation/${members.member.id}`;
+          
+          if (addVacation && addVacation > 0) {
+            url += `/${addVacation}`;
+            setAddVacation(0);
+          }
+
+          if (total_vactionDate) {
+            url += `/${total_vactionDate}`;
+          }
+      
+          axios.get(url).then(resp => {
+            setMyVacation(resp.data || {});
+          }).catch(error => {
+            console.error('There was an error fetching the vacation data', error);
+          });
         }
-    }, [members]);
+      }, [members, total_vactionDate, addVacation]);
 
 
     useEffect(() => {
@@ -77,12 +91,11 @@ const AttendenceMain = () => {
             setVacation_wait_list(resp1.data);
         });
     }, []);
-    
+
     if (loading) {
         // 데이터 로딩 중에는 로딩창을 표시
         return <CircularIndeterminate />;
     }
-
     return (
         <div>
             <div className={style.header}>
@@ -114,7 +127,7 @@ const AttendenceMain = () => {
                                         {`${members.member.name} ${members.member.position}`}
                                     </TableCell>
                                     <TableCell align="center">{`${myVacation.totalAnnualEntitlement}일`}</TableCell>
-                                    <TableCell align="center">{total_vactionDate + '일'}</TableCell>
+                                    <TableCell align="center">{`${myVacation.usedDays}일`}</TableCell>
                                     <TableCell align="center">{`${myVacation.totalAnnualEntitlement - total_vactionDate}일`}</TableCell>
                                 </TableRow>
                                 : "사용자를 불러오지 못하였습니다."}
@@ -128,7 +141,7 @@ const AttendenceMain = () => {
                     open={openModal && editingField === 'vacation'}
                     onClose={handleCloseModal}
                 >
-                    <VacationEdit onClose={handleCloseModal} />
+                    <VacationEdit onClose={handleCloseModal}  />
                 </Modal>
             </div>
 
