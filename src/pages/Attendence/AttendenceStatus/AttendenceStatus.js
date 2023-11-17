@@ -13,17 +13,18 @@ import { grey, blue } from '@mui/material/colors';
 const AttendenceStatus = () => {
 
     const [attendence, setAttendence] = useState([]);
-    const [attendenceDefail, setAttendenceDefail] = useState([]);
     
-
-    useEffect(() => {
-        axios.get("/api/attend").then(resp => {
-            // 데이터를 가져온 후 시간 및 날짜 분리 처리
-            const processedData = resp.data.map(item => {
+    useEffect(()=>{
+        axios.get("/api/attend/detail").then(resp=>{
+            console.log(resp.data)
+             // 데이터를 가져온 후 시간 및 날짜 분리 처리
+             const processedData = resp.data.map(item => {
                 // 출근 및 퇴근 시간을 JavaScript Date 객체로 변환
                 const workstartDate = new Date(item.workstart);
                 const workendDate = new Date(item.workend);
+                const totalWorkTime=new Date(item.totalWorkTime)
 
+                console.log(totalWorkTime)
                 // 날짜 및 시간 형식 지정
                 const dateFormatOptions = {
                     year: 'numeric',
@@ -41,7 +42,7 @@ const AttendenceStatus = () => {
                 const workStartTimeString = workstartDate.toLocaleTimeString(undefined, timeFormatOptions);
                 const workEndDateString = workendDate.toLocaleDateString(undefined, dateFormatOptions);
                 const workEndTimeString = item.workend !== null ? workendDate.toLocaleTimeString(undefined, timeFormatOptions) : null;
-                const totalWorkTimeInMinutes = (workendDate - workstartDate) / (1000 * 60); // 분 단위로 변환
+                const totalWorkTimeInMinutes = (totalWorkTime) / (1000 * 60); // 분 단위로 변환
                 const totalWorkHours = Math.floor(totalWorkTimeInMinutes / 60);
                 const totalWorkMinutes = totalWorkTimeInMinutes % 60;
                 return {
@@ -56,17 +57,10 @@ const AttendenceStatus = () => {
             });
 
             setAttendence(processedData);
-        });
-    }, []);
+        })
 
-
-    // useEffect(()=>{
-    //     axios.get("/api/attend/detail").then(resp=>{
-    //         console.log(resp.data)
-    //         setAttendenceDefail(resp.data);
-    //     })
-
-    // },[])
+    },[])
+    
     return (
         <div>
             <div>
