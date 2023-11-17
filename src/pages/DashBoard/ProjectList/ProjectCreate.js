@@ -43,12 +43,10 @@ const ProjectCreate = () => {
                     }}>
                         프로젝트 생성
                 </Typography>
-                프로젝트 - 프로젝트 이름, 프로젝트 설명. 기한, 
-                프로젝트 멤버 - 프로젝트 번호, 프로젝트 멤버, 부서, 이름(id) - 이건 일정추가처럼 변경
-                <Divider sx={{
+            </div>
+            <Divider sx={{
                     borderColor : "black"
                 }}/>
-            </div>
             <div className={`${style.padding20}`}>
                 <Typography sx={{
                         fontSize : 18

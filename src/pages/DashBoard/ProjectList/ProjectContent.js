@@ -1,4 +1,4 @@
-import { Button, Divider, Grid, Icon, IconButton, List, ListItem, Typography } from "@mui/material";
+import { Button, CircularProgress, Divider, Grid, Icon, IconButton, List, ListItem, Typography } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import style from './project.module.css';
 import { createContext, useContext, useEffect, useState } from "react";
@@ -129,11 +129,13 @@ const UpdateState = ({handleClose,pseq,setUpdate}) => {
     }
 
     const handleDelete = () => {
-        console.log(todo);
-        const tempTodo = todo.filter(e=>e.pschedule_seq != pseq); 
-        // axios.delete(`/api/project/todo/delete/${pseq}`).then(res=>{
-            
-        // });
+        axios.delete(`/api/project/todo/delete/${pseq}`).then(res=>{
+                const tempTodo = todo.filter(e=>e.pschedule_seq !== pseq); 
+                setTodo(tempTodo)
+                handleClose();
+            }).catch((e)=>{
+                console.log(e);;    
+        });
     }
     return(
         <div>
@@ -381,15 +383,101 @@ const AddMember = ({handleClose}) => {
 }
 
 const ProjectMember = () => {
-    const {member,setMember} = useContext(MemberContext);
+    const {member,setMember,loginID, manager} = useContext(MemberContext);
     
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const handleDeleteMember = (pseq,id) => {
+        axios.delete(`/api/project/delete/member/${pseq}/${id}`).then(res=>{
+            const tempMember = member.filter(e=>e.id !== id);
+            setMember(tempMember);
+        });
+    }
     
-    
-    return(
+    return loginID == manager ?(
+        <div className={`${style.membersection}`}>
+            <div className={`${style.borderbtm} ${style.padding10} ${style.center}`}>
+            프로젝트 멤버
+                <IconButton aria-label="add" onClick={handleOpen}>
+                    <AddIcon fontSize='small'/>
+                </IconButton>
+            </div>
+            
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={Modalstyle} className={`${style.bgwhite}`}>
+                    <AddMember handleClose={handleClose}/>
+                </Box>
+            </Modal>
+            <div>
+                <Grid container className={`${style.marginTB20}`}> 
+                    <Grid xs={3} className={style.center}>
+                        <Typography className={`${style.fs} ${style.b}`}>
+                            사원번호
+                        </Typography>
+                    </Grid>
+                    <Grid xs={4} className={style.center}>
+                        <Typography className={`${style.fs} ${style.b}`}>
+                            이름
+                        </Typography>
+                    </Grid>
+                    <Grid xs={4} className={style.center}>
+                        <Typography className={`${style.fs} ${style.b}`}>
+                        부서
+                        </Typography>
+                    </Grid>
+                    <Grid xs={1} className={style.center}>
+                        <Typography className={`${style.fs} ${style.b}`}>
+                        삭제
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <Divider sx={{bgcolor:"black"}}/>
+                {member.map((e,i)=>{
+                        return(
+                            <List sx={style} component="nav" aria-label="mailbox folders">
+                                <ListItem>
+                                    <Grid container key={i} className={`${style.marginT10}`}> 
+                                        <Grid xs={3} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.id}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={4} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                                {e.name}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={4} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.group_name}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={1} className={style.center}>
+                                            <IconButton aria-label="clear" onClick={()=>{handleDeleteMember(e.pseq,e.id)}}>
+                                                <ClearIcon sx={{color:"red"}}/>               
+                                            </IconButton>
+                                        </Grid>
+                                    </Grid>            
+                                </ListItem>
+                                
+                            <Divider />
+                                
+                            </List>
+                        )
+                    })}
+            </div>
+            
+        </div>
+    )
+    :
+    (
         <div className={`${style.membersection}`}>
             <div className={`${style.borderbtm} ${style.padding10} ${style.center}`}>
             프로젝트 멤버
@@ -472,7 +560,16 @@ const ProjectContent = () => {
     const [member,setMember] = useState([{}]);
     const [progress,setProgress] = useState([{}]);
     const [manager,setManager] = useState("");
+    const [isLoading,setLoading] = useState(true);
     const navi = useNavigate();
+
+    const CircularIndeterminate = () => {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </Box>
+        );
+    };
 
     useEffect(()=>{
         axios.get(`/api/project/todo/${seq}`).then(res=>{
@@ -487,6 +584,7 @@ const ProjectContent = () => {
 
         axios.get(`/api/project/progress/${seq}`).then(res=>{
             setProgress(res.data);
+            setLoading(false);
         }).catch((e)=>{
             console.log(e);
         });
@@ -505,6 +603,10 @@ const ProjectContent = () => {
             console.log(e);
         });
     }
+
+    if(isLoading){
+        return(<CircularIndeterminate/>)
+    }
     return(
         <div className={`${style.padding40} ${style.contentDiv}`}>
         <Grid container spacing={2}>
@@ -521,7 +623,7 @@ const ProjectContent = () => {
             </Grid>
 
             <Grid item xs={12}>
-                <MemberContext.Provider value={{member,setMember}}>
+                <MemberContext.Provider value={{member,setMember,loginID,manager}}>
                     <ProjectMember/>
                 </MemberContext.Provider>
             </Grid>

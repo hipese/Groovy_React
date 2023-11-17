@@ -281,9 +281,14 @@ const Calandarsection = () => {
     }
     return (
         <div className={style.calandarsection}>
-            <div className={`${style.padding5}`}>
+            <div className={`${style.CalendarMain}`}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateCalendar onChange={handleDate}                        
+                    <DateCalendar onChange={handleDate}
+                        sx={{
+                            '& .MuiDayCalendar-weekContainer': {
+                              height:36
+                            }
+                          }}
                         slots={{
                             day : ServerDay,
                         }}
