@@ -1,12 +1,12 @@
 import style from './survey.module.css';
-import {Button, Divider, Grid, IconButton, List, ListItem, Pagination, PaginationItem, Typography } from '@mui/material';
+import {Box, Button, CircularProgress, Divider, Grid, IconButton, List, ListItem, Pagination, PaginationItem, Typography } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { Link, Route, Routes } from 'react-router-dom';
 import SurveyWrite from './SurveyWrite/SurveyWrite';
 import SurveyContent from './SurveyContent/SurveyContent';
-import { useEffect } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
 import SurveyResult from './SurveyResult/SurveyResult.js'
@@ -54,7 +54,7 @@ color: 'inherit',
 }));
 
 const SurveyList = () => {
-    const [survey,setSurvey] = useState([]);
+    const {survey} = useContext(SurveyContext);
     const [search,setSearch] = useState("");
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -67,12 +67,8 @@ const SurveyList = () => {
     const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
     const visibleSignList = survey.slice(startIndex, endIndex);
 
-    useEffect(()=>{
-        axios.get("/api/survey/list").then(res=>{
-            setSurvey(res.data);
-        });
-    },[]);
-
+    
+    
     const onPageChange = (e, page) => {
         setCurrentPage(page);
     };
@@ -187,22 +183,46 @@ const SurveyList = () => {
                     )}
                 />
             </div>
-            <Link to="survey_result/33">asd</Link>
-            &nbsp;
-            <Link to="result_list">res</Link>
         </div>
     )
 }
 
+export const SurveyContext = createContext();
+
 const Survey=()=>{
+    const CircularIndeterminate = () => {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </Box>
+        );
+    };
+    const [survey,setSurvey] = useState([]);
+    const [isLoading, setLoading] = useState(true);
+
+    useEffect(()=>{
+        axios.get("/api/survey/list").then(res=>{
+            setSurvey(res.data);
+            setLoading(false);
+        });
+    },[]);
+
+
+    if(isLoading){
+        return(<CircularIndeterminate/>)
+    }
+
+
     return(
-        <Routes>
-            <Route path='/' element={<SurveyList/>}></Route>
-            <Route path='survey_write' element={<SurveyWrite/>}></Route>
-            <Route path='survey_content/:seq' element={<SurveyContent/>}></Route>
-            <Route path='survey_result/:seq' element={<SurveyResult/>}></Route>
-            <Route path='result_list' element={<SurveyResultList/>}></Route>
-        </Routes>
+        <SurveyContext.Provider value={{survey}}>
+            <Routes>
+                <Route path='/' element={<SurveyList/>}></Route>
+                <Route path='survey_write' element={<SurveyWrite/>}></Route>
+                <Route path='survey_content/:seq' element={<SurveyContent/>}></Route>
+                <Route path='survey_result/:seq' element={<SurveyResult/>}></Route>
+                <Route path='result_list' element={<SurveyResultList/>}></Route>
+            </Routes>
+        </SurveyContext.Provider>
     )
 }
 
