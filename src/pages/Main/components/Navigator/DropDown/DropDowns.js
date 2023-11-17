@@ -130,7 +130,7 @@ const Dropdown = () => {
           <List style={styles.item} onClick={toggleState}>
             <Item>
               <Link to="/Groovy/message" style={styles.link}>
-                <img src={message} alt="" width={'15px'} height={'15px'} /> 메시징
+                <img src={message} alt="" width={'15px'} height={'15px'} /> 메시지
               </Link>
             </Item>
           </List>
