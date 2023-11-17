@@ -65,7 +65,7 @@ const Sign_Review = () => {
     return (
         <div className={style.sign_container}>
             <div className={style.header}>
-                검토문서 
+                검토문서
                 <hr />
             </div>
             <div className={style.documents}>
