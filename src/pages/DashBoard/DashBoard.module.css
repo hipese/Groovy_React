@@ -70,6 +70,10 @@ div[role="row"] button {
     height: 36px !important;
 }
 
+.bgwhite{
+    background-color: white;
+}
+
 .noticesection{
     border: 2px solid black;
     border-radius: 10px;

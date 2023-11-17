@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import style from './DashBoard.module.css';
-import { Button, ButtonGroup, CircularProgress, Divider, Grid, IconButton, List, ListItem, ListItemText, Pagination, PaginationItem, Typography } from '@mui/material';
+import { Button, ButtonGroup, CircularProgress, Divider, Grid, IconButton, List, ListItem, ListItemText, Modal, Pagination, PaginationItem, Typography } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
@@ -226,6 +226,45 @@ const Signsection = () => {
     )
 }
 
+
+const Modalstyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
+const CalendarInfo = ({calendarData,pickedDate}) => {
+    const isThereAnySchedule = calendarData.filter(e=> format(new Date(e.starttime), 'yyyy-MM-dd') == format(new Date(pickedDate), 'yyyy-MM-dd'));
+    return isThereAnySchedule.length > 0 ? (
+        <div>
+            {
+                isThereAnySchedule.map((e,i)=>{
+                    return(
+                        <div>
+                            <div>
+                                Title : {e.title}
+                            </div>
+                            <div>
+                                Contents : {e.contents}
+                            </div>
+                        </div>
+                    )
+                })
+            }
+        </div>
+    ): (
+        <div>
+            일정 없음
+        </div>
+    )
+}
+
 const Calandarsection = () => {
     const {loginID} = React.useContext(LoginContext);
     const HighlightedDay = styled(PickersDay)(({ theme }) => ({
@@ -255,6 +294,7 @@ const Calandarsection = () => {
 
     const [highlightedDays, setHighlitedDays] = React.useState([]);
     const [calendarData,setCalendarData] = React.useState([]);
+    const [pickedDate,setPickedDate] = React.useState("");
     React.useEffect(()=>{
         axios.get(`/api/dash/calendar/${loginID}`).then(res=>{
                 setCalendarData(res.data);
@@ -274,11 +314,15 @@ const Calandarsection = () => {
 
     
     const handleDate = (e) => {
-        const pickedDate = format(new Date(e.$d), 'yyyy-MM-dd')
-        console.log(pickedDate);
-        console.log(calendarData);
-        console.log(highlightedDays);
+        const pick = format(new Date(e.$d), 'yyyy-MM-dd')
+        setPickedDate(e.$d);
+        handleOpen();
     }
+
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     return (
         <div className={style.calandarsection}>
             <div className={`${style.CalendarMain}`}>
@@ -300,7 +344,17 @@ const Calandarsection = () => {
                     />
                 </LocalizationProvider>
             </div>
-            
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                
+            >
+                <Box sx={Modalstyle}>
+                    <CalendarInfo  calendarData={calendarData} pickedDate={pickedDate}/>
+                </Box>
+            </Modal>
         </div>
     )
 }
