@@ -1,4 +1,4 @@
-import { Button, Divider, Grid, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Divider, Grid, Typography } from '@mui/material';
 import style from './survey_content.module.css'
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -149,16 +149,32 @@ const SurveyQuestion = () => {
 const SurveyContext = createContext();
 
 const SurveyContent = () => {
+
+    const CircularIndeterminate = () => {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </Box>
+        );
+    };
+
     const {seq} = useParams();
     const [contextData,setContextData] = useState(undefined);
+    const [isLoading,setLoading] = useState(true);
 
     const getData = async() => {
-        const res = await axios.get(`/api/survey/content/${seq}`);
+        const res = await axios.get(`/api/survey/content/${seq}`).finally(()=>{
+            setLoading(false);
+        });
         setContextData(res.data);
     }
     useEffect(()=>{
         getData();
     },[]);
+
+    if(isLoading){
+        return(<CircularIndeterminate/>)
+    }
     return (
         <div className={`${style.padding40} ${style.contentDiv}`}>
             <SurveyContext.Provider value={{contextData,setContextData}}>
