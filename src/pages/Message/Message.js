@@ -5,6 +5,16 @@ import axios from "axios";
 import Message_Room from "./Message_Room";
 import { createContext } from "react";
 import { useWebSocket } from "../../WebSocketContext/WebSocketContext";
+import CloseIcon from '@mui/icons-material/Close';
+import Tooltip from '@mui/material/Tooltip';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import { forwardRef } from "react";
+import MuiButton from "@mui/material/Button";
 
 const SelectContext = createContext();
 const ProfileContext = createContext();
@@ -21,6 +31,9 @@ let Message = () => {
     const messagesRef = useRef(messages);
     const selectedRoomRef = useRef(selectedRoom);
     const roomInfoRef = useRef(roomInfo);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [leaveRoom, setLeaveRoom] = useState("");
+    const [subscriptions, setSubscriptions] = useState([]);
 
     useEffect(() => {
         recentMessageRef.current = recentMessage;
@@ -34,41 +47,6 @@ let Message = () => {
     useEffect(() => {
         roomInfoRef.current = roomInfo;
     }, [roomInfo])
-    
-
-    // useEffect( async () => { 
-    //     await axios.get(`/api/message/getRoomInfo`).then(resp => {
-    //         setRoomInfo(resp.data)
-    //         axios.get(`/api/message/getProfiles`).then(resp => {
-    //             setProfiles(resp.data)
-    //             axios.get(`/api/message/getRecentMessage`).then(resp => {
-    //                 setRecentMessage(resp.data) 
-    //             }).catch(err => {
-    //                 console.log(err.data)
-    //             })
-    //         }).catch(err => {
-    //             console.log(err)
-    //         })
-    //     }).catch(err => {
-    //         console.log(err);
-    //     }).finally(()=>{
-    //         console.log(roomInfo);
-    //         console.log(profiles);
-    //         console.log(recentMessage);
-    //     })
-
-    //     // Stomp 구독
-    //     if (stompClient) {
-    //         roomInfo.forEach(info => {
-    //             console.log(info.seq);
-    //             stompClient.subscribe('/topic/message/' + info.seq, (response) => {
-    //                 console.log(response);
-    //                 receiveMessage(response);
-    //             });
-    //         })
-
-    //       }
-    // }, [])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -78,9 +56,11 @@ let Message = () => {
                     // Stomp 구독
                     if (stompClient) {
                         roomInfoResponse.data.forEach(info => {
-                            stompClient.subscribe('/topic/message/' + info.seq, (response) => {
+                            let subscription = stompClient.subscribe('/topic/message/' + info.seq, (response) => {
                                 receiveMessage(response);
                             });
+                            console.log(subscription)
+                            setSubscriptions(prev => [...prev, {room_seq : info.seq, subscription : subscription}]);
                         });
                     }
                     return roomInfoResponse.data;
@@ -138,6 +118,30 @@ let Message = () => {
             })
             setRoomInfo(copy)
         }).catch(err => console.log(err))
+    }
+
+    const closeSvgClickHandler = (room_seq) => {
+        setLeaveRoom(room_seq);
+        setOpenDialog(true)
+    }
+
+    const dialogAgree = () => {
+        axios.delete("/api/message/leaveRoom",{params : {room_seq : leaveRoom}}).then((resp) => {
+            let copy = recentMessage.filter(prev => prev.room_seq != leaveRoom)
+            setRecentMessage(copy);
+        }).catch(err => console.log(err)).finally( () => {
+            subscriptions.find((sub) => sub.room_seq == leaveRoom).subscription.unsubscribe();
+            const copySubs = subscriptions.filter(sub => sub.room_seq != leaveRoom);
+            setSubscriptions(copySubs);
+            setLeaveRoom("");
+            setSelectedRoom("");
+        });
+
+        setOpenDialog(false)
+    }
+
+    const dialogDisagree = () => {
+        setOpenDialog(false)
     }
 
 
@@ -200,6 +204,9 @@ let Message = () => {
                                             </Row>
                                         </Col>
                                         <div className={style.is_read} key={room.room_seq} hidden={roomInfo.filter(info => info.seq == room.room_seq)[0].is_read}></div>
+                                        <Tooltip title="나가기">
+                                            <CloseIcon className={style.closeIcon} color="action" fontSize="small" onClick={(e)=>{e.stopPropagation(); closeSvgClickHandler(room.room_seq)}}></CloseIcon>
+                                        </Tooltip>
                                     </Row>
                                 )
                             })
@@ -217,6 +224,24 @@ let Message = () => {
                     </MessageContext.Provider>
                 </Col>
             </Row>
+            <Dialog
+                open={openDialog}
+                keepMounted
+                onClose={dialogDisagree}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle>{"방을 나가시겠습니까?"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                        방을 나가면 다시 복구 할 수 없습니다.<br></br>
+                        정말로 나가시겠습니까?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <MuiButton onClick={dialogDisagree}>취소</MuiButton>
+                    <MuiButton onClick={dialogAgree}>확인</MuiButton>
+                </DialogActions>
+            </Dialog>
         </Container>
     )
 };

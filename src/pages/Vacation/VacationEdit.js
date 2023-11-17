@@ -23,8 +23,18 @@ const VacationEdit = forwardRef((props, ref) => {
     const [approver, setApprover] = useState({}); //선택한 직원의 정보을 저장하는 useState 
     const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상세정보를 가져옵니다.
 
+    const [approverVacation, setApproverVacation] = useState({}); //선택한 직원의 정보을 저장하는 useState 
+    const [vacation, setVacation] = useState([]);
+    const {setMyVacation}=useContext(VacationContext);
 
-    const {vacation,myVacation,setMyVacation, setAddVacation}=useContext(VacationContext);
+     // 휴가 정보를 뿌리는 위한 값 가져오기
+     useEffect(() => {
+        axios.get("/api/vacation").then(resp => {
+            setVacation(resp.data);
+            console.log(resp.data);
+        })
+    }, [])
+
 
     const toggleModal = () => {
         setModalOpen(!isModalOpen);
@@ -33,7 +43,7 @@ const VacationEdit = forwardRef((props, ref) => {
     useEffect(() => {
         if (approver) {
             const fVacation = vacation.find(vacation => vacation.memberID === approver.id);
-            setMyVacation(fVacation || {}); // find가 undefined를 반환할 경우 빈 객체를 사용합니다.
+            setApproverVacation(fVacation || {})
         }
     }, [approver, vacation]);
 
@@ -68,12 +78,23 @@ const VacationEdit = forwardRef((props, ref) => {
                     totalAnnualEntitlement: resp.data.totalAnnualEntitlement,
                     usedDays: resp.data.usedDays,
                     remainingDays: resp.data.remainingDays,
-                }));
+                })); 
+                setApproverVacation(prevApproverVacation  => ({
+                    ...prevApproverVacation ,
+                    totalAnnualEntitlement: resp.data.totalAnnualEntitlement,
+                    usedDays: resp.data.usedDays,
+                    remainingDays: resp.data.remainingDays,
+                })); 
+            })
+            .catch(error => {
+                // 오류 처리 로직
+                console.error("휴가 조절 중 오류 발생:", error);
+            });
 
-                if(!vacationValue==='add'){
-                    setAddVacation(vacationValue);
-                }
-                
+            axios.get(`/api/vacation/myVacation/${approver.id}`)
+            .then(resp => {
+                console.log(resp.data)
+                setApproverVacation(resp.data);
             })
             .catch(error => {
                 // 오류 처리 로직
@@ -97,19 +118,19 @@ const VacationEdit = forwardRef((props, ref) => {
                     </div>
 
                     <div className={style.selectMemberVeiws}>
-                        {approver.id&&myVacation.memberID ? <TableContainer component={Paper}>
+                        {approver.id&&approverVacation.memberID ? <TableContainer component={Paper}>
                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                 <TableHead>
                                     <TableRow sx={{ backgroundColor: blue[200] }}>
                                         <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">이름</TableCell>
-                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year} 총연차`}</TableCell>
-                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year}년 사용연차`}</TableCell>
-                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year}년 잔여연차`}</TableCell>
+                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`총연차`}</TableCell>
+                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`사용연차`}</TableCell>
+                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`잔여연차`}</TableCell>
                                     </TableRow>
                                 </TableHead>
 
                                 <TableBody>
-                                    {myVacation.memberID ?
+                                    {approverVacation.memberID ?
                                         <TableRow className={style.hoverEffect}
                                             key={55}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }
@@ -118,9 +139,9 @@ const VacationEdit = forwardRef((props, ref) => {
                                             <TableCell style={{ fontSize: '15px' }} component="th" scope="row" align="center">
                                                 {`${approver.name} ${approver.position}`}
                                             </TableCell>
-                                            <TableCell style={{ fontSize: '15px' }} align="center">{`${myVacation.totalAnnualEntitlement}일`}</TableCell>
-                                            <TableCell style={{ fontSize: '15px' }} align="center">{`${myVacation.usedDays}일`}</TableCell>
-                                            <TableCell style={{ fontSize: '15px' }} align="center">{`${myVacation.remainingDays}일`}</TableCell>
+                                            <TableCell style={{ fontSize: '15px' }} align="center">{`${approverVacation.totalAnnualEntitlement}일`}</TableCell>
+                                            <TableCell style={{ fontSize: '15px' }} align="center">{`${approverVacation.usedDays}일`}</TableCell>
+                                            <TableCell style={{ fontSize: '15px' }} align="center">{`${approverVacation.remainingDays}일`}</TableCell>
                                         </TableRow>
                                         : "사용자를 불러오지 못하였습니다."}
                                 </TableBody>
@@ -137,7 +158,7 @@ const VacationEdit = forwardRef((props, ref) => {
                         </div>
                         <div className={style.editRow} >
                             <button className={style.btn} data-action="subtract" onClick={handleVacation}>
-                                휴가  사용
+                                휴가 삭감
                             </button>
                             <SpinButton id="subtractVacation"/>
                         </div>

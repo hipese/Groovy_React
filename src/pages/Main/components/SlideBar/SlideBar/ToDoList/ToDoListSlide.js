@@ -24,9 +24,9 @@ const ToDoListSlide = () => {
     const members = useContext(MemberContext);
     const { todoList, setTodoList, toggleStar, ListAdded } = useContext(ToDoListContext);
     const navigate = useNavigate();
-    const handleListClick = (event) => {
+    const handleListClick = (event, todo) => {
         if (!event.target.closest('.starimg')) {
-            navigate(`ToDoListBoard`);
+            navigate(`ToDoListBoard`, { state: { seq: todo.seq } });
         }
     };
     
