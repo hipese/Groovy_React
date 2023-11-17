@@ -1,5 +1,5 @@
 import styles from "./ToDoListBoard.module.css";
-import { useContext, useState } from "react"
+import { useContext, useState, useRef, useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom";
 import StarIcon from "../ToDoListMain/StarIcon";
 import Avatar from "@mui/material/Avatar";
@@ -27,6 +27,8 @@ const ToDoListBoard = () => {
   const { todoList, setTodoList, toggleStar, ListAdded } = useContext(ToDoListContext);
   const location = useLocation();
   const { seq } = location.state;
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState("");
 
   const navigate = useNavigate();
   const handleDeletePage = (seq) => {
@@ -37,8 +39,52 @@ const ToDoListBoard = () => {
       setTodoList(prev => prev.filter(todo => todo.seq !== seq));
       navigate("/Groovy/list");
     }
-
   };
+  const startEdit = (todo) => {
+    setIsEditing(true);
+    setEditedTitle(todo.title);
+  };
+
+  const handleEditChange = (event) => {
+    setEditedTitle(event.target.value);
+  };
+
+  const saveEdit = (todo, index) => {
+    if (editedTitle !== todo.title) {
+      axios.put(`/api/tdList/${todo.seq}`, { seq: todo.seq, title: editedTitle }).then(res => {
+        console.log("res: ", res);
+        setTodoList(prev => {
+          const updatedList = [...prev];
+          updatedList[index].title = editedTitle;
+          return updatedList;
+        }); 
+      });
+
+
+    }
+    setIsEditing(false);
+  };
+  const cancelEdit = () => {
+    setIsEditing(false);
+    setEditedTitle("");
+  }
+  const editBorderRef = useRef(null);
+  useEffect(() => {
+  const handleGlobalClick = (event) => {
+    if (isEditing && editBorderRef.current && !editBorderRef.current.contains(event.target)) {
+        setIsEditing(false);
+        setEditedTitle("");
+      }
+    };
+
+    // Add event listener to document
+    document.addEventListener('click', handleGlobalClick);
+
+    // Remove event listener on cleanup
+    return () => {
+      document.removeEventListener('click', handleGlobalClick);
+    };
+  }, [isEditing, editBorderRef]);
 
 
   return (
@@ -47,7 +93,14 @@ const ToDoListBoard = () => {
           if (todo.seq === seq) {
             return (
               <div className={styles.tdlboardheader}>
-                <div className={styles.tdlboardtitle} key={index}>{todo.title}</div>
+                {!isEditing ? (
+                  <div onClick={() => startEdit(todo)} className={styles.tdlboardtitle}>{todo.title}</div>
+                ) : (
+                    <div className={styles.editborder} ref={editBorderRef}>
+                      <input type="text" className={styles.titleedit} value={editedTitle} onChange={event => { handleEditChange(event); }} onKeyDown={e => e.key === "Enter" && saveEdit(todo, index)} />
+                      <button className={styles.titleeditbtn} onClick={cancelEdit}>x</button>
+                    </div>
+                )}
                 <div className={styles.tdlstarimg}><StarIcon key={index} isActive={todo.isActive} onClick={() => toggleStar(index)} /></div>
                 <div className={styles.tdlprofile}>
                   {members.member.profile_image ? <ProfileContainer><StyledAvatar src={`/profiles/${members.member.profile_image}`} alt="profile" /></ProfileContainer> : <ProfileContainer> <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile"/></ProfileContainer>}

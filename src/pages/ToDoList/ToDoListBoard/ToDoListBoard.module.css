@@ -13,9 +13,64 @@
     padding-left: 15px;
 }
 
+.editborder {
+    min-width: 300px;
+    max-width: 50%;
+    width: auto;
+    border: 1px solid black;
+    padding: 2px;
+    border-radius: 3px;
+    position: relative;
+    display: inline-block;
+}
+
+.editborder2 {
+    width: 220px;
+    border: 1px solid black;
+    padding: 2px;
+    border-radius: 3px;
+    position: relative;
+    display: inline-block;
+
+}
+
 .tdlboardtitle {
     font-size: 18px;
     font-weight: bold;
+    cursor: pointer;
+}
+
+.titleedit {
+    width: 90%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.titleedit2 {
+    width: 90%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    padding-left: 5px;
+
+}
+
+.titleeditbtn {
+    background-color: transparent;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50%;
+    border: none;
+    position: absolute;
+    top: 0px;
+    right: 2px;
 }
 
 .tdlstarimg {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'; 
 import styles from "./ToDoListBoard.module.css";
 import { MemberContext } from "../../Groovy/Groovy";
@@ -13,6 +13,8 @@ function DragDropList({ parent_seq }) {
   const [newDbTitle, setNewDbTitle] = useState([]);
   const [newListAdded, setNewListAdded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState("");
 
   // 드래그가 종료되었을 때
   const handleOnDragEnd = async (result) => {
@@ -179,6 +181,46 @@ function DragDropList({ parent_seq }) {
     fetchAllContents();
   }, [newDbTitle]);
 
+  /////////////////////////////////여기까지가 로딩중일 때 보여줄 화면 렌더링 및 title과 contents를 불러오는 함수 /////////////////////////////////
+
+  const startEdit = (title) => {
+    setIsEditing(prev => ({ ...prev, [title.seq]: true }));
+    setEditedTitle(prev => ({ ...prev, [title.seq]: title.title }));
+  };
+
+  const handleEditChange = (titleSeq, event) => {
+    setEditedTitle(prev => ({ ...prev, [titleSeq]: event.target.value }));
+  };
+
+ const saveEdit = async (titleSeq, index) => {
+    if (editedTitle[titleSeq] !== newDbTitle[index].title) {
+      const response = await axios.put(`/api/tdltitle/${titleSeq}`, { seq: titleSeq, title: editedTitle[titleSeq] });
+      setNewDbTitle(prev => {
+        const updatedList = [...prev];
+        updatedList[index].title = editedTitle[titleSeq];
+        return updatedList;
+      });
+    }
+    setIsEditing(prev => ({ ...prev, [titleSeq]: false }));
+  };
+  const cancelEdit = (titleSeq) => {
+    setIsEditing(prev => ({ ...prev, [titleSeq]: false }));
+    setEditedTitle(prev => ({ ...prev, [titleSeq]: "" }));
+  };
+  const editBorderRef = useRef(null);
+  useEffect(() => {
+    const handleGlobalClick = (event) => {
+      if (isEditing && editBorderRef.current && !editBorderRef.current.contains(event.target)) {
+        setIsEditing(false);
+        setEditedTitle("");
+      }
+    };
+    document.addEventListener('click', handleGlobalClick);
+    return () => {
+      document.removeEventListener('click', handleGlobalClick);
+    };
+  }, [isEditing, editBorderRef]);
+
   return isLoading ? (
     <div className={styles.loadcontainer}>
       <div className={styles.loading}></div>
@@ -190,7 +232,18 @@ function DragDropList({ parent_seq }) {
                 {newDbTitle.map((title, index) => {
                     return (
                       <li key={index} className={styles.tdlinput}>
-                        <div className={styles.tdllisttitle}>{title.title} <button onClick={() => handleDeleteTitle(title.seq)}>x</button></div>
+                        <div className={styles.tdllisttitle}>
+                          
+                          {isEditing[title.seq] ? (
+                            <div className={styles.editborder2} ref={editBorderRef}>
+                              <input className={styles.titleedit2} value={editedTitle[title.seq]} onChange={event => { handleEditChange(title.seq,event); }} onKeyDown={e => e.key === "Enter" && saveEdit(title.seq, index)} />
+                              <button className={styles.titleeditbtn} onClick={() => cancelEdit(title.seq)}>x</button>
+                            </div>
+                          ) : (
+                            <div onClick={() => startEdit(title)}>{title.title}</div>
+                          )}
+
+                          <button onClick={() => handleDeleteTitle(title.seq)}>x</button></div>
                           <Droppable droppableId={`droppable-${title.seq}`} key={title.seq} type={`list-${title.seq}`}>
                             {(provided) => (
                               <ul className={styles.tdlul} {...provided.droppableProps} ref={provided.innerRef}>
