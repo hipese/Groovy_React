@@ -130,8 +130,13 @@ const MultipleChoice = ({seq}) => {
     return (
     <div>
         <div className={`${style.border} ${style.center} ${style.marginT20}`}>
-        객관식 질문 : <input type="text" name='contents' placeholder='객관식 질문 입력' onChange={(e)=>handleContentsChange(e)}/> 
-        <button onClick={addQuestion}>객관식 보기 추가</button>
+            <div className={`${style.center}`}>
+                객관식 질문 : <input type="text" name='contents' placeholder='객관식 질문 입력' onChange={(e)=>handleContentsChange(e)}/> 
+                <Button variant="outlined" size="medium" onClick={addQuestion}>
+                    객관식 보기 추가
+                </Button>
+            </div>        
+            <Divider/>
             <div>
                 {newQuestions.map((question, index) => (
                     <div key={index} className={`${style.padding10}`}>
@@ -176,8 +181,15 @@ const SurveyQuestion = () => {
 
     return(
         <div className={`${style.writeSection}`}>
-            <button onClick={addOpenEndedQuestion}>주관식 질문 추가</button>
-            <button onClick={addMultipleChoiceQuestion}>객관식 질문 추가</button>
+            <div className={`${style.padding10} ${style.btnEven}`}>
+                <Button variant="contained" size="medium" onClick={addOpenEndedQuestion}>
+                    주관식 질문 추가
+                </Button>
+                <Button variant="contained" size="medium" onClick={addMultipleChoiceQuestion}>
+                    객관식 질문 추가
+                </Button>
+            </div>
+            <Divider sx={{bgcolor:"black"}}/>            
             {questions}
             <Divider sx={{bgcolor:"black"}}/>
         </div>
@@ -262,7 +274,7 @@ const SurveyWrite = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <SurveyQuestion/>
-                        <Stack direction="row" spacing={5} className={`${style.center}`}>
+                        <Stack direction="row" spacing={5} className={`${style.center} ${style.padding10}`}>
                             <Button variant="outlined" startIcon={<DeleteIcon />} onClick={ts}>
                                 취소
                             </Button>

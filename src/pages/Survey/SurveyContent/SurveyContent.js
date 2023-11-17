@@ -1,4 +1,4 @@
-import { Button, Divider, Grid, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Divider, Grid, Typography } from '@mui/material';
 import style from './survey_content.module.css'
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -53,6 +53,7 @@ const SurveyTitle = () => {
 const SurveyQuestion = () => {
     const {seq} = useParams();
     const {contextData} = useContext(SurveyContext);
+    const titleData = contextData ? contextData[0] : {title:"",writer:"",contents:""};
     const {loginID} = useContext(LoginContext);
     const questionData = contextData ? contextData.slice(1) : [{}];
     const [response,setResponse] = useState([]);
@@ -82,6 +83,12 @@ const SurveyQuestion = () => {
     const show = () =>{
         console.log(response);
         axios.post(`/api/survey/response/${seq}`,response).then(res=>{
+            navi("/Groovy/survey");
+        });
+    }
+
+    const deleteContents = () => {
+        axios.delete(`/api/survey/delete/${seq}`).then(res=>{
             navi("/Groovy/survey");
         });
     }
@@ -128,6 +135,9 @@ const SurveyQuestion = () => {
                 <Link to="/Groovy/survey"><Button variant="outlined">
                     뒤로가기
                 </Button></Link>
+                {
+                    loginID == titleData.writer ? <Button variant="outlined" color="error" onClick={deleteContents}>삭제하기</Button> : ""
+                }
                 <Button variant="contained" onClick={show}  endIcon={<SendIcon />}>
                     제출
                 </Button>
@@ -139,16 +149,32 @@ const SurveyQuestion = () => {
 const SurveyContext = createContext();
 
 const SurveyContent = () => {
+
+    const CircularIndeterminate = () => {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </Box>
+        );
+    };
+
     const {seq} = useParams();
     const [contextData,setContextData] = useState(undefined);
+    const [isLoading,setLoading] = useState(true);
 
     const getData = async() => {
-        const res = await axios.get(`/api/survey/content/${seq}`);
+        const res = await axios.get(`/api/survey/content/${seq}`).finally(()=>{
+            setLoading(false);
+        });
         setContextData(res.data);
     }
     useEffect(()=>{
         getData();
     },[]);
+
+    if(isLoading){
+        return(<CircularIndeterminate/>)
+    }
     return (
         <div className={`${style.padding40} ${style.contentDiv}`}>
             <SurveyContext.Provider value={{contextData,setContextData}}>

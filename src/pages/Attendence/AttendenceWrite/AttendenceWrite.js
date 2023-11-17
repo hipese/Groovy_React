@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState,useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import style from "./AttendenceWrite.module.css";
@@ -39,6 +39,7 @@ import Org_Chart from "../../Org_Chart/components/Org_Chart_Modal/Org_Chart";
 import { LoginContext } from "../../../App";
 import { useWebSocket } from "../../../WebSocketContext/WebSocketContext";
 import { isWeekend } from 'date-fns';
+import { MemberContext } from "../../Groovy/Groovy";
 
 const modules = {
     toolbar: [
@@ -55,9 +56,11 @@ const formats = [
 ];
 
 const AttendenceWrite = () => {
-
+    
     const stompClient = useWebSocket();
     const { loginID } = useContext(LoginContext);
+    const members=useContext(MemberContext);
+    
     // 모달을 키거나 끌때 필요한 놈
     const [isModalOpen, setModalOpen] = useState(false);
     const [open, setOpen] = React.useState(true);
@@ -82,6 +85,14 @@ const AttendenceWrite = () => {
     const [total_date, setTotal_date] = useState(1);
     const currentDatePicker = dayjs();
 
+    const [signWriterInfo, setSignWriterInfo] = useState({}); //사용자의 상세정보
+
+    useEffect(() => {
+        axios.get(`/api/member/signWriterInfo/${members.member.id}`).then(resp2 => {
+            setSignWriterInfo(resp2.data);
+        });
+ 
+    }, []);
 
     const toggleModal = () => {
         setModalOpen(!isModalOpen);
@@ -306,7 +317,7 @@ const AttendenceWrite = () => {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안부서</TableCell>
-                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">마케팅</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">{signWriterInfo.group_name}</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안일</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">{formattedDate}</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안문서</TableCell>

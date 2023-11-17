@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Badge from "@mui/material/Badge";
@@ -48,6 +48,11 @@ function DotBadge() {
   const [open, setOpen] = React.useState(false);
 
   const dropdownRef = React.useRef(null); // 드롭다운 참조를 위한 ref
+  const notificationsRef = useRef(notifications);
+
+  useEffect(() => {
+    notificationsRef.current = notifications;
+  }, [notifications])
 
 
   const fetchNotifications = () => {
@@ -74,13 +79,15 @@ function DotBadge() {
         contents: receivedMessage.message, // 서버의 'message'를 클라이언트의 'contents'로 변환
       };
       console.log(transformedMessage);
-      setNotifications((prevNotifications) => [transformedMessage, ...prevNotifications]);
+      if(!((window.location.pathname.includes("/Groovy/message") && transformedMessage.contents.includes("메시지")) || (!window.location.pathname.includes("/Groovy/message") && notificationsRef.current.filter(notice => notice.contents.includes("메시지")).length >= 1) )) {
+        setNotifications((prevNotifications) => [transformedMessage, ...prevNotifications]);
+        setOpen(true);
+      }
     };
 
     if (stompClient) {
       const subscription = stompClient.subscribe('/queue/' + loginID, (response) => {
         handleWebSocketMessage(response);
-        setOpen(true);
       });
 
       return () => {
@@ -118,13 +125,16 @@ function DotBadge() {
 
 
   const handleNotificationCheck = (parent_seq) => {
-    axios.put(`/api/realtime_notification/${parent_seq}`)
+    if(parent_seq != null) {
+      axios.put(`/api/realtime_notification/${parent_seq}`)
       .then(resp => {
-        fetchNotifications();
+        
       })
       .catch(e => {
         console.error(e);
       });
+    }
+    fetchNotifications();
     setIsNotificationOpen(!isNotificationOpen);
   }
 
@@ -192,6 +202,14 @@ function DotBadge() {
                   ) : (
                     <React.Fragment />
                   )}
+                </Link>
+              )}
+
+              {notification.contents.includes("메시지") //&& location.pathname != "/Groovy/message/"
+               //&& notifications.filter(notice => notice.contents.includes("메시지")).length <= 1 
+               && (
+                <Link to={`/Groovy/message/`}>
+                  <Alert severity="info">{notification.contents}</Alert>
                 </Link>
               )}
             </div>
