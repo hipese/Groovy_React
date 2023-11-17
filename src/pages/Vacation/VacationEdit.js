@@ -102,9 +102,9 @@ const VacationEdit = forwardRef((props, ref) => {
                                 <TableHead>
                                     <TableRow sx={{ backgroundColor: blue[200] }}>
                                         <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">이름</TableCell>
-                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year} 총연차`}</TableCell>
-                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year}년 사용연차`}</TableCell>
-                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`${myVacation.year}년 잔여연차`}</TableCell>
+                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`총연차`}</TableCell>
+                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`사용연차`}</TableCell>
+                                        <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">{`잔여연차`}</TableCell>
                                     </TableRow>
                                 </TableHead>
 
@@ -137,7 +137,7 @@ const VacationEdit = forwardRef((props, ref) => {
                         </div>
                         <div className={style.editRow} >
                             <button className={style.btn} data-action="subtract" onClick={handleVacation}>
-                                휴가  사용
+                                휴가 삭감
                             </button>
                             <SpinButton id="subtractVacation"/>
                         </div>
