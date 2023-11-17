@@ -167,7 +167,7 @@ function DotBadge() {
         <div ref={dropdownRef} className={style.noticeContainer}>
           {notifications.map((notification, index) => (
             <div key={index} className={style.notice} onClick={() => handleNotificationCheck(notification.parent_seq)}>
-              {notification.contents.includes("전자결재") && (
+              {notification.contents.includes("결재") && (
                 <Link to={`/Groovy/signlist/detail/${notification.parent_seq}`}>
                   {notification.contents.includes("승인") ? (
                     <Alert severity="success">{notification.contents}</Alert>
