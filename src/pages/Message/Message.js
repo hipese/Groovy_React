@@ -33,6 +33,7 @@ let Message = () => {
     const roomInfoRef = useRef(roomInfo);
     const [openDialog, setOpenDialog] = useState(false);
     const [leaveRoom, setLeaveRoom] = useState("");
+    const [subscriptions, setSubscriptions] = useState([]);
 
     useEffect(() => {
         recentMessageRef.current = recentMessage;
@@ -55,9 +56,11 @@ let Message = () => {
                     // Stomp 구독
                     if (stompClient) {
                         roomInfoResponse.data.forEach(info => {
-                            stompClient.subscribe('/topic/message/' + info.seq, (response) => {
+                            let subscription = stompClient.subscribe('/topic/message/' + info.seq, (response) => {
                                 receiveMessage(response);
                             });
+                            console.log(subscription)
+                            setSubscriptions(prev => [...prev, {room_seq : info.seq, subscription : subscription}]);
                         });
                     }
                     return roomInfoResponse.data;
@@ -126,7 +129,14 @@ let Message = () => {
         axios.delete("/api/message/leaveRoom",{params : {room_seq : leaveRoom}}).then((resp) => {
             let copy = recentMessage.filter(prev => prev.room_seq != leaveRoom)
             setRecentMessage(copy);
-        }).catch(err => console.log(err)).finally(setLeaveRoom(""));
+        }).catch(err => console.log(err)).finally( () => {
+            subscriptions.find((sub) => sub.room_seq == leaveRoom).subscription.unsubscribe();
+            const copySubs = subscriptions.filter(sub => sub.room_seq != leaveRoom);
+            setSubscriptions(copySubs);
+            setLeaveRoom("");
+            setSelectedRoom("");
+        });
+
         setOpenDialog(false)
     }
 
