@@ -74,7 +74,7 @@ function DotBadge() {
         contents: receivedMessage.message, // 서버의 'message'를 클라이언트의 'contents'로 변환
       };
       console.log(transformedMessage);
-      setNotifications((prevNotifications) => [...prevNotifications, transformedMessage]);
+      setNotifications((prevNotifications) => [transformedMessage, ...prevNotifications]);
     };
 
     if (stompClient) {
@@ -167,17 +167,33 @@ function DotBadge() {
         <div ref={dropdownRef} className={style.noticeContainer}>
           {notifications.map((notification, index) => (
             <div key={index} className={style.notice} onClick={() => handleNotificationCheck(notification.parent_seq)}>
-              <Link to={`/Groovy/signlist/detail/${notification.parent_seq}`}>
-                {notification.contents.includes("승인") ? (
-                  <Alert severity="success">{notification.contents}</Alert>
-                ) : notification.contents.includes("반려") ? (
-                  <Alert severity="error">{notification.contents}</Alert>
-                ) : notification.contents.includes("도착") ? (
-                  <Alert severity="info">{notification.contents}</Alert>
-                ) : (
-                  <React.Fragment />
-                )}
-              </Link>
+              {notification.contents.includes("결재") && (
+                <Link to={`/Groovy/signlist/detail/${notification.parent_seq}`}>
+                  {notification.contents.includes("승인") ? (
+                    <Alert severity="success">{notification.contents}</Alert>
+                  ) : notification.contents.includes("반려") ? (
+                    <Alert severity="error">{notification.contents}</Alert>
+                  ) : notification.contents.includes("도착") ? (
+                    <Alert severity="info">{notification.contents}</Alert>
+                  ) : (
+                    <React.Fragment />
+                  )}
+                </Link>
+              )}
+
+              {notification.contents.includes("휴가") && (
+                <Link to={`/Groovy/attendence/detail/${notification.parent_seq}`}>
+                  {notification.contents.includes("승인") ? (
+                    <Alert severity="success">{notification.contents}</Alert>
+                  ) : notification.contents.includes("반려") ? (
+                    <Alert severity="error">{notification.contents}</Alert>
+                  ) : notification.contents.includes("도착") ? (
+                    <Alert severity="info">{notification.contents}</Alert>
+                  ) : (
+                    <React.Fragment />
+                  )}
+                </Link>
+              )}
             </div>
           ))}
           {notifications.length === 0 && (
@@ -188,6 +204,7 @@ function DotBadge() {
           )}
         </div>
       </Grow>
+
       <div>
         <Snackbar
           open={open}

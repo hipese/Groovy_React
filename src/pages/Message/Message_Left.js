@@ -2,6 +2,7 @@ import { Col, Row } from "reactstrap";
 import style from "./Message_Chat_Component.module.css";
 import { useContext } from "react";
 import { ProfileContext, SelectContext } from "./Message";
+import { format } from 'date-fns';
 
 const MessageLeft = (props) => {
     const { profiles } = useContext(ProfileContext);
@@ -24,7 +25,7 @@ const MessageLeft = (props) => {
                         })
                     }
                 </Col>
-                <Col xs={9} className={style.msg_left_info_container}>
+                <Col xs={8} className={style.msg_left_info_container}>
                     <Row className={style.msg_left_name_container}>
                         <Col xs={12} className={style.msg_left_name}>
                         {
@@ -37,6 +38,11 @@ const MessageLeft = (props) => {
                             {props.msg.contents}
                         </Col>
                     </Row>
+                </Col>
+                <Col xs={1} className={style.msg_left_time_container}>
+                    {
+                        format(new Date(props.msg.write_time), "a h:mm")
+                    }
                 </Col>
             </Row>
         </Col>

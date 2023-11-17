@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import style from "./Sign_Write.module.css";
@@ -33,6 +33,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FolderIcon from '@mui/icons-material/Folder';
+import { MemberContext } from "../../../Groovy/Groovy";
 
 const modules = {
     toolbar: [
@@ -50,13 +51,39 @@ const formats = [
 
 const Sign_Write = () => {
 
+    const formatDate = (date) => {
+        const d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
+    };
+
+    const todayDate = formatDate(new Date());
+
     const stompClient = useWebSocket();
     const { loginID } = useContext(LoginContext);
+    const members = useContext(MemberContext);
+
     // 모달을 키거나 끌때 필요한 놈
     const [isModalOpen, setModalOpen] = useState(false);
-    const [open, setOpen] = React.useState(true);
-
     const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상새정보를 가져옵니다.
+    const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
+    const [signWriterInfo, setSignWriterInfo] = useState({}); //사용자의 상세정보
+
+    useEffect(() => {
+        axios.get(`/api/member/signWriterInfo/${members.member.id}`).then(resp2 => {
+            setSignWriterInfo(resp2.data);
+        });
+ 
+    }, []);
+
+    const toggleModal = () => {
+        setModalOpen(!isModalOpen);
+    };
+
+    const [open, setOpen] = React.useState(true);
 
     const handleClick = () => {
         setOpen(!open);
@@ -66,17 +93,13 @@ const Sign_Write = () => {
     const [contents, setContents] = useState("");
     const [document_type, setDocument_type] = useState("품의서");
     const [title, setTitle] = useState("");
-    const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
     const [accept] = useState(1);
     const [comment] = useState("");
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
     const [formdata, setFormData] = useState({
         files: []
     });
-
-
-    const toggleModal = () => {
-        setModalOpen(!isModalOpen);
-    };
 
     const handleChange = (event) => {
         setDocument_type(event.target.value);
@@ -147,7 +170,6 @@ const Sign_Write = () => {
             .catch(error => {
                 console.error(error);
             });
-
     };
 
 
@@ -172,7 +194,7 @@ const Sign_Write = () => {
                                     onChange={handleChange}
                                 >
                                     <MenuItem value="품의서">품의서</MenuItem>
-                                    <MenuItem value="휴가신청서">휴가신청서</MenuItem>
+                                    <MenuItem value="증명서">증명서</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>
@@ -182,7 +204,7 @@ const Sign_Write = () => {
                             sx={{ width: '200px' }}
                             id="outlined-read-only-input"
                             label="기안작성자"
-                            value={loginID}
+                            value={signWriterInfo.name}
                             InputProps={{
                                 readOnly: true,
                                 startAdornment: (
@@ -201,8 +223,8 @@ const Sign_Write = () => {
                         </div>
                         <div className={style.buttonDiv}>
                             <button onClick={toggleModal} className={style.btn}>조직도 검색</button>
-                            <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} 
-                            selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
+                            <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover}
+                                selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
                         </div>
                     </div>
                     <div className={style.table}>
@@ -240,11 +262,11 @@ const Sign_Write = () => {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안부서</TableCell>
-                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">마케팅</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center"> {signWriterInfo && signWriterInfo.group_name ? signWriterInfo.group_name : "부서선택"}</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안일</TableCell>
-                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">2023-11-03</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">{formattedDate}</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안문서</TableCell>
-                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">자동설정</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">{document_type}</TableCell>
                                     </TableRow>
                                 </TableHead>
                             </Table>
