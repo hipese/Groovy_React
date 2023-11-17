@@ -62,7 +62,7 @@ const DeptNoticeList = () => {
         });
     },[]);
     return (
-        <div className={`${style.surveyContents}`}>
+        <div className={`${style.noticeContents}`}>
             <div className={`${style.padding10}`}>
                 <Grid container spacing={2}>
                     <Grid item xs={7} className={`${style.vcenter}`}>
@@ -82,7 +82,6 @@ const DeptNoticeList = () => {
                         </Search>
                     </Grid>
                     <Grid item xs={1} className={`${style.vcenter}`}>
-                        {isExcutives ? <Link to="write_notice"><button>공지 생성</button></Link> : ""}
                         
                     </Grid>
                 </Grid>

@@ -93,7 +93,12 @@
 }
 
 .modalWidth{
-    width: 900px;
+    width: 950px;
+}
+
+.marginTB20{
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 /* ProjectContent */
