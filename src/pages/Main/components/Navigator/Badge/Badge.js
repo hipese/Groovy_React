@@ -79,7 +79,7 @@ function DotBadge() {
         contents: receivedMessage.message, // 서버의 'message'를 클라이언트의 'contents'로 변환
       };
       console.log(transformedMessage);
-      if(!((window.location.pathname.includes("/Groovy/message") && transformedMessage.contents.includes("메시지")) || (!window.location.pathname.includes("/Groovy/message") && notificationsRef.current.filter(notice => notice.contents.includes("메시지")).length >= 1) )) {
+      if (!((window.location.pathname.includes("/Groovy/message") && transformedMessage.contents.includes("메시지")) || (!window.location.pathname.includes("/Groovy/message") && notificationsRef.current.filter(notice => notice.contents.includes("메시지")).length >= 1))) {
         setNotifications((prevNotifications) => [transformedMessage, ...prevNotifications]);
         setOpen(true);
       }
@@ -124,15 +124,15 @@ function DotBadge() {
 
 
 
-  const handleNotificationCheck = (parent_seq) => {
-    if(parent_seq != null) {
-      axios.put(`/api/realtime_notification/${parent_seq}`)
-      .then(resp => {
-        
-      })
-      .catch(e => {
-        console.error(e);
-      });
+  const handleNotificationCheck = async(parent_seq) => {
+    if (parent_seq != null) {
+      const realtime_notificationResponse = await axios.put(`/api/realtime_notification/${parent_seq}`)
+        .then(resp => {
+          
+        })
+        .catch(e => {
+          console.error(e);
+        });
     }
     fetchNotifications();
     setIsNotificationOpen(!isNotificationOpen);
@@ -206,12 +206,12 @@ function DotBadge() {
               )}
 
               {notification.contents.includes("메시지") //&& location.pathname != "/Groovy/message/"
-               //&& notifications.filter(notice => notice.contents.includes("메시지")).length <= 1 
-               && (
-                <Link to={`/Groovy/message/`}>
-                  <Alert severity="info">{notification.contents}</Alert>
-                </Link>
-              )}
+                //&& notifications.filter(notice => notice.contents.includes("메시지")).length <= 1 
+                && (
+                  <Link to={`/Groovy/message/`}>
+                    <Alert severity="info">{notification.contents}</Alert>
+                  </Link>
+                )}
             </div>
           ))}
           {notifications.length === 0 && (
