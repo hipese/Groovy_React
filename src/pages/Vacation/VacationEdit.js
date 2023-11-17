@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useContext, useEffect, useState } from "react";
 import style from "./VacationEdit.module.css"
 import axios from "axios";
 import Org_Chart from "../Org_Chart/components/Org_Chart_Modal/Org_Chart";
@@ -11,6 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { blue } from '@mui/material/colors';
 import SpinButton from "./SpinButton";
+import { VacationContext } from "../Groovy/Groovy";
 
 const VacationEdit = forwardRef((props, ref) => {
 
@@ -22,24 +23,12 @@ const VacationEdit = forwardRef((props, ref) => {
     const [approver, setApprover] = useState({}); //선택한 직원의 정보을 저장하는 useState 
     const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상세정보를 가져옵니다.
 
+
+    const {vacation,myVacation,setMyVacation, setAddVacation}=useContext(VacationContext);
+
     const toggleModal = () => {
         setModalOpen(!isModalOpen);
     };
-
-
-
-    const [vacation, setVacation] = useState([]);
-    const [myVacation, setMyVacation] = useState({}); //나중에 년도 검색할거면 이거 배열로 바꾸고 로직 추가해야함 
-
-    //직원 검색을 위한 변수들
-    
-
-    useEffect(() => {
-        axios.get("/api/vacation").then(resp => {
-            setVacation(resp.data);
-            console.log(resp.data);
-        })
-    }, [])
 
     useEffect(() => {
         if (approver) {
@@ -47,7 +36,6 @@ const VacationEdit = forwardRef((props, ref) => {
             setMyVacation(fVacation || {}); // find가 undefined를 반환할 경우 빈 객체를 사용합니다.
         }
     }, [approver, vacation]);
-
 
     const handleVacation = (e) => {
         const action = e.target.getAttribute('data-action');
@@ -81,6 +69,11 @@ const VacationEdit = forwardRef((props, ref) => {
                     usedDays: resp.data.usedDays,
                     remainingDays: resp.data.remainingDays,
                 }));
+
+                if(!vacationValue==='add'){
+                    setAddVacation(vacationValue);
+                }
+                
             })
             .catch(error => {
                 // 오류 처리 로직
@@ -104,7 +97,7 @@ const VacationEdit = forwardRef((props, ref) => {
                     </div>
 
                     <div className={style.selectMemberVeiws}>
-                        {myVacation.memberID ? <TableContainer component={Paper}>
+                        {approver.id&&myVacation.memberID ? <TableContainer component={Paper}>
                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                 <TableHead>
                                     <TableRow sx={{ backgroundColor: blue[200] }}>

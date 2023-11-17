@@ -1,28 +1,44 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
-import style from "./Board.module.css";
-import { Pagination, PaginationItem } from "@mui/material";
+import React, { useState, useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { blue } from '@mui/material/colors';
+import InsertLinkIcon from '@mui/icons-material/InsertLink';
+import { Pagination, PaginationItem } from '@mui/material';
+import style from './List.module.css';
+import { MemberContext } from '../Groovy/Groovy';
+import { Input } from "reactstrap";
 
 const List = () => {
+    const { member } = useContext(MemberContext);
+    const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [boards, setBoards] = useState([]);
     const COUNT_PER_PAGE = 10;
 
     useEffect(() => {
+        const dept = member.group_name;
         Promise.all([
-            axios.get("/api/boards/recent"),
-            axios.get("/api/boards/recentDept")
-        ]).then(responses => {
-            const recentBoards = responses[0].data.map(board => ({ ...board, isRecentDept: 'recent' }));
-            const deptBoards = responses[1].data.map(board => ({ ...board, isRecentDept: 'dept' }));
+            axios.get('/api/boards/recent'),
+            axios.get(`/api/boards/recentDept/${dept}`),
+        ])
+            .then((responses) => {
+                const recentBoards = responses[0].data.map((board) => ({
+                    ...board,
+                    isRecentDept: 'recent',
+                }));
+                const deptBoards = responses[1].data.map((board) => ({
+                    ...board,
+                    isRecentDept: 'dept',
+                }));
 
-            const combinedBoards = [...recentBoards, ...deptBoards];
-            combinedBoards.sort((a, b) => new Date(b.write_date) - new Date(a.write_date));
-            setBoards(combinedBoards);
-        }).catch(() => {
-        });
-    }, []);
+                const combinedBoards = [...recentBoards, ...deptBoards];
+                combinedBoards.sort(
+                    (a, b) => new Date(b.write_date) - new Date(a.write_date)
+                );
+                setBoards(combinedBoards);
+            })
+            .catch(() => { });
+    }, [member.group_name]);
 
     const totalItems = boards.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
@@ -36,47 +52,116 @@ const List = () => {
     const visibleBoard = boards.slice(startIndex, endIndex);
 
     const getDetailLink = (seq, isRecentDept) => {
-        const basePath = isRecentDept === 'recent' ? '/groovy/board/detail' : '/groovy/board/detailDept';
+        const basePath =
+            isRecentDept === 'recent'
+                ? '/groovy/board/detail'
+                : '/groovy/board/detailDept';
         return `${basePath}/${seq}`;
     };
 
+    const inputChangeHandler = (e) => {
+        setSearch(e.target.value);
+    };
+
     return (
-        <div className="Boardcontainer">
+        <div className={style.boardContainer}>
             <div className={style.search}>
-                <input type="text" placeholder='게시글 검색'></input>
-                <button>검색</button>
+                <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
             </div>
-            <hr></hr>
-            <div className="body">
+            <hr />
+            <div className={style.body}>
+                <div className={style.margin}>최근 게시물</div>
+                <hr />
                 <div className={style.margin}>
-                    최근 게시물
+                    <div className={style.boardTable}>
+                        <div className={style.tableRow}>
+                            <div className={style.tableHeader}>작성자</div>
+                            <div className={style.tableHeader}>파일</div>
+                            <div className={style.tableHeader}>제목</div>
+                            <div className={style.tableHeader}>조회수</div>
+                            <div className={style.tableHeader}>카테고리</div>
+                            <div className={style.tableHeader}>작성일</div>
+                        </div>
+                        {search === ''
+                            ? visibleBoard.map((e) => (
+                                <div key={e.seq} className={style.tableRow}>
+                                    <div className={style.tableCell}>
+                                        {e.name} {e.position}
+                                    </div>
+                                    <div className={style.tableCell}>
+                                        {e.fseq !== 0 && (
+                                            <InsertLinkIcon
+                                                sx={{ color: blue[200] }}
+                                            />
+                                        )}
+                                    </div>
+                                    <div className={style.tableCell}>
+                                        <Link
+                                            to={getDetailLink(
+                                                e.seq,
+                                                e.isRecentDept
+                                            )}
+                                        >
+                                            {e.title}
+                                        </Link>
+                                    </div>
+                                    <div className={style.tableCell}>
+                                        {e.view_count}
+                                    </div>
+                                    <div className={style.tableCell}>
+                                        {e.dept} {e.category}
+                                    </div>
+                                    <div className={style.tableCell}>
+                                        {e.write_date}
+                                    </div>
+                                </div>
+                            ))
+                            : visibleBoard
+                                .filter(
+                                    (e) =>
+                                        e.name.includes(search) ||
+                                        e.contents.includes(search) ||
+                                        e.title.includes(search)
+                                )
+                                .map((e) => (
+                                    <div
+                                        key={e.seq}
+                                        className={style.tableRow}
+                                    >
+                                        <div className={style.tableCell}>
+                                            {e.name} {e.position}
+                                        </div>
+                                        <div className={style.tableCell}>
+                                            {e.fseq !== 0 && (
+                                                <InsertLinkIcon
+                                                    sx={{ color: blue[200] }}
+                                                />
+                                            )}
+                                        </div>
+                                        <div className={style.tableCell}>
+                                            <Link
+                                                to={getDetailLink(
+                                                    e.seq,
+                                                    e.isRecentDept
+                                                )}
+                                            >
+                                                {e.title}
+                                            </Link>
+                                        </div>
+                                        <div className={style.tableCell}>
+                                            {e.view_count}
+                                        </div>
+                                        <div className={style.tableCell}>
+                                            {e.dept} {e.category}
+                                        </div>
+                                        <div className={style.tableCell}>
+                                            {e.write_date}
+                                        </div>
+                                    </div>
+                                ))}
+                    </div>
                 </div>
-                <hr></hr>
-                <div className={style.margin}>
-                    <table border="1">
-                        <tbody>
-                            <tr>
-                                <th>Writer</th>
-                                <th>Title</th>
-                                <th>View_Count</th>
-                                <th>Category</th>
-                                <th>Write_Date</th>
-                            </tr>
-                            {visibleBoard.map((e) => (
-                                <tr key={e.seq}>
-                                    <td>{e.writer}</td>
-                                    <td>
-                                        <Link to={getDetailLink(e.seq, e.isRecentDept)}>{e.title}</Link>
-                                    </td>
-                                    <td>{e.view_count}</td>
-                                    <td>{e.category}</td>
-                                    <td>{e.write_date}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                <hr></hr>
+                <hr />
                 <div className={style.margin}>
                     <Pagination
                         count={totalPages}
@@ -84,9 +169,9 @@ const List = () => {
                         onChange={onPageChange}
                         size="medium"
                         sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            padding: "15px 0",
+                            display: 'flex',
+                            justifyContent: 'center',
+                            padding: '15px 0',
                         }}
                         renderItem={(item) => (
                             <PaginationItem {...item} sx={{ fontSize: 15 }} />
@@ -95,7 +180,7 @@ const List = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default List;
