@@ -11,27 +11,38 @@
     align-items: center;
     position: relative;
     padding-left: 15px;
+    overflow: auto;
 }
 
 .editborder {
     min-width: 300px;
     max-width: 50%;
     width: auto;
-    border: 1px solid black;
+    border: 2px solid rgb(0, 100, 255);
+    box-shadow: 0 0 3px 0 rgb(0, 100, 255) inset;
     padding: 2px;
-    border-radius: 3px;
+    border-radius: 10px;
     position: relative;
     display: inline-block;
 }
 
 .editborder2 {
-    width: 220px;
-    border: 1px solid black;
-    padding: 2px;
-    border-radius: 3px;
+    width: 100%;
+    height: 100%;
     position: relative;
     display: inline-block;
+    border: 2px solid rgb(0, 100, 255);
+    box-shadow: 0 0 3px 0 rgb(0, 100, 255) inset;
+    border-radius: 10px;
+    background-color: white;
+    padding-left: 5px;
+}
 
+.editborder3 {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: inline-block;
 }
 
 .tdlboardtitle {
@@ -52,14 +63,23 @@
 
 .titleedit2 {
     width: 90%;
+    height: 100%;
     border: none;
     outline: none;
     background-color: transparent;
     border-radius: 5px;
     font-size: 15px;
     font-weight: bold;
-    padding-left: 5px;
+    padding: 0px;
+}
 
+.contentsedit {
+    width: 90%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-radius: 5px;
+    font-weight: 700;
 }
 
 .titleeditbtn {
@@ -71,6 +91,18 @@
     position: absolute;
     top: 0px;
     right: 2px;
+}
+
+.contentseditbtn {
+    background-color: transparent;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50%;
+    border: none;
+    position: absolute;
+    top: -6px;
+    right: 4px;
+
 }
 
 .tdlstarimg {
@@ -109,6 +141,7 @@
     width: 100%;
     height: calc(100% - 55px);
     padding: 15px;
+    overflow: auto;
 }
 
 .tdlol {
@@ -133,7 +166,7 @@
 
 .tdllisttitle {
     width: 100%;
-    min-height: 30px;
+    height: 40px;
     border: none;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -143,6 +176,17 @@
     display: flex;
     align-items: center;
     position: relative;
+}
+
+.tdllisttitle button {
+    position: absolute;
+    top: 2px !important;
+    right: 2px !important;
+    background: transparent;
+    outline: none;
+    border: none;
+    font-size: 18px;
+
 }
 
 .tdllisttitle button {
@@ -218,6 +262,24 @@
 
 }
 
+.tdlliedit {
+    border: 2px solid rgb(0, 100, 255) !important;
+    box-shadow: 0 0 3px 0 rgb(0, 100, 255) inset !important;
+}
+
+.liupbtn {
+    width: 10px;
+    background-color: transparent;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    background: transparent;
+    border: none;
+    outline: none;
+    display: none;
+    cursor: pointer;
+}
+
 .libtn {
     position: absolute;
     top: 4px;
@@ -226,6 +288,10 @@
     border: none;
     outline: none;
     display: none;
+}
+
+.tdlli:hover .liupbtn {
+    display: block;
 }
 
 .tdlli:hover .libtn {

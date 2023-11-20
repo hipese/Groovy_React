@@ -86,9 +86,10 @@ const ToDoListBoard = () => {
     };
   }, [isEditing, editBorderRef]);
 
+// <div className={styles.tdlboard} style={{ backgroundImage: "linear-gradient(to right, #FFF2F2, #E5E0FF ,#8EA7E9, #7286D3 )" }}>
 
   return (
-    <div className={styles.tdlboard}>
+    <div className={styles.tdlboard} style={{ backgroundImage: "linear-gradient(to right, #FFF2F2, #E5E0FF ,#8EA7E9, #7286D3 )" }}>
         {todoList.map((todo, index) => { 
           if (todo.seq === seq) {
             return (
