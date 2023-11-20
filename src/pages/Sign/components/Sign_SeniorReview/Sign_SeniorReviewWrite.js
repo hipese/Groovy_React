@@ -103,6 +103,7 @@ const Sign_SeniorReviewWrite = () => {
 
     const [accept] = useState(1);
     const [comment] = useState("");
+    const [fileList, setFileList] = useState([]);
     const [formdata, setFormData] = useState({
         files: []
     });
@@ -150,15 +151,12 @@ const Sign_SeniorReviewWrite = () => {
 
 
     const handleFileChange = (e) => {
-        const filesArray = Array.from(e.target.files).map(file => ({
-          // 파일 업로드 시점에는 서버에서 제공하는 seq, sys_name, parent_seq 값이 없으므로
-          // 해당 값을 설정하지 않습니다.
-          ori_name: file.name, 
-        }));
-      
-        setFormData({ ...formdata, files: filesArray });
-        setOpen(true); 
-      };
+        const files = Array.from(e.target.files);
+
+        setFileList(files);
+        setOpen(true);
+    };
+
     // const handleQuillChange = (content, delta, source, editor) => {
     //     setQuillValue(editor.getContents());
     // };
@@ -198,8 +196,8 @@ const Sign_SeniorReviewWrite = () => {
         submitFormData.append("title", title);
 
         // Append files to the submitFormData
-        formdata.files.forEach(e => {
-            submitFormData.append("files", e);
+        fileList.forEach(file => {
+            submitFormData.append("files", file); // 'file'은 File 객체입니다.
         });
 
 

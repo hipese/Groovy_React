@@ -26,6 +26,7 @@ const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, s
     const [backUpEmployees, setBackUpEmployees] = useState({}); // 원래 직원의 목록을 저장합니다
     const [selectedRow, setSelectedRow] = useState(null); //선택한 행의 값을 가져옵니다.
 
+    const [positionRank,setPositionRank]=useState([]);
 
     useEffect(() => {
         axios.get("/api/member/selectedEmployee").then(resp => {
@@ -34,6 +35,12 @@ const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, s
             setBackUpEmployees(resp.data);
             setLoading(false);
         });
+
+        axios("/api/positionRank").then(resp=>{
+            console.log(resp.data);
+            setPositionRank(resp.data);
+        })
+
     }, []);
 
 
