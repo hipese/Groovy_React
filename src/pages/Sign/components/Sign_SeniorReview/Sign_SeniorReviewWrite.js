@@ -1,4 +1,4 @@
-import { useContext, useState,useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import style from "./Sign_SeniorlReviewWrite.module.css";
@@ -40,11 +40,11 @@ import { MemberContext } from "../../../Groovy/Groovy";
 
 const CircularIndeterminate = () => {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <CircularProgress />
-      </Box>
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+            <CircularProgress />
+        </Box>
     );
-  };
+};
 
 
 const modules = {
@@ -65,13 +65,13 @@ const Sign_SeniorReviewWrite = () => {
 
     const formatDate = (date) => {
         const d = new Date(date),
-              month = '' + (d.getMonth() + 1),
-              day = '' + d.getDate(),
-              year = d.getFullYear();
-      
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
         return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
-      };
-      
+    };
+
     const todayDate = formatDate(new Date());
 
     const { seq } = useParams();
@@ -82,7 +82,7 @@ const Sign_SeniorReviewWrite = () => {
     const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상새정보를 가져옵니다.
     const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
     const [signWriterInfo, setSignWriterInfo] = useState({}); //사용자의 상세정보
-    
+
 
     const toggleModal = () => {
         setModalOpen(!isModalOpen);
@@ -95,12 +95,12 @@ const Sign_SeniorReviewWrite = () => {
     };
 
     const navi = useNavigate();
-    const members =useContext(MemberContext);
+    const members = useContext(MemberContext);
     const [loading, setLoading] = useState(true);
     const [contents, setContents] = useState("");
-    const [document_type, setDocument_type] = useState("품의서");
+    const [document_type, setDocument_type] = useState("");
     const [title, setTitle] = useState("");
-    
+
     const [accept] = useState(1);
     const [comment] = useState("");
     const [formdata, setFormData] = useState({
@@ -110,14 +110,14 @@ const Sign_SeniorReviewWrite = () => {
 
     useEffect(() => {
         axios.get(`/api/member/signWriterInfo/${members.member.id}`).then(resp2 => {
+            console.log(resp2.data);
             setSignWriterInfo(resp2.data);
         });
- 
-    }, []);
-    
+
+    }, [members.member.id]);
+
     useEffect(() => {
         axios.get(`/api/signlist/documentInto/${seq}`).then((resp) => {
-        
             setLoading(false);
             setTitle(resp.data.title);
             setDocument_type(resp.data.document_type);
@@ -127,21 +127,21 @@ const Sign_SeniorReviewWrite = () => {
 
     useEffect(() => {
         axios.get(`/api/signfiles/documentInto_files/${seq}`).then(resp1 => {
-        
-          setLoading(false);
-          setFormData(prevFormData => ({
-            ...prevFormData,
-            files: resp1.data.map(file => ({
-              // Assuming file object has a property `name`
-              // You might need to adjust this based on the actual structure of your file object
-              seq: file.seq,
-              ori_name: file.ori_name,
-              sys_name: file.sys_name,
-              parent_seq: file.parent_seq,
-            })),
-          }));
+
+            setLoading(false);
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                files: resp1.data.map(file => ({
+                    // Assuming file object has a property `name`
+                    // You might need to adjust this based on the actual structure of your file object
+                    seq: file.seq,
+                    ori_name: file.ori_name,
+                    sys_name: file.sys_name,
+                    parent_seq: file.parent_seq,
+                })),
+            }));
         });
-      }, [seq]);
+    }, [seq]);
 
 
     const handleChange = (event) => {
@@ -150,9 +150,15 @@ const Sign_SeniorReviewWrite = () => {
 
 
     const handleFileChange = (e) => {
-        setFormData(prev => ({ ...prev, files: [...e.target.files] }))
-        setOpen(true);
-    }
+        const filesArray = Array.from(e.target.files).map(file => ({
+          // 파일 업로드 시점에는 서버에서 제공하는 seq, sys_name, parent_seq 값이 없으므로
+          // 해당 값을 설정하지 않습니다.
+          ori_name: file.name, 
+        }));
+      
+        setFormData({ ...formdata, files: filesArray });
+        setOpen(true); 
+      };
     // const handleQuillChange = (content, delta, source, editor) => {
     //     setQuillValue(editor.getContents());
     // };
@@ -220,7 +226,7 @@ const Sign_SeniorReviewWrite = () => {
     if (loading) {
         // 데이터 로딩 중에는 로딩창을 표시
         return <CircularIndeterminate />;
-      }
+    }
 
     return (
         <div>
@@ -243,7 +249,7 @@ const Sign_SeniorReviewWrite = () => {
                                     onChange={handleChange}
                                 >
                                     <MenuItem value="품의서">품의서</MenuItem>
-                                    <MenuItem value="휴가신청서">휴가신청서</MenuItem>
+                                    <MenuItem value="증명서">증명서</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>
@@ -271,9 +277,9 @@ const Sign_SeniorReviewWrite = () => {
                             결제선 지정
                         </div>
                         <div className={style.buttonDiv}>
-                            <button onClick={toggleModal} className={style.btn}>조직도 검색</button>
+                            <button onClick={toggleModal} className={style.btn}>직원 검색</button>
                             <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover}
-                            selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
+                                selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
                         </div>
                     </div>
                     <div className={style.table}>
