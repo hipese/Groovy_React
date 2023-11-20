@@ -37,17 +37,7 @@ const Groovy = () => {
     const [department, setDepartment] = useState([]);
 
     //작성자의 휴가정보를 뿌리기 위한 변수
-    const [vacation, setVacation] = useState([]);
     const [myVacation, setMyVacation] = useState({}); //(나중에 년도 검색할거면 이거 배열로 바꾸고 로직 추가해야함) 
-    const [addVacation,setAddVacation] =useState();
-
-    // 휴가 정보를 뿌리는 위한 값 가져오기
-    useEffect(() => {
-        axios.get("/api/vacation").then(resp => {
-            setVacation(resp.data);
-            console.log(resp.data);
-        })
-    }, [])
 
 
     // 드롭다운 내용을 관리하는 배열
@@ -96,7 +86,7 @@ const Groovy = () => {
     return (
         <WebSocketProvider>
             <MemberContext.Provider value={{ member, setMember }}>
-                <VacationContext.Provider value={{ vacation, setVacation, myVacation, setMyVacation ,addVacation,setAddVacation}}>
+                <VacationContext.Provider value={{ myVacation, setMyVacation }}>
                     <DepartmentContext.Provider value={{ department, setDepartment }}>
                         <div>
                             <Container className="NaviContainer g-0" fluid>

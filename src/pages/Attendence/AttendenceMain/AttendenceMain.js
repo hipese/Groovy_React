@@ -27,7 +27,7 @@ const CircularIndeterminate = () => {
 const AttendenceMain = () => {
 
     const members = useContext(MemberContext);
-    const {myVacation,setMyVacation, addVacation, setAddVacation}=useContext(VacationContext);
+    const {myVacation,setMyVacation}=useContext(VacationContext);
 
     const [vacation_complete_list, setVacation_complete_list] = useState([]);
     const [vacation_wait_list, setVacation_wait_list] = useState([]);
@@ -54,43 +54,43 @@ const AttendenceMain = () => {
 
     //=========================================================================
 
-   
-    useEffect(() => {
-        if (members.member) {
-          let url = `/api/vacation/myVacation/${members.member.id}`;
-          
-          if (addVacation && addVacation > 0) {
-            url += `/${addVacation}`;
-            setAddVacation(0);
-          }
-
-          if (total_vactionDate) {
-            url += `/${total_vactionDate}`;
-          }
-      
-          axios.get(url).then(resp => {
-            setMyVacation(resp.data || {});
-          }).catch(error => {
-            console.error('There was an error fetching the vacation data', error);
-          });
-        }
-      }, [members, total_vactionDate, addVacation]);
-
+    const [hasCompletedVacationFetched, setHasCompletedVacationFetched] = useState(false);
 
     useEffect(() => {
-        axios.get(`/api/attend/vacation_complete`).then((resp) => {
-            setVacation_complete_list(resp.data);
+        const fetchListData = async () => {
+            try {
+                const [completeResp, waitResp] = await Promise.all([
+                    axios.get(`/api/attend/vacation_complete`),
+                    axios.get("/api/attend/vacation_wait")
+                ]);
+                setVacation_complete_list(completeResp.data);
+                setVacation_wait_list(waitResp.data);
     
-            // Calculate total used days for completed documents
-            const totalUsedDays = resp.data.reduce((acc, doc) => acc + doc.total_date, 0);
-            setTotal_vactionDate(totalUsedDays);
-            setLoading(false);
-        });
+                // Calculate total used days for completed documents
+                const totalUsedDays = completeResp.data.reduce((acc, doc) => acc + doc.total_date, 0);
+                setTotal_vactionDate(totalUsedDays);
+                setHasCompletedVacationFetched(true); // Signal that list data has been fetched
+            } catch (error) {
+                console.error('Error fetching vacation lists:', error);
+            } finally {
+                setLoading(false); // Loading is complete regardless of whether the fetch was successful
+            }
+        };
     
-        axios.get("/api/attend/vacation_wait").then((resp1) => {
-            setVacation_wait_list(resp1.data);
-        });
+        fetchListData();
     }, []);
+    
+    useEffect(() => {
+        if (hasCompletedVacationFetched && members.member) {
+            const url = `/api/vacation/myVacation/${members.member.id}` + (total_vactionDate ? `/${total_vactionDate}` : '');
+            axios.get(url).then(resp => {
+                setMyVacation(resp.data || {});
+            }).catch(error => {
+                console.error('There was an error fetching the vacation data:', error);
+            });
+        }
+    }, [hasCompletedVacationFetched, members.member, total_vactionDate]);
+
 
     if (loading) {
         // 데이터 로딩 중에는 로딩창을 표시
@@ -148,7 +148,7 @@ const AttendenceMain = () => {
             <div className={style.documents2}>
                 <div className={style.titleText}>휴가신청 완료</div>
                 <div className={style.text}>
-                    <Link to="/Groovy/attend/attendenceComplete">
+                    <Link to="/Groovy/attendence/attendenceComplete">
                         {`완료된 문서가 ${vacation_complete_list.length}건이 있습니다.`}
                     </Link>
                 </div>
@@ -190,7 +190,7 @@ const AttendenceMain = () => {
             <div className={style.documents3}>
                 <div className={style.titleText}>휴가신청 진행중</div>
                 <div className={style.text}>
-                    <Link to="/Groovy/attend/attendenceWait">
+                    <Link to="/Groovy/attendence/attendenceWait">
                         {`진행중인 문서가 ${vacation_wait_list.length}건이 있습니다.`}
                     </Link>
                 </div>
