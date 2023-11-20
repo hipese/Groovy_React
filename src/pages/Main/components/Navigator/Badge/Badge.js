@@ -212,6 +212,13 @@ function DotBadge() {
                     <Alert severity="info">{notification.contents}</Alert>
                   </Link>
                 )}
+
+              {notification.contents.includes("프로젝트")
+                && (
+                  <Link to={`/Groovy/dashboard/project/content/${notification.parent_seq}`}>
+                    <Alert severity="info">{notification.contents}</Alert>
+                  </Link>
+                )}
             </div>
           ))}
           {notifications.length === 0 && (

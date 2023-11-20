@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './Calendar.module.css'
+import styles from '../Calendar/Calendar.module.css';
 import { format, parseISO, subDays } from 'date-fns';
 import axios from 'axios';
 

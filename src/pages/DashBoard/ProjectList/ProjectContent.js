@@ -15,6 +15,7 @@ import Org_Chart from "../../Org_Chart/components/Org_Chart_Modal/Org_Chart.js";
 import { LoginContext } from "../../../App";
 import RemoveIcon from '@mui/icons-material/Remove';
 import ClearIcon from '@mui/icons-material/Clear';
+import { useWebSocket } from "../../../WebSocketContext/WebSocketContext";
 
 const Modalstyle = {
     position: 'absolute',
@@ -320,10 +321,24 @@ const AddMember = ({handleClose}) => {
         
     },[approver]);
 
+    const stompClient = useWebSocket();
+    
+
+
     const handleAdd = () => {
+
         setMember(prev=>([...prev,newMember]));
         console.log(newMember);
         axios.post(`/api/project/addMember/${seq}`,newMember).then(res=>{
+            const parentSeq = res.data; // 서버에서 반환한 값으로 설정
+            const message = "프로젝트에 초대되었습니다.";
+            const messageObject = { message, recipient: newMember.id, parent_seq: parentSeq };
+
+            // Stomp를 통해 메시지 전송
+            if (stompClient) {
+                stompClient.send("/app/notice", {}, JSON.stringify(messageObject));
+            }
+
             setMember(prev=>([...prev,member]));
             handleClose();
         });
