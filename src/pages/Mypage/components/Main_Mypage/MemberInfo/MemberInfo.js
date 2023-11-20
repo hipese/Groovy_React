@@ -1,15 +1,20 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import style from "./MemberInfo.module.css"
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
 import { Modal } from "@mui/material";
 import ImageChange from "./ImageChange/ImageChange";
-import { MemberContext } from "../../../../Groovy/Groovy";
+import { MemberContext, VacationContext } from "../../../../Groovy/Groovy";
 import UpdateContact from "./Update/UpdateContact";
 import UpdateGroup_Name from "./Update/UpdateGroup_Name";
 import UpdatePosition from "./Update/UpdatePosition";
 import UpdateEmail from "./Update/UpdateEmail";
-
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import axios from "axios";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 const StyledAvatar = styled(Avatar)({
     width: "100%",
@@ -21,8 +26,8 @@ const StyledAvatar = styled(Avatar)({
     },
 });
 const ProfileContainer = styled("div")({
-    width: "75px",
-    height: "75px",
+    width: "120px",
+    height: "120px",
 });
 
 
@@ -30,12 +35,36 @@ const ProfileContainer = styled("div")({
 const MemberInfo = () => {
 
 
+    const members = useContext(MemberContext);
+    const { myVacation, setMyVacation } = useContext(VacationContext);
+
     const [openModal, setOpenModal] = useState(false); // 모달 상태
 
     const [editingField, setEditingField] = useState(null);
 
-    const members = useContext(MemberContext);
+    const [attendenceCount, setAttendenceCount] = useState();
+    const [attendence, setAttendence] = useState();
 
+    useEffect(() => {
+
+        axios.get(`/api/attend/attendenceCount`).then(resp => {
+            setAttendenceCount(resp.data);
+        })
+
+        axios.get(`/api/attend/myAttendence`).then(resp => {
+            console.log(resp.data);
+            setAttendence(resp.data);
+        })
+    }, [])
+
+    useEffect(() => {
+
+        axios.get(`/api/vacation/myVacation`)
+            .then(resp => {
+                console.log(resp.data)
+                setMyVacation(resp.data);
+            })
+    }, [])
 
     const handleEdit = (field) => {
         setEditingField(field); // 수정 중인 필드 설정
@@ -49,99 +78,131 @@ const MemberInfo = () => {
     };
 
     return (
-        <div className={style.contanier}>
+        <div className={style.memberInfo}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    '& > :not(style)': {
+                        m: 1,
+                        width: 800,
+                        height: 450,
+                    },
+                }}
+            >
+                <Paper elevation={3}>
+                    <div className={style.infoHeader}>
 
-            <div className={style.memberInfo}>
+                        <div className={style.imagebox}>
 
-                <div className={style.infoHeader}>
+                            {/* profile_image가 null이면 기본으로 설정된 이미지를 아니면 profile이미지로 설정한다. */}
+                            {members.member.profile_image ? <ProfileContainer>
+                                <StyledAvatar src={`/profiles/${members.member.profile_image}`} alt="profile" onClick={() => handleEdit('imageChage')} />
+                            </ProfileContainer> : <ProfileContainer>
+                                <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" onClick={() => handleEdit('imageChage')} />
+                            </ProfileContainer>}
+                            <Modal
+                                open={openModal && editingField === 'imageChage'}
+                                onClose={handleCloseModal} // 모달을 닫는 함수를 지정
+                            ><ImageChange onClose={handleCloseModal} /></Modal>
 
-                    <div className={style.imagebox}>
-
-                        {/* profile_image가 null이면 기본으로 설정된 이미지를 아니면 profile이미지로 설정한다. */}
-                        {members.member.profile_image ? <ProfileContainer>
-                            <StyledAvatar src={`/profiles/${members.member.profile_image}`} alt="profile" onClick={() => handleEdit('imageChage')} />
-                        </ProfileContainer> : <ProfileContainer>
-                            <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" onClick={() => handleEdit('imageChage')} />
-                        </ProfileContainer>}
-                        <Modal
-                            open={openModal && editingField === 'imageChage'}
-                            onClose={handleCloseModal} // 모달을 닫는 함수를 지정
-                        ><ImageChange onClose={handleCloseModal} /></Modal>
-
-                    </div>
-
-                    <div className={style.contentsbox}>
-
-                        <div className={style.name}>
-                            {members.member.name}
                         </div>
 
-                        <div className={style.email}>
-                            <div className={style.textdiv}>
-                                {members.member.email}
+                        <div className={style.contentsbox}>
+
+                            <div className={style.name}>
+                                {members.member.name}
                             </div>
-                            <div className={style.emailbtndiv}>
-                                <button className={style.emailbtn} onClick={() => handleEdit('email')}>수정</button>
+
+                            <div className={style.email}>
+                                <div className={style.emailTextdiv}>
+                                    {members.member.email}
+                                </div>
+                                <div className={style.emailbtndiv} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Button className={style.emailbtn} variant="contained" onClick={() => handleEdit('email')}>수정</Button>
+                                    <Modal
+                                        open={openModal && editingField === 'email'}
+                                        onClose={handleCloseModal}
+                                    >
+                                        <UpdateEmail onClose={handleCloseModal} />
+                                    </Modal>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div className={style.contentsDivs}>
+
+                        <div className={style.contentsdiv}>
+                            <div className={style.textdiv}>
+                                연락처
+                            </div>
+                            <div className={style.contentText}>
+                                {members.member.contact}
+                            </div>
+                            <div className={style.btndiv}>
+                                <Button className={style.btn} variant="contained" onClick={() => handleEdit('contact')}>수정</Button>
                                 <Modal
-                                    open={openModal && editingField === 'email'} // 'group_name' 필드를 편집할 때만 모달을 열기
+                                    open={openModal && editingField === 'contact'} // 'group_name' 필드를 편집할 때만 모달을 열기
                                     onClose={handleCloseModal}
                                 >
-                                    <UpdateEmail onClose={handleCloseModal} />
+                                    <UpdateContact onClose={handleCloseModal} />
                                 </Modal>
                             </div>
                         </div>
 
-                    </div>
-                </div>
+                        <div className={style.contentsdiv}>
+                            <div className={style.textdiv}>
+                                부서
+                            </div>
 
-                <div className={style.contentsdiv}>
-                    <div className={style.textdiv}>
-                        {members.member.contact}
-                    </div>
+                            <div className={style.content}>
+                                {members.member.group_name}
+                            </div>
+                        </div>
 
-                    <div className={style.btndiv}>
-                        <button className={style.btn} onClick={() => handleEdit('contact')}>수정</button>
-                        <Modal
-                            open={openModal && editingField === 'contact'} // 'group_name' 필드를 편집할 때만 모달을 열기
-                            onClose={handleCloseModal}
-                        >
-                            <UpdateContact onClose={handleCloseModal} />
-                        </Modal>
-                    </div>
-                </div>
+                        <div className={style.contentsdiv}>
+                            <div className={style.textdiv}>
+                                직책
+                            </div>
 
-                <div className={style.contentsdiv}>
-                    <div className={style.textdiv}>
-                        {members.member.group_name}
-                    </div>
+                            <div className={style.content}>
+                                {members.member.position}
+                            </div>
+                        </div>
 
-                    <div className={style.btndiv}>
-                        <button className={style.btn} onClick={() => handleEdit('group_name')}>수정</button>
-                        <Modal
-                            open={openModal && editingField === 'group_name'} // 'group_name' 필드를 편집할 때만 모달을 열기
-                            onClose={handleCloseModal}
-                        >
-                            <UpdateGroup_Name onClose={handleCloseModal} />
-                        </Modal>
-                    </div>
-                </div>
+                        <div className={style.contentsdiv}>
+                            <div className={style.textdiv}>
+                                근무일수
+                            </div>
 
-                <div className={style.contentsdiv}>
-                    <div className={style.textdiv}>
-                        {members.member.position}
-                    </div>
-                    <div className={style.btndiv}>
-                        <button className={style.btn} onClick={() => handleEdit('position')}>수정</button>
-                        <Modal
-                            open={openModal && editingField === 'position'} // 'group_name' 필드를 편집할 때만 모달을 열기
-                            onClose={handleCloseModal}
-                        >
-                            <UpdatePosition onClose={handleCloseModal} />
-                        </Modal>
-                    </div>
+                            <div className={style.content}>
+                                {attendenceCount}일
+                            </div>
 
-                </div>
-            </div>
+                        </div>
+
+                        <div className={style.contentsdiv}>
+                            <div className={style.textdiv}>
+                                출근현황
+                            </div>
+                            <div className={style.alterdiv}>
+                                {attendence ? <Stack sx={{ width: '50%', height: '100%', padding: '0px' }} spacing={2}>
+                                    <Alert variant="outlined" severity="success">
+                                        근무중
+                                    </Alert>
+                                </Stack> : <Stack sx={{ width: '50%' }} spacing={2}>
+                                    <Alert variant="outlined" severity="warning">
+                                        출근을 해주세요
+                                    </Alert>
+                                </Stack>}
+                            </div>
+
+                        </div>
+                    </div>
+                </Paper>
+            </Box>
         </div>
     );
 }

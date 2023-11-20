@@ -54,7 +54,12 @@ color: 'inherit',
 }));
 
 const SurveyList = () => {
-    const {survey} = useContext(SurveyContext);
+    const {survey,setSurvey} = useContext(SurveyContext);
+    useEffect(()=>{
+        axios.get("/api/survey/list").then(res=>{
+            setSurvey(res.data);
+        });
+    },[]);
     const [search,setSearch] = useState("");
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -135,7 +140,7 @@ const SurveyList = () => {
             </div>
             <Divider sx={{bgcolor:"black"}}/>
             <div id='list' className={`${style.list}`}>
-                {visibleSignList.filter(e=>e.surtitle.includes(search) || (e.surwriter.includes(search))).map((e,i)=>{
+                {visibleSignList ? visibleSignList.filter(e=>e.surtitle.includes(search) || (e.surwriter.includes(search))).map((e,i)=>{
                         return(
                             <List sx={style} component="nav" aria-label="mailbox folders">
                                 <Link to={e.surstate == 0 ? `/Groovy/survey/survey_content/${e.surseq}` : ""}>
@@ -165,7 +170,27 @@ const SurveyList = () => {
                                 
                             </List>
                         )
-                    })}
+                    }) : <List sx={style} component="nav" aria-label="mailbox folders">
+                        <ListItem>
+                        <Grid container > 
+                            <Grid xs={1} className={style.center}>
+                                <Typography className={`${style.fs} ${style.b}`}>
+                                </Typography>
+                            </Grid>
+                            <Grid xs={6} className={style.center}>
+                                <Typography className={`${style.fs} ${style.b}`}>
+                                </Typography>
+                            </Grid>
+                            <Grid xs={3} className={style.center}>
+                                <Typography className={`${style.fs} ${style.b}`}>
+                                </Typography>
+                            </Grid>
+                            <Grid xs={2} className={style.center}>
+                            </Grid>
+                        </Grid>            
+                    </ListItem>
+                <Divider />
+                </List>}
             </div>
             <div>
             <Pagination
@@ -190,31 +215,10 @@ const SurveyList = () => {
 export const SurveyContext = createContext();
 
 const Survey=()=>{
-    const CircularIndeterminate = () => {
-        return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <CircularProgress />
-            </Box>
-        );
-    };
     const [survey,setSurvey] = useState([]);
-    const [isLoading, setLoading] = useState(true);
-
-    useEffect(()=>{
-        axios.get("/api/survey/list").then(res=>{
-            setSurvey(res.data);
-            setLoading(false);
-        });
-    },[]);
-
-
-    if(isLoading){
-        return(<CircularIndeterminate/>)
-    }
-
-
+    
     return(
-        <SurveyContext.Provider value={{survey}}>
+        <SurveyContext.Provider value={{survey,setSurvey}}>
             <Routes>
                 <Route path='/' element={<SurveyList/>}></Route>
                 <Route path='survey_write' element={<SurveyWrite/>}></Route>

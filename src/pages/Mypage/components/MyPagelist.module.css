@@ -1,16 +1,18 @@
 .container{
     width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.index{
+/* .index{
     width: 25%;
     height: 100%;
     float: left;
     border-left: 1px solid ghostwhite;
-}
+} */
 
 .contents{
-    width: 75%;
+    width: 100%;
     height: 100%;
-    float: left;
 }

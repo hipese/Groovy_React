@@ -1,6 +1,6 @@
 import axios from "axios";
 import style from "./AttendenceStatus.module.css";
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -11,14 +11,29 @@ import Paper from '@mui/material/Paper';
 import { blue } from '@mui/material/colors';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import Today from "@mui/icons-material/Today";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import { Pagination, PaginationItem } from "@mui/material";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 
 const AttendenceStatus = () => {
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const COUNT_PER_PAGE = 5;
 
     const [attendence, setAttendence] = useState([]);
-    const [attendenceCount,setAttendenceCount]=useState();
+    const [attendenceCount, setAttendenceCount] = useState();
+
+
 
     useEffect(() => {
         axios.get("/api/attend/detail").then(resp => {
@@ -28,13 +43,13 @@ const AttendenceStatus = () => {
                 // 출근 및 퇴근 시간을 JavaScript Date 객체로 변환
                 const workstartDate = new Date(item.workstart);
                 const workendDate = new Date(item.workend);
-                
+
                 // 퇴근 날짜에서 '일' 부분만 추출
                 const workStartDay = workstartDate && !isNaN(workstartDate.getTime()) ? workstartDate.getDate() : 0;
                 const workEndDay = workendDate && !isNaN(workendDate.getTime()) ? workendDate.getDate() : 0;
 
-                const isStartDay=item.workstart?true:false;
-                const isEndDaytest=item.workend?true:false; 
+                const isStartDay = item.workstart ? true : false;
+                const isEndDaytest = item.workend ? true : false;
 
                 //널인값과 날짜가 같은지 아닌지를 비교해서 밑에 출석표시를 다르게 나타나게 한다.
 
@@ -56,8 +71,8 @@ const AttendenceStatus = () => {
                 const workEndDateString = workendDate.toLocaleDateString(undefined, dateFormatOptions);
                 const workEndTimeString = item.workend !== null ? workendDate.toLocaleTimeString(undefined, timeFormatOptions) : null;
                 const totalWorkTimeInMinutes = (workendDate - workstartDate) / (1000 * 60); // 분 단위로 변환
-                const totalWorkHours = Math.floor(totalWorkTimeInMinutes / 60) >= 23 ? 23 : Math.floor(totalWorkTimeInMinutes / 60);
-                const adjustedWorkHours = totalWorkHours > 23 || totalWorkHours <= 0 ? 0 : totalWorkHours;
+                const totalWorkHours = Math.floor(totalWorkTimeInMinutes / 60) >= 20 ? 23 : Math.floor(totalWorkTimeInMinutes / 60);
+                const adjustedWorkHours = totalWorkHours >= 23 || totalWorkHours <= 0 ? 0 : totalWorkHours;
                 const totalWorkMinutes = totalWorkTimeInMinutes % 60;
 
                 return {
@@ -66,18 +81,19 @@ const AttendenceStatus = () => {
                     workStartTime: workStartTimeString,
                     workEndDate: workEndDateString,
                     workEndTime: workEndTimeString,
-                    workStartDay:workStartDay,
-                    workEndDay:workEndDay,
+                    workStartDay: workStartDay,
+                    workEndDay: workEndDay,
                     totalWorkHours: totalWorkHours,
                     adjustedWorkHours: adjustedWorkHours,
                     totalWorkMinutes: totalWorkMinutes,
                     attendstatus: item.status,
-                    isStartDay:isStartDay,
-                    isEndDaytest:isEndDaytest,
+                    isStartDay: isStartDay,
+                    isEndDaytest: isEndDaytest,
                 };
             });
 
             setAttendence(processedData);
+            setLoading(false);
         })
 
     }, [])
@@ -88,6 +104,26 @@ const AttendenceStatus = () => {
             setAttendenceCount(resp.data);
         })
     }, [])
+
+
+    const totalItems = attendence.length;
+    const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
+
+    const onPageChange = (e, page) => {
+        setCurrentPage(page);
+    };
+
+    const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
+    const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
+    const visibleSignList = attendence.slice(startIndex, endIndex);
+
+    if (loading) {
+        return <CircularIndeterminate />;
+    }
+
+    const handleAbsence=()=>{
+
+    }
 
     return (
         <div>
@@ -114,14 +150,14 @@ const AttendenceStatus = () => {
                             </TableHead>
 
                             <TableBody>
-                                {attendence.map((e, i) => {
+                                {visibleSignList.map((e, i) => {
                                     // 현재 시간을 구함니다.
                                     const currentTime = new Date();
                                     const today = currentTime.getDate(); // 일
                                     const currentHour = currentTime.getHours();
                                     const isPastSix = currentHour >= 18;
 
-                            
+
 
                                     // 퇴근 시간이 18시가 넘었는지 확인합니다.  
                                     const isAbsent = e.workEndTime === null && isPastSix;
@@ -143,27 +179,46 @@ const AttendenceStatus = () => {
                                                 // 퇴근시간이 있으면 시 언제 퇴근 했는지 표시
                                                 <>
                                                     <TableCell style={{ fontSize: '15px' }} align="center">{e.workEndTime}.</TableCell>
-                                                    <TableCell style={{ fontSize: '15px' }} align="center"> {`${(e.workStartDay!=e.workEndDay||e.totalWorkHours >= 23)? "비정상적인 근무시간" : `${e.totalWorkHours}시간 ${e.totalWorkMinutes.toFixed(0)}분`}`}</TableCell>
+                                                    <TableCell style={{ fontSize: '15px' }} align="center"> {`${(e.workStartDay != e.workEndDay || e.totalWorkHours >= 23) ? "비정상적인 근무시간" : `${e.totalWorkHours}시간 ${e.totalWorkMinutes.toFixed(0)}분`}`}</TableCell>
                                                 </>
-                                            ) :(
+                                            ) : (
                                                 // 퇴근을 하지 않았을때 표시
                                                 <>
-                                                    <TableCell style={{ fontSize: '15px' }} align="center">{`${(e.workStartDay==today)? "근무중" : `퇴근정보없음`}`}</TableCell>
-                                                    <TableCell style={{ fontSize: '15px' }} align="center">{`${(e.workStartDay==today)? "근무중" : `퇴근정보없음`}`}</TableCell>
+                                                    <TableCell style={{ fontSize: '15px' }} align="center">{`${(e.workStartDay == today) ? "근무중" : `퇴근정보없음`}`}</TableCell>
+                                                    <TableCell style={{ fontSize: '15px' }} align="center">{`${(e.workStartDay == today) ? "근무중" : `퇴근정보없음`}`}</TableCell>
                                                 </>
                                             )}
 
                                             {e.attendstatus == 0 ? <TableCell style={{ fontSize: '15px' }} align="center">
                                                 <Stack sx={{ width: '60%', margin: '0 auto' }} spacing={2}>
-                                                    <Alert variant="filled" severity="error">
-                                                        결석
+                                                    <Alert
+                                                        variant="filled"
+                                                        severity="error"
+                                                        onClick={handleAbsence}
+                                                        sx={{
+                                                            transition: 'transform 0.3s ease-in-out',
+                                                            '&:hover': {
+                                                                transform: 'scale(1.1)',
+                                                                cursor: 'pointer'
+                                                            }
+                                                        }} >
+                                                        결근
                                                     </Alert>
                                                 </Stack>
                                             </TableCell> :
                                                 <TableCell style={{ fontSize: '15px' }} align="center">
                                                     <Stack sx={{ width: '60%', margin: '0 auto' }} spacing={2}>
-                                                        <Alert variant="filled" severity="success">
-                                                            출석
+                                                        <Alert 
+                                                        variant="filled" 
+                                                        severity="success" 
+                                                        sx={{
+                                                            transition: 'transform 0.3s ease-in-out',
+                                                            '&:hover': {
+                                                                transform: 'scale(1.1)',
+                                                                cursor: 'pointer',
+                                                            }
+                                                        }}>
+                                                            출근
                                                         </Alert>
                                                     </Stack>
                                                 </TableCell>}
@@ -173,6 +228,22 @@ const AttendenceStatus = () => {
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    <div className={style.pagenation}>
+                        <Pagination
+                            count={totalPages}
+                            page={currentPage}
+                            onChange={onPageChange}
+                            size="medium"
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                padding: "15px 0",
+                            }}
+                            renderItem={(item) => (
+                                <PaginationItem {...item} sx={{ fontSize: 12 }} />
+                            )}
+                        />
+                    </div>
                 </div>
             </div>
         </div >
