@@ -36,9 +36,9 @@ const Modalstyle = {
         console.log(e);
         console.log(e.$d);
         console.log(e.name);
-        //const {name,value} = e.target;
+        const {name,value} = e.target;
         
-        //setSchedule(prev=>({...prev,[name]:value}));
+        setSchedule(prev=>({...prev,[name]:value}));
     }
 
     const handleAdd = () => {
