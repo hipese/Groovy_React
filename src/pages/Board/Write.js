@@ -16,6 +16,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FolderIcon from '@mui/icons-material/Folder';
+import { useWebSocket } from '../../WebSocketContext/WebSocketContext';
 
 function Write() {
   const { member } = useContext(MemberContext);
@@ -24,6 +25,7 @@ function Write() {
   const [files, setFiles] = useState([]);
   const navi = useNavigate();
   const { loginID } = useContext(LoginContext);
+  const stompClient = useWebSocket();
 
   const [open, setOpen] = React.useState(true);
 
@@ -86,6 +88,11 @@ function Write() {
           },
         })
         .then((resp) => {
+          if (board.category === '공지') {
+            if (stompClient) {
+              stompClient.send("/app/board", {}, '공지가 등록되었습니다.');
+            }
+          }
           navi('/groovy/board');
         })
         .catch((e) => {

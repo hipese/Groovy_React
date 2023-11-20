@@ -91,7 +91,7 @@ const VacationEdit = forwardRef((props, ref) => {
                 console.error("휴가 조절 중 오류 발생:", error);
             });
 
-            axios.get(`/api/vacation/myVacation/${approver.id}`)
+            axios.get(`/api/vacation/selectVacation/${approver.id}`)
             .then(resp => {
                 console.log(resp.data)
                 setApproverVacation(resp.data);

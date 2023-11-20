@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import style from "./Manage.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
+import { Modal } from "@mui/material";
+import VacationEdit from '../Vacation/VacationEdit';
 
 const Manage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -13,6 +15,21 @@ const Manage = () => {
     const [editedUser, setEditedUser] = useState({});
     const [userCount, setUserCount] = useState(0);
     const [inactiveCount, setInactiveCount] = useState(0);
+
+    const [openModal, setOpenModal] = useState(false); // 모달 상태
+    const [editingField, setEditingField] = useState(null);// 모달 제어용 
+
+    const handleEditModal = (field) => {
+        setEditingField(field); // 수정 중인 필드 설정
+        setOpenModal(true); // 모달 열기
+    };
+
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+        setEditingField(null); // 수정 중인 필드 상태를 초기화
+    };
+
 
     const COUNT_PER_PAGE = 10;
 
@@ -279,6 +296,16 @@ const Manage = () => {
                         )}
                     />
                 </div>
+            </div>
+
+            <div className={style.vacation}>
+                휴가관리<button className={style.btnVacation} onClick={() => handleEditModal('vacation')}>휴가조절</button>
+                <Modal
+                    open={openModal && editingField === 'vacation'}
+                    onClose={handleCloseModal}
+                >
+                    <VacationEdit onClose={handleCloseModal}  />
+                </Modal>
             </div>
         </div>
     );
