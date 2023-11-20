@@ -4,7 +4,6 @@ import List from './List';
 import Write from './Write';
 import Detail from './Detail';
 import SendMail from './SendMail';
-import TempMail from './TempMail';
 import MailToMe from './MailToMe';
 import Waste from './Waste';
 
@@ -17,7 +16,6 @@ function Email() {
                 <Route path="/detail/:seq" element={<Detail />} />
                 <Route path="/sent" element={<SendMail />} />
                 <Route path="/tome" element={<MailToMe />} />
-                <Route path="/temp" element={<TempMail />} />
                 <Route path="/waste" element={<Waste />} />
             </Routes>
         </div>

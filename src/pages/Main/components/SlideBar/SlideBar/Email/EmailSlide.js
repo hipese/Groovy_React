@@ -19,11 +19,6 @@ const EmailSlide = () => {
                     보낸메일함
                 </button>
             </Link>
-            <Link to="">
-                <button className={style.btn}>
-                    임시보관함
-                </button>
-            </Link>
             <Link to="/groovy/mail/tome">
                 <button className={style.btn}>
                     내게쓴메일함
