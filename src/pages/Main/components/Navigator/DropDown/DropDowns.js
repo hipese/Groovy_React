@@ -13,6 +13,7 @@ import list from './assets/trello.svg';
 import message from './assets/message.svg';
 import mail from './assets/mail.svg';
 import down from './assets/down.svg';
+import Fade from '@mui/material/Fade';
 
 import { LoginContext } from '../../../../../App';
 import { MemberContext } from '../../../../Groovy/Groovy';
@@ -111,89 +112,91 @@ const Dropdown = () => {
         메뉴
         <img src={down} alt="" width={'20px'} height={'15px'} />
       </button>
-      <div style={dropdownMenuStyle}>
-        <ul style={styles.list}>
-          <List style={styles.item} onClick={toggleState}>
-            <Item>
-              <Link to="/Groovy/dashboard" style={styles.link}>
-                <img src={layout} alt="" width={'15px'} height={'15px'} /> 개요
-              </Link>
-            </Item>
-          </List>
-          <List style={styles.item} onClick={toggleState}>
-            <Item>
-              <Link to="/Groovy/contacts" style={styles.link}>
-                <img src={contacts} alt="" width={'15px'} height={'15px'} /> 주소록
-              </Link>
-            </Item>
-          </List>
-          <List style={styles.item} onClick={toggleState}>
-            <Item>
-              <Link to="/Groovy/message" style={styles.link}>
-                <img src={message} alt="" width={'15px'} height={'15px'} /> 메시지
-              </Link>
-            </Item>
-          </List>
-          <List style={styles.item} onClick={toggleState}>
-            <Item>
-              <Link to="/Groovy/mail" style={styles.link}>
-                <img src={mail} alt="" width={'15px'} height={'15px'} /> 메일
-              </Link>
-            </Item>
-          </List>
-          <List style={styles.item} onClick={toggleState}>
-            <Item>
-              <Link to="/Groovy/survey" style={styles.link}>
-                <img src={survey} alt="" width={'15px'} height={'15px'} /> 설문
-              </Link>
-            </Item>
-          </List>
-          <List style={styles.item} onClick={toggleState}>
-            <Item>
-              <Link to="/Groovy/list" style={styles.link}>
-                <img src={list} alt="" width={'15px'} height={'15px'} /> 할일
-              </Link>
-            </Item>
-          </List>
-          <List style={styles.item} onClick={toggleState}>
-            <Item>
-              <Link to="/Groovy/calendar" style={styles.link}>
-                <img src={calendar} alt="" width={'15px'} height={'15px'} /> 캘린더
-              </Link>
-            </Item>
-          </List>
-          <List style={styles.item} onClick={toggleState}>
-            <Item>
-              <Link to="/Groovy/board" style={styles.link}>
-                <img src={board} alt="" width={'15px'} height={'15px'} /> 게시판
-              </Link>
-            </Item>
-          </List>
-          <List style={styles.item} onClick={toggleState}>
-            <Item>
-              <Link to="/Groovy/signlist" style={styles.link}>
-                <img src={approval} alt="" width={'15px'} height={'15px'} /> 전자결재
-              </Link>
-            </Item>
-          </List>
-          <List style={styles.item} onClick={toggleState}>
-            <Item>
-              <Link to="/Groovy/attendence" style={styles.link}>
-                <img src={setting} alt="" width={'15px'} height={'15px'} /> 근태관리
-              </Link>
-            </Item>
-          </List>
-          <List style={styles.item} onClick={toggleState}>
-            <Item>
-              {isAdmin ? (
-                <Link to="/Groovy/admin" style={styles.link}>
-                  <img src={admin} alt="" width={'15px'} height={'15px'} /> 관리
+      <Fade in={isOpened} collapsedSize={40}>
+        <div style={dropdownMenuStyle}>
+          <ul style={styles.list}>
+            <List style={styles.item} onClick={toggleState}>
+              <Item>
+                <Link to="/Groovy/dashboard" style={styles.link}>
+                  <img src={layout} alt="" width={'15px'} height={'15px'} /> 개요
                 </Link>
-              ) : (<div></div>)}
-            </Item>
-          </List>
-        </ul>
-      </div>
+              </Item>
+            </List>
+            <List style={styles.item} onClick={toggleState}>
+              <Item>
+                <Link to="/Groovy/contacts" style={styles.link}>
+                  <img src={contacts} alt="" width={'15px'} height={'15px'} /> 주소록
+                </Link>
+              </Item>
+            </List>
+            <List style={styles.item} onClick={toggleState}>
+              <Item>
+                <Link to="/Groovy/message" style={styles.link}>
+                  <img src={message} alt="" width={'15px'} height={'15px'} /> 메시지
+                </Link>
+              </Item>
+            </List>
+            <List style={styles.item} onClick={toggleState}>
+              <Item>
+                <Link to="/Groovy/mail" style={styles.link}>
+                  <img src={mail} alt="" width={'15px'} height={'15px'} /> 메일
+                </Link>
+              </Item>
+            </List>
+            <List style={styles.item} onClick={toggleState}>
+              <Item>
+                <Link to="/Groovy/survey" style={styles.link}>
+                  <img src={survey} alt="" width={'15px'} height={'15px'} /> 설문
+                </Link>
+              </Item>
+            </List>
+            <List style={styles.item} onClick={toggleState}>
+              <Item>
+                <Link to="/Groovy/list" style={styles.link}>
+                  <img src={list} alt="" width={'15px'} height={'15px'} /> 할일
+                </Link>
+              </Item>
+            </List>
+            <List style={styles.item} onClick={toggleState}>
+              <Item>
+                <Link to="/Groovy/calendar" style={styles.link}>
+                  <img src={calendar} alt="" width={'15px'} height={'15px'} /> 캘린더
+                </Link>
+              </Item>
+            </List>
+            <List style={styles.item} onClick={toggleState}>
+              <Item>
+                <Link to="/Groovy/board" style={styles.link}>
+                  <img src={board} alt="" width={'15px'} height={'15px'} /> 게시판
+                </Link>
+              </Item>
+            </List>
+            <List style={styles.item} onClick={toggleState}>
+              <Item>
+                <Link to="/Groovy/signlist" style={styles.link}>
+                  <img src={approval} alt="" width={'15px'} height={'15px'} /> 전자결재
+                </Link>
+              </Item>
+            </List>
+            <List style={styles.item} onClick={toggleState}>
+              <Item>
+                <Link to="/Groovy/attendence" style={styles.link}>
+                  <img src={setting} alt="" width={'15px'} height={'15px'} /> 근태관리
+                </Link>
+              </Item>
+            </List>
+            <List style={styles.item} onClick={toggleState}>
+              <Item>
+                {isAdmin ? (
+                  <Link to="/Groovy/admin" style={styles.link}>
+                    <img src={admin} alt="" width={'15px'} height={'15px'} /> 관리
+                  </Link>
+                ) : (<div></div>)}
+              </Item>
+            </List>
+          </ul>
+        </div>
+      </Fade>
     </div>
   );
 };
