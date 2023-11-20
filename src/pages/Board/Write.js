@@ -33,6 +33,10 @@ function Write() {
     setOpen(!open);
   };
 
+  const handleBack = () => {
+    navi(-1);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setBoard((prev) => ({ ...prev, [name]: value }));
@@ -59,10 +63,7 @@ function Write() {
       alert("공지/자유를 선택하세요.");
       return;
     }
-
-    console.log('Before trim:', board.contents);
     const trimContent = board.contents.trim();
-    console.log('After trim:', trimContent);
     if (!trimContent) {
       alert("내용을 입력하세요.");
       return;
@@ -93,7 +94,6 @@ function Write() {
             }
           }
           navi('/groovy/board');
-          console.log(resp.data);
         })
         .catch((e) => {
           console.error(e);
@@ -107,7 +107,6 @@ function Write() {
         })
         .then((resp) => {
           navi('/groovy/board');
-          console.log(resp.data);
         })
         .catch((e) => {
           console.error(e);
@@ -210,7 +209,7 @@ function Write() {
       </div>
       <hr></hr>
       <div className={style.btn}>
-        <button>취소</button>
+        <button onClick={handleBack}>취소</button>
         <button onClick={handleAdd}>등록</button>
       </div>
     </div>
