@@ -90,8 +90,13 @@ function DotBadge() {
         handleWebSocketMessage(response);
       });
 
+      const newTopicSubscription = stompClient.subscribe('/topic/board', (response) => {
+        handleWebSocketMessage(response);
+      });
+
       return () => {
         subscription.unsubscribe();
+        newTopicSubscription.unsubscribe();
       };
     }
   }, [stompClient, loginID]);
@@ -113,7 +118,6 @@ function DotBadge() {
         setIsNotificationOpen(false);
       }
     }
-
     if (isNotificationOpen) {
       document.addEventListener('click', handleClickOutside);
     }
@@ -124,11 +128,11 @@ function DotBadge() {
 
 
 
-  const handleNotificationCheck = async(parent_seq) => {
+  const handleNotificationCheck = async (parent_seq) => {
     if (parent_seq != null) {
       const realtime_notificationResponse = await axios.put(`/api/realtime_notification/${parent_seq}`)
         .then(resp => {
-          
+
         })
         .catch(e => {
           console.error(e);
@@ -212,6 +216,12 @@ function DotBadge() {
                     <Alert severity="info">{notification.contents}</Alert>
                   </Link>
                 )}
+
+              {notification.contents.includes("공지") && (
+                <Link to={`/Groovy/board/com`}>
+                  <Alert severity="info">{notification.contents}</Alert>
+                </Link>
+              )}
             </div>
           ))}
           {notifications.length === 0 && (
