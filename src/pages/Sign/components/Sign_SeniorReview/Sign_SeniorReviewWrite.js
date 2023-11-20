@@ -151,9 +151,12 @@ const Sign_SeniorReviewWrite = () => {
 
 
     const handleFileChange = (e) => {
-        const files = Array.from(e.target.files);
+        const newFiles = Array.from(e.target.files).map(file => ({
+            ori_name: file.name,
+            file: file
+        }));
 
-        setFileList(files);
+        setFormData({ ...formdata, files: newFiles });
         setOpen(true);
     };
 
@@ -195,9 +198,9 @@ const Sign_SeniorReviewWrite = () => {
         submitFormData.append("comment", comment);
         submitFormData.append("title", title);
 
-        // Append files to the submitFormData
-        fileList.forEach(file => {
-            submitFormData.append("files", file); // 'file'은 File 객체입니다.
+        // formdata 상태에서 저장된 파일들을 FormData에 추가합니다.
+        formdata.files.forEach((fileObject) => {
+            submitFormData.append("files", fileObject.file); // 'file'은 File 객체입니다.
         });
 
 
