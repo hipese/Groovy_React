@@ -101,7 +101,6 @@ const Worksection = () => {
         }).catch((e)=>{
             console.log(e);
             setWorking(false);
-            setLoading(true);
         }) : navi("/");}
     },[]);
     

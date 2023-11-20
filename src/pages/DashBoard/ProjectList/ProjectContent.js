@@ -305,6 +305,7 @@ const AddMember = ({handleClose}) => {
     const {member, setMember} = useContext(MemberContext);
     const [newMember,setNewMember] = useState({pseq:0,group_name:"없음",name:"",id:""});
     const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
+    const [selectMemberdetail, setSelectMemberdetail] = useState({});
 
     const handleChange = (e) => {
         const {name,value} = e.target;
@@ -363,17 +364,11 @@ const AddMember = ({handleClose}) => {
                                 <button onClick={handleAdd}>추가</button>
                             </div>
                         </Grid>
-                    </Grid>
-                    
-                    
-                    
-                    
+                    </Grid> 
                 </Grid>
             </Grid>
-            
-            
             <div className={`${style.modalWidth}`}>
-                <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} />
+                <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
             </div>
             
             
