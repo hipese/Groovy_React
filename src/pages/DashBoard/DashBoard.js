@@ -19,6 +19,7 @@ import { DateCalendar, DatePicker, LocalizationProvider, PickersDay, StaticDateP
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ControlCameraSharp } from '@mui/icons-material';
+import CalendarInnerModal from './CalendarInnerModal';
 
 const Loading = () => {
 return(
@@ -101,7 +102,6 @@ const Worksection = () => {
         }).catch((e)=>{
             console.log(e);
             setWorking(false);
-            setLoading(true);
         }) : navi("/");}
     },[]);
     
@@ -352,7 +352,7 @@ const Calandarsection = () => {
                 
             >
                 <Box sx={Modalstyle}>
-                    <CalendarInfo  calendarData={calendarData} pickedDate={pickedDate}/>
+                    <CalendarInnerModal />
                 </Box>
             </Modal>
         </div>
@@ -474,6 +474,35 @@ const ProjectSection = () => {
 }
 
 const NoticeSection = () => {
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const [deptNotice,setDeptNotice] = React.useState([]);
+    const {loginID} = React.useContext(LoginContext);
+
+    const COUNT_PER_PAGE = 3;
+    const totalItems = deptNotice.length;
+    const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
+    const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
+    const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
+    const visibleSignList = deptNotice.slice(startIndex, endIndex);
+    
+    const onPageChange = (e, page) => {
+        setCurrentPage(page);
+    };
+    
+    React.useEffect( ()=>{
+        axios.get(`/api/dept_notice/${loginID}`).then(res=>{
+            const group = res.data;
+            axios.get(`/api/boards/deptCom/${group}`).then(response=>{
+                setDeptNotice(response.data);
+                console.log(response.data);
+            }).catch((e)=>{
+                console.log("board - "+e);
+            });
+        }).catch((e)=>{
+            console.log("group -"+e);
+        });
+    },[]);
+
     return (
         <div className={style.noticesection}>
             <div className={`${style.padding10} ${style.borderbtm}`}>
@@ -488,6 +517,79 @@ const NoticeSection = () => {
                         </IconButton></Link>
                     </Grid>
                 </Grid>
+            </div>
+            <div className={`${style.marginT30} ${style.padding10}`}>
+                <Grid container rowSpacing={2}>
+                    <Grid xs={1} className={style.center}>
+                        <Typography className={`${style.fs18} ${style.bold}`}>
+                            번호
+                        </Typography>
+                    </Grid>
+                    <Grid xs={3} className={style.center}>
+                        <Typography className={`${style.fs18} ${style.bold}`}>
+                        작성자
+                        </Typography>
+                    </Grid>
+                    <Grid xs={6} className={style.center}>
+                        <Typography className={`${style.fs18} ${style.bold}`}>
+                        제목
+                        </Typography>
+                    </Grid>
+                    <Grid xs={2} className={style.center}>
+                        <Typography className={`${style.fs18} ${style.bold}`}>
+                        작성일자
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </div>
+            <div>
+                    {visibleSignList.map((e,i)=>{
+                        return(          
+                            <List sx={style} component="nav" aria-label="mailbox folders">
+                                <Link to={`/groovy/board/detailDept/${e.seq}`}><ListItem button>
+                                    <Grid container key={i} className={`${style.marginT10}`}> 
+                                        <Grid xs={1} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.seq}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={3} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                                {e.writer}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={6} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.title}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={2} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.write_date ? format(new Date(e.write_date), 'yyyy-MM-dd') : e.write_date}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>            
+                                </ListItem></Link>
+                            <Divider />
+                                
+                            </List>
+                        )
+                    })}
+                    <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={onPageChange}
+                        size="medium"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: "15px 0",
+                        }}
+                        renderItem={(item) => (
+                            <PaginationItem {...item} sx={{ fontSize: 12 }} />
+                        )}
+                    />
+                
             </div>
             <div>
                 

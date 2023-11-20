@@ -8,7 +8,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { format } from 'date-fns';
 import { LoginContext } from '../../../App';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ProjectCreate = () => {
     const {loginID} = useContext(LoginContext);
@@ -87,9 +87,9 @@ const ProjectCreate = () => {
                 }}/>
             <div className={`${style.center} ${style.padding10}`}>
                 <Stack direction="row" spacing={5}>
-                    <Button variant="outlined" startIcon={<DeleteIcon />}>
+                    <Link to="/Groovy/dashboard"><Button variant="outlined" startIcon={<DeleteIcon />}>
                         취소
-                    </Button>
+                    </Button></Link>
                     <Button variant="contained" endIcon={<SendIcon />} onClick={handleProjectAdd}>
                         생성
                     </Button>

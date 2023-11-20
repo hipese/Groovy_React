@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { createContext } from 'react';
 import { useContext } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LoginContext } from '../../../App';
 const SurveyContent = ({survey,setSurvey}) => {
     //const [survey,setSurvey] = useState({title:"",contents:""});
@@ -196,21 +196,6 @@ const SurveyQuestion = () => {
     )
 }
 
-const SurveySubmit = () => {
-    return(
-        <div className={`${style.padding15} ${style.center}`}>
-            <Stack direction="row" spacing={5}>
-                <Button variant="outlined" startIcon={<DeleteIcon />}>
-                    취소
-                </Button>
-                <Button variant="contained" endIcon={<SendIcon />}>
-                    생성
-                </Button>
-            </Stack>
-        </div>
-    )
-}
-
 const QuestionContext = createContext();
 
 const SurveyWrite = () => {
@@ -226,6 +211,13 @@ const SurveyWrite = () => {
     const navi = useNavigate();
     
     const handleAllData = async () => {
+        if(survey.surtitle == "" || survey.surtitle == undefined){
+            alert("제목을 작성하시오");
+            return;
+        }else if(survey.surcontents == "" || survey.surcontents == undefined){
+            alert("내용을 작성하시오");
+            return;
+        }
         const updateResult = [survey,...shortAnswers.filter(Boolean),...multiAnswers.filter(Boolean)];
 
         await new Promise((res)=>{
@@ -255,16 +247,10 @@ const SurveyWrite = () => {
         setResult([]);
     },[result]);
 
-    const resultshow = async () => {
+    const resultInsert = async () => {
         await handleAllData();
     }
 
-    const ts = () => {
-        console.log(...shortAnswers);
-        console.log(...multiAnswers);
-        handleAllData();
-        console.log(result);
-    }
     return(
         <div className={`${style.padding40} ${style.contentDiv}`}>
             <QuestionContext.Provider value={{result,setResult,shrtAns,setShrtAns,formedAns, setFormedAns,shortAnswers,setShortAnswers,multiAnswers,setMultiAnswers}}>
@@ -275,10 +261,10 @@ const SurveyWrite = () => {
                     <Grid item xs={12}>
                         <SurveyQuestion/>
                         <Stack direction="row" spacing={5} className={`${style.center} ${style.padding10}`}>
-                            <Button variant="outlined" startIcon={<DeleteIcon />} onClick={ts}>
+                            <Link to="/Groovy/survey"><Button variant="outlined" startIcon={<DeleteIcon />}>
                                 취소
-                            </Button>
-                            <Button variant="contained" endIcon={<SendIcon />}  onClick={resultshow}>
+                            </Button></Link>
+                            <Button variant="contained" endIcon={<SendIcon />}  onClick={resultInsert}>
                                 생성
                             </Button>
                         </Stack>
