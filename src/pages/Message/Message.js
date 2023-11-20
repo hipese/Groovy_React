@@ -12,8 +12,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import { forwardRef } from "react";
+import { format } from 'date-fns';
 import MuiButton from "@mui/material/Button";
 
 const SelectContext = createContext();
@@ -86,8 +85,15 @@ let Message = () => {
         console.log(recentMessageRef)
         const copyRecent = [JSON.parse(resp.body)].concat(recentMessageRef.current.filter(recent => recent.room_seq != JSON.parse(resp.body).room_seq));
         setRecentMessage(copyRecent);
-        if(JSON.parse(resp.body).room_seq == selectedRoomRef.current) {
-            setMessages([...messagesRef.current, JSON.parse(resp.body)]);
+        if (JSON.parse(resp.body).room_seq == selectedRoomRef.current) {
+            if(new Date(JSON.parse(resp.body).write_time).getDate() !== new Date(messagesRef.current.at(-1).write_time).getDate()) {
+                let date = new Date(JSON.parse(resp.body).write_time)
+                    date.setUTCHours(0,0,0,0);
+                    let dateMessage = {seq : -1, id : "System", room_seq : selectedRoom, contents : format(date, "Y-M-d EEEE"), write_time : date.toISOString() }
+                    setMessages([...messagesRef.current, dateMessage, JSON.parse(resp.body)]);
+            } else {
+                setMessages([...messagesRef.current, JSON.parse(resp.body)]);
+            }
             axios.put("/api/message/readMessage", null, { params: { room_seq: selectedRoomRef.current } }).then(resp => {
                 const copyInfo = roomInfoRef.current.map(info => {
                     if (info.seq == selectedRoomRef.current)
@@ -104,7 +110,7 @@ let Message = () => {
             })
             setRoomInfo(copyInfo)
         }
-            
+
     }
 
     const roomObjectClickHandler = (room_seq) => {
@@ -126,10 +132,10 @@ let Message = () => {
     }
 
     const dialogAgree = () => {
-        axios.delete("/api/message/leaveRoom",{params : {room_seq : leaveRoom}}).then((resp) => {
+        axios.delete("/api/message/leaveRoom", { params: { room_seq: leaveRoom } }).then((resp) => {
             let copy = recentMessage.filter(prev => prev.room_seq != leaveRoom)
             setRecentMessage(copy);
-        }).catch(err => console.log(err)).finally( () => {
+        }).catch(err => console.log(err)).finally(() => {
             subscriptions.find((sub) => sub.room_seq == leaveRoom).subscription.unsubscribe();
             const copySubs = subscriptions.filter(sub => sub.room_seq != leaveRoom);
             setSubscriptions(copySubs);
@@ -154,7 +160,7 @@ let Message = () => {
                         {
                             recentMessage.map(room => {
                                 return (
-                                    <Row className={style.chat_room_object} key={room.room_seq} onClick={() => (roomObjectClickHandler(room.room_seq))}>
+                                    <Row className={`${style.chat_room_object} ${selectedRoom === room.room_seq ? style.selectedRoom : ""}`} key={room.room_seq} onClick={() => (roomObjectClickHandler(room.room_seq))}>
                                         <Col xs={4} className={style.room_profile_container}>
                                             <Row className={style.room_profile}>
                                                 {
@@ -174,16 +180,16 @@ let Message = () => {
                                                         :
                                                         <Col xs={12} className={style.profile_multibox}>
                                                             {profiles.filter(profile => profile.room_seq == room.room_seq).map((profile, index) => {
-                                                                if (index <= 1)
+                                                                if (index <= 1) {
                                                                     return (
-                                                                        <>
-                                                                            {
+                                                                            
                                                                                 profile.profile_image ?
-                                                                                    <img src={`/profiles/${profile.profile_image}`} key={index} alt="profile" className={index ? style.profile_image1 : style.profile_image2} ></img> :
-                                                                                    <img src={`/assets/default.png`} alt="profile" key={index} className={index ? style.profile_image1 : style.profile_image2}></img>
-                                                                            }
-                                                                        </>
+                                                                                    (<img src={`/profiles/${profile.profile_image}`} key={index} alt="profile" className={index ? style.profile_image1 : style.profile_image2} ></img>) :
+                                                                                    (<img src={`/assets/default.png`} alt="profile" key={index} className={index ? style.profile_image1 : style.profile_image2}></img>)
+                                                                            
+                                                                        
                                                                     )
+                                                                }
                                                             })}
                                                         </Col>
                                                 }
@@ -205,7 +211,7 @@ let Message = () => {
                                         </Col>
                                         <div className={style.is_read} key={room.room_seq} hidden={roomInfo.filter(info => info.seq == room.room_seq)[0].is_read}></div>
                                         <Tooltip title="나가기">
-                                            <CloseIcon className={style.closeIcon} color="action" fontSize="small" onClick={(e)=>{e.stopPropagation(); closeSvgClickHandler(room.room_seq)}}></CloseIcon>
+                                            <CloseIcon className={style.closeIcon} color="action" fontSize="small" onClick={(e) => { e.stopPropagation(); closeSvgClickHandler(room.room_seq) }}></CloseIcon>
                                         </Tooltip>
                                     </Row>
                                 )

@@ -2,18 +2,19 @@
     display: flex;
     justify-content: center;
     height: fit-content;
-    margin-top: 3px;
+    margin-top: 5px;
     margin-bottom: 3px;
 }
 
 .system_msg {
     width: 80%;
     text-align: center;
-    background-color: rgb(200, 200, 200);
+    background-color: rgb(220, 220, 220);
     border-radius: 10px;
     height: fit-content;
     padding-top: 5px;
     padding-bottom: 5px;
+    font-weight: bolder;
 }
 
 .msg_left_container {

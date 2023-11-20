@@ -31,7 +31,7 @@
 }
 
 .chat_room_object:hover {
-    background-color: rgb(240, 240, 240);
+    background-color: rgb(247, 247, 247);
     cursor: pointer;
 }
 
@@ -39,6 +39,11 @@
     box-sizing: border-box;
     /* border: 1px solid rgb(240, 240, 240); */
 }
+
+.selectedRoom {
+    background-color: rgb(240, 240, 240);
+}
+
 .room_profile_container, .room_profile {
     position: relative;
     height: 100%;
