@@ -81,7 +81,6 @@ const AttendenceMain = () => {
     }, []);
     
     useEffect(() => {
-        console.log("한무실행")
         if (hasCompletedVacationFetched && members.member) {
             const url = `/api/vacation/myVacation/${members.member.id}` + (total_vactionDate ? `/${total_vactionDate}` : '');
             axios.get(url).then(resp => {
