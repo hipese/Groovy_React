@@ -77,7 +77,7 @@ const Sign_Write = () => {
             setSignWriterInfo(resp2.data);
         });
  
-    }, []);
+    }, [members.member.id]);
 
     const toggleModal = () => {
         setModalOpen(!isModalOpen);
@@ -222,7 +222,7 @@ const Sign_Write = () => {
                             결제선 지정
                         </div>
                         <div className={style.buttonDiv}>
-                            <button onClick={toggleModal} className={style.btn}>조직도 검색</button>
+                            <button onClick={toggleModal} className={style.btn}>직원 검색</button>
                             <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover}
                                 selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
                         </div>

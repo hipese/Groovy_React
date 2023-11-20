@@ -8,19 +8,20 @@ import { useContext } from 'react';
 import { useState } from 'react';
 import { LoginContext } from '../../../App';
 import SendIcon from '@mui/icons-material/Send';
+import { SurveyContext } from '../Survey';
 
 const SurveyTitle = () => {
-    const {contextData} = useContext(SurveyContext);
+    const {contextData} = useContext(SurveyContentsContext);
     const {seq} = useParams();
     const {loginID} = useContext(LoginContext);
     const titleData = contextData ? contextData[0] : {title:"",writer:"",contents:""};
 
     const navi = useNavigate();
-    console.log(titleData);
 
     const handleSurveyClose = () => {
         axios.put(`/api/survey/close/${seq}`).then(res=>{
             navi("/Groovy/survey");
+            
         })
     }
 
@@ -52,7 +53,7 @@ const SurveyTitle = () => {
 
 const SurveyQuestion = () => {
     const {seq} = useParams();
-    const {contextData} = useContext(SurveyContext);
+    const {contextData} = useContext(SurveyContentsContext);
     const titleData = contextData ? contextData[0] : {title:"",writer:"",contents:""};
     const {loginID} = useContext(LoginContext);
     const questionData = contextData ? contextData.slice(1) : [{}];
@@ -146,7 +147,7 @@ const SurveyQuestion = () => {
     )
 }
 
-const SurveyContext = createContext();
+const SurveyContentsContext = createContext();
 
 const SurveyContent = () => {
 
@@ -177,7 +178,7 @@ const SurveyContent = () => {
     }
     return (
         <div className={`${style.padding40} ${style.contentDiv}`}>
-            <SurveyContext.Provider value={{contextData,setContextData}}>
+            <SurveyContentsContext.Provider value={{contextData,setContextData}}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <SurveyTitle/>
@@ -187,7 +188,7 @@ const SurveyContent = () => {
                         <SurveyQuestion/>
                     </Grid>
                 </Grid>
-            </SurveyContext.Provider>
+            </SurveyContentsContext.Provider>
         </div>
     )
 }

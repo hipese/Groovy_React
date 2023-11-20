@@ -66,14 +66,13 @@ const AttendenceMain = () => {
                 setVacation_complete_list(completeResp.data);
                 setVacation_wait_list(waitResp.data);
     
-                // Calculate total used days for completed documents
                 const totalUsedDays = completeResp.data.reduce((acc, doc) => acc + doc.total_date, 0);
                 setTotal_vactionDate(totalUsedDays);
-                setHasCompletedVacationFetched(true); // Signal that list data has been fetched
+                setHasCompletedVacationFetched(true); 
             } catch (error) {
                 console.error('Error fetching vacation lists:', error);
             } finally {
-                setLoading(false); // Loading is complete regardless of whether the fetch was successful
+                setLoading(false); 
             }
         };
     
@@ -82,7 +81,7 @@ const AttendenceMain = () => {
     
     useEffect(() => {
         if (hasCompletedVacationFetched && members.member) {
-            const url = `/api/vacation/myVacation/${members.member.id}` + (total_vactionDate ? `/${total_vactionDate}` : '');
+            const url = `/api/vacation/myVacation/` + (total_vactionDate ? `/${total_vactionDate}` : '');
             axios.get(url).then(resp => {
                 setMyVacation(resp.data || {});
             }).catch(error => {
@@ -136,7 +135,7 @@ const AttendenceMain = () => {
                 </TableContainer>
             </div>
             <div>
-                <button className={style.btn} onClick={() => handleEdit('vacation')}>휴가조절(관리자만 사용하세요)</button>
+                <button className={style.btn} onClick={() => handleEdit('vacation')}>휴가조절</button>
                 <Modal
                     open={openModal && editingField === 'vacation'}
                     onClose={handleCloseModal}

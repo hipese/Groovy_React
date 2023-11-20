@@ -1,14 +1,12 @@
 .noticeContents{
-    width: 1100px;
+    width: 1300px;
     height: 760px;
     margin-left: 50px;
     margin-top: 50px;
 }
-
-.contentDiv{
-    width: 1200px;
-    height: 790px;
-    margin: auto;
+.list{
+    height: 100%;
+    max-height: 570px;
 }
 
 .vcenter{
@@ -27,27 +25,28 @@
     align-items: center;
 }
 
-.btnEven{
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
 .padding10{
     padding: 10px;
 }
 .padding15{
     padding: 15px;
 }
-.padding40{
-    padding: 40px;
+
+.marginT30{
+    margin-top: 30px;
 }
-.marginT50{
-    margin-top: 50px;
+
+.marginT40{
+    margin-top: 40px;
 }
 
 .marginB50{
     margin-bottom: 50px;
+}
+
+.marginTB40{
+    margin-top: 40px;
+    margin-bottom: 20px;
 }
 
 .marginTB50{
@@ -61,11 +60,4 @@
 
 .bold{
     font-weight: bold;
-}
-
-/* Write Content */
-
-.writeSection{
-    border: 1px solid black;
-    border-radius: 5px;
 }

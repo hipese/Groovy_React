@@ -15,6 +15,7 @@ import Org_Chart from "../../Org_Chart/components/Org_Chart_Modal/Org_Chart.js";
 import { LoginContext } from "../../../App";
 import RemoveIcon from '@mui/icons-material/Remove';
 import ClearIcon from '@mui/icons-material/Clear';
+import { useWebSocket } from "../../../WebSocketContext/WebSocketContext";
 
 const Modalstyle = {
     position: 'absolute',
@@ -35,9 +36,9 @@ const Modalstyle = {
         console.log(e);
         console.log(e.$d);
         console.log(e.name);
-        //const {name,value} = e.target;
+        const {name,value} = e.target;
         
-        //setSchedule(prev=>({...prev,[name]:value}));
+        setSchedule(prev=>({...prev,[name]:value}));
     }
 
     const handleAdd = () => {
@@ -305,6 +306,7 @@ const AddMember = ({handleClose}) => {
     const {member, setMember} = useContext(MemberContext);
     const [newMember,setNewMember] = useState({pseq:0,group_name:"없음",name:"",id:""});
     const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
+    const [selectMemberdetail, setSelectMemberdetail] = useState({});
 
     const handleChange = (e) => {
         const {name,value} = e.target;
@@ -319,10 +321,24 @@ const AddMember = ({handleClose}) => {
         
     },[approver]);
 
+    const stompClient = useWebSocket();
+    
+
+
     const handleAdd = () => {
+
         setMember(prev=>([...prev,newMember]));
         console.log(newMember);
         axios.post(`/api/project/addMember/${seq}`,newMember).then(res=>{
+            const parentSeq = res.data; // 서버에서 반환한 값으로 설정
+            const message = "프로젝트에 초대되었습니다.";
+            const messageObject = { message, recipient: newMember.id, parent_seq: parentSeq };
+
+            // Stomp를 통해 메시지 전송
+            if (stompClient) {
+                stompClient.send("/app/notice", {}, JSON.stringify(messageObject));
+            }
+
             setMember(prev=>([...prev,member]));
             handleClose();
         });
@@ -363,17 +379,11 @@ const AddMember = ({handleClose}) => {
                                 <button onClick={handleAdd}>추가</button>
                             </div>
                         </Grid>
-                    </Grid>
-                    
-                    
-                    
-                    
+                    </Grid> 
                 </Grid>
             </Grid>
-            
-            
             <div className={`${style.modalWidth}`}>
-                <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} />
+                <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
             </div>
             
             
