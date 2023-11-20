@@ -10,6 +10,7 @@ import MessageRight from "./Message_Right";
 import MessageLeft from "./Message_Left";
 import MessageSystem from "./Message_System";
 import { useWebSocket } from "../../WebSocketContext/WebSocketContext";
+import { format } from 'date-fns';
 
 const Message_Room = () => {
     const { selectedRoom } = useContext(SelectContext)
@@ -26,7 +27,26 @@ const Message_Room = () => {
     useEffect(() => {
         setMyMessage("");
         axios.get(`/api/message/selectByRoomSeq`, { params: { room_seq: selectedRoom } }).then(resp => {
-            setMessages(resp.data);
+            setMessages(() => {
+                const dateMessages = resp.data.map(e => {
+                    let date = new Date(e.write_time)
+                    date.setUTCHours(0,0,0,0);
+
+                    let dateMessage = {seq : -1, id : "System", room_seq : selectedRoom, contents : format(date, "Y-M-d EEEE"), write_time : date.toISOString() }
+                    return dateMessage;
+                })
+                const uniqueDate = dateMessages.filter((item, index, array) => {
+                    return array.findIndex((otherItem) => otherItem.write_time === item.write_time) === index;
+                })
+                let copy = resp.data;
+                copy.push(...uniqueDate);
+                copy.sort((a, b) => {
+                    var dateA = new Date(a.write_time);
+                    var dateB = new Date(b.write_time);
+                    return dateA - dateB;
+                })
+                return copy;
+            });
         }).catch(err => console.log(err))
     }, [selectedRoom])
 
