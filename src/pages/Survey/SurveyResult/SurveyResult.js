@@ -116,13 +116,6 @@ const SurveyResult = () => {
         updateShortArray();
     },[goUpate]);
 
-    const show = () =>{
-        console.log(multiCount.length);
-        console.log(data);
-        console.log(array);
-        console.log(short);
-    }
-
     return(
         <div className={`${style.resultDiv} ${style.border} ${style.borderRad10}`}>
             <div className={`${style.borderbtm} ${style.padding10} ${style.center}`}>
@@ -156,7 +149,7 @@ const SurveyResult = () => {
             <div>
                 {array.map((e,i)=>{
                     return(
-                        <div>
+                        <div key={i}>
                             <div className={`${style.padding20}`}>
                                 <Typography sx={{fontWeight:"bold"}}>
                                     {`${i+1}번째 객관식 질문`}

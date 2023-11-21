@@ -27,9 +27,7 @@ const ProjectCreate = () => {
     }
 
     const handleProjectAdd = async () => {
-        console.log(newProject);
         axios.post("/api/project/create",newProject).then(res=>{
-            console.log(res.data);
             navi("/Groovy/dashboard/project");
         }).catch((e)=>{
             console.log(e);
