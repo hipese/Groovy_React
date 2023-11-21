@@ -24,10 +24,13 @@
 }
 
 .select {
-    width: 100%;
-    font-size: 15px;
+    font-size: 13px;
+    font-weight: 700;
     text-decoration: none;
-    padding: 3px;
+    padding: 10px;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
 }
 
 a {
@@ -40,7 +43,7 @@ a {
 }
 
 .select:hover {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(250, 250, 250);
 }
 
 .selectDown {
@@ -72,17 +75,34 @@ a {
     height: 40px;
     position: relative;
     cursor: pointer;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.tdlDBInsert:hover {
+    background-color: rgb(250, 250, 250);
+}
+
+.bgbox {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 10px;
+    border-radius: 5px;
+    z-index: 1;
 }
 
 .tdltitle {
-    width: 90%;
+    max-width: 170px;
     height: 18px;
-    color: white;
+    color: rgb(0, 0, 0);
     font-size: 13px;
     font-weight: 700;
-    position: relative;
-    top: 2px;
-    left: 2px;
+    position: absolute;
+    top: 10px;
+    left: 45px;
     overflow: hidden;
 }
 
@@ -91,18 +111,55 @@ a {
     height: 20px;
     position: absolute;
     top: 5px;
-    right: -20px;
+    right: -40px;
+    transition: right 0.2s ease-in-out;
+    display: none;
 }
 
 .tdlDBInsert:hover .starimg {
-    right: -2px;
+    display: block;
+    right: 7px;
+    transition: right 0.2s ease-in-out;
 }
 
 .starimg:active {
+    display: block;
     transform: scale(0.8);
 }
 
 .starActive {
+    display: block;
     top: 5px;
-    right: -2px;
+    right: 7px;
+}
+
+.submenu {
+    list-style: none;
+    width: 210px;
+    background-color: white;
+    position: absolute;
+    top: 35px;
+    left: 20px;
+    border-radius: 5px;
+    padding: 9px;
+    box-shadow: 0 1px 0px 1px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+}
+
+.submenu>div {
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+}
+
+.bgselect {
+    float: left;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 35px;
+    height: 30px;
+    border-radius: 5px;
+    box-shadow: 0 1px 0px 1px rgba(0, 0, 0, 0.05);
 }
