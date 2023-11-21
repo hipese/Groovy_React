@@ -69,7 +69,7 @@ const Sign_Write = () => {
     const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상새정보를 가져옵니다.
     const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
     const [signWriterInfo, setSignWriterInfo] = useState({}); //사용자의 상세정보
-    const [isSend,setIsSend]=useState();
+    const [isSend,setIsSend]=useState(); //결재시 직급을 비교하여 선택할 수 있는 인원에 제한을 준다.
 
     useEffect(() => {
         axios.get(`/api/member/signWriterInfo/${members.member.id}`).then(resp2 => {

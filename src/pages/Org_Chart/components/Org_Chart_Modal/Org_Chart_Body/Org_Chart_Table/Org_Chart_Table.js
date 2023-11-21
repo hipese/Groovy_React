@@ -32,7 +32,7 @@ const columns = [
 ];
 
 
-const Org_Chart_Table = ({ setEmployees, employees, selectedRow, setSelectedRow, setApprover, setSelectMemberdetail,isSend ,setMyPositionRank,setIsSend}) => {
+const Org_Chart_Table = ({ setEmployees, employees, selectedRow, setSelectedRow, setApprover, setSelectMemberdetail ,setMyPositionRank,setIsSend}) => {
 
     const members=useContext(MemberContext);
 
@@ -57,18 +57,16 @@ const Org_Chart_Table = ({ setEmployees, employees, selectedRow, setSelectedRow,
         if (selectedRow === id) {
             setSelectedRow(null);
             setApprover({});
+            setIsSend();
         } else {
             setSelectedRow(id);
             try {
                 const respApprover = await axios.get(`/api/member/${id}`);
                 setApprover(respApprover.data);
-                console.log(respApprover.data.position);
-                console.log(members.member.position);
-
+                
                 const respRank = await axios.get(`/api/positionRank/isRanking/${respApprover.data.position}/${members.member.position}`);
                 setMyPositionRank(respRank.data);
                 setIsSend(respRank.data);
-                console.log(isSend);
             } catch (error) {
                 console.error("Failed to fetch data:", error);
                 // 오류 처리를 할 수 있습니다.
