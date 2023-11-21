@@ -62,13 +62,23 @@ div{
     width: 100% !important;
 }
 
-.CalendarMain>div>div {
+.weekContainer{
+    height: 20%!important;
+}
+
+.CalendarMain>div>div>div>div>div>div>div>button {
     height: 36px!important;
 }
 
-div[role="row"] button {
-    height: 36px !important;
+.CalendarMain>div>div>div>div>div>div{
+    height: 220px!important;
 }
+
+.CalendarMain>div>div>div>div>div>div>div[role="row"]{
+    height: 38px!important;
+    max-height: 38px!important;
+}
+
 
 .bgwhite{
     background-color: white;

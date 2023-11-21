@@ -1,18 +1,24 @@
 import axios from 'axios';
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from "react-router-dom";
+import { blue } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
+import InsertLinkIcon from '@mui/icons-material/InsertLink';
+import EmailIcon from '@mui/icons-material/Email';
+import DraftsIcon from '@mui/icons-material/Drafts';
 import style from "./List.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
-
-import { LoginContext } from '../../App'; 
+import { Input } from "reactstrap";
+import { LoginContext } from '../../App';
 
 const List = () => {
+    const [search, setSearch] = useState('');
 
-    const { loginID } = useContext(LoginContext); 
+    const { loginID } = useContext(LoginContext);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [mails, setMails] = useState([]);
-    const COUNT_PER_PAGE = 15;
+    const COUNT_PER_PAGE = 8;
 
     useEffect(() => {
         LoadMails();
@@ -21,17 +27,25 @@ const List = () => {
     const LoadMails = () => {
         axios.get(`/api/mails/inbox/${loginID}`).then(resp => {
             setMails(resp.data);
-        }).catch(error => {
-            console.error("데이터 불러오기 중 오류 발생", error);
+        }).catch(() => {
         });
     }
 
     const handleDelete = (seq) => {
-        axios.put(`/api/mails/inbox/${seq}`).then((resp) => {
+        const formData = new FormData();
+        formData.append('member_id', loginID);
+        axios.put(`/api/mails/inbox/${seq}`, formData).then((resp) => {
             LoadMails();
         })
-            .catch((error) => {
-                console.error("삭제중 오류 발생", error);
+            .catch(() => {
+            });
+    };
+
+    const markAsRead = (seq) => {
+        axios.put(`/api/mails/read/${seq}`).then((resp) => {
+            LoadMails();
+        })
+            .catch(() => {
             });
     };
 
@@ -46,45 +60,72 @@ const List = () => {
     const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
     const visibleMail = mails.slice(startIndex, endIndex);
 
+    const inputChangeHandler = (e) => {
+        setSearch(e.target.value);
+    };
+
+    const filteredMail = search === ''
+        ? visibleMail
+        : visibleMail.filter(
+            (e) =>
+            e.name.includes(search) ||
+            e.group_name.includes(search) ||
+            e.position.includes(search) ||
+            e.email.includes(search) ||
+            e.title.includes(search)
+        );
+
     return (
         <div className="Mailcontainer">
             <div className={style.search}>
-                <input type="text" placeholder='메일 검색'></input>
-                <button>검색</button>
+                <Input placeholder="메일 검색" className={style.input_search} onChange={inputChangeHandler}></Input>
             </div>
             <hr></hr>
             <div className="body">
+                <div className={style.margin}>받은메일함</div>
+                <hr />
                 <div className={style.margin}>
-                    받은메일함
+                    <div className={style.mailTable}>
+                        <div className={style.tableRow}>
+                            <div className={style.tableHeader}>삭제</div>
+                            <div className={style.tableHeader}>읽음</div>
+                            <div className={style.tableHeader}>파일</div>
+                            <div className={style.tableHeader}>-</div>
+                            <div className={style.tableHeader}>보낸이</div>
+                            <div className={style.tableHeader}>제목</div>
+                            <div className={style.tableHeader}>작성일</div>
+                        </div>
+                        {filteredMail.map((e) => (
+                            <div key={e.seq} className={style.tableRow}>
+                                <div className={style.tableCell}>
+                                    <button onClick={() => handleDelete(e.seq)}>삭제</button>
+                                </div>
+                                <div className={style.tableCell}>
+                                    {e.is_read !== true ? (
+                                        <EmailIcon sx={{ color: blue[200] }} />
+                                    ) : (
+                                        <DraftsIcon sx={{ color: grey[400] }} />
+                                    )}
+
+                                </div>
+                                <div className={style.tableCell}>
+                                    {e.mfseq !== 0 && (
+                                        <InsertLinkIcon
+                                            sx={{ color: blue[200] }}
+                                        />
+                                    )}
+                                </div>
+                                <div className={style.tableCell}>{e.name} {e.group_name} {e.position}</div>
+                                <div className={style.tableCell}>{e.email}</div>
+                                <div className={style.tableCell}>
+                                    <Link to={`/groovy/mail/detail/${e.parent_seq}`} onClick={() => markAsRead(e.seq)}>{e.title}</Link>
+                                </div>
+                                <div className={style.tableCell}>{e.write_date}</div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <hr></hr>
-                <div className={style.margin}>
-                    <table border="1">
-                        <tbody>
-                            <tr>
-                                <th>Seq</th>
-                                <th>삭제</th>
-                                <th>Sender</th>
-                                <th>Receipient</th>
-                                <th>Title</th>
-                                <th>Write_Date</th>
-                            </tr>
-                            {visibleMail.map((e) => (
-                                <tr key={e.seq}>
-                                    <td>{e.seq}</td>
-                                    <td><button onClick={() => handleDelete(e.seq)}>Del</button></td>
-                                    <td>{e.sender}</td>
-                                    <td>{e.receipient}</td>
-                                    <td>
-                                        <Link to={`/groovy/mail/detail/${e.seq}`}>{e.title}</Link>
-                                    </td>
-                                    <td>{e.write_date}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                <hr></hr>
+                <hr />
                 <div className={style.margin}>
                     <Pagination
                         count={totalPages}

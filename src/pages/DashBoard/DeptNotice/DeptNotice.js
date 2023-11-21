@@ -1,5 +1,5 @@
 import style from './notice.module.css';
-import {Grid, IconButton, List, ListItem, Typography } from '@mui/material';
+import {Divider, Grid, IconButton, List, ListItem, Pagination, PaginationItem, Typography } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
@@ -53,14 +53,42 @@ color: 'inherit',
 const DeptNoticeList = () => {
     const {loginID} = useContext(LoginContext);
     const [isExcutives,setExcutives] = useState(false);
-    useEffect(()=>{
+    const [deptNotice,setDeptNotice] = useState([]);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const COUNT_PER_PAGE = 10;
+
+    useEffect( ()=>{
         axios.get(`/api/dept_notice/${loginID}`).then(res=>{
-            console.log(res.data);
-            setExcutives(res.data);
+            const group = res.data;
+            axios.get(`/api/boards/deptCom/${group}`).then(response=>{
+                setDeptNotice(response.data);
+                console.log(response.data);
+            }).catch((e)=>{
+                console.log("board - "+e);
+            });
         }).catch((e)=>{
-            console.log(e);
+            console.log("group -"+e);
         });
     },[]);
+
+    const totalItems = deptNotice.length;
+    const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
+
+    const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
+    const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
+    const visibleNoticeList = deptNotice.slice(startIndex, endIndex);
+
+    const [search,setSearch] = useState("");
+
+    const onPageChange = (e, page) => {
+        setCurrentPage(page);
+    };
+    const handleSearchChange = (e) => {
+        const {value} = e.target;
+        setSearch(value);
+    }
+
     return (
         <div className={`${style.noticeContents}`}>
             <div className={`${style.padding10}`}>
@@ -70,7 +98,7 @@ const DeptNoticeList = () => {
                             부서 내 소식
                         </Typography>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={3}>
                         <Search>
                             <SearchIconWrapper>
                             <SearchIcon />
@@ -78,20 +106,21 @@ const DeptNoticeList = () => {
                             <StyledInputBase
                             placeholder="Search…"
                             inputProps={{ 'aria-label': 'search' }}
+                            onChange={handleSearchChange}
                             />
                         </Search>
                     </Grid>
-                    <Grid item xs={1} className={`${style.vcenter}`}>
+                    <Grid item xs={2} className={`${style.center}`}>
                         
                     </Grid>
                 </Grid>
             </div>
-            <hr></hr>
-            <div className={`${style.marginT40}`}>
+            <Divider sx={{bgcolor:"black"}}/>
+            <div className={`${style.marginTB40}`}>
                 <Grid container rowSpacing={2}>
                     <Grid xs={1} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
-                            번호
+                            작성자
                         </Typography>
                     </Grid>
                     <Grid xs={6} className={style.center}>
@@ -101,44 +130,90 @@ const DeptNoticeList = () => {
                     </Grid>
                     <Grid xs={3} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
-                            작성일자
+                            조회수
                         </Typography>
                     </Grid>
                     <Grid xs={2} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
-                            상태
+                            작성일
                         </Typography>
                     </Grid>
                 </Grid>
             </div>
-            <hr></hr>
-            <div id='list'>
-                <List sx={style} component="nav" aria-label="mailbox folders">
-                    <ListItem button>
-                        <Grid container className={`${style.marginT10}`}> 
-                            <Grid xs={1} className={style.center}>
-                                <Typography className={`${style.fs} ${style.b}`}>
-                                1
-                                </Typography>
-                            </Grid>
-                            <Grid xs={6} className={style.center}>
-                                <Typography className={`${style.fs} ${style.b}`}>
-                                    2
-                                </Typography>
-                            </Grid>
-                            <Grid xs={3} className={style.center}>
-                                <Typography className={`${style.fs} ${style.b}`}>
-                                3
-                                </Typography>
-                            </Grid>
-                            <Grid xs={2} className={style.center}>
-                                <Typography className={`${style.fs} ${style.b}`}>
-                                4
-                                </Typography>
-                            </Grid>
-                        </Grid>            
-                    </ListItem>
-                </List>
+            <Divider sx={{bgcolor:"black"}}/>
+            <div id='list'>                
+                {visibleNoticeList ? visibleNoticeList.filter((e)=>e.title.includes(search) || (e.writer.includes(search))).map((e,i)=>{
+                        return(
+                            <List sx={style} component="nav" aria-label="mailbox folders">            
+                                <ListItem key={i} button>
+                                    <Grid container className={`${style.marginT10}`}> 
+                                        <Grid xs={1} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.writer}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={6} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.title}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={3} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.view_count}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid xs={2} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.write_date}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>            
+                                </ListItem>
+                            </List>           
+                        )
+                    }) : <List sx={style} component="nav" aria-label="mailbox folders">            
+                            <ListItem >
+                                <Grid container className={`${style.marginT10}`}> 
+                                    <Grid xs={1} className={style.center}>
+                                        <Typography className={`${style.fs} ${style.b}`}>
+                                        
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={6} className={style.center}>
+                                        <Typography className={`${style.fs} ${style.b}`}>
+
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={3} className={style.center}>
+                                        <Typography className={`${style.fs} ${style.b}`}>
+                                        
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={2} className={style.center}>
+                                        <Typography className={`${style.fs} ${style.b}`}>
+                                        
+                                        </Typography>
+                                    </Grid>
+                                </Grid>            
+                            </ListItem>
+                        </List>           
+                }                
+            </div>
+            <div>
+                <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={onPageChange}
+                        size="medium"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: "15px 0",
+                        }}
+                        renderItem={(item) => (
+                            <PaginationItem {...item} sx={{ fontSize: 12 }} />
+                        )}
+                    />
             </div>
         </div>
     )
@@ -148,7 +223,6 @@ const DeptNotice = () => {
     return (
         <Routes>
             <Route path='/' element={<DeptNoticeList/>}></Route>
-            <Route path='write_notice' element={<DeptNoticeWrite/>}></Route>
         </Routes>
     )
 }

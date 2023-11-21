@@ -24,6 +24,19 @@
     margin: 10px;
     padding: 10px;
 }
+.btn{
+  text-align: center;
+    height: 50px;
+    width: 120px;
+    border-radius: 10px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 20px;
+}
+.btn:hover:hover {
+    background-color: rgb(100, 180, 255);
+}
 
 .vacationStatus {
   background-color: whitesmoke;

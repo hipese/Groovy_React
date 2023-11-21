@@ -1,15 +1,93 @@
 .search {
+    width: 25%;
+    margin-top: 30px;
+    margin-left: 900px;
+}
+
+.input_search {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.input_search:focus {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+hr {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.tableCell button {
+    margin: 5px;
+    width: 50px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.tableCell button:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.margin {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.mailTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tableRow {
     display: flex;
-    justify-content: flex-end;
-    margin: 30px;
+    border-bottom: 1px solid #ccc;
+    align-items: center;
 }
 
-hr{
-    margin-left: 30px;
-    margin-right: 30px;
+.tableHeader,
+.tableCell {
+    padding: 10px;
+    flex: 1;
+    text-align: left;
 }
 
-.margin{
-    margin-left: 30px;
-    margin-right: 30px;
+.tableHeader {
+    font-weight: bold;
+    background-color: #f2f2f2;
+}
+
+.tableCell a {
+    text-decoration: none;
+    color: #0066cc;
+}
+
+.tableCell a:hover {
+    text-decoration: underline;
+}
+
+.tableCell button {
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-right: 5px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+}
+
+.paginationItem {
+    margin: 0 5px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.paginationItem:hover {
+    text-decoration: underline;
 }

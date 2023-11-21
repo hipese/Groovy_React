@@ -1,6 +1,6 @@
 import axios from "axios";
 import style from "./Org_Chart_Table.module.css"
-import  { useState } from 'react';
+import  { useContext, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,6 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { MemberContext } from "../../../../../Groovy/Groovy";
 
 
 const columns = [
@@ -31,7 +32,9 @@ const columns = [
 ];
 
 
-const Org_Chart_Table = ({ setEmployees, employees, selectedRow, setSelectedRow, setApprover, setSelectMemberdetail }) => {
+const Org_Chart_Table = ({ setEmployees, employees, selectedRow, setSelectedRow, approver, setApprover, setSelectMemberdetail ,setMyPositionRank}) => {
+
+    const members=useContext(MemberContext);
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -50,6 +53,7 @@ const Org_Chart_Table = ({ setEmployees, employees, selectedRow, setSelectedRow,
 
     // 행을 클릭했을 때 해당 행의 색깔을 변경하고 그 행에 id값을 가진 사람을 선택합니다.
     const handleRowClick = (id) => {
+        console.log(id)
         if (selectedRow === id) {
             setSelectedRow(null);
             setApprover({});
@@ -61,6 +65,11 @@ const Org_Chart_Table = ({ setEmployees, employees, selectedRow, setSelectedRow,
                 console.error("Failed to fetch approver data:", error);
                 // 오류 처리를 할 수 있습니다.
             });
+
+            // axios.get(`/api/positionRank/isRanking/${approver.position}/${members.member.position}`).then(resp=>{
+            //     console.log(resp.data)
+            //     setMyPositionRank(resp.data);
+            // })
 
             axios.get(`/api/member/detail/${id}`).then(resp => {
                 setSelectMemberdetail(resp.data);

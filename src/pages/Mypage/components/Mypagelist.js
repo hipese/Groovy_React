@@ -8,13 +8,9 @@ import SurveyList from "./SurveyList/SurveyList";
 const Mypagelist = () => {
   return (
     <div className={style.container}>
-      <div className={style.index}>
-        <MypageIndex />
-      </div>
       <div className={style.contents}>
         <Routes>
           <Route path="/" element={<MemberInfo />} />
-          <Route path="/surveyList" element={<SurveyList />} />
         </Routes>
       </div>
     </div>
