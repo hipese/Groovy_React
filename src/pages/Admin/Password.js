@@ -2,12 +2,16 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import style from "./Password.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
+import { Input } from "reactstrap";
+
 
 const Password = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [users, setUsers] = useState([]);
     const [editUserId, setEditUserId] = useState(null);
     const [newPasswords, setNewPasswords] = useState({});
+
+    const [search, setSearch] = useState('');
 
     const COUNT_PER_PAGE = 10;
 
@@ -63,11 +67,14 @@ const Password = () => {
         setEditUserId(null);
     };
 
+    const inputChangeHandler = (e) => {
+        setSearch(e.target.value);
+    };
+    
     return (
         <div className="Admincontainer">
             <div className={style.search}>
-                <input type="text" placeholder='사용자 검색'></input>
-                <button>검색</button>
+                <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
             </div>
             <hr></hr>
             <div className="body">
@@ -76,28 +83,31 @@ const Password = () => {
                 </div>
                 <hr></hr>
                 <div className={style.pwDiv}>
-                    <table border="1">
-                        <tbody>
-                            <tr align='center'>
-                                <th>이름</th>
-                                <th>ID</th>
-                                <th>비밀번호</th>
-                                <th></th>
-                            </tr>
-                            {visibleUser.map((e) => (
-                                <tr align='center' key={e.id}>
-                                    <td>{e.name}</td>
-                                    <td>{e.id}</td>
-                                    <td>
+                    <div className={style.tableContainer}>
+                        <div className={style.tableRow}>
+                            <div className={style.tableHeader}>이름</div>
+                            <div className={style.tableHeader}>ID</div>
+                            <div className={style.tableHeader}>비밀번호</div>
+                            <div className={style.tableHeader}>-</div>
+                        </div>
+                        {search === ''
+                            ? visibleUser.map((e) => (
+                                <div className={style.tableRow} key={e.id}>
+                                    <div className={style.tableCell}>{e.name}</div>
+                                    <div className={style.tableCell}>{e.id}</div>
+                                    <div className={style.tableCell}>
                                         {editUserId === e.id ? (
-                                            <input type="password" className={style.pw} value={newPasswords[e.id] || ''}
+                                            <input
+                                                type="password"
+                                                className={style.pw}
+                                                value={newPasswords[e.id] || ''}
                                                 onChange={(event) => {
                                                     setNewPasswords(prevPasswords => ({ ...prevPasswords, [e.id]: event.target.value, }));
                                                 }}
                                             />
                                         ) : "********"}
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div className={style.tableCell}>
                                         {editUserId === e.id ? (
                                             <>
                                                 <button onClick={handleCancel} className={style.cancel}>수정취소</button>
@@ -106,11 +116,47 @@ const Password = () => {
                                         ) : (
                                             <button onClick={() => handleEdit(e.id)} className={style.add}>수정</button>
                                         )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                    </div>
+                                </div>
+                            ))
+                            : users
+                                .filter(
+                                    (e) =>
+                                        e.name.includes(search) ||
+                                        e.id.includes(search) ||
+                                        (e.group_name && e.group_name.includes(search)) ||
+                                        e.position.includes(search) ||
+                                        e.contact.includes(search) ||
+                                        e.email.includes(search)
+                                )
+                                .map((e) => (<div className={style.tableRow} key={e.id}>
+                                    <div className={style.tableCell}>{e.name}</div>
+                                    <div className={style.tableCell}>{e.id}</div>
+                                    <div className={style.tableCell}>
+                                        {editUserId === e.id ? (
+                                            <input
+                                                type="password"
+                                                className={style.pw}
+                                                value={newPasswords[e.id] || ''}
+                                                onChange={(event) => {
+                                                    setNewPasswords(prevPasswords => ({ ...prevPasswords, [e.id]: event.target.value, }));
+                                                }}
+                                            />
+                                        ) : "********"}
+                                    </div>
+                                    <div className={style.tableCell}>
+                                        {editUserId === e.id ? (
+                                            <>
+                                                <button onClick={handleCancel} className={style.cancel}>수정취소</button>
+                                                <button onClick={() => handleSave(e.id)} className={style.save}>저장</button>
+                                            </>
+                                        ) : (
+                                            <button onClick={() => handleEdit(e.id)} className={style.add}>수정</button>
+                                        )}
+                                    </div>
+                                </div>
+                                ))}
+                    </div>
                 </div>
                 <hr></hr>
                 <div className={style.margin}>
