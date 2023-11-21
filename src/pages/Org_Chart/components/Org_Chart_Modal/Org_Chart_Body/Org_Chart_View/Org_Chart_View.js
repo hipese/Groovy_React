@@ -32,11 +32,6 @@ const Org_Chart_View = ({ approver, setApprover, setIsSend, selectedRow, selectM
     };
 
     useEffect(() => {
-        console.log("isSend: " + isSend)
-        console.log("approver.id:" + approver.id);
-        console.log("approver:" + approver);
-        console.log("selectedRow의 값" + selectedRow)
-
         // isSend가 true이고, approver.id가 없는 경우에만 실행
         if (isSend === true) {
             handleInvalidApprover();
