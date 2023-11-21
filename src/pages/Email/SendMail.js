@@ -44,32 +44,22 @@ const SendMail = () => {
             });
     };
 
-    
+
     const totalItems = mails.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
-    
+
     const onPageChange = (e, page) => {
         setCurrentPage(page);
     };
-    
+
     const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
     const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
     const visibleMail = mails.slice(startIndex, endIndex);
-    
+
     const inputChangeHandler = (e) => {
         setSearch(e.target.value);
     };
-    
-    const filteredMail = search === ''
-    ? visibleMail
-    : visibleMail.filter(
-        (e) =>
-        e.name.includes(search) ||
-        e.group_name.includes(search) ||
-        e.position.includes(search) ||
-        e.email.includes(search) ||
-        e.title.includes(search)
-    );
+
     return (
         <div className="Mailcontainer">
             <div className={style.search}>
@@ -92,34 +82,72 @@ const SendMail = () => {
                             <div className={style.tableHeader}>제목</div>
                             <div className={style.tableHeader}>작성일</div>
                         </div>
-                        {filteredMail.map((e) => (
-                            <div key={e.seq} className={style.tableRow}>
-                                <div className={style.tableCell}>
-                                    <button onClick={() => handleDelete(e.seq)}>Del</button>
-                                </div>
-                                <div className={style.tableCell}>
-                                    {e.is_read !== true ? (
-                                        <EmailIcon sx={{ color: blue[200] }} />
-                                    ) : (
-                                        <DraftsIcon sx={{ color: grey[400] }}/>
-                                    )}
+                        {search === ''
+                            ? visibleMail.map((e) => (
+                                <div key={e.seq} className={style.tableRow}>
+                                    <div className={style.tableCell}>
+                                        <button onClick={() => handleDelete(e.seq)}>Del</button>
+                                    </div>
+                                    <div className={style.tableCell}>
+                                        {e.is_read !== true ? (
+                                            <EmailIcon sx={{ color: blue[200] }} />
+                                        ) : (
+                                            <DraftsIcon sx={{ color: grey[400] }} />
+                                        )}
 
+                                    </div>
+                                    <div className={style.tableCell}>
+                                        {e.mfseq !== 0 && (
+                                            <InsertLinkIcon
+                                                sx={{ color: blue[200] }}
+                                            />
+                                        )}
+                                    </div>
+                                    <div className={style.tableCell}>{e.name} {e.group_name} {e.position}</div>
+                                    <div className={style.tableCell}>{e.email}</div>
+                                    <div className={style.tableCell}>
+                                        <Link to={`/groovy/mail/detail/${e.seq}`}>{e.title}</Link>
+                                    </div>
+                                    <div className={style.tableCell}>{e.write_date}</div>
                                 </div>
-                                <div className={style.tableCell}>
-                                    {e.mfseq !== 0 && (
-                                        <InsertLinkIcon
-                                            sx={{ color: blue[200] }}
-                                        />
-                                    )}
+                            ))
+                            : mails
+                                .filter(
+                                    (e) =>
+                                        e.name.includes(search) ||
+                                        (e.group_name && e.group_name.includes(search)) ||
+                                        e.position.includes(search) ||
+                                        e.title.includes(search) ||
+                                        e.contents.includes(search) ||
+                                        e.email.includes(search)
+                                )
+                                .map((e) => (<div key={e.seq} className={style.tableRow}>
+                                    <div className={style.tableCell}>
+                                        <button onClick={() => handleDelete(e.seq)}>Del</button>
+                                    </div>
+                                    <div className={style.tableCell}>
+                                        {e.is_read !== true ? (
+                                            <EmailIcon sx={{ color: blue[200] }} />
+                                        ) : (
+                                            <DraftsIcon sx={{ color: grey[400] }} />
+                                        )}
+
+                                    </div>
+                                    <div className={style.tableCell}>
+                                        {e.mfseq !== 0 && (
+                                            <InsertLinkIcon
+                                                sx={{ color: blue[200] }}
+                                            />
+                                        )}
+                                    </div>
+                                    <div className={style.tableCell}>{e.name} {e.group_name} {e.position}</div>
+                                    <div className={style.tableCell}>{e.email}</div>
+                                    <div className={style.tableCell}>
+                                        <Link to={`/groovy/mail/detail/${e.seq}`}>{e.title}</Link>
+                                    </div>
+                                    <div className={style.tableCell}>{e.write_date}</div>
                                 </div>
-                                <div className={style.tableCell}>{e.name} {e.group_name} {e.position}</div>
-                                <div className={style.tableCell}>{e.email}</div>
-                                <div className={style.tableCell}>
-                                    <Link to={`/groovy/mail/detail/${e.seq}`}>{e.title}</Link>
-                                </div>
-                                <div className={style.tableCell}>{e.write_date}</div>
-                            </div>
-                        ))}
+                                ))}
                     </div>
                 </div>
                 <hr></hr>
