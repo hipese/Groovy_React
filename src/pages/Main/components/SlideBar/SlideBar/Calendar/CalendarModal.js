@@ -12,6 +12,7 @@ let todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of to
 const Modal = ({ showModal, setShowModal, selectedDate, onEventAdded }) => {
     const { loginID } = React.useContext(LoginContext);
     const [alarmValue, setAlarmValue] = React.useState("15분 전");
+    const [showAlarm, setShowAlarm] = React.useState(false);
 
     const [formData, setFormData] = React.useState({
         project: "나의 프로젝트",
@@ -81,7 +82,12 @@ const Modal = ({ showModal, setShowModal, selectedDate, onEventAdded }) => {
         alarm: "15분 전",
         contents: "",
     });
-}
+    }
+    const alarmalert = (e) => {
+        alert("아직 지원하지 않는 기능입니다.");
+        setShowAlarm(!showAlarm);
+        e.preventDefault();
+    }
 
 
 
@@ -125,7 +131,7 @@ const Modal = ({ showModal, setShowModal, selectedDate, onEventAdded }) => {
                                     onKeyDown={(e) => e.preventDefault()}
                                 /></div></li>
                         <li><span>알림</span>
-                            <div className={styles.alarm}><input type="checkbox" name="alarm" /><span>메일</span>
+                            <div className={styles.alarm}><input type="checkbox" name="alarm" onClick={e=> alarmalert(e)} checked={showAlarm} onChange={() => setShowAlarm(!showAlarm)} /><span>메일</span>
                                 <select name="alarm" defaultValue={alarmValue}>
                                     <option value="정시">정시</option>
                                     <option value="5분 전">5분 전</option>

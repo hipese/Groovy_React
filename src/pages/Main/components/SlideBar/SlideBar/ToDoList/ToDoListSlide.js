@@ -112,11 +112,11 @@ const ToDoListSlide = () => {
                     <img src={grid} alt="where..?" width={"20px"} height={"20px"} /> <span className={styles.selectMenu}>Boards</span>
                 </div>
             </Link>
-            <Link to="ToDoListCalendar">
+            {/* <Link to="ToDoListCalendar">
                 <div className={styles.select}>
                     <img src={calendar} alt="where..?" width={"20px"} height={"20px"} /> <span className={styles.selectMenu}>Calendar</span>
                 </div>
-            </Link>
+            </Link> */}
             <div className={styles.selectTitle}>
                 Team Boards <span className={styles.selectDown}><button className={styles.btn}>+</button></span>
             </div>
