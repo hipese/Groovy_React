@@ -9,9 +9,8 @@ const WebSocketProvider = ({ children }) => {
   const [stompClient, setStompClient] = useState(null);
 
   const initializeWebSocket = useCallback(() => {
-  const socket = new WebSocket('ws://10.2.2.62/ws-message');
-  const client = Stomp.over(socket, { debug: false }); // 디버그 모드 비활성화
-  client.debug = function(){}
+  const socket = new WebSocket('ws://10.2.9.37/ws-message');
+  const client = Stomp.over(socket);
 
     client.connect({}, (frame) => {
       setStompClient(client);
