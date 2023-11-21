@@ -217,6 +217,9 @@ const SurveyWrite = () => {
         }else if(survey.surcontents == "" || survey.surcontents == undefined){
             alert("내용을 작성하시오");
             return;
+        }else if(shortAnswers.length + multiAnswers.length <= 0){
+            alert("질문을 작성하시오");
+            return;
         }
         const updateResult = [survey,...shortAnswers.filter(Boolean),...multiAnswers.filter(Boolean)];
 

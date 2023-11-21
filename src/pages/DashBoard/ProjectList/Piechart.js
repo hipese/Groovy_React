@@ -5,15 +5,7 @@ import axios from 'axios';
 
 const Piechart = () => {
     const {progress,setProgress,todo,setTodo,seq} = useContext(progressContext);
-    const handle = {
-        padClick: (data) => {
-            console.log(data);
-        },
 
-        legendClick: (data) => {
-            console.log(data);
-        },
-    };
     useEffect(()=>{
         axios.get(`/api/project/progress/${seq}`).then(res=>{
             setProgress(res.data);
@@ -95,10 +87,6 @@ const Piechart = () => {
                     },
                 }}
                 /**
-                 * pad 클릭 이벤트
-                 */
-                onClick={handle.padClick}
-                /**
                  * legend 설정 (default로 하단에 있는 색상별 key 표시)
                  */
                 legends={[
@@ -124,7 +112,6 @@ const Piechart = () => {
                                 },
                             },
                         ],
-                        onClick: handle.legendClick, // legend 클릭 이벤트
                     },
                 ]}
             />

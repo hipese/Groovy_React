@@ -52,7 +52,6 @@ const Worksection = () => {
         checkInData.append("time",now);
         
         await axios.post("/api/dash/checkin",checkInData).then(res =>{
-            console.log(res.data);
             setWorking(true);
         });
     }
@@ -71,7 +70,6 @@ const Worksection = () => {
         checkOutData.append("time",now);
 
         await axios.put("/api/dash/checkout",checkOutData).then(res =>{
-            console.log(res.data);
             setWorking(false);
             setWorkname("");
         });
@@ -84,7 +82,6 @@ const Worksection = () => {
 
     React.useEffect(()=>{
         {loginID ? axios.get(`/api/dash/workstart/${loginID}`).then(res=>{
-            console.log(res.data);
             if(res.data){
                 setWorking(true);
                 const starttime = res.data.workstart ? format(new Date(res.data.workstart), 'HH:mm:ss') : res.data.workstart;
@@ -92,7 +89,6 @@ const Worksection = () => {
                 setWorkstate("출근");
                 if(res.data.workend){
                     const endtime = res.data.workend ? format(new Date(res.data.workend), 'HH:mm:ss') : res.data.workend;
-                    console.log("퇴근했는데 왜 또 로그인해");
                     setCheckOut(endtime);
                     setWorkstate("퇴근");
                 }
@@ -128,35 +124,35 @@ const Worksection = () => {
                 </div>
                 <div>
                     <div>
-                        <Grid container rowSpacing={2}>
-                            <Grid xs={6} className={style.center}>
+                        <Grid container>
+                            <Grid item={true} xs={6} className={style.center}>
                                 <IconButton aria-label="login" size="large" disabled={checkOutTime != "00:00:00" ? true : working} onClick={handleCheckIn}>
                                     <LoginIcon>
                                     </LoginIcon>    
                                 </IconButton>
                             </Grid>
-                            <Grid xs={6} className={style.center}>
+                            <Grid item={true} xs={6} className={style.center}>
                                 <IconButton aria-label="login" size="large" disabled={checkOutTime != "00:00:00" ? true : !working} onClick={handleCheckOut}>
                                     <LogoutIcon/>
                                     
                                 </IconButton>
                             </Grid>
-                            <Grid xs={6} className={style.center}>
+                            <Grid item={true} xs={6} className={style.center}>
                                 <div>
                                     출근하기
                                 </div>
                             </Grid>
-                            <Grid xs={6} className={style.center}>
+                            <Grid item={true} xs={6} className={style.center}>
                                 <div>
                                     퇴근하기
                                 </div>
                             </Grid>
-                            <Grid xs={6} className={style.center}>
+                            <Grid item={true} xs={6} className={style.center}>
                                 <div>
                                     {checkInTime}
                                 </div>
                             </Grid>
-                            <Grid xs={6} className={style.center}>
+                            <Grid item={true} xs={6} className={style.center}>
                                 <div>
                                     {checkOutTime}
                                 </div>
@@ -195,18 +191,13 @@ const Signsection = () => {
             </div>
             <div className={`${style.signContents} ${style.center}`}>
                 <Box sx={{ '& button': { m: 1 } }}>
-                    <div className={`${style.signBtns}`}>
-                        
+                    <div className={`${style.signBtns}`}>                        
                             <Button variant="outlined" name="wait" size="medium" onClick={handleSignButton}>
                                 대기
-                            </Button>
-                        
-                        
+                            </Button>                        
                             <Button variant="outlined" name="" size="medium" onClick={handleSignButton}>
                                 확인
                             </Button>
-                        
-
                     </div>
                     <div className={`${style.signBtns}`}>
                         
@@ -239,32 +230,6 @@ const Modalstyle = {
     p: 4,
   };
 
-const CalendarInfo = ({calendarData,pickedDate}) => {
-    const isThereAnySchedule = calendarData.filter(e=> format(new Date(e.starttime), 'yyyy-MM-dd') == format(new Date(pickedDate), 'yyyy-MM-dd'));
-    return isThereAnySchedule.length > 0 ? (
-        <div>
-            {
-                isThereAnySchedule.map((e,i)=>{
-                    return(
-                        <div>
-                            <div>
-                                Title : {e.title}
-                            </div>
-                            <div>
-                                Contents : {e.contents}
-                            </div>
-                        </div>
-                    )
-                })
-            }
-        </div>
-    ): (
-        <div>
-            일정 없음
-        </div>
-    )
-}
-
 const Calandarsection = () => {
     const {loginID} = React.useContext(LoginContext);
     const HighlightedDay = styled(PickersDay)(({ theme }) => ({
@@ -295,6 +260,7 @@ const Calandarsection = () => {
     const [highlightedDays, setHighlitedDays] = React.useState([]);
     const [calendarData,setCalendarData] = React.useState([]);
     const [pickedDate,setPickedDate] = React.useState("");
+    const [scheduleDay,setSchedule] = React.useState({});
     React.useEffect(()=>{
         axios.get(`/api/dash/calendar/${loginID}`).then(res=>{
                 setCalendarData(res.data);
@@ -314,8 +280,10 @@ const Calandarsection = () => {
 
     
     const handleDate = (e) => {
-        const pick = format(new Date(e.$d), 'yyyy-MM-dd')
+        const tempDate = e.$d;
+        const isThereAnySchedule = calendarData.filter(e=> format(new Date(e.starttime), 'yyyy-MM-dd') == format(new Date(tempDate), 'yyyy-MM-dd'));
         setPickedDate(e.$d);
+        setSchedule(isThereAnySchedule);
         handleOpen();
     }
 
@@ -352,7 +320,7 @@ const Calandarsection = () => {
                 
             >
                 <Box sx={Modalstyle}>
-                    <CalendarInnerModal />
+                    <CalendarInnerModal isOpen={open} onClose={handleClose} eventDetails={scheduleDay} />
                 </Box>
             </Modal>
         </div>
@@ -379,7 +347,7 @@ const ProjectSection = () => {
         <div className={style.projectsection}>
             <div className={`${style.padding10} ${style.borderbtm}`}>
                 <Grid container spacing={2}>
-                    <Grid item xs={11} className={`${style.vcenter}`}>
+                    <Grid item xs={11} className={`${style.vcenter} ${style.titleText}`}>
                         프로젝트
                     </Grid>
                     <Grid item xs={1}>
@@ -390,60 +358,61 @@ const ProjectSection = () => {
                     </Grid>
                 </Grid>
             </div>
-            <div className={`${style.marginT30} ${style.padding10}`}>
+            <div className={`${style.padding10} ${style.paddingTB10}`}>
                 <Grid container rowSpacing={2}>
-                    <Grid xs={1} className={style.center}>
+                    <Grid item={true} xs={1} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                             번호
                         </Typography>
                     </Grid>
-                    <Grid xs={3} className={style.center}>
+                    <Grid item={true} xs={3} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                         관리자
                         </Typography>
                     </Grid>
-                    <Grid xs={5} className={style.center}>
+                    <Grid item={true} xs={5} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                         프로젝트
                         </Typography>
                     </Grid>
-                    <Grid xs={2} className={style.center}>
+                    <Grid item={true} xs={2} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                         기한
                         </Typography>
                     </Grid>
-                    <Grid xs={1} className={style.center}>
+                    <Grid item={true} xs={1} className={style.center}>
                         
                     </Grid>
                 </Grid>
             </div>
+            <Divider sx={{bgcolor:"black"}}/>
             <div>
                     {visibleSignList.map((e,i)=>{
                         return(          
-                            <List sx={style} component="nav" aria-label="mailbox folders">
+                            <List sx={style} component="nav" aria-label="mailbox folders" key={i}>
                                 <Link to={`/groovy/dashboard/project/content/${e.pseq}`}><ListItem button>
-                                    <Grid container key={i} className={`${style.marginT10}`}> 
-                                        <Grid xs={1} className={style.center}>
+                                    <Grid container className={`${style.marginT10}`}> 
+                                        <Grid item={true} xs={1} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.pseq}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={3} className={style.center}>
+                                        <Grid item={true} xs={3} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                                 {e.pmanager}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={5} className={style.center}>
+                                        <Grid item={true} xs={5} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.pname}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={2} className={style.center}>
+                                        <Grid item={true} xs={2} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.ptime_limit ? format(new Date(e.ptime_limit), 'yyyy-MM-dd') : e.ptime_limit}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={1} className={style.center}>
+                                        <Grid item={true} xs={1} className={style.center}>
                                             
                                         </Grid>
                                     </Grid>            
@@ -494,7 +463,6 @@ const NoticeSection = () => {
             const group = res.data;
             axios.get(`/api/boards/deptCom/${group}`).then(response=>{
                 setDeptNotice(response.data);
-                console.log(response.data);
             }).catch((e)=>{
                 console.log("board - "+e);
             });
@@ -507,7 +475,7 @@ const NoticeSection = () => {
         <div className={style.noticesection}>
             <div className={`${style.padding10} ${style.borderbtm}`}>
                 <Grid container spacing={2}>
-                    <Grid item xs={11} className={`${style.vcenter}`}>
+                    <Grid item xs={11} className={`${style.vcenter} ${style.titleText}`}>
                         부서 내 소식
                     </Grid>
                     <Grid item xs={1}>
@@ -518,52 +486,53 @@ const NoticeSection = () => {
                     </Grid>
                 </Grid>
             </div>
-            <div className={`${style.marginT30} ${style.padding10}`}>
-                <Grid container rowSpacing={2}>
-                    <Grid xs={1} className={style.center}>
+            <div className={`${style.padding10} ${style.paddingTB10}`}>
+                <Grid container rowSpacing={1}>
+                    <Grid item={true} xs={1} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                             번호
                         </Typography>
                     </Grid>
-                    <Grid xs={3} className={style.center}>
+                    <Grid item={true} xs={3} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                         작성자
                         </Typography>
                     </Grid>
-                    <Grid xs={6} className={style.center}>
+                    <Grid item={true} xs={6} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                         제목
                         </Typography>
                     </Grid>
-                    <Grid xs={2} className={style.center}>
+                    <Grid item={true} xs={2} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                         작성일자
                         </Typography>
                     </Grid>
                 </Grid>
             </div>
+            <Divider sx={{bgcolor:"black"}}/>
             <div>
                     {visibleSignList.map((e,i)=>{
                         return(          
                             <List sx={style} component="nav" aria-label="mailbox folders">
                                 <Link to={`/groovy/board/detailDept/${e.seq}`}><ListItem button>
                                     <Grid container key={i} className={`${style.marginT10}`}> 
-                                        <Grid xs={1} className={style.center}>
+                                        <Grid item={true} xs={1} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.seq}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={3} className={style.center}>
+                                        <Grid item={true} xs={3} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                                 {e.writer}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={6} className={style.center}>
+                                        <Grid item={true} xs={6} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.title}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={2} className={style.center}>
+                                        <Grid item={true} xs={2} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.write_date ? format(new Date(e.write_date), 'yyyy-MM-dd') : e.write_date}
                                             </Typography>
@@ -589,10 +558,6 @@ const NoticeSection = () => {
                             <PaginationItem {...item} sx={{ fontSize: 12 }} />
                         )}
                     />
-                
-            </div>
-            <div>
-                
             </div>
         </div>
     )
@@ -631,7 +596,6 @@ const DashBoard=()=>{
     const {loginID} = React.useContext(LoginContext);
 
     React.useEffect(()=>{
-        console.log(loginID);
         axios.get(`/api/project/${loginID}`).then(res=>{
             setProject(res.data);
             setLoading(false);
@@ -641,7 +605,6 @@ const DashBoard=()=>{
     },[loginID]);
 
     if(isLoading){
-        //return loginID ? (<CircularIndeterminate/>) : (<div>ID None</div>);
         return (<CircularIndeterminate/>);
     }
 
