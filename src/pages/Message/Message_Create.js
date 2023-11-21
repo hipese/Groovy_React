@@ -164,7 +164,7 @@ let Message_Create = () => {
                 <Button className={style.btn_create} style={checked.length == 0 ? {bottom:"-20%"} : {bottom:"5%"}} onClick={handleClickOpen}>채팅방 만들기</Button>
             </Row>
             <Row>
-            <Dialog open={open} onClose={handleClose} keepMounted >
+            <Dialog open={open} onClose={handleClose} keepMounted maxWidth={"sm"} fullWidth>
         <DialogTitle>채팅방 이름 입력</DialogTitle>
         <DialogContent>
           <DialogContentText>
