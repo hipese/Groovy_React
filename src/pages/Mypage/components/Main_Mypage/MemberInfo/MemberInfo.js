@@ -6,8 +6,6 @@ import { Modal } from "@mui/material";
 import ImageChange from "./ImageChange/ImageChange";
 import { MemberContext, VacationContext } from "../../../../Groovy/Groovy";
 import UpdateContact from "./Update/UpdateContact";
-import UpdateGroup_Name from "./Update/UpdateGroup_Name";
-import UpdatePosition from "./Update/UpdatePosition";
 import UpdateEmail from "./Update/UpdateEmail";
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -53,6 +51,7 @@ const MemberInfo = () => {
 
         axios.get(`/api/attend/myAttendence`).then(resp => {
             setAttendence(resp.data);
+            console.log(resp.data);
         })
     }, [])
 
