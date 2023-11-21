@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import style from './Position.module.css';
+import { Input } from "reactstrap";
 
 const Position = () => {
     const [positions, setPositions] = useState([]);
     const [newPosition, setNewPosition] = useState('');
     const [editPositionId, setEditPositionId] = useState(null);
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         axios.get('/api/admin/position').then((resp) => {
@@ -59,61 +61,75 @@ const Position = () => {
         }
     };
 
+    const inputChangeHandler = (e) => {
+        setSearch(e.target.value);
+    };
+
+    const filteredPosition = search === ''
+        ? positions
+        : positions.filter(
+            (e) =>
+                e.position.includes(search)
+        );
+
     return (
         <div className="Admincontainer">
             <div className={style.search}>
-                <input type="text" placeholder="사용자 검색" />
-                <button>검색</button>
+                <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
             </div>
             <hr />
             <div className="body">
                 <div className={style.margin}>직위 관리</div>
                 <hr />
                 <div className={style.position}>
-                    <table border="1">
-                        <tbody>
-                            <tr align="center">
-                                <th>직위</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input
-                                        type="text"
-                                        placeholder="직위 입력"
-                                        className={style.pos}
-                                        value={newPosition}
-                                        onChange={(e) => setNewPosition(e.target.value)}
-                                    />
-                                </td>
-                                <td>
-                                    {editPositionId === null ? (
-                                        <button onClick={handleAdd} className={style.edit}>
-                                            추가
+                    <div className={style.tableContainer}>
+                        <div className={style.tableRow} align="center">
+                            <div className={style.tableHeader}>직위</div>
+                        </div>
+                        <div className={style.tableRow}>
+                            <div className={style.tableCell}>
+                                <input
+                                    type="text"
+                                    placeholder="직위입력"
+                                    className={style.pos}
+                                    value={newPosition}
+                                    onChange={(e) => setNewPosition(e.target.value)}
+                                />
+                            </div>
+                            <div className={style.tableCell}>
+                                {editPositionId === null ? (
+                                    <button onClick={handleAdd} className={style.edit}>
+                                        추가
+                                    </button>
+                                ) : (
+                                    <>
+                                        <button onClick={handleCancel} className={style.cancel}>
+                                            취소
                                         </button>
-                                    ) : (
-                                        <>
-                                            <button onClick={handleCancel} className={style.cancel}>
-                                                취소
-                                            </button>
-                                            <button onClick={() => handleAdd(editPositionId)} className={style.save}>
-                                                완료
-                                            </button>
-                                        </>
-                                    )}
-                                </td>
-                            </tr>
-                            {positions.map((e) => (
-                                <tr align="center" key={e.position}>
-                                    <td>{e.position}</td>
-                                    <td>
-                                        <button onClick={() => handleDel(e.position)} className={style.del}>
-                                            삭제
+                                        <button
+                                            onClick={() => handleAdd(editPositionId)}
+                                            className={style.save}
+                                        >
+                                            완료
                                         </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                        {filteredPosition.map((e) => (
+                            <div className={style.tableRow} align="center" key={e.position}>
+                                <div className={style.tableCell}>{e.position}</div>
+                                <div className={style.tableCell}>
+                                    <button
+                                        onClick={() => handleDel(e.position)}
+                                        className={style.del}
+                                    >
+                                        삭제
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <hr />
             </div>

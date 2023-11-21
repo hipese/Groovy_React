@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import style from './Position.module.css';
+import { Input } from "reactstrap";
 
 const Dept = () => {
     const [depts, setDepts] = useState([]);
     const [newDept, setNewDept] = useState('');
     const [editDeptId, setEditDeptId] = useState(null);
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         axios.get('/api/admin/dept').then((resp) => {
@@ -59,61 +61,75 @@ const Dept = () => {
         }
     };
 
+    const inputChangeHandler = (e) => {
+        setSearch(e.target.value);
+    };
+
+    const filteredDept = search === ''
+        ? depts
+        : depts.filter(
+            (e) =>
+                (e.dept_name && e.dept_name.includes(search))
+        );
+
     return (
         <div className="Admincontainer">
             <div className={style.search}>
-                <input type="text" placeholder="사용자 검색" />
-                <button>검색</button>
+                <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
             </div>
             <hr />
             <div className="body">
                 <div className={style.margin}>직무 관리</div>
                 <hr />
                 <div className={style.position}>
-                    <table border="1">
-                        <tbody>
-                            <tr align="center">
-                                <th>직무</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input
-                                        type="text"
-                                        placeholder="직무 입력"
-                                        className={style.pos}
-                                        value={newDept}
-                                        onChange={(e) => setNewDept(e.target.value)}
-                                    />
-                                </td>
-                                <td>
-                                    {editDeptId === null ? (
-                                        <button onClick={handleAdd} className={style.edit}>
-                                            추가
+                    <div className={style.tableContainer}>
+                        <div className={style.tableRow} align="center">
+                            <div className={style.tableHeader}>직무</div>
+                        </div>
+                        <div className={style.tableRow}>
+                            <div className={style.tableCell}>
+                                <input
+                                    type="text"
+                                    placeholder="직무입력"
+                                    className={style.pos}
+                                    value={newDept}
+                                    onChange={(e) => setNewDept(e.target.value)}
+                                />
+                            </div>
+                            <div className={style.tableCell}>
+                                {editDeptId === null ? (
+                                    <button onClick={handleAdd} className={style.edit}>
+                                        추가
+                                    </button>
+                                ) : (
+                                    <>
+                                        <button onClick={handleCancel} className={style.cancel}>
+                                            취소
                                         </button>
-                                    ) : (
-                                        <>
-                                            <button onClick={handleCancel} className={style.cancel}>
-                                                취소
-                                            </button>
-                                            <button onClick={() => handleAdd(editDeptId)} className={style.save}>
-                                                완료
-                                            </button>
-                                        </>
-                                    )}
-                                </td>
-                            </tr>
-                            {depts.map((e) => (
-                                <tr align="center" key={e.dept_name}>
-                                    <td>{e.dept_name}</td>
-                                    <td>
-                                        <button onClick={() => handleDel(e.dept_name)} className={style.del}>
-                                            삭제
+                                        <button
+                                            onClick={() => handleAdd(editDeptId)}
+                                            className={style.save}
+                                        >
+                                            완료
                                         </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                        {filteredDept.map((e) => (
+                            <div className={style.tableRow} align="center" key={e.dept_name}>
+                                <div className={style.tableCell}>{e.dept_name}</div>
+                                <div className={style.tableCell}>
+                                    <button
+                                        onClick={() => handleDel(e.dept_name)}
+                                        className={style.del}
+                                    >
+                                        삭제
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <hr />
             </div>
