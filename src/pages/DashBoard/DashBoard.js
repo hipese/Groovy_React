@@ -514,9 +514,9 @@ const NoticeSection = () => {
             <div>
                     {visibleSignList.map((e,i)=>{
                         return(          
-                            <List sx={style} component="nav" aria-label="mailbox folders">
+                            <List sx={style} key={i} component="nav" aria-label="mailbox folders">
                                 <Link to={`/groovy/board/detailDept/${e.seq}`}><ListItem button>
-                                    <Grid container key={i} className={`${style.marginT10}`}> 
+                                    <Grid container className={`${style.marginT10}`}> 
                                         <Grid item={true} xs={1} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.seq}
