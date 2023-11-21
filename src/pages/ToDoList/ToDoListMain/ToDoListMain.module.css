@@ -16,6 +16,7 @@
     font-size: 25px;
     font-weight: 700;
     margin-left: 20px;
+    text-shadow: #dadada 3px 5px 10px;
 }
 
 .tdlMaintitle span {
@@ -39,9 +40,10 @@
 }
 
 .tdlBoardsTitle {
-    font-size: 22px;
+    font-size: 30px;
     font-weight: 700;
     margin-bottom: 50px;
+    text-shadow: #dadada 5px 5px 3px;
 }
 
 .tdlul {
@@ -78,6 +80,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 2px 3px 3px 1px rgba(0, 0, 0, 0.3);
+    text-shadow: #929292 5px 5px 10px;
+    font-size: 20px;
 }
 
 .tdlInsert:hover {
@@ -91,6 +96,7 @@
     overflow: hidden;
     cursor: pointer;
     background-color: rgb(0, 128, 255);
+    box-shadow: 2px 3px 3px 1px rgba(0, 0, 0, 0.3);
 }
 
 .tdltitle {
