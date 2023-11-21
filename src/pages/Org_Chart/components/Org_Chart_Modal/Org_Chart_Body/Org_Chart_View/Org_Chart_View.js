@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import style from "./Org_Chart_View.module.css"
 import { Avatar, styled } from "@mui/material";
 
@@ -8,7 +9,7 @@ const StyledAvatar = styled(Avatar)({
     width: "200px",
     height: "200px",
     border: "1px solid #000000",
-  
+
     "&:hover": {
         opacity: "0.8",
         cursor: "pointer",
@@ -23,39 +24,86 @@ const ProfileContainer = styled("div")({
 });
 
 
-const Org_Chart_View = ({ approver, selectMemberdetail }) => {
+const Org_Chart_View = ({ approver,selectedRow, selectMemberdetail, isSend }) => {
+
+    const handleInvalidApprover = () => {
+        console.log("경고")
+    };
+
+    useEffect(() => {
+        console.log("useEffect에서는 뭐나옴" + isSend)
+        console.log("가져온 거"+approver.id);
+        console.log("selectedRow의 값"+selectedRow)
+        // isSend가 true이고, approver.id가 없는 경우에만 실행
+        if (isSend === true && approver && !approver.id) {
+            handleInvalidApprover();
+        }
+    }, [isSend, approver.id]);
+
+
     return (
         <div className={style.view_div}>
 
-            {/* {isLoading ? (
-                <div>Loading...</div> // 로딩 중일 때 표시할 메시지
-            ) : (
-                나중에 로딩필요하면 만들어라
-            )} */}
-
-            {approver && !approver.id ? <div className={style.null}>
-                결재자를 선택해주세요
-            </div> : <div className={style.view_div}>
-                <div className={style.title}>
-                    {approver.group_name ? `${approver.group_name} ${approver.position}` : `${approver.position}`}
-                </div>
-                <div className={style.imageDiv}>
-                    {selectMemberdetail.profile_image ? <ProfileContainer>
-                        <StyledAvatar src={`/profiles/${selectMemberdetail.profile_image}`} alt="profile" />
-                    </ProfileContainer> : <ProfileContainer>
-                        <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" />
-                    </ProfileContainer>}
-                </div>
-                <div className={style.footer}>
-                    <div className={style.email}>
-                        {selectMemberdetail.email}
+            {isSend == null &&selectedRow!==null &&(
+                approver && !approver.id ? (
+                    <div className={style.null}>
+                        결재자를 선택해주세요
                     </div>
-                    <div className={style.idname}>
-                        {`${approver.id} ${approver.name}`}
+                ) : (
+                    <div className={style.view_div}>
+                        <div className={style.title}>
+                            {approver.group_name ? `${approver.group_name} ${approver.position}` : `${approver.position}`}
+                        </div>
+                        <div className={style.imageDiv}>
+                            {selectMemberdetail.profile_image ? (
+                                <ProfileContainer>
+                                    <StyledAvatar src={`/profiles/${selectMemberdetail.profile_image}`} alt="profile" />
+                                </ProfileContainer>
+                            ) : (
+                                <ProfileContainer>
+                                    <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" />
+                                </ProfileContainer>
+                            )}
+                        </div>
+                        <div className={style.footer}>
+                            <div className={style.email}>
+                                {selectMemberdetail.email}
+                            </div>
+                            <div className={style.idname}>
+                                {`${approver.id} ${approver.name}`}
+                            </div>
+                        </div>
+                    </div>
+                )
+            )}
+
+            {isSend === false && approver && !approver.id && (
+                // isSend가 false이고 approver.id가 없을 때 렌더링할 JSX
+                <div className={style.view_div}>
+                    <div className={style.title}>
+                        {approver.group_name ? `${approver.group_name} ${approver.position}` : `${approver.position}`}
+                    </div>
+                    <div className={style.imageDiv}>
+                        {selectMemberdetail.profile_image ? (
+                            <ProfileContainer>
+                                <StyledAvatar src={`/profiles/${selectMemberdetail.profile_image}`} alt="profile" />
+                            </ProfileContainer>
+                        ) : (
+                            <ProfileContainer>
+                                <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" />
+                            </ProfileContainer>
+                        )}
+                    </div>
+                    <div className={style.footer}>
+                        <div className={style.email}>
+                            {selectMemberdetail.email}
+                        </div>
+                        <div className={style.idname}>
+                            {`${approver.id} ${approver.name}`}
+                        </div>
                     </div>
                 </div>
-            </div>}
-
+            )}
         </div>
     );
 }

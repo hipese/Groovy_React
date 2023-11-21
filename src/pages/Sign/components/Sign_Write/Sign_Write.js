@@ -5,7 +5,6 @@ import style from "./Sign_Write.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import Org_Chart from '../../../Org_Chart/components/Org_Chart_Modal/Org_Chart';
 import axios from 'axios';
-import { LoginContext } from "../../../../App";
 import { useWebSocket } from "../../../../WebSocketContext/WebSocketContext";
 import * as React from 'react';
 import Box from '@mui/material/Box';
@@ -63,7 +62,6 @@ const Sign_Write = () => {
     const todayDate = formatDate(new Date());
 
     const stompClient = useWebSocket();
-    const { loginID } = useContext(LoginContext);
     const members = useContext(MemberContext);
 
     // 모달을 키거나 끌때 필요한 놈
@@ -71,6 +69,7 @@ const Sign_Write = () => {
     const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상새정보를 가져옵니다.
     const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
     const [signWriterInfo, setSignWriterInfo] = useState({}); //사용자의 상세정보
+    const [isSend,setIsSend]=useState();
 
     useEffect(() => {
         axios.get(`/api/member/signWriterInfo/${members.member.id}`).then(resp2 => {
@@ -224,7 +223,7 @@ const Sign_Write = () => {
                         <div className={style.buttonDiv}>
                             <button onClick={toggleModal} className={style.btn}>직원 검색</button>
                             <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover}
-                                selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
+                                selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} isSend={isSend} setIsSend={setIsSend}/>
                         </div>
                     </div>
                     <div className={style.table}>

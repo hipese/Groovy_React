@@ -18,7 +18,7 @@ const CircularIndeterminate = () => {
 
 
 
-const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, setSelectMemberdetail }) => {
+const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, setSelectMemberdetail,isSend,setIsSend }) => {
 
     const [loading, setLoading] = useState(true);
 
@@ -81,7 +81,7 @@ const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, s
                         <Org_Chart_Table employees={employees} setEmployees={setEmployees}
                             selectedRow={selectedRow} setSelectedRow={setSelectedRow}
                             setBackUpEmployees={setBackUpEmployees} setApprover={setApprover} setSelectMemberdetail={setSelectMemberdetail} 
-                            setMyPositionRank={setMyPositionRank}/>
+                            setMyPositionRank={setMyPositionRank} isSend={isSend} setIsSend={setIsSend}/>
                     </div>
 
                 </div>
@@ -99,7 +99,7 @@ const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, s
 
                 <div className={style.view_div}>
 
-                    <Org_Chart_View approver={approver} selectMemberdetail={selectMemberdetail} />
+                    <Org_Chart_View approver={approver} isSend={isSend} selectedRow={selectedRow} setApprover={setApprover} selectMemberdetail={selectMemberdetail} />
 
                 </div>
 
