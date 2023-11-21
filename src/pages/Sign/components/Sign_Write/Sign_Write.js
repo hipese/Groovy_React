@@ -188,7 +188,7 @@ const Sign_Write = () => {
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={document_type}
+                                    value={document_type || ''}
                                     label="문서종류"
                                     onChange={handleChange}
                                 >
@@ -203,7 +203,7 @@ const Sign_Write = () => {
                             sx={{ width: '200px' }}
                             id="outlined-read-only-input"
                             label="기안작성자"
-                            value={signWriterInfo.name}
+                            value={signWriterInfo.name || ''}
                             InputProps={{
                                 readOnly: true,
                                 startAdornment: (
@@ -279,7 +279,7 @@ const Sign_Write = () => {
                                     id="filled-hidden-label-normal"
                                     placeholder="제목을 입력해주세요"
                                     variant="filled"
-                                    value={title}
+                                    value={title || ''}
                                     onChange={handleTitleChange}
                                 />
                             </div>
@@ -291,7 +291,7 @@ const Sign_Write = () => {
                             theme="snow"
                             modules={modules}
                             formats={formats}
-                            value={contents} // 내용을 contents 상태로 설정
+                            value={contents || ''} // 내용을 contents 상태로 설정
                             onChange={handleContentChange} // 내용이 변경될 때 호출할 핸들러
                         />
                     </div>

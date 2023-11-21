@@ -3,12 +3,36 @@ import style from "./Contact.module.css"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import StarIcon from '@mui/icons-material/Star';
+import { Box, CircularProgress, Pagination, PaginationItem } from "@mui/material";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 const Contact_Favorite = () => {
 
     const [contacts, setContacts] = useState([]);
     const [favorite, setFavorite] = useState([]);
     const [search, setSearch] = useState("");
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
+
+    const COUNT_PER_PAGE = 10;
+    const totalItems = contacts.length;
+    const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
+
+    const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
+    const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
+    const visibleContacts = contacts.slice(startIndex, endIndex);
+
+    const onPageChange = (e, page) => {
+        setCurrentPage(page);
+    };
 
     useEffect(() => {
         axios.get("/api/contact/selectFavorite").then((resp) => {
@@ -25,7 +49,7 @@ const Contact_Favorite = () => {
         }).catch(err => {
             console.log(err);
         })
-
+        setLoading(false);
     }, [])
 
     const inputChangeHandler = (e) => {
@@ -43,6 +67,11 @@ const Contact_Favorite = () => {
         }).catch(err => {
             console.log(err)
         })
+    }
+
+    if (loading) {
+        // 데이터 로딩 중에는 로딩창을 표시
+        return <CircularIndeterminate />;
     }
 
     return (
@@ -69,7 +98,7 @@ const Contact_Favorite = () => {
                         {
                             search == "" 
                             ?
-                            contacts.map((member) => {
+                            visibleContacts.map((member) => {
                                 if(favorite.some(fav => fav == member.id))
                                 return (
                                     <Row className={style.contact_object} key={member.id}>
@@ -131,6 +160,23 @@ const Contact_Favorite = () => {
 
                     </Row>
                 </Col>
+            </Row>
+
+            <Row>
+            <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={onPageChange}
+                        size="medium"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: "15px 0",
+                        }}
+                        renderItem={(item) => (
+                            <PaginationItem {...item} sx={{ fontSize: 12 }} />
+                        )}
+                    />
             </Row>
         </Container>
     )

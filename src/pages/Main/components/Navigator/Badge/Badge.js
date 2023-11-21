@@ -56,10 +56,9 @@ function DotBadge() {
 
 
   const fetchNotifications = () => {
-    axios.get('/api/realtime_notification')
+    axios.get('/api/realtime_notification') 
       .then(resp => {
         setNotifications(prevNotifications => resp.data);
-        console.log(resp.data);
       })
       .catch(e => {
         console.error(e);
@@ -71,14 +70,13 @@ function DotBadge() {
     const handleWebSocketMessage = (message) => {
       // WebSocket 메시지를 처리하고 상태를 업데이트
       const receivedMessage = JSON.parse(message.body);
-      console.log(receivedMessage);
 
       // 서버에서 받은 메시지 구조를 클라이언트 상태 구조로 변환
       const transformedMessage = {
         parent_seq: receivedMessage.parent_seq,
         contents: receivedMessage.message, // 서버의 'message'를 클라이언트의 'contents'로 변환
       };
-      console.log(transformedMessage);
+
       if (!((window.location.pathname.includes("/Groovy/message") && transformedMessage.contents.includes("메시지")) || (!window.location.pathname.includes("/Groovy/message") && notificationsRef.current.filter(notice => notice.contents.includes("메시지")).length >= 1))) {
         setNotifications((prevNotifications) => [transformedMessage, ...prevNotifications]);
         setOpen(true);

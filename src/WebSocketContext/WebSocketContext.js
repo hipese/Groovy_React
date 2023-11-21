@@ -13,7 +13,6 @@ const WebSocketProvider = ({ children }) => {
   const client = Stomp.over(socket);
 
     client.connect({}, (frame) => {
-      console.log('Connected: ' + frame);
       setStompClient(client);
     });
   }, [loginID, setStompClient]);

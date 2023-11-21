@@ -92,6 +92,11 @@
     align-items: center;
 }
 
+.checkbox_selectUser {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
 .profile_image {
     width: 40%;
     border-radius: 50%;
@@ -114,7 +119,7 @@
     background-color: rgb(240, 240, 240);
     border: 0px;
     border-radius: 50%;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     transition: all 0.5s cubic-bezier(.25,.8,.25,1);
     color: rgb(0, 0, 0);
     font-weight: bold;
@@ -122,7 +127,7 @@
 
 .btn_create:hover {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    background-color: rgb(210, 210, 210);
+    background-color: rgb(230, 230, 230);
     color: rgb(0, 0, 0);
 }
 
