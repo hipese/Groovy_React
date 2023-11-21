@@ -108,7 +108,7 @@ const SurveyQuestion = () => {
                     질문
                 </Typography>                
             </div>
-            <div className={`${style.padding40}`}>
+            <div className={`${style.padding40} ${style.borderbtm}`}>
             {questionData.map((e, i) => (
                     <div key={i}>
                         <Typography sx={{fontSize:"18",fontWeight:"bold"}}>
@@ -138,7 +138,6 @@ const SurveyQuestion = () => {
                     </div>
                 ))}
             </div>
-            <Divider sx={{bgcolor:"black"}}/>
             <div className={`${style.center} ${style.padding10} ${style.btnEven}`}>
                 <Link to="/Groovy/survey"><Button variant="outlined">
                     뒤로가기

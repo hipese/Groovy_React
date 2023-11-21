@@ -6,22 +6,32 @@ div{
     border: 0px solid black;
 }
 
+.body{
+    background-color: indigo;
+}
+
+.backDiv{
+    width: 100%;
+    height: 100%;
+    background-color: #e3f2fd30;
+}
+
 .guideDiv{
-    width: 1200px;
+    width: 1250px;
     height: 820px;
     margin-left: 100px;
 }
 
 .left{
     float: left;
-    width: 30%;
+    width: 28%;
     height: 100%;
     padding: 10px;
 }
 
 .right{
     float: left;
-    width: 70%;
+    width: 68%;
     height: 100%;
     padding: 10px;
 }
@@ -33,29 +43,34 @@ div{
     height: 300px;
     padding: 15px;
     padding-top: 0px;
+    background-color: white;
 }
 
 .signsection{
     border: 2px solid black;
     border-radius: 10px;
-    margin-top: 15px;
+    margin-top: 30px;
     width: 100%;
     height: 160px;
+    background-color: white;
 }
 
 .calandarsection{
     border: 2px solid black;
     border-radius: 10px;
-    margin-top: 15px;
+    margin-top: 30px;
     width: 100%;
     height: 310px;
+    background-color: white;
 }
 
 .projectsection{
     border: 2px solid black;
     border-radius: 10px;
+    margin-top: 15px;
     width: 100%;
     height: 49%;
+    background-color: white;
 }
 
 .CalendarMain{
@@ -90,6 +105,7 @@ div{
     margin-top: 15px;
     width: 100%;
     height: 49%;
+    background-color: white;
 }
 
 .workContents{
@@ -209,7 +225,20 @@ div{
     margin-top: 30px;
 }
 
+.marginR15{
+    margin-right: 15px;
+}
+
 .titleText{
     font-weight: bold;
     font-size: 20px;
+}
+
+.bordertopRad{
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.bgblue{
+    background-color: #90caf9;
 }
