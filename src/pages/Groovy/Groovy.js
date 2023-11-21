@@ -80,8 +80,7 @@ const Groovy = () => {
     const { dbList, refreshList } = useCalendar();
 
     // ToDoList 상위 컴포넌트에서 사용할 상태와 함수
-    const { todoList, setTodoList, toggleStar, ListAdded } = useToDoList();
-
+    const { todoList, setTodoList, toggleStar, ListAdded, tdlbg } = useToDoList();
 
     return (
         <WebSocketProvider>
@@ -93,7 +92,7 @@ const Groovy = () => {
                                 <Navigator />
                             </Container>
                             <ListContext.Provider value={{ refreshList }}>
-                                <ToDoListContext.Provider value={{ todoList, setTodoList, toggleStar, ListAdded }}>
+                                <ToDoListContext.Provider value={{ todoList, setTodoList, toggleStar, ListAdded, tdlbg}}>
                                     <div className="SlideContainer">
                                         <SlideBar refreshList={refreshList} />
                                     </div>
@@ -119,7 +118,7 @@ const Groovy = () => {
                                     <Route path="signlist/*" element={<Sign_List />} />
                                     <Route path="survey/*" element={<Survey />} />
                                     <Route path="list/*" element={
-                                        <ToDoListContext.Provider value={{ todoList, setTodoList, toggleStar, ListAdded }}>
+                                        <ToDoListContext.Provider value={{ todoList, setTodoList, toggleStar, ListAdded, tdlbg }}>
                                             <ToDoList />
                                         </ToDoListContext.Provider>
                                     } />

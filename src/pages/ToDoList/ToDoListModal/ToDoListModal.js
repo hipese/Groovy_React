@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import styles from './ToDoListModal.module.css';
 import axios from 'axios';
 import Dropdown from './ToDoListDrop';
@@ -47,7 +47,10 @@ const ToDoListModal = ({ showModal, setShowModal, ListAdded }) => {
       return;
     }
     try {
-      await axios.post("/api/tdList", formData);
+      const response = await axios.post("/api/tdList", formData);
+      const seq = response.data.seq;
+      console.log(response.data);
+      await axios.post("/api/tdlbackground", ({ bgselect: "linear-gradient(to right, #FFFFFF, #FFFFFF ,#FFFFFF, #FFFFFF)", parent_seq: seq}))
       ListAdded();
       closeModal();
     } catch (error) {
