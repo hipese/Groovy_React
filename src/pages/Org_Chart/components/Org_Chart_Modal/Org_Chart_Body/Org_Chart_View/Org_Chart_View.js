@@ -24,7 +24,7 @@ const ProfileContainer = styled("div")({
 });
 
 
-const Org_Chart_View = ({ approver,setApprover,setIsSend, selectedRow, selectMemberdetail, isSend }) => {
+const Org_Chart_View = ({ approver, setApprover, setIsSend, selectedRow, selectMemberdetail, isSend }) => {
 
     const handleInvalidApprover = () => {
         alert("결재시에는 자신보다 직급이 같거나 높은 맴버를 선택해주세요")
@@ -36,7 +36,7 @@ const Org_Chart_View = ({ approver,setApprover,setIsSend, selectedRow, selectMem
         console.log("approver.id:" + approver.id);
         console.log("approver:" + approver);
         console.log("selectedRow의 값" + selectedRow)
-        
+
         // isSend가 true이고, approver.id가 없는 경우에만 실행
         if (isSend === true) {
             handleInvalidApprover();
@@ -49,7 +49,7 @@ const Org_Chart_View = ({ approver,setApprover,setIsSend, selectedRow, selectMem
     return (
         <div className={style.view_div}>
 
-            {isSend === false && approver.id &&  (
+            {isSend === false && approver.id && (
                 // isSend가 false이고 approver.id가 없을 때 렌더링할 JSX
                 <div className={style.view_div}>
                     <div className={style.title}>
@@ -78,12 +78,8 @@ const Org_Chart_View = ({ approver,setApprover,setIsSend, selectedRow, selectMem
             )}
 
 
-            {isSend == null && !approver.id &&(
-                approver && !approver.id ? (
-                    <div className={style.null}>
-                        결재자를 선택해주세요
-                    </div>
-                ) : (
+            {isSend === undefined && approver.id && (
+                (
                     <div className={style.view_div}>
                         <div className={style.title}>
                             {approver.group_name ? `${approver.group_name} ${approver.position}` : `${approver.position}`}
@@ -108,8 +104,13 @@ const Org_Chart_View = ({ approver,setApprover,setIsSend, selectedRow, selectMem
                             </div>
                         </div>
                     </div>
+
                 )
             )}
+
+            {approver.id === undefined && selectedRow===null&& (<div className={style.null}>
+                결재자를 선택해주세요
+            </div>)}
 
         </div>
     );

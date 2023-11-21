@@ -297,6 +297,7 @@ const AddMember = ({handleClose}) => {
     const handleChildClose = () => setChildOpen(false);
     
     const [isModalOpen, setModalOpen] = useState(false);
+    const isSign=false;
     const toggleModal = () => {
         setModalOpen(!isModalOpen);
     };
@@ -383,7 +384,8 @@ const AddMember = ({handleClose}) => {
                 </Grid>
             </Grid>
             <div className={`${style.modalWidth}`}>
-                <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
+                <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} 
+                selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} isSign={isSign} />
             </div>
             
             

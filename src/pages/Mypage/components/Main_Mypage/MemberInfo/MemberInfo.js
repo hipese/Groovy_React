@@ -52,7 +52,6 @@ const MemberInfo = () => {
         })
 
         axios.get(`/api/attend/myAttendence`).then(resp => {
-            console.log(resp.data);
             setAttendence(resp.data);
         })
     }, [])
@@ -61,7 +60,6 @@ const MemberInfo = () => {
 
         axios.get(`/api/vacation/myVacation`)
             .then(resp => {
-                console.log(resp.data)
                 setMyVacation(resp.data);
             })
     }, [])
