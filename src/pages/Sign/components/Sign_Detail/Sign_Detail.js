@@ -170,7 +170,6 @@ const Sign_Detail = ({ approver }) => {
                         <List
                             sx={{
                                 width: '100%',
-                                maxWidth: 360,
                                 bgcolor: 'background.paper',
                             }}
                         >
@@ -231,7 +230,6 @@ const Sign_Detail = ({ approver }) => {
                         <List
                             sx={{
                                 width: '100%',
-                                maxWidth: 360,
                                 bgcolor: 'background.paper',
                             }}
                         >

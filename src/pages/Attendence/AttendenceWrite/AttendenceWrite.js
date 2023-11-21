@@ -1,4 +1,4 @@
-import { useContext, useState,useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import style from "./AttendenceWrite.module.css";
@@ -56,11 +56,11 @@ const formats = [
 ];
 
 const AttendenceWrite = () => {
-    
+
     const stompClient = useWebSocket();
     const { loginID } = useContext(LoginContext);
-    const members=useContext(MemberContext);
-    
+    const members = useContext(MemberContext);
+
     // 모달을 키거나 끌때 필요한 놈
     const [isModalOpen, setModalOpen] = useState(false);
     const [open, setOpen] = React.useState(true);
@@ -91,7 +91,7 @@ const AttendenceWrite = () => {
         axios.get(`/api/member/signWriterInfo/${members.member.id}`).then(resp2 => {
             setSignWriterInfo(resp2.data);
         });
- 
+
     }, []);
 
     const toggleModal = () => {
@@ -153,6 +153,10 @@ const AttendenceWrite = () => {
 
 
     const handleSubmit = () => {
+        if (startDate.isAfter(endDate)) {
+            alert("정확한 날짜를 입력해주세요.");
+            return;
+        }
 
         //approver이 없으면 선택하라고 알려주는 경고창 띄우기
         if (Object.keys(approver).length === 0) {
