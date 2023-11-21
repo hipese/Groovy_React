@@ -18,6 +18,7 @@
 
 .leftContainer {
     float: left;
+    width: 350px;
 }
 
 .left {
@@ -49,22 +50,23 @@
     font-weight: bold;
     margin: 10px;
     padding: 10px;
-    margin-left: 500px;
+    margin-left: 520px;
     margin-top: 50px;
 }
 
 .rightContainer {
-    padding-left: 900px;
+    margin-left: 900px;
+    width: 350px;
 }
 
 .tableBox{
-    width: 1150px;
+    width: 1250px;
 }
 
 .contents {
     display: flex;
     align-items: center;
-    width: 1150px;
+    width: 1250px;
     height: 300px;
     overflow-y: auto;
     border-top: 1px solid gray;
