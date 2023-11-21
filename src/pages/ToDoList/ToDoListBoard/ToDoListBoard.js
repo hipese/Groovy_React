@@ -88,27 +88,29 @@ const ToDoListBoard = () => {
     <>
     {tdlbg.map((bg, index) => {
       return ( seq === bg.parent_seq) &&
-        <div className={styles.tdlboard} style={{ backgroundImage: bg.bgselect }}>
+        <div className={styles.tdlboard} style={{ backgroundImage: bg.bgselect }} key={index}>
             {todoList.map((todo, index) => { 
               if (todo.seq === seq) {
                 return (
-                  <div className={styles.tdlboardheader}>
+                  <div className={styles.tdlboardheader} key={index}>
                     {!isEditing ? (
                       <div onClick={() => startEdit(todo)} className={styles.tdlboardtitle}>{todo.title}</div>
                     ) : (
-                        <div className={styles.editborder} ref={editBorderRef}>
-                          <input type="text" className={styles.titleedit} value={editedTitle} onChange={event => { handleEditChange(event); }} onKeyDown={e => e.key === "Enter" && saveEdit(todo, index)} />
-                          <button className={styles.titleeditbtn} onClick={cancelEdit}>x</button>
-                        </div>
+                      <div className={styles.editborder} ref={editBorderRef}>
+                        <input type="text" className={styles.titleedit} value={editedTitle} onChange={event => { handleEditChange(event); }} onKeyDown={e => e.key === "Enter" && saveEdit(todo, index)} />
+                        <button className={styles.titleeditbtn} onClick={cancelEdit}>x</button>
+                      </div>
                     )}
                     <div className={styles.tdlstarimg}><StarIcon key={index} isActive={todo.isActive} onClick={() => toggleStar(index)} /></div>
                     <div className={styles.tdlprofile}>
-                      {members.member.profile_image ? <ProfileContainer><StyledAvatar src={`/profiles/${members.member.profile_image}`} alt="profile" /></ProfileContainer> : <ProfileContainer> <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile"/></ProfileContainer>}
+                      {members.member.profile_image ? <ProfileContainer><StyledAvatar src={`/profiles/${members.member.profile_image}`} alt="profile" /></ProfileContainer> : <ProfileContainer> <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" /></ProfileContainer>}
                     </div>
                     <div className={styles.tdlsubmit}>
                       <button className={styles.tdlsubmitbutton} type="button" onClick={() => handleDeletePage(todo.seq)}>삭제</button>
                     </div>
                   </div>);
+              } else {
+                return null;
               }    
             })}
             <Contents parent_seq={seq} />

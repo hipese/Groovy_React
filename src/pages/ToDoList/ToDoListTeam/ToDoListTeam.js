@@ -1,7 +1,7 @@
 const ToDoListTeam = () => {
   return (
     <div className="container">
-      메인 To-Do-List Team
+      <h1>아직 지원하지 않는 기능입니다.</h1>
     </div>
   );
 };

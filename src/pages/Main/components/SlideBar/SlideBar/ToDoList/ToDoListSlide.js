@@ -54,13 +54,17 @@ const ToDoListSlide = () => {
 
     const backgroundstyles = [
         { bg: "linear-gradient(to right, #FFF2F2, #E5E0FF ,#8EA7E9, #7286D3 )" },
-        { bg: "linear-gradient(to right, #F3EEEA, #EBE3D5 ,#B0A695, #776B5D )" },
-        { bg: "linear-gradient(to right, #F9F5F6, #F8E8EE ,#FDCEDF, #F2BED1 )" },
-        { bg: "linear-gradient(to right, #F8EDE3, #DFD3C3 ,#D0B8A8, #85586F )" },
-        { bg: "linear-gradient(to right, #FFF8EA, #9E7676 ,#815B5B, #594545 )" },
-        { bg: "linear-gradient(to right, #FFF5E4, #FFE3E1 ,#FFD1D1, #FF9494 )" },
-        { bg: "linear-gradient(to right, #79B4B7, #FEFBF3 ,#F8F0DF, #9D9D9D )" },
-        { bg: "linear-gradient(to right, #FFFAFA, #FFE0E0 ,#FFC0D0, #EFDFBF )" }
+        { bg: "linear-gradient(to right, #F4EEFF, #DCD6F7 ,#A6B1E1, #424874 )" },
+        { bg: "linear-gradient(to right, #F9F7F7, #DBE2EF ,#3F72AF, #112D4E )" },
+        { bg: "linear-gradient(to right, #F9F8EB, #A7D7C5 ,#74B49B, #5C8D89 )" },
+        { bg: "linear-gradient(to right, #FFFBE9, #E3CAA5 ,#CEAB93, #AD8B73 )" },
+        { bg: "linear-gradient(to right, #F1F1F6, #E1CCEC ,#C9B6E4, #BE9FE1 )" },
+        { bg: "linear-gradient(to right, #FAF4B7, #F6C6EA ,#F9F9F9, #CDF0EA )" },
+        { bg: "linear-gradient(to right, #A7FFE4, #FFD6EC ,#FFA1CF, #FF74B1 )" },
+        { bg: "linear-gradient(to right, #FEF9A7, #FAC213 ,#F77E21, #D61C4E )" },
+        { bg: "linear-gradient(to right, #F3D1F4, #F5FCC1 ,#BAE5E5, #98D6EA )" },
+        { bg: "linear-gradient(to right, #F3C1C6, #F0F69F ,#B0E0A8, #D8EFF0 )" },
+        { bg: "linear-gradient(to right, #FF6B6B, #FFD93D ,#6BCB77, #4D96FF )" },
     ]
 
     const toggleModal = () => {
