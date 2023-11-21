@@ -43,7 +43,7 @@ hr{
 }
 
 .receipient{
-    width: 84%;
+    width: 90%;
     margin-left: 29px;
 }
 
@@ -99,4 +99,26 @@ hr{
 
 .btn button:hover {
     background-color: rgb(100, 180, 255);
+}
+.receipientmember{
+    width: 100%;
+    height: 10%;
+}
+.inputdiv{
+    width: 80%;
+    float: left;
+}
+.btndiv{
+    width: 20%;
+    float: left;
+}
+.selectbtn{
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 20px;
+    z-index: 1;
 }

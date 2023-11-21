@@ -112,7 +112,7 @@ const Contact_Group = () => {
                         {
                             search == ""
                             ?
-                            contacts.map((member) => {
+                            visibleContacts.map((member) => {
                                 return (
                                     <Row className={style.contact_object} key={member.id}>
                                         <Col xs={1} className={style.favorite_container}>
@@ -142,7 +142,7 @@ const Contact_Group = () => {
                                 )
                             })
                             :
-                            visibleContacts.filter(member => member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search))
+                            contacts.filter(member => member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search))
                             .map((member) => {
                                 return (
                                     <Row className={style.contact_object} key={member.id}>

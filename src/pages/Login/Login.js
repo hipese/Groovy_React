@@ -91,7 +91,7 @@ const Login = () => {
                         <Row>
                             <Col xs={2}></Col>
                             <Col xs={8} className={style.input_id_container}>
-                                <Input type="text" className={style.input_id} name="id" placeholder="ID" onChange={handleChange} value={acc.id} />
+                                <Input type="text" className={style.input_id} name="id" placeholder="ID" onChange={handleChange} value={acc.id} autoFocus/>
                             </Col>
                         </Row>
                         <Row>

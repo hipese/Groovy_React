@@ -43,7 +43,6 @@ const Groovy = () => {
     // 드롭다운 내용을 관리하는 배열
     useEffect(() => {
         axios.get("/api/member/department").then(resp => {
-            console.log(resp.data);
             setDepartment(resp.data);
         });
     }, []);

@@ -18,7 +18,7 @@ const CircularIndeterminate = () => {
 
 
 
-const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, setSelectMemberdetail,isSend,setIsSend }) => {
+const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, setSelectMemberdetail,isSend,setIsSend ,isSign}) => {
 
     const [loading, setLoading] = useState(true);
 
@@ -30,7 +30,6 @@ const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, s
 
     useEffect(() => {
         axios.get("/api/member/selectedEmployee").then(resp => {
-            console.log(resp.data);
             setEmployees(resp.data)
             setBackUpEmployees(resp.data);
             setLoading(false);
@@ -81,7 +80,7 @@ const Org_Chart = ({ isOpen, close, approver, setApprover, selectMemberdetail, s
                         <Org_Chart_Table employees={employees} setEmployees={setEmployees}
                             selectedRow={selectedRow} setSelectedRow={setSelectedRow}
                             setBackUpEmployees={setBackUpEmployees} setApprover={setApprover} setSelectMemberdetail={setSelectMemberdetail} 
-                            setMyPositionRank={setMyPositionRank} isSend={isSend} setIsSend={setIsSend}/>
+                            setMyPositionRank={setMyPositionRank} isSend={isSend} setIsSend={setIsSend} isSign={isSign}/>
                     </div>
 
                 </div>

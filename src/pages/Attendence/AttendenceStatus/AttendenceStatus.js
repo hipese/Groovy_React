@@ -37,7 +37,6 @@ const AttendenceStatus = () => {
 
     useEffect(() => {
         axios.get("/api/attend/detail").then(resp => {
-            console.log(resp.data)
             // 데이터를 가져온 후 시간 및 날짜 분리 처리
             const processedData = resp.data.map(item => {
                 // 출근 및 퇴근 시간을 JavaScript Date 객체로 변환

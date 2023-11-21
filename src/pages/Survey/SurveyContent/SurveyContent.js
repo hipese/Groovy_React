@@ -21,8 +21,10 @@ const SurveyTitle = () => {
     const handleSurveyClose = () => {
         axios.put(`/api/survey/close/${seq}`).then(res=>{
             navi("/Groovy/survey");
-            
-        })
+        }).catch((e)=>{
+            console.log(e);
+            navi("/Groovy/survey");
+        });
     }
 
     return(
@@ -82,14 +84,19 @@ const SurveyQuestion = () => {
     };
 
     const show = () =>{
-        console.log(response);
         axios.post(`/api/survey/response/${seq}`,response).then(res=>{
+            navi("/Groovy/survey");
+        }).catch((e)=>{
+            console.log(e);
             navi("/Groovy/survey");
         });
     }
 
     const deleteContents = () => {
         axios.delete(`/api/survey/delete/${seq}`).then(res=>{
+            navi("/Groovy/survey");
+        }).catch((e)=>{
+            console.log(e);
             navi("/Groovy/survey");
         });
     }
