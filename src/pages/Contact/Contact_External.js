@@ -2,10 +2,34 @@ import { useEffect, useState } from "react";
 import { Col, Container, Input, Row } from "reactstrap";
 import style from "./Contact.module.css";
 import axios from "axios";
+import { Box, CircularProgress, Pagination, PaginationItem } from "@mui/material";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 const Contact_External = () => {
     const [contacts, setContacts] = useState([]);
     const [search, setSearch] = useState("");
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
+
+    const COUNT_PER_PAGE = 10;
+    const totalItems = contacts.length;
+    const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
+
+    const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
+    const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
+    const visibleContacts = contacts.slice(startIndex, endIndex);
+
+    const onPageChange = (e, page) => {
+        setCurrentPage(page);
+    };
 
     useEffect(() => {
         axios.get("/api/contact/selectExternal").then((resp) => {
@@ -17,13 +41,17 @@ const Contact_External = () => {
         }).catch(err => {
             console.log(err);
         })
-
+        setLoading(false);
     }, [])
 
     const inputChangeHandler = (e) => {
         setSearch(e.target.value);
     }
 
+    if (loading) {
+        // 데이터 로딩 중에는 로딩창을 표시
+        return <CircularIndeterminate />;
+    }
 
     return (
         <Container>
@@ -49,7 +77,7 @@ const Contact_External = () => {
                         {
                             search == ""
                             ?
-                            contacts.map((member) => {
+                            visibleContacts.map((member) => {
                                 return (
                                     <Row className={style.contact_object} key={member.seq}>
                                         <Col xs={1} className={style.company_container}>
@@ -105,6 +133,23 @@ const Contact_External = () => {
 
                     </Row>
                 </Col>
+            </Row>
+
+            <Row>
+            <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={onPageChange}
+                        size="medium"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: "15px 0",
+                        }}
+                        renderItem={(item) => (
+                            <PaginationItem {...item} sx={{ fontSize: 12 }} />
+                        )}
+                    />
             </Row>
         </Container>
     );

@@ -15,8 +15,62 @@
     background-color: rgb(100, 180, 255);
 }
 
-.boardContainer{
+.mailContainer{
     margin-top: 30px;
+    border: 1px solid black;
+}
+
+.title{
+    width: 80%;
+    height: 70px;
+    font-size: xx-large;
+    font-weight: 500;
+    margin: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.sender{
+    width: 80%;
+    height: 40px;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.receipient{
+    width: 80%;
+    height: 40px;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.date{
+    width: 80%;
+    height: 40px;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.file{
+    width: 80%;
+    height: 40px;
+    margin: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.files>p {
+    float: left;
+    margin-left: 10px;
+}
+
+.contents{
+    width: 100%;
+    height: 400px;
+    padding: 20px;
 }
 
 hr {

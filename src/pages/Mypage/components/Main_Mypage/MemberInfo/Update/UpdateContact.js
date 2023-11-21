@@ -32,6 +32,11 @@ const UpdateContact = forwardRef((props,ref) => {
 
     const handleConfirm = () => {
 
+        if(contact.length<10){
+            alert("전화번호 형식으 올바르지 않습니다.")
+            return;
+        }
+
         // 멤버 상태를 업데이트하는 로직
         axios.put(`/api/member/ContactUpdate/${contact}`).then(resp => {
             onClose();

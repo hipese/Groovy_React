@@ -5,7 +5,6 @@ import style from "./Sign_Write.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import Org_Chart from '../../../Org_Chart/components/Org_Chart_Modal/Org_Chart';
 import axios from 'axios';
-import { LoginContext } from "../../../../App";
 import { useWebSocket } from "../../../../WebSocketContext/WebSocketContext";
 import * as React from 'react';
 import Box from '@mui/material/Box';
@@ -63,7 +62,6 @@ const Sign_Write = () => {
     const todayDate = formatDate(new Date());
 
     const stompClient = useWebSocket();
-    const { loginID } = useContext(LoginContext);
     const members = useContext(MemberContext);
 
     // 모달을 키거나 끌때 필요한 놈
@@ -71,13 +69,14 @@ const Sign_Write = () => {
     const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상새정보를 가져옵니다.
     const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
     const [signWriterInfo, setSignWriterInfo] = useState({}); //사용자의 상세정보
+    const [isSend,setIsSend]=useState(); //결재시 직급을 비교하여 선택할 수 있는 인원에 제한을 준다.
 
     useEffect(() => {
         axios.get(`/api/member/signWriterInfo/${members.member.id}`).then(resp2 => {
             setSignWriterInfo(resp2.data);
         });
  
-    }, []);
+    }, [members.member.id]);
 
     const toggleModal = () => {
         setModalOpen(!isModalOpen);
@@ -189,7 +188,7 @@ const Sign_Write = () => {
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={document_type}
+                                    value={document_type || ''}
                                     label="문서종류"
                                     onChange={handleChange}
                                 >
@@ -204,7 +203,7 @@ const Sign_Write = () => {
                             sx={{ width: '200px' }}
                             id="outlined-read-only-input"
                             label="기안작성자"
-                            value={signWriterInfo.name}
+                            value={signWriterInfo.name || ''}
                             InputProps={{
                                 readOnly: true,
                                 startAdornment: (
@@ -222,9 +221,9 @@ const Sign_Write = () => {
                             결제선 지정
                         </div>
                         <div className={style.buttonDiv}>
-                            <button onClick={toggleModal} className={style.btn}>조직도 검색</button>
+                            <button onClick={toggleModal} className={style.btn}>직원 검색</button>
                             <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover}
-                                selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
+                                selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} isSend={isSend} setIsSend={setIsSend}/>
                         </div>
                     </div>
                     <div className={style.table}>
@@ -280,7 +279,7 @@ const Sign_Write = () => {
                                     id="filled-hidden-label-normal"
                                     placeholder="제목을 입력해주세요"
                                     variant="filled"
-                                    value={title}
+                                    value={title || ''}
                                     onChange={handleTitleChange}
                                 />
                             </div>
@@ -292,7 +291,7 @@ const Sign_Write = () => {
                             theme="snow"
                             modules={modules}
                             formats={formats}
-                            value={contents} // 내용을 contents 상태로 설정
+                            value={contents || ''} // 내용을 contents 상태로 설정
                             onChange={handleContentChange} // 내용이 변경될 때 호출할 핸들러
                         />
                     </div>

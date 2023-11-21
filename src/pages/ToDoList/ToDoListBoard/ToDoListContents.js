@@ -3,6 +3,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import styles from "./ToDoListBoard.module.css";
 import { MemberContext } from "../../Groovy/Groovy";
 import axios from 'axios';
+import { LuPencil } from "react-icons/lu"; 
 
 function DragDropList({ parent_seq }) {
   const members = React.useContext(MemberContext);
@@ -15,6 +16,8 @@ function DragDropList({ parent_seq }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState("");
+  const [isEditingContent, setIsEditingContent] = useState({});
+  const [editedContent, setEditedContent] = useState({}); 
 
   // 드래그가 종료되었을 때
   const handleOnDragEnd = async (result) => {
@@ -151,6 +154,7 @@ function DragDropList({ parent_seq }) {
       console.error('Error in deleting contents:', error);
     }
   };
+
   /////////////////////////////////여기까지가 Contents쪽 함수들 /////////////////////////////////
 
   // 로딩중일 때 보여줄 화면 렌더링 및 title과 contents를 불러오는 함수
@@ -221,6 +225,39 @@ function DragDropList({ parent_seq }) {
     };
   }, [isEditing, editBorderRef]);
 
+  const startEditContent = (item) => {
+    setIsEditingContent({ ...isEditingContent, [item.seq]: true });
+    setEditedContent({ ...editedContent, [item.seq]: item.contents });
+  };
+
+  const handleEditContentChange = (itemSeq, event) => {
+    setEditedContent(prev => ({ ...prev, [itemSeq]: event.target.value }));
+  };
+
+  const cancelEditContent = (itemSeq) => {
+    setIsEditingContent({ ...isEditingContent, [itemSeq]: false });
+  };
+
+const saveEditContent = async (titleSeq, itemSeq) => {
+  const editedContentValue = editedContent[itemSeq];
+  if (editedContentValue) {
+    try {
+      await axios.put(`/api/tdlcontents/${itemSeq}`, { seq: itemSeq, contents: editedContentValue });
+
+      const updatedItems = itemsByTitle[titleSeq].map(item => {
+        if (item.seq === itemSeq) {
+          return { ...item, contents: editedContentValue };
+        }
+        return item;
+      });
+      setItemsByTitle({ ...itemsByTitle, [titleSeq]: updatedItems });
+      setIsEditingContent({ ...isEditingContent, [itemSeq]: false });
+    } catch (error) {
+      console.error('Error updating content:', error);
+    }
+  }
+};
+
   return isLoading ? (
     <div className={styles.loadcontainer}>
       <div className={styles.loading}></div>
@@ -233,17 +270,18 @@ function DragDropList({ parent_seq }) {
                     return (
                       <li key={index} className={styles.tdlinput}>
                         <div className={styles.tdllisttitle}>
-                          
                           {isEditing[title.seq] ? (
                             <div className={styles.editborder2} ref={editBorderRef}>
                               <input className={styles.titleedit2} value={editedTitle[title.seq]} onChange={event => { handleEditChange(title.seq,event); }} onKeyDown={e => e.key === "Enter" && saveEdit(title.seq, index)} />
                               <button className={styles.titleeditbtn} onClick={() => cancelEdit(title.seq)}>x</button>
                             </div>
                           ) : (
-                            <div onClick={() => startEdit(title)}>{title.title}</div>
+                              <>
+                                <div onClick={() => startEdit(title)}>{title.title}</div>
+                                <button onClick={() => handleDeleteTitle(title.seq)}>x</button>
+                              </>
                           )}
-
-                          <button onClick={() => handleDeleteTitle(title.seq)}>x</button></div>
+                          </div>
                           <Droppable droppableId={`droppable-${title.seq}`} key={title.seq} type={`list-${title.seq}`}>
                             {(provided) => (
                               <ul className={styles.tdlul} {...provided.droppableProps} ref={provided.innerRef}>
@@ -253,9 +291,24 @@ function DragDropList({ parent_seq }) {
                                       <li ref={provided.innerRef}
                                           {...provided.draggableProps}
                                           {...provided.dragHandleProps}
-                                          className={styles.tdlli} >
-                                        {item.contents}
-                                        <button onClick={() => handleDeleteContents(title.seq, item.seq)} className={styles.libtn}>x</button>
+                                          className={`${styles.tdlli} ${isEditingContent[item.seq] ? styles.tdlliedit : ''}`} >
+                                        
+                                        {isEditingContent[item.seq] ? (
+                                            <div className={styles.editborder3}>
+                                              <input
+                                                type="text" className={styles.contentsedit}
+                                                value={editedContent[item.seq] || ''}
+                                                onChange={(e) => { handleEditContentChange(item.seq, e); }}
+                                                onKeyDown={(e) => e.key === "Enter" && saveEditContent(title.seq, item.seq)} />
+                                              <button className={styles.contentseditbtn} onClick={() => cancelEditContent(item.seq)}>x</button>
+                                            </div>
+                                        ) : (
+                                            <>
+                                              {item.contents}
+                                              <LuPencil className={styles.liupbtn} onClick={() => startEditContent(item)} />
+                                              <button onClick={() => handleDeleteContents(title.seq, item.seq)} className={styles.libtn}>x</button>
+                                            </>
+                                          )}
                                       </li>
                                     )}
                                   </Draggable>

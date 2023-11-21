@@ -4,12 +4,35 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Box, CircularProgress, Pagination, PaginationItem } from "@mui/material";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 let Contact = () => {
 
     const [contacts, setContacts] = useState([]);
     const [favorite, setFavorite] = useState([]);
     const [search, setSearch] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
+
+    const COUNT_PER_PAGE = 10;
+    const totalItems = contacts.length;
+    const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
+
+    const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
+    const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
+    const visibleContacts = contacts.slice(startIndex, endIndex);
+
+    const onPageChange = (e, page) => {
+        setCurrentPage(page);
+    };
 
     useEffect(() => {
         axios.get("/api/contact/selectAll").then((resp) => {
@@ -26,7 +49,7 @@ let Contact = () => {
         }).catch(err => {
             console.log(err);
         })
-
+        setLoading(false);
     }, [])
 
     const inputChangeHandler = (e) => {
@@ -34,12 +57,8 @@ let Contact = () => {
     }
 
     const favoriteEmptyHandler = (e) => {
-        console.log("Favorite!")
-        console.log("target : " + e.target);
         const {id} = e.target.dataset;
-        console.log("clicked id : " + id)
         axios.post("/api/contact/setFavorite",{target_id:id}).then((resp) => {
-            console.log(resp.data)
             setFavorite(resp.data);
         }).catch(err => {
             console.log(err)
@@ -47,16 +66,17 @@ let Contact = () => {
     }
 
     const favoriteFilledHandler = (e) => {
-        console.log("Unfavorite!")
-        console.log("target : " + e.target);
         const {id} = e.target.dataset;
-        console.log("clicked id : " + id)
         axios.delete(`/api/contact/delFavorite/${id}`).then((resp) => {
-            console.log(resp.data)
             setFavorite(resp.data);
         }).catch(err => {
             console.log(err)
         })
+    }
+
+    if (loading) {
+        // 데이터 로딩 중에는 로딩창을 표시
+        return <CircularIndeterminate />;
     }
 
     return (
@@ -83,7 +103,7 @@ let Contact = () => {
                         {
                             search == ""
                             ?
-                            contacts.map((member) => {
+                            visibleContacts.map((member) => {
                                 return (
                                     <Row className={style.contact_object} key={member.id}>
                                         <Col xs={1} className={style.favorite_container}>
@@ -147,6 +167,23 @@ let Contact = () => {
 
                     </Row>
                 </Col>
+            </Row>
+
+            <Row>
+            <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={onPageChange}
+                        size="medium"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: "15px 0",
+                        }}
+                        renderItem={(item) => (
+                            <PaginationItem {...item} sx={{ fontSize: 12 }} />
+                        )}
+                    />
             </Row>
         </Container>
     );

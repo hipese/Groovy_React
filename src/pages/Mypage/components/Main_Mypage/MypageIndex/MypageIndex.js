@@ -39,11 +39,6 @@ const MypageIndex = () => {
     const [value, setValue] = React.useState(0);
     const members = useContext(MemberContext);
 
-
-    const handleEdit = () => {
-
-    }
-
     const handlenaiv1 = () => {
         navigate("")
     }

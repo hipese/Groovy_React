@@ -11,8 +11,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { blue } from '@mui/material/colors';
 import { MemberContext, VacationContext } from "../../Groovy/Groovy";
-import VacationEdit from "../../Vacation/VacationEdit";
-import { Modal } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
@@ -34,26 +32,6 @@ const AttendenceMain = () => {
     const [total_vactionDate, setTotal_vactionDate] = useState();
     const [loading, setLoading] = useState(true);
 
-
-    //=========================================================================
-
-
-    const [openModal, setOpenModal] = useState(false); // 모달 상태
-    const [editingField, setEditingField] = useState(null);// 모달 제어용 
-
-    const handleEdit = (field) => {
-        setEditingField(field); // 수정 중인 필드 설정
-        setOpenModal(true); // 모달 열기
-    };
-
-
-    const handleCloseModal = () => {
-        setOpenModal(false);
-        setEditingField(null); // 수정 중인 필드 상태를 초기화
-    };
-
-    //=========================================================================
-
     const [hasCompletedVacationFetched, setHasCompletedVacationFetched] = useState(false);
 
     useEffect(() => {
@@ -66,14 +44,13 @@ const AttendenceMain = () => {
                 setVacation_complete_list(completeResp.data);
                 setVacation_wait_list(waitResp.data);
     
-                // Calculate total used days for completed documents
                 const totalUsedDays = completeResp.data.reduce((acc, doc) => acc + doc.total_date, 0);
                 setTotal_vactionDate(totalUsedDays);
-                setHasCompletedVacationFetched(true); // Signal that list data has been fetched
+                setHasCompletedVacationFetched(true); 
             } catch (error) {
                 console.error('Error fetching vacation lists:', error);
             } finally {
-                setLoading(false); // Loading is complete regardless of whether the fetch was successful
+                setLoading(false); 
             }
         };
     
@@ -82,7 +59,7 @@ const AttendenceMain = () => {
     
     useEffect(() => {
         if (hasCompletedVacationFetched && members.member) {
-            const url = `/api/vacation/myVacation/${members.member.id}` + (total_vactionDate ? `/${total_vactionDate}` : '');
+            const url = `/api/vacation/myVacation/` + (total_vactionDate ? `/${total_vactionDate}` : '');
             axios.get(url).then(resp => {
                 setMyVacation(resp.data || {});
             }).catch(error => {
@@ -135,16 +112,7 @@ const AttendenceMain = () => {
                     </Table>
                 </TableContainer>
             </div>
-            <div>
-                <button className={style.btn} onClick={() => handleEdit('vacation')}>휴가조절(관리자만 사용하세요)</button>
-                <Modal
-                    open={openModal && editingField === 'vacation'}
-                    onClose={handleCloseModal}
-                >
-                    <VacationEdit onClose={handleCloseModal}  />
-                </Modal>
-            </div>
-
+            
             <div className={style.documents2}>
                 <div className={style.titleText}>휴가신청 완료</div>
                 <div className={style.text}>

@@ -24,7 +24,7 @@ const ProfileContainer = styled("div")({
 
 const ToDoListBoard = () => {
   const members = useContext(MemberContext);
-  const { todoList, setTodoList, toggleStar, ListAdded } = useContext(ToDoListContext);
+  const { todoList, setTodoList, toggleStar, tdlbg } = useContext(ToDoListContext);
   const location = useLocation();
   const { seq } = location.state;
   const [isEditing, setIsEditing] = useState(false);
@@ -35,7 +35,7 @@ const ToDoListBoard = () => {
     const result = window.confirm("정말 삭제하시겠습니까?");
 
     if (result) {
-      const result = axios.delete(`/api/tdList/${seq}`, { params: { seq: seq } });
+      axios.delete(`/api/tdList/${seq}`, { params: { seq: seq } });
       setTodoList(prev => prev.filter(todo => todo.seq !== seq));
       navigate("/Groovy/list");
     }
@@ -77,47 +77,46 @@ const ToDoListBoard = () => {
       }
     };
 
-    // Add event listener to document
     document.addEventListener('click', handleGlobalClick);
 
-    // Remove event listener on cleanup
     return () => {
       document.removeEventListener('click', handleGlobalClick);
     };
   }, [isEditing, editBorderRef]);
 
-
   return (
-    <div className={styles.tdlboard}>
-        {todoList.map((todo, index) => { 
-          if (todo.seq === seq) {
-            return (
-              <div className={styles.tdlboardheader}>
-                {!isEditing ? (
-                  <div onClick={() => startEdit(todo)} className={styles.tdlboardtitle}>{todo.title}</div>
-                ) : (
-                    <div className={styles.editborder} ref={editBorderRef}>
-                      <input type="text" className={styles.titleedit} value={editedTitle} onChange={event => { handleEditChange(event); }} onKeyDown={e => e.key === "Enter" && saveEdit(todo, index)} />
-                      <button className={styles.titleeditbtn} onClick={cancelEdit}>x</button>
+    <>
+    {tdlbg.map((bg, index) => {
+      return ( seq === bg.parent_seq) &&
+        <div className={styles.tdlboard} style={{ backgroundImage: bg.bgselect }} key={index}>
+            {todoList.map((todo, index) => { 
+              if (todo.seq === seq) {
+                return (
+                  <div className={styles.tdlboardheader} key={index}>
+                    {!isEditing ? (
+                      <div onClick={() => startEdit(todo)} className={styles.tdlboardtitle}>{todo.title}</div>
+                    ) : (
+                      <div className={styles.editborder} ref={editBorderRef}>
+                        <input type="text" className={styles.titleedit} value={editedTitle} onChange={event => { handleEditChange(event); }} onKeyDown={e => e.key === "Enter" && saveEdit(todo, index)} />
+                        <button className={styles.titleeditbtn} onClick={cancelEdit}>x</button>
+                      </div>
+                    )}
+                    <div className={styles.tdlstarimg}><StarIcon key={index} isActive={todo.isActive} onClick={() => toggleStar(index)} /></div>
+                    <div className={styles.tdlprofile}>
+                      {members.member.profile_image ? <ProfileContainer><StyledAvatar src={`/profiles/${members.member.profile_image}`} alt="profile" /></ProfileContainer> : <ProfileContainer> <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile" /></ProfileContainer>}
                     </div>
-                )}
-                <div className={styles.tdlstarimg}><StarIcon key={index} isActive={todo.isActive} onClick={() => toggleStar(index)} /></div>
-                <div className={styles.tdlprofile}>
-                  {members.member.profile_image ? <ProfileContainer><StyledAvatar src={`/profiles/${members.member.profile_image}`} alt="profile" /></ProfileContainer> : <ProfileContainer> <StyledAvatar src={`/assets/Default_pfp.svg`} alt="profile"/></ProfileContainer>}
-                </div>
-                <div className={styles.tdlsubmit}>
-                  <button className={styles.tdlsubmitbutton} type="button" onClick={() => handleDeletePage(todo.seq)}>삭제</button>
-                </div>
-              </div>);
-          }    
-        })}
-        
-        <Contents parent_seq={seq} />
-      
-
-
-
-    </div>
+                    <div className={styles.tdlsubmit}>
+                      <button className={styles.tdlsubmitbutton} type="button" onClick={() => handleDeletePage(todo.seq)}>삭제</button>
+                    </div>
+                  </div>);
+              } else {
+                return null;
+              }    
+            })}
+            <Contents parent_seq={seq} />
+        </div>
+      })}
+    </>
   );
 };
 
