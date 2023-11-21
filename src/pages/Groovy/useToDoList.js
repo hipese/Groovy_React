@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export const useToDoList = () => {
-    const [todoList, setTodoList] = useState([]);
+  const [todoList, setTodoList] = useState([]);
+  const [tdlbg, setTdlbg] = useState([]);
     
   const toggleStar = async (id) => {
     const updatedList = todoList.map((todo, index) => {
@@ -37,6 +38,9 @@ export const useToDoList = () => {
         try {
             const res = await axios.get("/api/tdList");
             let updatedTodoList = res.data.map(todo => ({ ...todo, isActive: false }));
+          
+            const tdlbg = await axios.get("/api/tdlbackground");
+            setTdlbg(tdlbg.data); 
 
             const bookmarksRes = await axios.get("/api/tdlbookmark");
             const bookmarks = bookmarksRes.data;
@@ -60,5 +64,5 @@ export const useToDoList = () => {
         getTodoList();
     }
 
-    return { todoList, setTodoList, toggleStar ,ListAdded };
+    return { todoList, setTodoList, toggleStar, ListAdded, tdlbg, setTdlbg };
 }
