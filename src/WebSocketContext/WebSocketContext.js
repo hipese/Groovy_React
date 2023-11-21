@@ -9,11 +9,11 @@ const WebSocketProvider = ({ children }) => {
   const [stompClient, setStompClient] = useState(null);
 
   const initializeWebSocket = useCallback(() => {
-  const socket = new WebSocket('ws://10.2.9.63/ws-message');
-  const client = Stomp.over(socket);
+  const socket = new WebSocket('ws://10.2.2.62/ws-message');
+  const client = Stomp.over(socket, { debug: false }); // 디버그 모드 비활성화
+  client.debug = function(){}
 
     client.connect({}, (frame) => {
-      console.log('Connected: ' + frame);
       setStompClient(client);
     });
   }, [loginID, setStompClient]);

@@ -112,7 +112,7 @@ const Dropdown = () => {
         메뉴
         <img src={down} alt="" width={'20px'} height={'15px'} />
       </button>
-      <Fade in={isOpened} collapsedSize={40}>
+      <Fade in={isOpened}>
         <div style={dropdownMenuStyle}>
           <ul style={styles.list}>
             <List style={styles.item} onClick={toggleState}>
