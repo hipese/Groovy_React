@@ -41,7 +41,7 @@
 }
 
 .signwrite {
-    margin-left: 100px;
+    /* margin-left: 100px; */
     margin-bottom: 50px;
 }
 
@@ -50,7 +50,7 @@
     font-weight: bold;
     margin: 10px;
     padding: 10px;
-    margin-left: 450px;
+    margin-left: 550px;
     margin-top: 50px;
 }
 
@@ -59,13 +59,13 @@
 }
 
 .tableBox{
-    width: 1000px;
+    width: 1250px;
 }
 
 .contents {
     display: flex;
     align-items: center;
-    width: 1000px;
+    width: 1250px;
     height: 300px;
     overflow-y: auto;
     border-top: 1px solid gray;
