@@ -111,7 +111,7 @@ const Worksection = () => {
                     {checkOutTime != "00:00:00" ? "퇴근" : `${workState} ${workname}`}
                 </div>
             </div>
-            <div className={style.workContents}>
+            <div className={`${style.workContents}`}>
                 <div className={style.padding10}>
                     <div className={style.dateDiv}>
                         <div className={`${style.today_date} ${style.left50}`} id='today_date'>
@@ -345,20 +345,22 @@ const ProjectSection = () => {
     
     return (
         <div className={style.projectsection}>
-            <div className={`${style.padding10} ${style.borderbtm}`}>
+            <div className={`${style.padding10} ${style.borderbtm} ${style.bgblue} ${style.bordertopRad}`}>
                 <Grid container spacing={2}>
-                    <Grid item xs={11} className={`${style.vcenter} ${style.titleText}`}>
+                    <Grid item xs={11} className={`${style.vcenter}`}>
+                        <Typography sx={{color:"white",fontSize:"20px",fontWeight:"bold"}} className={`${style.textBorder}`}>
                         프로젝트
+                        </Typography>                        
                     </Grid>
                     <Grid item xs={1}>
                         <Link to='project'>
-                        <IconButton aria-label="add">
+                        <IconButton aria-label="add" sx={{border:"2px solid white"}}>
                             <AddIcon fontSize='small'/>
                         </IconButton></Link>
                     </Grid>
                 </Grid>
             </div>
-            <div className={`${style.padding10} ${style.paddingTB10}`}>
+            <div className={`${style.padding10} ${style.paddingTB10} ${style.borderbtm}`}>
                 <Grid container rowSpacing={2}>
                     <Grid item={true} xs={1} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
@@ -385,13 +387,12 @@ const ProjectSection = () => {
                     </Grid>
                 </Grid>
             </div>
-            <Divider sx={{bgcolor:"black"}}/>
             <div>
                     {visibleSignList.map((e,i)=>{
                         return(          
-                            <List sx={style} component="nav" aria-label="mailbox folders" key={i}>
+                            <List sx={style} className={`${style.borderbtm}`} component="nav" aria-label="mailbox folders" key={i}>
                                 <Link to={`/groovy/dashboard/project/content/${e.pseq}`}><ListItem button>
-                                    <Grid container className={`${style.marginT10}`}> 
+                                    <Grid container> 
                                         <Grid item={true} xs={1} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.pseq}
@@ -417,7 +418,6 @@ const ProjectSection = () => {
                                         </Grid>
                                     </Grid>            
                                 </ListItem></Link>
-                            <Divider />
                                 
                             </List>
                         )
@@ -473,20 +473,22 @@ const NoticeSection = () => {
 
     return (
         <div className={style.noticesection}>
-            <div className={`${style.padding10} ${style.borderbtm}`}>
+            <div className={`${style.padding10} ${style.borderbtm} ${style.bgblue} ${style.bordertopRad}`}>      
                 <Grid container spacing={2}>
                     <Grid item xs={11} className={`${style.vcenter} ${style.titleText}`}>
-                        부서 내 소식
+                        <Typography sx={{color:"white",fontSize:"20px",fontWeight:"bold"}} className={`${style.textBorder}`}>
+                            부서 내 소식
+                        </Typography>                        
                     </Grid>
                     <Grid item xs={1}>
                     <Link to='notice'>
-                        <IconButton aria-label="add">
+                        <IconButton aria-label="add" sx={{border:"2px solid white"}}>
                             <AddIcon fontSize='small'/>
                         </IconButton></Link>
                     </Grid>
                 </Grid>
             </div>
-            <div className={`${style.padding10} ${style.paddingTB10}`}>
+            <div className={`${style.padding10} ${style.paddingTB10} ${style.borderbtm}`}>
                 <Grid container rowSpacing={1}>
                     <Grid item={true} xs={1} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
@@ -510,11 +512,10 @@ const NoticeSection = () => {
                     </Grid>
                 </Grid>
             </div>
-            <Divider sx={{bgcolor:"black"}}/>
             <div>
                     {visibleSignList.map((e,i)=>{
                         return(          
-                            <List sx={style} key={i} component="nav" aria-label="mailbox folders">
+                            <List sx={style} className={`${style.borderbtm}`} key={i} component="nav" aria-label="mailbox folders">
                                 <Link to={`/groovy/board/detailDept/${e.seq}`}><ListItem button>
                                     <Grid container className={`${style.marginT10}`}> 
                                         <Grid item={true} xs={1} className={style.center}>
@@ -539,7 +540,6 @@ const NoticeSection = () => {
                                         </Grid>
                                     </Grid>            
                                 </ListItem></Link>
-                            <Divider />
                                 
                             </List>
                         )
@@ -566,7 +566,7 @@ const NoticeSection = () => {
 const DashPageOne = () => {
     return(
         <div className={style.guideDiv}>
-            <div className={style.left}>
+            <div className={`${style.left} ${style.marginR15}`}>
                 <Worksection/>
                 <Signsection/>
                 <Calandarsection/>
@@ -609,13 +609,16 @@ const DashBoard=()=>{
     }
 
     return(
-        <ProjectContext.Provider value={{project,setProject}}>
-            <Routes>
-                <Route path='/' element={<DashPageOne/>}></Route>
-                    <Route path='project/*' element={<ProjectList/>}></Route>
-                <Route path='notice/*' element={<DeptNotice/>}></Route>
-            </Routes>        
-        </ProjectContext.Provider>
+        <div className={`${style.backDiv}`}>
+            <ProjectContext.Provider value={{project,setProject}}>
+                <Routes>
+                    <Route path='/' element={<DashPageOne/>}></Route>
+                        <Route path='project/*' element={<ProjectList/>}></Route>
+                    <Route path='notice/*' element={<DeptNotice/>}></Route>
+                </Routes>        
+            </ProjectContext.Provider>
+        </div>
+        
     )
 }
 

@@ -43,9 +43,6 @@ const MemberInfo = () => {
     const [attendenceCount, setAttendenceCount] = useState();
     const [attendence, setAttendence] = useState();
 
-
-    console.log(attendence);
-
     useEffect(() => {
 
         axios.get(`/api/attend/attendenceCount`).then(resp => {

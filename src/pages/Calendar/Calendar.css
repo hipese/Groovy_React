@@ -42,6 +42,7 @@ th[role="columnheader"] {
     background-color: white !important;
     text-align: center !important;
     z-index: 2;
+    cursor: pointer !important;
 }
 
 .myData-event {
