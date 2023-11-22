@@ -13,7 +13,6 @@ div{
 .backDiv{
     width: 100%;
     height: 100%;
-    background-color: #e3f2fd30;
 }
 
 .guideDiv{
@@ -141,6 +140,10 @@ div{
 .borderbtm{
     border-bottom: 1px solid grey;
 }
+
+.textBorder {
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}  
 
 .padding15{
     position: relative;

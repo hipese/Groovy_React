@@ -162,8 +162,13 @@ const UpdateState = ({handleClose,pseq,setUpdate}) => {
             </div>
             
             <div className={`${style.border} ${style.padding20} ${style.btnEven}`}>
-                <button onClick={handleClose}>취소</button>
-                <button onClick={handleUpdate}>수정</button>
+                
+                <Button variant="outlined" size="small" color="error" onClick={handleClose}>
+                    취소
+                </Button>
+                <Button variant="outlined" size="small" color="primary" onClick={handleUpdate}>
+                    수정
+                </Button>                
             </div>
         </div>
     )
@@ -327,8 +332,14 @@ const AddMember = ({handleClose}) => {
 
 
     const handleAdd = () => {
+        let temp = "";
+        temp = member.filter(e=>e.id == newMember.id);
+
         if(newMember.id == "" || newMember.group_name == "" || newMember.name == "" || newMember.id == undefined || newMember.group_name == undefined || newMember.name == undefined){
             alert("멤버를 선택해주세요.");
+            return;
+        }else if(temp.length>0){
+            alert("이미 초대된 사원입니다.");
             return;
         }
 
@@ -361,25 +372,41 @@ const AddMember = ({handleClose}) => {
                         <Grid item xs={4} className={style.center}>
                             <div className={`${style.padding10}`}>
                                 ID
-                                <input type="text" name="name" value={approver.id ? approver.id : ""} onChange={handleChange} readOnly/>
                             </div>
                         </Grid>
                         <Grid item xs={4} className={style.center}>
                             <div className={`${style.padding10}`}>
                                 부서
-                                <input type="text" name="group_name" value={approver.group_name == null ? "없음" : approver.group_name} onChange={handleChange} readOnly/>
                             </div>
                         </Grid>
                         <Grid item xs={4} className={style.center}>
                             <div className={`${style.padding10}`}>
                                 이름
+                            </div>
+                        </Grid>
+                        <Grid item xs={4} className={style.center}>
+                            <div className={`${style.padding10}`}>
+                                <input type="text" name="name" value={approver.id ? approver.id : ""} onChange={handleChange} readOnly/>
+                            </div>
+                        </Grid>
+                        <Grid item xs={4} className={style.center}>
+                            <div className={`${style.padding10}`}>
+                                <input type="text" name="group_name" value={approver.group_name == null ? "없음" : approver.group_name} onChange={handleChange} readOnly/>
+                            </div>
+                        </Grid>
+                        <Grid item xs={4} className={style.center}>
+                            <div className={`${style.padding10}`}>
                                 <input type="text"value={approver.name ? approver.name : ""} readOnly/>
                             </div>
                         </Grid>
                         <Grid item xs={12} className={`${style.center}`}>
-                            <div className={`${style.border} ${style.btnEven}`}>
-                                <button onClick={handleClose}>취소</button>
-                                <button onClick={handleAdd}>추가</button>
+                            <div className={`${style.btnEven} ${style.w100}`}>
+                                <Button variant="outlined" size="small" color="error" onClick={handleClose}>
+                                    취소
+                                </Button>
+                                <Button variant="outlined" size="small" color="primary" onClick={handleAdd}>
+                                    추가
+                                </Button> 
                             </div>
                         </Grid>
                     </Grid> 
@@ -403,18 +430,15 @@ const ProjectMember = () => {
     const handleClose = () => setOpen(false);
 
     const handleDeleteMember = (pseq,id) => {
-        if(pseq == "" || pseq == null || pseq == undefined){
-            alert("회원 번호 입력.");
+        let bool = window.confirm("멤버를 추방하시겠습니까?");
+        if(bool){
+            axios.delete(`/api/project/delete/member/${pseq}/${id}`).then(res=>{
+                const tempMember = member.filter(e=>e.id !== id);
+                setMember(tempMember);
+            });    
+        }else{
             return;
-        }else if(id == "" || id == null || id == undefined){
-            alert("회원 ID 입력.");
-            return;
-        }
-
-        axios.delete(`/api/project/delete/member/${pseq}/${id}`).then(res=>{
-            const tempMember = member.filter(e=>e.id !== id);
-            setMember(tempMember);
-        });
+        }        
     }
     
     return loginID == manager ?(
@@ -482,9 +506,12 @@ const ProjectMember = () => {
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={1} className={style.center}>
-                                            <IconButton onClick={()=>{handleDeleteMember(e.pseq,e.id)}}>
-                                                <ClearIcon sx={{color:"red"}}/>               
-                                            </IconButton>
+                                            {
+                                                e.id == manager ? "" : <IconButton onClick={()=>{handleDeleteMember(e.pseq,e.id)}}>
+                                                                            <ClearIcon sx={{color:"red"}}/>               
+                                                                        </IconButton>
+                                            }
+                                            
                                         </Grid>
                                     </Grid>            
                                 </ListItem>

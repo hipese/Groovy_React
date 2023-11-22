@@ -348,7 +348,7 @@ const ProjectSection = () => {
             <div className={`${style.padding10} ${style.borderbtm} ${style.bgblue} ${style.bordertopRad}`}>
                 <Grid container spacing={2}>
                     <Grid item xs={11} className={`${style.vcenter}`}>
-                        <Typography sx={{color:"white",fontSize:"20px",fontWeight:"bold"}}>
+                        <Typography sx={{color:"white",fontSize:"20px",fontWeight:"bold"}} className={`${style.textBorder}`}>
                         프로젝트
                         </Typography>                        
                     </Grid>
@@ -476,7 +476,7 @@ const NoticeSection = () => {
             <div className={`${style.padding10} ${style.borderbtm} ${style.bgblue} ${style.bordertopRad}`}>      
                 <Grid container spacing={2}>
                     <Grid item xs={11} className={`${style.vcenter} ${style.titleText}`}>
-                        <Typography sx={{color:"white",fontSize:"20px",fontWeight:"bold"}}>
+                        <Typography sx={{color:"white",fontSize:"20px",fontWeight:"bold"}} className={`${style.textBorder}`}>
                             부서 내 소식
                         </Typography>                        
                     </Grid>

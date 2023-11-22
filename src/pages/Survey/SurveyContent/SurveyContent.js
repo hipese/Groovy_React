@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { LoginContext } from '../../../App';
 import SendIcon from '@mui/icons-material/Send';
 import { SurveyContext } from '../Survey';
+import { Login } from '@mui/icons-material';
 
 const SurveyTitle = () => {
     const {contextData} = useContext(SurveyContentsContext);
@@ -84,6 +85,7 @@ const SurveyQuestion = () => {
     };
 
     const show = () =>{
+        console.log(response);
         axios.post(`/api/survey/response/${seq}`,response).then(res=>{
             navi("/Groovy/survey");
         }).catch((e)=>{
@@ -166,8 +168,10 @@ const SurveyContent = () => {
     };
 
     const {seq} = useParams();
+    const {loginID} = useContext(LoginContext);
     const [contextData,setContextData] = useState(undefined);
     const [isLoading,setLoading] = useState(true);
+    const navi = useNavigate();
 
     const getData = async() => {
         const res = await axios.get(`/api/survey/content/${seq}`).finally(()=>{
@@ -177,6 +181,15 @@ const SurveyContent = () => {
     }
     useEffect(()=>{
         getData();
+        axios.get(`/api/survey/getRes/${seq}/${loginID}`).then(res=>{
+            console.log(res.data);
+            if(res.data){
+                alert("이미 참여한 설문조사입니다.");
+                navi(-1);
+            }
+        }).catch((e)=>{
+            console.log(e);
+        });
     },[]);
 
     if(isLoading){
