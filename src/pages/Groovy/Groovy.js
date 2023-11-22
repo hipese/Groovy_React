@@ -34,15 +34,16 @@ const DepartmentContext = createContext({
 const Groovy = () => {
 
     const navi = useNavigate();
+    const { loginID, setLoginID } = useContext(LoginContext);
 
     useEffect(() => {
         let intervalId = null;
         const checkLoginStatus = async () => {
-            console.log("로그인 했는지 안했는지 확인");
             try {
                 const resp = await axios.get("/auth/check-session");
                 if (resp.data.loggedIn === false) {
                     clearInterval(intervalId); // 인터벌 취소
+                    setLoginID("")
                     navi("/"); // 로그인 페이지로 이동
                 }
             } catch (error) {
@@ -52,7 +53,7 @@ const Groovy = () => {
             }
         };
 
-        intervalId = setInterval(checkLoginStatus, 10000);
+        intervalId = setInterval(checkLoginStatus, 15000);
 
         // 컴포넌트가 언마운트되거나 인터벌이 취소될 때 정리
         return () => {
@@ -92,7 +93,7 @@ const Groovy = () => {
     }, []);
 
     const location = useLocation();
-    const { loginID, setLoginID } = useContext(LoginContext);
+
 
     useEffect(() => {
         axios.get("/auth/isLogined").then((resp) => {

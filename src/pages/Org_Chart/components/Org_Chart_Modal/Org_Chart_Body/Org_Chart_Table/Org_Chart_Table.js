@@ -53,6 +53,7 @@ const Org_Chart_Table = ({ setEmployees, employees, selectedRow, setSelectedRow,
 
     // 행을 클릭했을 때 해당 행의 색깔을 변경하고 그 행에 id값을 가진 사람을 선택합니다.
     const handleRowClick = async (id) => {
+
         if (selectedRow === id) {
             setSelectedRow(null);
             setApprover({});
