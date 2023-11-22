@@ -27,6 +27,18 @@ const ProjectCreate = () => {
     }
 
     const handleProjectAdd = async () => {
+        if(newProject.pname == "" || newProject.pname == undefined){
+            alert("제목을 적어주세요");
+            return;
+        }else if(newProject.pcontents == "" || newProject.pcontents == undefined){
+            alert("제목을 적어주세요");
+            return;
+        }
+        else if(newProject.ptime_limit == "" || newProject.ptime_limit == undefined){
+            alert("제목을 적어주세요");
+            return;
+        }
+
         axios.post("/api/project/create",newProject).then(res=>{
             navi("/Groovy/dashboard/project");
         }).catch((e)=>{
