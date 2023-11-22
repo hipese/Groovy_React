@@ -9,11 +9,23 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import style from "./List.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
 import { Input } from "reactstrap";
+import { MemberContext } from '../Groovy/Groovy';
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
-import { LoginContext } from '../../App';
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 const Waste = () => {
-    const { loginID } = useContext(LoginContext);
+
+    const {member} =useContext(MemberContext);
+
+    const [loading, setLoading] = useState(true);
 
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,8 +34,8 @@ const Waste = () => {
 
     const LoadMails = () => {
         Promise.all([
-            axios.get(`/api/mails/waste/inbox/${loginID}`),
-            axios.get(`/api/mails/waste/send/${loginID}`)
+            axios.get(`/api/mails/waste/inbox/${member.id}`),
+            axios.get(`/api/mails/waste/send/${member.id}`)
         ])
         .then(([inboxResp, sendResp]) => {
             const inboxMails = inboxResp.data.map(item => ({ ...item, isInbox: true }));
@@ -32,6 +44,7 @@ const Waste = () => {
             const combinedMails = [...inboxMails, ...sentMails];
 
             setMails(combinedMails);
+            setLoading(false);
         })
         .catch(error => {
         });
@@ -39,10 +52,10 @@ const Waste = () => {
 
     useEffect(() => {
         LoadMails();
-    }, []);
+    }, [member.id]);
 
     const handleDelete = (seq, isInbox) => {
-        const deleteEndpoint = isInbox ? `/api/mails/inbox/${seq}` : `/api/mails/sent/${seq}`;
+        const deleteEndpoint = isInbox ? `/api/mails/sent/${seq}` : `/api/mails/inbox/${seq}`;
         axios.delete(deleteEndpoint).then(() => {
             LoadMails();
         })
@@ -65,13 +78,17 @@ const Waste = () => {
         setSearch(e.target.value);
     };
 
-    const markAsRead = (seq) => {
-        axios.put(`/api/mails/read/${seq}`).then(() => {
+    const markAsRead = (parent_seq) => {
+        axios.put(`/api/mails/read/${parent_seq}`).then(() => {
             LoadMails();
         })
         .catch(() => {
         });
     };
+
+    if (loading) {
+        return <CircularIndeterminate />;
+    }
 
     return (
         <div className="Mailcontainer">
@@ -97,9 +114,9 @@ const Waste = () => {
                         </div>
                         {search === ''
                             ? visibleMails.map((e) => (
-                                <div key={e.seq} className={style.tableRow}>
+                                <div key={e.parent_seq} className={style.tableRow}>
                                 <div className={style.tableCell}>
-                                    <button onClick={() => handleDelete(e.seq, e.isInbox)} >삭제</button>
+                                    <button onClick={() => handleDelete((e.isInbox ? e.ws_seq : e.wr_seq), e.isInbox)} >삭제</button>
                                 </div>
                                 <div className={style.tableCell}>
                                     {e.is_read !== true ? (
@@ -118,7 +135,7 @@ const Waste = () => {
                                 <div className={style.tableCell}>{e.name} {e.group_name} {e.position}</div>
                                 <div className={style.tableCell}>{e.email}</div>
                                 <div className={style.tableCell}>
-                                    <Link to={`/groovy/mail/detail/${e.parent_seq}`} onClick={() => markAsRead(e.seq)}>{e.title}</Link>
+                                    <Link to={`/groovy/mail/detail/${e.parent_seq}`} onClick={() => markAsRead(e.parent_seq)}>{e.title}</Link>
                                 </div>
                                 <div className={style.tableCell}>{e.write_date}</div>
                             </div>
@@ -132,9 +149,9 @@ const Waste = () => {
                                         e.title.includes(search) ||
                                         e.email.includes(search)
                                 )
-                                .map((e) => (<div key={e.seq} className={style.tableRow}>
+                                .map((e) => (<div key={e.parent_seq} className={style.tableRow}>
                                     <div className={style.tableCell}>
-                                        <button onClick={() => handleDelete(e.seq, e.isInbox)} >삭제</button>
+                                        <button onClick={() => handleDelete(e.ws_seq, e.isInbox)} >삭제</button>
                                     </div>
                                     <div className={style.tableCell}>
                                         {e.is_read !== true ? (

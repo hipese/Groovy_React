@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from './Write.module.css';
 import axios from 'axios';
@@ -14,7 +14,6 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FolderIcon from '@mui/icons-material/Folder';
-import { MemberContext } from '../Groovy/Groovy';
 import Org_Chart from '../Org_Chart/components/Org_Chart_Modal/Org_Chart';
 
 function Write() {
@@ -24,8 +23,6 @@ function Write() {
   const { loginID } = useContext(LoginContext);
 
   const [open, setOpen] = React.useState(true);
-
-  const members = useContext(MemberContext);
 
   // 모달을 키거나 끌때 필요한 놈
   const [isModalOpen, setModalOpen] = useState(false);

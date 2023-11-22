@@ -3,10 +3,10 @@ import style from "./EmailSlide.module.css";
 
 const EmailSlide = () => {
     return (
-        <div className={style.CalendarSlide}>
+        <div>
             <Link to="/groovy/mail/write">
                 <button className={style.btn1}>
-                    <strong>+</strong> 메일 쓰기
+                    <strong>+ 메일 쓰기</strong> 
                 </button>
             </Link>
             <Link to="/groovy/mail">

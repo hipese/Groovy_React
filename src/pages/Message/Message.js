@@ -18,6 +18,8 @@ import MuiButton from "@mui/material/Button";
 const SelectContext = createContext();
 const ProfileContext = createContext();
 const MessageContext = createContext();
+const MembersInfoContext = createContext();
+
 let Message = () => {
 
     const [selectedRoom, setSelectedRoom] = useState("");
@@ -33,6 +35,7 @@ let Message = () => {
     const [openDialog, setOpenDialog] = useState(false);
     const [leaveRoom, setLeaveRoom] = useState("");
     const [subscriptions, setSubscriptions] = useState([]);
+    const [membersInfo, setMembersInfo] = useState([]);
 
     useEffect(() => {
         recentMessageRef.current = recentMessage;
@@ -58,7 +61,6 @@ let Message = () => {
                             let subscription = stompClient.subscribe('/topic/message/' + info.seq, (response) => {
                                 receiveMessage(response);
                             });
-                            console.log(subscription)
                             setSubscriptions(prev => [...prev, {room_seq : info.seq, subscription : subscription}]);
                         });
                     }
@@ -71,6 +73,8 @@ let Message = () => {
                 const recentMessageResponse = await axios.get(`/api/message/getRecentMessage`);
                 setRecentMessage(recentMessageResponse.data);
 
+                const membersInfoResponse = await axios.get(`/api/message/getMembersInfo`);
+                setMembersInfo(membersInfoResponse.data);
 
             } catch (error) {
                 console.log(error);
@@ -82,7 +86,7 @@ let Message = () => {
 
 
     const receiveMessage = (resp) => {
-        console.log(recentMessageRef)
+       
         const copyRecent = [JSON.parse(resp.body)].concat(recentMessageRef.current.filter(recent => recent.room_seq != JSON.parse(resp.body).room_seq));
         setRecentMessage(copyRecent);
         if (JSON.parse(resp.body).room_seq == selectedRoomRef.current) {
@@ -221,13 +225,15 @@ let Message = () => {
                     </Row>
                 </Col>
                 <Col className={style.chat_room_container}>
-                    <MessageContext.Provider value={{ messages, setMessages }}>
-                        <SelectContext.Provider value={{ selectedRoom }}>
-                            <ProfileContext.Provider value={{ profiles }}>
-                                <Message_Room />
-                            </ProfileContext.Provider>
-                        </SelectContext.Provider>
-                    </MessageContext.Provider>
+                    <MembersInfoContext.Provider value={{membersInfo}}>
+                        <MessageContext.Provider value={{ messages, setMessages }}>
+                            <SelectContext.Provider value={{ selectedRoom }}>
+                                <ProfileContext.Provider value={{ profiles }}>
+                                    <Message_Room />
+                                </ProfileContext.Provider>
+                            </SelectContext.Provider>
+                        </MessageContext.Provider>
+                    </MembersInfoContext.Provider>
                 </Col>
             </Row>
             <Dialog
@@ -253,4 +259,4 @@ let Message = () => {
 };
 
 export default Message;
-export { SelectContext, ProfileContext, MessageContext };
+export { SelectContext, ProfileContext, MessageContext, MembersInfoContext };
