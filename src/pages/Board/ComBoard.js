@@ -59,7 +59,7 @@ const ComBoard = () => {
                             ? visibleBoard.map((e) => (
                                 <div key={e.seq} className={style.tableRow}>
                                     <div className={style.tableCell}>
-                                        {e.name} {e.position}
+                                        {e.name} {e.group_name} {e.position}
                                     </div>
                                     <div className={style.tableCell}>
                                         {e.fseq !== 0 && (
@@ -78,13 +78,15 @@ const ComBoard = () => {
                                 .filter(
                                     (e) =>
                                         e.name.includes(search) ||
+                                        (e.group_name && e.group_name.includes(search)) ||
+                                        e.position.includes(search) ||
                                         e.contents.includes(search) ||
                                         e.title.includes(search)
                                 )
                                 .map((e) => (
                                     <div key={e.seq} className={style.tableRow}>
                                         <div className={style.tableCell}>
-                                            {e.name} {e.position}
+                                            {e.name} {e.group_name} {e.position}
                                         </div>
                                         <div className={style.tableCell}>
                                             {e.fseq !== 0 && (

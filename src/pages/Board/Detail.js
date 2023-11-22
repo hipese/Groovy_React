@@ -237,14 +237,13 @@ const Detail = () => {
                                         <p>{reply.name} {reply.group_name} {reply.position}</p>
                                         {editingReply === reply.seq ? (
                                             <>
-                                                <textarea className={style.replyForm} rows="4" value={editedReply} onChange={(e) => setEditedReply(e.target.value)}>
-                                                    <div className={style.btn}>
-                                                        <button onClick={handleSaveEdit}>완료</button>
-                                                        <button onClick={handleCancelEdit}>취소</button>
-                                                    </div>
-                                                </textarea>
+                                                <textarea className={style.replyForm} rows="4" value={editedReply} onChange={(e) => setEditedReply(e.target.value)} />
+                                                <div className={style.btn}>
+                                                    <button onClick={handleSaveEdit}>완료</button>
+                                                    <button onClick={handleCancelEdit}>취소</button>
+                                                </div>
                                             </>
-                                        ) : (<p>{reply.contents}</p>)}
+                                        ) : (<p className={style.recontents}>{reply.contents}</p>)}
                                         <p>{reply.write_date}</p>
                                     </div>
                                     <div className={style.btn}>
