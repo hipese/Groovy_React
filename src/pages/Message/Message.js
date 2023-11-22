@@ -61,7 +61,6 @@ let Message = () => {
                             let subscription = stompClient.subscribe('/topic/message/' + info.seq, (response) => {
                                 receiveMessage(response);
                             });
-                            console.log(subscription)
                             setSubscriptions(prev => [...prev, {room_seq : info.seq, subscription : subscription}]);
                         });
                     }
@@ -87,7 +86,7 @@ let Message = () => {
 
 
     const receiveMessage = (resp) => {
-        console.log(recentMessageRef)
+       
         const copyRecent = [JSON.parse(resp.body)].concat(recentMessageRef.current.filter(recent => recent.room_seq != JSON.parse(resp.body).room_seq));
         setRecentMessage(copyRecent);
         if (JSON.parse(resp.body).room_seq == selectedRoomRef.current) {
