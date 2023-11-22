@@ -11,6 +11,7 @@ import { CalendarUpPush, TeamBirthdays } from './CalendarEvent_utils'
 import axios from 'axios'
 import CalendarInnerModal from './CalendarInnerModal'
 import { ListContext } from "../Groovy/Groovy"
+import confetti from 'canvas-confetti';
 
 // 옵저버 설정
 function applyStyles() {
@@ -45,6 +46,76 @@ const Calendar = () => {
     const [eventModalOpen, setEventModalOpen] = useState(false);
     const [eventDetails, setEventDetails] = useState(null);
     const { dbList, refreshList } = useContext(ListContext);
+  
+
+    function handleEventClick(clickInfo) {
+      const { extendedProps, classNames } = clickInfo.event;
+      if (classNames.includes('birthday-event')) {
+        startConfettiAnimation();
+      } else if (extendedProps && extendedProps.seq) {
+        setEventDetails(extendedProps);
+        setEventModalOpen(true);
+      }
+    }
+
+  // Function to start the confetti animation
+  function startConfettiAnimation() {
+    const duration = 60 * 60 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 500, ticks: 20, zIndex: 0 }; //startvelocity: 시작 속도, spread: 분포, ticks: 틱, zIndex: z축
+ 
+    function randomInRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    const interval = setInterval(function () {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 20 * (timeLeft / duration);
+      confetti(
+        Object.assign({}, defaults, {
+          particleCount,
+          origin: { x: randomInRange(0, 1), y: randomInRange(0, 1) }
+        })
+      );
+      confetti(
+        Object.assign({}, defaults, {
+          particleCount,
+          origin: { x: randomInRange(0, 1), y: randomInRange(0, 1) }
+        })
+      );
+      confetti(
+        Object.assign({}, defaults, {
+          particleCount,
+          origin: { x: randomInRange(0, 1), y: randomInRange(0, 1) }
+        })
+      );
+    }, 250);
+
+    // Stop the animation after 5 seconds
+    setTimeout(() => clearInterval(interval), 10000);
+  }
+
+    function handleEventDrop(info) {
+      const { event } = info;
+      const startDate = new Date(event.start);
+      startDate.setDate(startDate.getDate() + 1);
+      const NewStart = startDate.toISOString().split('T')[0] ? startDate.toISOString().split('T')[0] : null;
+      
+      const endDate = event.end ? new Date(event.end) : null;
+      if (endDate) {
+        endDate.setDate(endDate.getDate());
+      }
+      const NewEnd = endDate ? endDate.toISOString().split('T')[0] : null;
+
+      axios.put(`/api/calendar/${event.extendedProps.seq}`, { ...event.extendedProps, starttime: NewStart, endtime: NewEnd }).then((res) => {
+        refreshList();
+      });
+    };
 
   
   useEffect(() => {
@@ -115,18 +186,13 @@ const Calendar = () => {
     setShowModal(true);
   };
 
-  function handleEventClick(clickInfo) {
-    const { extendedProps } = clickInfo.event;
-    if (extendedProps && extendedProps.seq) {
-      setEventDetails(extendedProps); // 이벤트의 세부 정보를 상태에 저장
-      setEventModalOpen(true); // 모달을 열기
-    }
-  }
+
   const handleCloseModal = () => {
     setEventModalOpen(false);
     setEventDetails(null);
   };
-
+  const editableDbList = dbList.map(event => ({ ...event, editable: true }));
+  const nonEditableEvents = events.map(event => ({ ...event, editable: false }));
   
   return (
     <>
@@ -139,13 +205,14 @@ const Calendar = () => {
                   headerToolbar={{ left: 'dayGridMonth,timeGridWeek,timeGridDay', center: 'title', right: 'today prev,next' }}
                   locale={koLocale}
                   weekends={weekendsVisible}
-                  events={[...events, ...dbList]}
+                  events={[...editableDbList, ...nonEditableEvents]}
                   select={handleDateSelect}
                   selectable={true}
                   selectMirror={true}
                   dayMaxEvents={true}
-                 eventClick={handleEventClick}
-          />
+                  eventClick={handleEventClick}
+                  eventDrop={handleEventDrop}
+                />
             </div>
       </div>
       <CalendarInnerModal isOpen={eventModalOpen} onClose={handleCloseModal} eventDetails={eventDetails} onEventAdded={refreshList}/>
