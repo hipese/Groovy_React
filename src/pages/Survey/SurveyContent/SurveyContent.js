@@ -182,7 +182,6 @@ const SurveyContent = () => {
     useEffect(()=>{
         getData();
         axios.get(`/api/survey/getRes/${seq}/${loginID}`).then(res=>{
-            console.log(res.data);
             if(res.data){
                 alert("이미 참여한 설문조사입니다.");
                 navi(-1);
