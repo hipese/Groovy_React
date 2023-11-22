@@ -16,37 +16,38 @@ const SurveyContent = ({survey,setSurvey}) => {
     };
     return(
         <div className={`${style.writeSection}`}>
-            <Grid container spacing={2} sx={{
-                padding:1
-            }}>
-                <Grid item xs={2} className={`${style.center}`}>
-                    제목 : 
+            <div className={`${style.borderbtm}`}>
+                <Grid container spacing={2} sx={{
+                    padding:1
+                }}>
+                    <Grid item xs={2} className={`${style.center}`}>
+                        제목 : 
+                    </Grid>
+                    <Grid item xs={10}>
+                        <TextField id="outlined-basic" label="제목" variant="outlined" sx={{width:"80%"}} name='surtitle' onChange={handleChange}/>
+                    </Grid>
                 </Grid>
-                <Grid item xs={10}>
-                    <TextField id="outlined-basic" label="제목" variant="outlined" sx={{width:"80%"}} name='surtitle' onChange={handleChange}/>
+            </div>
+            <div>
+                <Grid container spacing={2} sx={{
+                    marginTop:1
+                }}>
+                    <Grid item xs={12} className={`${style.center}`}>
+                        <TextField
+                            id="outlined-multiline-static"
+                            label="내용을 작성하세요"
+                            multiline
+                            rows={17}
+                            sx={{
+                                width:"90%",
+                                height:450
+                            }}
+                            name='surcontents'
+                            onChange={handleChange}
+                            />
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Divider sx={{bgcolor:"black"}}/>
-            <Grid container spacing={2} sx={{
-                marginTop:1
-            }}>
-                <Grid item xs={12} className={`${style.center}`}>
-                    <TextField
-                        id="outlined-multiline-static"
-                        label="내용을 작성하세요"
-                        multiline
-                        rows={17}
-                        sx={{
-                            width:"90%",
-                            height:450
-                        }}
-                        name='surcontents'
-                        onChange={handleChange}
-                        />
-                </Grid>
-            </Grid>
-            <Divider sx={{bgcolor:"black"}}/>
-            
+            </div>            
         </div>
 
     )
@@ -74,7 +75,7 @@ const ShortAnswer = ({seq}) => {
 
 
     return(
-        <div className={`${style.border} ${style.center} ${style.marginT20}`}>
+        <div className={`${style.center} ${style.marginT20}`}>
             단답형 질문 : <input type="text" data-key={`${seq}`} placeholder='단답형 질문을 입력하시오.' name="questions" onChange={(e)=> handleChange(e,seq)}/>
         </div>
         
@@ -98,8 +99,8 @@ const MultipleChoice = ({seq}) => {
         const { value } = e.target;
         setNewQuestions((prevQuestions) => {
             const newQuestionsArray = [...prevQuestions];
-            newQuestionsArray[index] = value;
-            return newQuestionsArray;
+                newQuestionsArray[index] = value;
+                return newQuestionsArray;
         });
 
     }
@@ -129,14 +130,13 @@ const MultipleChoice = ({seq}) => {
 
     return (
     <div>
-        <div className={`${style.border} ${style.center} ${style.marginT20}`}>
+        <div className={`${style.center} ${style.marginT20}`}>
             <div className={`${style.center}`}>
                 객관식 질문 : <input type="text" name='contents' placeholder='객관식 질문 입력' onChange={(e)=>handleContentsChange(e)}/> 
                 <Button variant="outlined" size="medium" onClick={addQuestion}>
                     객관식 보기 추가
                 </Button>
-            </div>        
-            <Divider/>
+            </div> 
             <div>
                 {newQuestions.map((question, index) => (
                     <div key={index} className={`${style.padding10}`}>
@@ -181,7 +181,7 @@ const SurveyQuestion = () => {
 
     return(
         <div className={`${style.writeSection}`}>
-            <div className={`${style.padding10} ${style.btnEven}`}>
+            <div className={`${style.padding10} ${style.btnEven} ${style.borderbtm}`}>
                 <Button variant="contained" size="medium" onClick={addOpenEndedQuestion}>
                     주관식 질문 추가
                 </Button>
@@ -189,9 +189,7 @@ const SurveyQuestion = () => {
                     객관식 질문 추가
                 </Button>
             </div>
-            <Divider sx={{bgcolor:"black"}}/>            
             {questions}
-            <Divider sx={{bgcolor:"black"}}/>
         </div>
     )
 }
@@ -218,7 +216,17 @@ const SurveyWrite = () => {
             alert("내용을 작성하시오");
             return;
         }
+        
         const updateResult = [survey,...shortAnswers.filter(Boolean),...multiAnswers.filter(Boolean)];
+
+        updateResult.forEach(obj => {
+            if (Array.isArray(obj.questions) && obj.questions.length > 0) {
+              obj.questions = obj.questions.filter(question => question !== '');
+              if (obj.questions.length === 0) {
+                obj.questions = null;
+              }
+            }
+          });
 
         await new Promise((res)=>{
             setResult(prev=>[...prev,...updateResult]);
@@ -227,8 +235,8 @@ const SurveyWrite = () => {
     }
 
     const sendData = async () => {
+        console.log(result);
         try{
-            console.log(result);
             await axios.post("/api/survey",result).then(res=>{
                 navi("/Groovy/survey");
                 console.log("post 성공");

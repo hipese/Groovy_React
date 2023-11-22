@@ -84,13 +84,12 @@
 }
 
 .tableBox2 {
-    width: 1000px;
-    margin-left: 100px;
+    width: 1150px;
 }
 
 .titleRow {
     clear: both;
-    width: 1000px;
+    width: 1150px;
     overflow: hidden;
 }
 
@@ -114,17 +113,15 @@
 }
 
 .textEditor {
-    width: 1000px;
-    margin-left: 100px;
+    width: 1150px;
     height: 200px;
     margin-bottom: 50px;
 }
 
 
 .fileRow {
-    width: 1000px;
+    width: 1150px;;
     overflow: hidden;
-    margin-left: 100px;
     margin-bottom: 50px;
 }
 

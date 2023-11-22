@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { LoginContext } from '../../../App';
 import SendIcon from '@mui/icons-material/Send';
 import { SurveyContext } from '../Survey';
+import { Login } from '@mui/icons-material';
 
 const SurveyTitle = () => {
     const {contextData} = useContext(SurveyContentsContext);
@@ -21,8 +22,10 @@ const SurveyTitle = () => {
     const handleSurveyClose = () => {
         axios.put(`/api/survey/close/${seq}`).then(res=>{
             navi("/Groovy/survey");
-            
-        })
+        }).catch((e)=>{
+            console.log(e);
+            navi("/Groovy/survey");
+        });
     }
 
     return(
@@ -85,11 +88,17 @@ const SurveyQuestion = () => {
         console.log(response);
         axios.post(`/api/survey/response/${seq}`,response).then(res=>{
             navi("/Groovy/survey");
+        }).catch((e)=>{
+            console.log(e);
+            navi("/Groovy/survey");
         });
     }
 
     const deleteContents = () => {
         axios.delete(`/api/survey/delete/${seq}`).then(res=>{
+            navi("/Groovy/survey");
+        }).catch((e)=>{
+            console.log(e);
             navi("/Groovy/survey");
         });
     }
@@ -101,7 +110,7 @@ const SurveyQuestion = () => {
                     질문
                 </Typography>                
             </div>
-            <div className={`${style.padding40}`}>
+            <div className={`${style.padding40} ${style.borderbtm}`}>
             {questionData.map((e, i) => (
                     <div key={i}>
                         <Typography sx={{fontSize:"18",fontWeight:"bold"}}>
@@ -131,7 +140,6 @@ const SurveyQuestion = () => {
                     </div>
                 ))}
             </div>
-            <Divider sx={{bgcolor:"black"}}/>
             <div className={`${style.center} ${style.padding10} ${style.btnEven}`}>
                 <Link to="/Groovy/survey"><Button variant="outlined">
                     뒤로가기
@@ -160,8 +168,10 @@ const SurveyContent = () => {
     };
 
     const {seq} = useParams();
+    const {loginID} = useContext(LoginContext);
     const [contextData,setContextData] = useState(undefined);
     const [isLoading,setLoading] = useState(true);
+    const navi = useNavigate();
 
     const getData = async() => {
         const res = await axios.get(`/api/survey/content/${seq}`).finally(()=>{
@@ -171,6 +181,14 @@ const SurveyContent = () => {
     }
     useEffect(()=>{
         getData();
+        axios.get(`/api/survey/getRes/${seq}/${loginID}`).then(res=>{
+            if(res.data){
+                alert("이미 참여한 설문조사입니다.");
+                navi(-1);
+            }
+        }).catch((e)=>{
+            console.log(e);
+        });
     },[]);
 
     if(isLoading){

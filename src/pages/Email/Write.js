@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from './Write.module.css';
 import axios from 'axios';
@@ -14,6 +14,8 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FolderIcon from '@mui/icons-material/Folder';
+import { MemberContext } from '../Groovy/Groovy';
+import Org_Chart from '../Org_Chart/components/Org_Chart_Modal/Org_Chart';
 
 function Write() {
   const [mail, setMail] = useState({});
@@ -22,6 +24,20 @@ function Write() {
   const { loginID } = useContext(LoginContext);
 
   const [open, setOpen] = React.useState(true);
+
+  const members = useContext(MemberContext);
+
+  // 모달을 키거나 끌때 필요한 놈
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectMemberdetail, setSelectMemberdetail] = useState({}); //선택한 직원에 상새정보를 가져옵니다.
+  const [approver, setApprover] = useState({}); //승인자의 정보을 저장하는 useState 
+  const [isSend, setIsSend] = useState(); //결재시 직급을 비교하여 선택할 수 있는 인원에 제한을 준다.
+  const isSign = false;
+
+  const toggleModal = () => {
+    setModalOpen(!isModalOpen);
+  };
+
 
   const handleClick = () => {
     setOpen(!open);
@@ -44,7 +60,7 @@ function Write() {
   const handleAdd = () => {
     const formData = new FormData();
     formData.append('sender', loginID);
-    formData.append('receipient', mail.receipient);
+    formData.append('receipient', approver.id);
     formData.append('title', mail.title);
     formData.append('contents', mail.contents);
 
@@ -70,11 +86,24 @@ function Write() {
       <div className={style.write}>메일 작성</div>
       <hr></hr>
       <div className={style.margin}>
-        받는 사람
-        <input type="text" placeholder="받는 사람" name="receipient" onChange={handleChange} value={mail.receipient} className={style.receipient} /><br />
+
+        <div className={style.receipientmember}>
+          <div className={style.inputdiv}>
+            받는 사람
+            <input type="text" placeholder="받는 사람" name="receipient" onChange={handleChange} value={approver.name || ''}  className={style.receipient} /><br />
+          </div>
+
+          <div className={style.btndiv}>
+            <button onClick={toggleModal} className={style.selectbtn}>직원 검색</button>
+            <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover}
+              selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} isSend={isSend} setIsSend={setIsSend} isSign={isSign} />
+          </div>
+
+        </div>
+
         <hr></hr>
         제목
-        <input type="text" placeholder="제목" name="title" onChange={handleChange} value={mail.title} className={style.title} /><br />
+        <input type="text" placeholder="제목" name="title" onChange={handleChange} value={mail.title || ''} className={style.title} /><br />
         <hr></hr>
 
         <div className={style.fileList}>

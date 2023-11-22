@@ -86,7 +86,7 @@ const SurveyResultList=()=>{
                         </Typography>
                     </Grid>
                     <Grid item xs={3}>
-                        <Search>
+                        {/* <Search>
                             <SearchIconWrapper>
                             <SearchIcon />
                             </SearchIconWrapper>
@@ -94,7 +94,7 @@ const SurveyResultList=()=>{
                             placeholder="Search…"
                             inputProps={{ 'aria-label': 'search' }}
                             />
-                        </Search>
+                        </Search> */}
                     </Grid>
                     <Grid item xs={1} className={`${style.vcenter}`}>
                         
@@ -102,24 +102,24 @@ const SurveyResultList=()=>{
                 </Grid>
             </div>
             <Divider sx={{bgcolor:"black"}}/>
-            <div className={`${style.marginTB40}`}>
+            <div className={`${style.marginTB20}`}>
                 <Grid container rowSpacing={2}>
-                    <Grid xs={1} className={style.center}>
+                    <Grid item xs={1} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                             번호
                         </Typography>
                     </Grid>
-                    <Grid xs={6} className={style.center}>
+                    <Grid item xs={6} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                             제목
                         </Typography>
                     </Grid>
-                    <Grid xs={3} className={style.center}>
+                    <Grid item xs={3} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                             작성일자
                         </Typography>
                     </Grid>
-                    <Grid xs={2} className={style.center}>
+                    <Grid item xs={2} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                             상태
                         </Typography>
@@ -130,26 +130,26 @@ const SurveyResultList=()=>{
             <div id='list' className={`${style.list}`}>
                 {visibleSignList ? visibleSignList.map((e,i)=>{
                         return(
-                            <List sx={style} component="nav" aria-label="mailbox folders">
+                            <List sx={style} key={i} component="nav" aria-label="mailbox folders">
                                 <Link to={`/Groovy/survey/survey_result/${e.surseq}`}>
                                     <ListItem button>
-                                    <Grid container key={i}> 
-                                        <Grid xs={1} className={style.center}>
+                                    <Grid container> 
+                                        <Grid item xs={1} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.surseq}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={5} className={style.center}>
+                                        <Grid item xs={6} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                                 {e.surtitle}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={4} className={style.center}>
+                                        <Grid item xs={3} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.surwriter}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={2} className={style.center}>
+                                        <Grid item xs={2} className={style.center}>
                                             {e.surstate == 0 ? "설문진행중" : "설문종료"}
                                         </Grid>
                                     </Grid>            

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import style from "./Inactive.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
+import { Input } from "reactstrap";
 
 const Inactive = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -10,6 +11,9 @@ const Inactive = () => {
     const [users, setUsers] = useState([]);
     const [inactives, setInactives] = useState([]);
     const [depts, setDept] = useState([{ dept_name: "" }]);
+
+    const [search, setSearch] = useState('');
+    const [search2, setSearch2] = useState('');
 
     const [editUserId, setEditUserId] = useState(null);
     const [editInactiveId, setEditInactiveId] = useState(null);
@@ -121,39 +125,46 @@ const Inactive = () => {
             });
     };
 
+    const inputChangeHandler = (e) => {
+        setSearch(e.target.value);
+    };
+
+    const inputChangeHandler2 = (e) => {
+        setSearch2(e.target.value);
+    };
+
     return (
         <div className="Admincontainer">
             <div className={style.search}>
-                <input type="text" placeholder='사용자 검색'></input>
-                <button>검색</button>
+                <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
             </div>
             <hr></hr>
             <div className="body">
                 <div className={style.margin}>
-                    비활성 사용자
+                    비활성화
                 </div>
                 <hr></hr>
                 <div className={style.user}>
-                    <table border="1">
-                        <tbody>
-                            <tr align='center'>
-                                <th>이름</th>
-                                <th>ID</th>
-                                <th>소속부서</th>
-                                <th>직급</th>
-                                <th>전화번호</th>
-                                <th>이메일</th>
-                                <th></th>
-                            </tr>
-                            {visibleUser.map((user) => (
-                                <tr align='center' key={user.id}>
-                                    <td>{user.name}</td>
-                                    <td>{user.id}</td>
-                                    <td>{user.group_name}</td>
-                                    <td>{user.position}</td>
-                                    <td>{user.contact}</td>
-                                    <td>{user.email}</td>
-                                    <td>
+                    <div className={style.tableContainer}>
+                        <div className={style.tableRow}>
+                            <div className={style.tableHeader}>이름</div>
+                            <div className={style.tableHeader}>ID</div>
+                            <div className={style.tableHeader}>소속부서</div>
+                            <div className={style.tableHeader}>직급</div>
+                            <div className={style.tableHeader}>전화번호</div>
+                            <div className={style.tableHeader}>이메일</div>
+                            <div className={style.tableHeader}>-</div>
+                        </div>
+                        {search === ''
+                            ? visibleUser.map((user) => (
+                                <div className={style.tableRow} key={user.id}>
+                                    <div className={style.tableCell}>{user.name}</div>
+                                    <div className={style.tableCell}>{user.id}</div>
+                                    <div className={style.tableCell}>{user.group_name}</div>
+                                    <div className={style.tableCell}>{user.position}</div>
+                                    <div className={style.tableCell}>{user.contact}</div>
+                                    <div className={style.tableCell}>{user.email}</div>
+                                    <div className={style.tableCell}>
                                         {editUserId === user.id ? (
                                             <>
                                                 <button onClick={handleCancel} className={style.cancel}>
@@ -163,12 +174,51 @@ const Inactive = () => {
                                                     완료
                                                 </button>
                                             </>
-                                        ) : (<button onClick={() => handleEdit(user.id)} className={style.edit}>비활성화</button>)}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                        ) : (
+                                            <button onClick={() => handleEdit(user.id)} className={style.edit}>
+                                                비활성화
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            ))
+                            : users
+                                .filter(
+                                    (e) =>
+                                        e.name.includes(search) ||
+                                        e.id.includes(search) ||
+                                        (e.group_name && e.group_name.includes(search)) ||
+                                        e.position.includes(search) ||
+                                        e.contact.includes(search) ||
+                                        e.email.includes(search)
+                                )
+                                .map((user) => (
+                                    <div className={style.tableRow} key={user.id}>
+                                        <div className={style.tableCell}>{user.name}</div>
+                                        <div className={style.tableCell}>{user.id}</div>
+                                        <div className={style.tableCell}>{user.group_name}</div>
+                                        <div className={style.tableCell}>{user.position}</div>
+                                        <div className={style.tableCell}>{user.contact}</div>
+                                        <div className={style.tableCell}>{user.email}</div>
+                                        <div className={style.tableCell}>
+                                            {editUserId === user.id ? (
+                                                <>
+                                                    <button onClick={handleCancel} className={style.cancel}>
+                                                        취소
+                                                    </button>
+                                                    <button onClick={() => handleSave(user.id)} className={style.save}>
+                                                        완료
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <button onClick={() => handleEdit(user.id)} className={style.edit}>
+                                                    비활성화
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                    </div>
                 </div>
                 <hr></hr>
                 <div className={style.margin}>
@@ -187,36 +237,53 @@ const Inactive = () => {
                         )}
                     />
                 </div>
+                <div className={style.search}>
+                    <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler2}></Input>
+                </div>
+                <hr></hr>
+                <div className={style.margin}>비활성 사용자</div>
+                <hr></hr>
                 <div className={style.user}>
-                    <table border="1">
-                        <tbody>
-                            <tr align='center'>
-                                <th>이름</th>
-                                <th>ID</th>
-                                <th>비활성화</th>
-                                <th>직급</th>
-                                <th>전화번호</th>
-                                <th>이메일</th>
-                                <th></th>
-                            </tr>
-                            {visibleInactive.map((user) => (
-                                <tr align='center' key={user.id}>
-                                    <td>{user.name}</td>
-                                    <td>{user.id}</td>
-                                    <td>
+                    <div className={style.tableContainer}>
+                        <div className={style.tableRow} align='center'>
+                            <div className={style.tableHeader}>이름</div>
+                            <div className={style.tableHeader}>ID</div>
+                            <div className={style.tableHeader}>비활성화</div>
+                            <div className={style.tableHeader}>직급</div>
+                            <div className={style.tableHeader}>전화번호</div>
+                            <div className={style.tableHeader}>이메일</div>
+                            <div className={style.tableHeader}>-</div>
+                        </div>
+                        {search2 === ''
+                            ? visibleInactive.map((user) => (
+                                <div className={style.tableRow} align='center' key={user.id}>
+                                    <div className={style.tableCell}>{user.name}</div>
+                                    <div className={style.tableCell}>{user.id}</div>
+                                    <div className={style.tableCell}>
                                         {editInactiveId === user.id ? (
-                                            <select name="department" value={editedUser.group_name || ''} className={style.dept} onChange={(e) => handleChange(e, 'group_name')}>
-                                                <option value="">부서입력</option>
-                                                {depts.map((e) => (
-                                                    <option key={e.dept_name} value={e.dept_name}>{e.dept_name}</option>
-                                                ))}
-                                            </select>
-                                        ) : (user.group_name)}
-                                    </td>
-                                    <td>{user.position}</td>
-                                    <td>{user.contact}</td>
-                                    <td>{user.email}</td>
-                                    <td>
+                                            <div className={style.deptContainer}>
+                                                <select
+                                                    name="department"
+                                                    value={editedUser.group_name || ''}
+                                                    className={style.dept}
+                                                    onChange={(e) => handleChange(e, 'group_name')}
+                                                >
+                                                    <option value="">부서입력</option>
+                                                    {depts.map((e) => (
+                                                        <option key={e.dept_name} value={e.dept_name}>
+                                                            {e.dept_name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        ) : (
+                                            <div className={style.tableCell}>{user.group_name}</div>
+                                        )}
+                                    </div>
+                                    <div className={style.tableCell}>{user.position}</div>
+                                    <div className={style.tableCell}>{user.contact}</div>
+                                    <div className={style.tableCell}>{user.email}</div>
+                                    <div className={style.tableCell}>
                                         {editInactiveId === user.id ? (
                                             <>
                                                 <button onClick={handleCancel2} className={style.cancel}>
@@ -226,12 +293,70 @@ const Inactive = () => {
                                                     완료
                                                 </button>
                                             </>
-                                        ) : (<button onClick={() => handleEdit2(user.id)} className={style.edit}>해제</button>)}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                        ) : (
+                                            <button onClick={() => handleEdit2(user.id)} className={style.edit}>
+                                                해제
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            ))
+                            : inactives
+                                .filter(
+                                    (e) =>
+                                        e.name.includes(search2) ||
+                                        e.id.includes(search2) ||
+                                        e.position.includes(search2) ||
+                                        e.contact.includes(search2) ||
+                                        e.email.includes(search2)
+                                )
+                                .map((user) => (
+                                    <div className={style.tableRow} align='center' key={user.id}>
+                                        <div className={style.tableCell}>{user.name}</div>
+                                        <div className={style.tableCell}>{user.id}</div>
+                                        <div className={style.tableCell}>
+                                            {editInactiveId === user.id ? (
+                                                <div className={style.deptContainer}>
+                                                    <select
+                                                        name="department"
+                                                        value={editedUser.group_name || ''}
+                                                        className={style.dept}
+                                                        onChange={(e) => handleChange(e, 'group_name')}
+                                                    >
+                                                        <option value="">부서입력</option>
+                                                        {depts.map((e) => (
+                                                            <option key={e.dept_name} value={e.dept_name}>
+                                                                {e.dept_name}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            ) : (
+                                                <div className={style.tableCell}>{user.group_name}</div>
+                                            )}
+                                        </div>
+                                        <div className={style.tableCell}>{user.position}</div>
+                                        <div className={style.tableCell}>{user.contact}</div>
+                                        <div className={style.tableCell}>{user.email}</div>
+                                        <div className={style.tableCell}>
+                                            {editInactiveId === user.id ? (
+                                                <>
+                                                    <button onClick={handleCancel2} className={style.cancel}>
+                                                        취소
+                                                    </button>
+                                                    <button onClick={() => handleInactive(user.id)} className={style.save}>
+                                                        완료
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <button onClick={() => handleEdit2(user.id)} className={style.edit}>
+                                                    해제
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                    </div>
                 </div>
                 <hr></hr>
                 <div className={style.margin}>

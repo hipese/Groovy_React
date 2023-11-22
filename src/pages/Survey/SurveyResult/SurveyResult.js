@@ -116,13 +116,6 @@ const SurveyResult = () => {
         updateShortArray();
     },[goUpate]);
 
-    const show = () =>{
-        console.log(multiCount.length);
-        console.log(data);
-        console.log(array);
-        console.log(short);
-    }
-
     return(
         <div className={`${style.resultDiv} ${style.border} ${style.borderRad10}`}>
             <div className={`${style.borderbtm} ${style.padding10} ${style.center}`}>
@@ -135,17 +128,15 @@ const SurveyResult = () => {
                     const shortSeqNumber = element[index].short_seq;
                     return (
                         <div key={index} className={`${style.borderbtm}`}>
-                            <div className={`${style.padding20}`}>
+                            <div className={`${style.padding20} ${style.borderbtm}`}>
                                 <Typography sx={{fontWeight:"bold"}}>
-                                    {`${shortSeqNumber}번째 주관식 질문`}
+                                    {`${index+1}번째 주관식 질문`}
                                 </Typography>
                             </div>
-                            <Divider sx={{bgcolor:"black"}}/>
                             {element.map((e, i) => (
                                 <div key={i}>
-                                    <div className={`${style.padding10}`}>
+                                    <div className={`${style.padding10} ${style.borderbtm}`}>
                                         {e.short_res_contents}
-                                        <Divider/>
                                     </div>
                                 </div>
                             ))}
@@ -156,17 +147,15 @@ const SurveyResult = () => {
             <div>
                 {array.map((e,i)=>{
                     return(
-                        <div>
-                            <div className={`${style.padding20}`}>
+                        <div key={i}>
+                            <div className={`${style.padding20} ${style.borderbtm}`}>
                                 <Typography sx={{fontWeight:"bold"}}>
                                     {`${i+1}번째 객관식 질문`}
                                 </Typography>
                             </div>
-                            <Divider sx={{bgcolor:"black"}}/>
-                            <div>
+                            <div className={`${style.borderbtm}`}>
                                 <Piechart array={e}/>       
                             </div>                        
-                            <Divider sx={{bgcolor:"black"}}/>
                         </div>
                         
                     )
@@ -196,7 +185,6 @@ const SurveyContent = () => {
                     <Grid item xs={12}>
                         <SurveyTitle/>
                     </Grid>
-
                     <Grid item xs={12}>
                         <SurveyResult/>
                     </Grid>

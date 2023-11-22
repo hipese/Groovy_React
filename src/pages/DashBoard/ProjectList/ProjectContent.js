@@ -31,19 +31,25 @@ const Modalstyle = {
     const navi = useNavigate();
     const {seq} = useParams();
     const {todo,setTodo} = useContext(AddScheduleContext);
-    const [schedule,setSchedule] = useState({pschedule_start: '', pschedule_end: "", pschedule_contents: "", pschedule_importance: 'High',pschedule_state:0});
+    const [schedule,setSchedule] = useState({pschedule_start: '', pschedule_end: "", pschedule_contents: "", pschedule_importance: 'Low',pschedule_state:0});
     const handleChange = (e) => {
-        console.log(e);
-        console.log(e.$d);
-        console.log(e.name);
         const {name,value} = e.target;
-        
         setSchedule(prev=>({...prev,[name]:value}));
     }
 
     const handleAdd = () => {
+        console.log(schedule);
+        console.log(schedule.pschedule_start<schedule.pschedule_end);
+        if(schedule.pschedule_contents == "" || schedule.pschedule_contents == undefined){
+            alert("할일을 적어주세요.");
+            return;
+        }else if(schedule.pschedule_start>schedule.pschedule_end){
+            alert("종료일이 시작일보다 이전일 수 없습니다.")
+            return;
+        }
+
         axios.post(`/api/project/addSchedule/${seq}`,schedule).then(res=>{
-            setTodo(prev=>([...prev,schedule]));
+           setTodo(prev=>([...prev,schedule]));
         });
     }
     return(
@@ -82,13 +88,13 @@ const Modalstyle = {
             </div>
             <Divider sx={{bgcolor:"black"}}/>
             <div className={`${style.btnEven} ${style.padding10}`}>
-                <IconButton aria-label="remove" onClick={handleClose} sx={{color:"black"}}>
+                <IconButton onClick={handleClose} sx={{color:"black"}}>
                     <RemoveIcon />
                     <Typography sx={{fontSize:"14"}}>
                         취소
                     </Typography>
                 </IconButton>
-                <IconButton aria-label="add" onClick={handleAdd} sx={{color:"black"}}>
+                <IconButton onClick={handleAdd} sx={{color:"black"}}>
                     <AddIcon/>
                     <Typography sx={{fontSize:"14"}}>
                         추가하기
@@ -122,7 +128,7 @@ const UpdateState = ({handleClose,pseq,setUpdate}) => {
     }
 
     const handleUpdate = () => {
-        console.log(state);
+        if(state )
         axios.put(`/api/project/update/state`,state).then(res=>{
             setUpdate(true);
             handleClose();
@@ -150,14 +156,19 @@ const UpdateState = ({handleClose,pseq,setUpdate}) => {
             </div>
             <div className={`${style.border} ${style.padding20} ${style.center}`}>
                 지우기
-                <IconButton aria-label="clear" onClick={handleDelete}>
+                <IconButton onClick={handleDelete}>
                     <ClearIcon sx={{color:"red"}}/>               
                 </IconButton>
             </div>
             
             <div className={`${style.border} ${style.padding20} ${style.btnEven}`}>
-                <button onClick={handleClose}>취소</button>
-                <button onClick={handleUpdate}>수정</button>
+                
+                <Button variant="outlined" size="small" color="error" onClick={handleClose}>
+                    취소
+                </Button>
+                <Button variant="outlined" size="small" color="primary" onClick={handleUpdate}>
+                    수정
+                </Button>                
             </div>
         </div>
     )
@@ -184,9 +195,9 @@ const ProjectTodo = () => {
         });
     },[isUpdate]);
 
-    const handleDelete = (e) =>{
-        console.log(e.target);
-    }
+    // const handleDelete = (e) =>{
+    //     console.log(e.target);
+    // }
     return(
         <div className={`${style.todosection}`}>
             <div className={`${style.borderbtm} ${style.padding10} ${style.center}`}>
@@ -196,7 +207,7 @@ const ProjectTodo = () => {
                 </IconButton>
             </div>
             <Modal
-                open={open}
+                open={Boolean(open)}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
@@ -205,80 +216,75 @@ const ProjectTodo = () => {
                     <AddSchedule handleClose={handleClose}/>
                 </Box>
             </Modal>
-            <div>
-                <Grid container className={`${style.marginT10}`}> 
-                    <Grid xs={2} className={style.center}>
+            <div className={`${style.borderbtm}`}>
+                <Grid container className={`${style.marginTB20}`}> 
+                    <Grid item xs={2} className={style.center}>
                         <Typography className={`${style.fs} ${style.b}`}>
                         시작일
                         </Typography>
                     </Grid>
-                    <Grid xs={2} className={style.center}>
+                    <Grid item xs={2} className={style.center}>
                         <Typography className={`${style.fs} ${style.b}`}>
                             종료일
                         </Typography>
                     </Grid>
-                    <Grid xs={4} className={style.center}>
+                    <Grid item xs={4} className={style.center}>
                         <Typography className={`${style.fs} ${style.b}`}>
                         할일
                         </Typography>
                     </Grid>
-                    <Grid xs={2} className={style.center}>
+                    <Grid item xs={2} className={style.center}>
                         <Typography className={`${style.fs} ${style.b}`}>
                         중요도
                         </Typography>
                     </Grid>
-                    <Grid xs={2} className={style.center}>
+                    <Grid item xs={2} className={style.center}>
                         <Typography className={`${style.fs} ${style.b}`}>
                         상태
                         </Typography>
                     </Grid>
-                </Grid>     
-                <Divider/>
+                </Grid>   
             </div>
                     {todo.map((e,i)=>{
                         return(
-                            <List sx={style} component="nav" aria-label="mailbox folders">
+                            <List sx={style} className={`${style.borderbtm}`} key={i} component="nav" aria-label="mailbox folders">
                                 <ListItem button onClick={()=>{
                                     handleOpenUpdate();
                                     setSeq(e.pschedule_seq);
                                 }}>
-                                    <Grid container key={i} className={`${style.marginT10}`}> 
-                                        <Grid xs={2} className={style.center}>
+                                    <Grid container className={`${style.marginT10}`}> 
+                                        <Grid item xs={2} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.pschedule_start ? format(new Date(e.pschedule_start), 'yyyy-MM-dd') : e.pschedule_start}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={2} className={style.center}>
+                                        <Grid item xs={2} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
-                                                {e.pschedule_end ? format(new Date(e.pschedule_end), 'yyyy-MM-dd') : e.pschedule_end}
+                                            {e.pschedule_end ? format(new Date(e.pschedule_end), 'yyyy-MM-dd') : e.pschedule_end}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={4} className={style.center}>
+                                        <Grid item xs={4} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.pschedule_contents}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={2} className={style.center}>
+                                        <Grid item xs={2} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.pschedule_importance}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={2} className={style.center} button>
+                                        <Grid item xs={2} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.pschedule_state != '2' ? e.pschedule_state != '1' ? "해야할 일" : "진행중" : "완료"}
                                             </Typography>
                                         </Grid>
                                     </Grid>            
                                 </ListItem>
-                                
-                                
-                            <Divider />
-                                
                             </List>
                         )
                     })}
                     <Modal
-                        open={openUpdate}
+                        open={Boolean(openUpdate)}
                         onClose={handleCloseUpdate}
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
@@ -297,6 +303,7 @@ const AddMember = ({handleClose}) => {
     const handleChildClose = () => setChildOpen(false);
     
     const [isModalOpen, setModalOpen] = useState(false);
+    const isSign=false;
     const toggleModal = () => {
         setModalOpen(!isModalOpen);
     };
@@ -326,9 +333,17 @@ const AddMember = ({handleClose}) => {
 
 
     const handleAdd = () => {
+        let temp = "";
+        temp = member.filter(e=>e.id == newMember.id);
 
-        setMember(prev=>([...prev,newMember]));
-        console.log(newMember);
+        if(newMember.id == "" || newMember.group_name == "" || newMember.name == "" || newMember.id == undefined || newMember.group_name == undefined || newMember.name == undefined){
+            alert("멤버를 선택해주세요.");
+            return;
+        }else if(temp.length>0){
+            alert("이미 초대된 사원입니다.");
+            return;
+        }
+
         axios.post(`/api/project/addMember/${seq}`,newMember).then(res=>{
             const parentSeq = res.data; // 서버에서 반환한 값으로 설정
             const message = "프로젝트에 초대되었습니다.";
@@ -339,7 +354,7 @@ const AddMember = ({handleClose}) => {
                 stompClient.send("/app/notice", {}, JSON.stringify(messageObject));
             }
 
-            setMember(prev=>([...prev,member]));
+            setMember(prev=>([...prev,newMember]));
             handleClose();
         });
     }
@@ -347,43 +362,60 @@ const AddMember = ({handleClose}) => {
         <div>
 
             <Grid container spacing={2}> 
-                <Grid xs={3} className={style.center}>
-                    <IconButton aria-label="add" onClick={toggleModal}>
+                <Grid item xs={3} className={style.center}>
+                    <IconButton onClick={toggleModal}>
                         조직도에서 추가
                         <AddIcon fontSize='large'/>
                     </IconButton>                    
                 </Grid>
-                <Grid xs={9} className={style.center}>
+                <Grid item xs={9} className={style.center}>
                     <Grid container> 
-                        <Grid xs={4} className={style.center}>
+                        <Grid item xs={4} className={style.center}>
                             <div className={`${style.padding10}`}>
                                 ID
-                                <input type="text" name="name" value={approver.id ? approver.id : ""} onChange={handleChange}/>
                             </div>
                         </Grid>
-                        <Grid xs={4} className={style.center}>
+                        <Grid item xs={4} className={style.center}>
                             <div className={`${style.padding10}`}>
                                 부서
-                                <input type="text" name="group_name" value={approver.group_name == null ? "없음" : approver.group_name} onChange={handleChange}/>
                             </div>
                         </Grid>
-                        <Grid xs={4} className={style.center}>
+                        <Grid item xs={4} className={style.center}>
                             <div className={`${style.padding10}`}>
                                 이름
-                                <input type="text"value={approver.name ? approver.name : ""}/>
                             </div>
                         </Grid>
-                        <Grid xs={12} className={`${style.center}`}>
-                            <div className={`${style.border} ${style.btnEven}`}>
-                                <button onClick={handleClose}>취소</button>
-                                <button onClick={handleAdd}>추가</button>
+                        <Grid item xs={4} className={style.center}>
+                            <div className={`${style.padding10}`}>
+                                <input type="text" name="name" value={approver.id ? approver.id : ""} onChange={handleChange} readOnly/>
+                            </div>
+                        </Grid>
+                        <Grid item xs={4} className={style.center}>
+                            <div className={`${style.padding10}`}>
+                                <input type="text" name="group_name" value={approver.group_name == null ? "없음" : approver.group_name} onChange={handleChange} readOnly/>
+                            </div>
+                        </Grid>
+                        <Grid item xs={4} className={style.center}>
+                            <div className={`${style.padding10}`}>
+                                <input type="text"value={approver.name ? approver.name : ""} readOnly/>
+                            </div>
+                        </Grid>
+                        <Grid item xs={12} className={`${style.center}`}>
+                            <div className={`${style.btnEven} ${style.w100}`}>
+                                <Button variant="outlined" size="small" color="error" onClick={handleClose}>
+                                    취소
+                                </Button>
+                                <Button variant="outlined" size="small" color="primary" onClick={handleAdd}>
+                                    추가
+                                </Button> 
                             </div>
                         </Grid>
                     </Grid> 
                 </Grid>
             </Grid>
             <div className={`${style.modalWidth}`}>
-                <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} />
+                <Org_Chart isOpen={isModalOpen} close={toggleModal} approver={approver} setApprover={setApprover} 
+                selectMemberdetail={selectMemberdetail} setSelectMemberdetail={setSelectMemberdetail} isSign={isSign} />
             </div>
             
             
@@ -400,10 +432,15 @@ const ProjectMember = () => {
     const handleClose = () => setOpen(false);
 
     const handleDeleteMember = (pseq,id) => {
-        axios.delete(`/api/project/delete/member/${pseq}/${id}`).then(res=>{
-            const tempMember = member.filter(e=>e.id !== id);
-            setMember(tempMember);
-        });
+        let bool = window.confirm("멤버를 추방하시겠습니까?");
+        if(bool){
+            axios.delete(`/api/project/delete/member/${pseq}/${id}`).then(res=>{
+                const tempMember = member.filter(e=>e.id !== id);
+                setMember(tempMember);
+            });    
+        }else{
+            return;
+        }        
     }
     
     return loginID == manager ?(
@@ -426,59 +463,60 @@ const ProjectMember = () => {
                 </Box>
             </Modal>
             <div>
-                <Grid container className={`${style.marginTB20}`}> 
-                    <Grid xs={3} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                            사원번호
-                        </Typography>
+                <div className={`${style.borderbtm}`}>
+                    <Grid container className={`${style.marginTB20}`}> 
+                        <Grid item xs={3} className={style.center}>
+                            <Typography className={`${style.fs} ${style.b}`}>
+                                사원번호
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4} className={style.center}>
+                            <Typography className={`${style.fs} ${style.b}`}>
+                                이름
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4} className={style.center}>
+                            <Typography className={`${style.fs} ${style.b}`}>
+                            부서
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={1} className={style.center}>
+                            <Typography className={`${style.fs} ${style.b}`}>
+                            삭제
+                            </Typography>
+                        </Grid>
                     </Grid>
-                    <Grid xs={4} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                            이름
-                        </Typography>
-                    </Grid>
-                    <Grid xs={4} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                        부서
-                        </Typography>
-                    </Grid>
-                    <Grid xs={1} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                        삭제
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Divider sx={{bgcolor:"black"}}/>
+                </div>                
                 {member.map((e,i)=>{
                         return(
-                            <List sx={style} component="nav" aria-label="mailbox folders">
+                            <List sx={style} className={`${style.borderbtm}`} key={i} component="nav" aria-label="mailbox folders">
                                 <ListItem>
-                                    <Grid container key={i} className={`${style.marginT10}`}> 
-                                        <Grid xs={3} className={style.center}>
+                                    <Grid container className={`${style.marginT10}`}> 
+                                        <Grid item xs={3} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.id}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={4} className={style.center}>
+                                        <Grid item xs={4} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                                 {e.name}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={4} className={style.center}>
+                                        <Grid item xs={4} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.group_name}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={1} className={style.center}>
-                                            <IconButton aria-label="clear" onClick={()=>{handleDeleteMember(e.pseq,e.id)}}>
-                                                <ClearIcon sx={{color:"red"}}/>               
-                                            </IconButton>
+                                        <Grid item xs={1} className={style.center}>
+                                            {
+                                                e.id == manager ? "" : <IconButton onClick={()=>{handleDeleteMember(e.pseq,e.id)}}>
+                                                                            <ClearIcon sx={{color:"red"}}/>               
+                                                                        </IconButton>
+                                            }
+                                            
                                         </Grid>
                                     </Grid>            
                                 </ListItem>
-                                
-                            <Divider />
-                                
                             </List>
                         )
                     })}
@@ -491,13 +529,10 @@ const ProjectMember = () => {
         <div className={`${style.membersection}`}>
             <div className={`${style.borderbtm} ${style.padding10} ${style.center}`}>
             프로젝트 멤버
-                <IconButton aria-label="add" onClick={handleOpen}>
-                    <AddIcon fontSize='small'/>
-                </IconButton>
             </div>
             
             <Modal
-                open={open}
+                open={Boolean(open)}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
@@ -507,52 +542,53 @@ const ProjectMember = () => {
                 </Box>
             </Modal>
             <div>
-                <Grid container className={`${style.marginTB20}`}> 
-                    <Grid xs={4} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                            사원번호
-                        </Typography>
+                <div className={`${style.borderbtm}`}>
+                    <Grid container className={`${style.marginTB20}`}> 
+                        <Grid item xs={4} className={style.center}>
+                            <Typography className={`${style.fs} ${style.b}`}>
+                                사원번호
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4} className={style.center}>
+                            <Typography className={`${style.fs} ${style.b}`}>
+                                이름
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4} className={style.center}>
+                            <Typography className={`${style.fs} ${style.b}`}>
+                            부서
+                            </Typography>
+                        </Grid>
                     </Grid>
-                    <Grid xs={4} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                            이름
-                        </Typography>
-                    </Grid>
-                    <Grid xs={4} className={style.center}>
-                        <Typography className={`${style.fs} ${style.b}`}>
-                        부서
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Divider sx={{bgcolor:"black"}}/>
-                {member.map((e,i)=>{
-                        return(
-                            <List sx={style} component="nav" aria-label="mailbox folders">
-                                <ListItem>
-                                    <Grid container key={i} className={`${style.marginT10}`}> 
-                                        <Grid xs={4} className={style.center}>
-                                            <Typography className={`${style.fs} ${style.b}`}>
-                                            {e.id}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid xs={4} className={style.center}>
-                                            <Typography className={`${style.fs} ${style.b}`}>
-                                                {e.name}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid xs={4} className={style.center}>
-                                            <Typography className={`${style.fs} ${style.b}`}>
-                                            {e.group_name}
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>            
-                                </ListItem>
-                                
-                            <Divider />
-                                
-                            </List>
-                        )
-                    })}
+                </div>
+                <div>
+                    {member.map((e,i)=>{
+                            return(
+                                <List sx={style} key={i} className={`${style.borderbtm}`} component="nav" aria-label="mailbox folders">
+                                    <ListItem>
+                                        <Grid container className={`${style.marginT10}`}> 
+                                            <Grid item xs={4} className={style.center}>
+                                                <Typography className={`${style.fs} ${style.b}`}>
+                                                {e.id}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={4} className={style.center}>
+                                                <Typography className={`${style.fs} ${style.b}`}>
+                                                    {e.name}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={4} className={style.center}>
+                                                <Typography className={`${style.fs} ${style.b}`}>
+                                                {e.group_name}
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>            
+                                    </ListItem>                                    
+                                </List>
+                            )
+                        })}
+                </div>
+                
             </div>
             
         </div>
@@ -639,7 +675,7 @@ const ProjectContent = () => {
             </Grid>
 
             <Grid item xs={12}>
-                <div className={`${style.border} ${style.borderRad10} ${style.btnEven} ${style.padding10}`}>
+                <div className={`${style.border} ${style.borderRad10} ${style.btnEven} ${style.padding10} ${style.marginB20}`}>
                     <Link to="/groovy/dashboard/project"><Button variant="outlined">
                         목록으로
                     </Button></Link>

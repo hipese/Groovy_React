@@ -116,7 +116,7 @@ const List = () => {
                                     </div>
                                 </div>
                             ))
-                            : visibleBoard
+                            : boards
                                 .filter(
                                     (e) =>
                                         e.name.includes(search) ||

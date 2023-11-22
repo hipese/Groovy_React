@@ -8,7 +8,6 @@ import axios from 'axios';
 import { LoginContext } from '../../../App';
 import { Route, Routes } from 'react-router';
 import { Link } from 'react-router-dom';
-import DeptNoticeWrite from './DeptNoticeWrite.js';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -57,13 +56,12 @@ const DeptNoticeList = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const COUNT_PER_PAGE = 10;
-
+    
     useEffect( ()=>{
         axios.get(`/api/dept_notice/${loginID}`).then(res=>{
             const group = res.data;
             axios.get(`/api/boards/deptCom/${group}`).then(response=>{
                 setDeptNotice(response.data);
-                console.log(response.data);
             }).catch((e)=>{
                 console.log("board - "+e);
             });
@@ -93,7 +91,7 @@ const DeptNoticeList = () => {
         <div className={`${style.noticeContents}`}>
             <div className={`${style.padding10}`}>
                 <Grid container spacing={2}>
-                    <Grid item xs={7} className={`${style.vcenter}`}>
+                    <Grid item xs={9} className={`${style.vcenter}`}>
                         <Typography variant="h5" >
                             부서 내 소식
                         </Typography>
@@ -110,30 +108,27 @@ const DeptNoticeList = () => {
                             />
                         </Search>
                     </Grid>
-                    <Grid item xs={2} className={`${style.center}`}>
-                        
-                    </Grid>
                 </Grid>
             </div>
             <Divider sx={{bgcolor:"black"}}/>
-            <div className={`${style.marginTB40}`}>
+            <div className={`${style.marginTB20}`}>
                 <Grid container rowSpacing={2}>
-                    <Grid xs={1} className={style.center}>
+                    <Grid item xs={1} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                             작성자
                         </Typography>
                     </Grid>
-                    <Grid xs={6} className={style.center}>
+                    <Grid item xs={6} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                             제목
                         </Typography>
                     </Grid>
-                    <Grid xs={3} className={style.center}>
+                    <Grid item xs={3} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                             조회수
                         </Typography>
                     </Grid>
-                    <Grid xs={2} className={style.center}>
+                    <Grid item xs={2} className={style.center}>
                         <Typography className={`${style.fs18} ${style.bold}`}>
                             작성일
                         </Typography>
@@ -142,27 +137,58 @@ const DeptNoticeList = () => {
             </div>
             <Divider sx={{bgcolor:"black"}}/>
             <div id='list'>                
-                {visibleNoticeList ? visibleNoticeList.filter((e)=>e.title.includes(search) || (e.writer.includes(search))).map((e,i)=>{
+                {search == "" ?
+                visibleNoticeList.map((e,i)=>{
                         return(
-                            <List sx={style} component="nav" aria-label="mailbox folders">            
-                                <ListItem key={i} button>
+                            <List sx={style} key={i} component="nav" aria-label="mailbox folders">            
+                                <Link to={`/groovy/board/detailDept/${e.seq}`}><ListItem button>
                                     <Grid container className={`${style.marginT10}`}> 
-                                        <Grid xs={1} className={style.center}>
+                                        <Grid item xs={1} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.writer}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={6} className={style.center}>
+                                        <Grid item xs={6} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.title}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={3} className={style.center}>
+                                        <Grid item xs={3} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.view_count}
                                             </Typography>
                                         </Grid>
-                                        <Grid xs={2} className={style.center}>
+                                        <Grid item xs={2} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.write_date}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>            
+                                </ListItem></Link>
+                            </List>           
+                        )
+                    }) :
+                    deptNotice.filter((e)=>e.title.includes(search) || (e.writer.includes(search))).map((e,i)=>{
+                        return(
+                            <List sx={style} key={i} component="nav" aria-label="mailbox folders">            
+                                <ListItem button>
+                                    <Grid container className={`${style.marginT10}`}> 
+                                        <Grid item xs={1} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.writer}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.title}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={3} className={style.center}>
+                                            <Typography className={`${style.fs} ${style.b}`}>
+                                            {e.view_count}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={2} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
                                             {e.write_date}
                                             </Typography>
@@ -171,33 +197,7 @@ const DeptNoticeList = () => {
                                 </ListItem>
                             </List>           
                         )
-                    }) : <List sx={style} component="nav" aria-label="mailbox folders">            
-                            <ListItem >
-                                <Grid container className={`${style.marginT10}`}> 
-                                    <Grid xs={1} className={style.center}>
-                                        <Typography className={`${style.fs} ${style.b}`}>
-                                        
-                                        </Typography>
-                                    </Grid>
-                                    <Grid xs={6} className={style.center}>
-                                        <Typography className={`${style.fs} ${style.b}`}>
-
-                                        </Typography>
-                                    </Grid>
-                                    <Grid xs={3} className={style.center}>
-                                        <Typography className={`${style.fs} ${style.b}`}>
-                                        
-                                        </Typography>
-                                    </Grid>
-                                    <Grid xs={2} className={style.center}>
-                                        <Typography className={`${style.fs} ${style.b}`}>
-                                        
-                                        </Typography>
-                                    </Grid>
-                                </Grid>            
-                            </ListItem>
-                        </List>           
-                }                
+                    })}           
             </div>
             <div>
                 <Pagination

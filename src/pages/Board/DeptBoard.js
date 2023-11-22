@@ -78,7 +78,7 @@ const DeptBoard = () => {
                                     <div className={style.tableCell}>{e.write_date}</div>
                                 </div>
                             ))
-                            : visibleBoard
+                            : boards
                                 .filter(
                                     (e) =>
                                         e.name.includes(search) ||

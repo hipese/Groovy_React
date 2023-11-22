@@ -6,8 +6,6 @@ import { Modal } from "@mui/material";
 import ImageChange from "./ImageChange/ImageChange";
 import { MemberContext, VacationContext } from "../../../../Groovy/Groovy";
 import UpdateContact from "./Update/UpdateContact";
-import UpdateGroup_Name from "./Update/UpdateGroup_Name";
-import UpdatePosition from "./Update/UpdatePosition";
 import UpdateEmail from "./Update/UpdateEmail";
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -45,6 +43,9 @@ const MemberInfo = () => {
     const [attendenceCount, setAttendenceCount] = useState();
     const [attendence, setAttendence] = useState();
 
+
+    console.log(attendence);
+
     useEffect(() => {
 
         axios.get(`/api/attend/attendenceCount`).then(resp => {
@@ -52,7 +53,6 @@ const MemberInfo = () => {
         })
 
         axios.get(`/api/attend/myAttendence`).then(resp => {
-            console.log(resp.data);
             setAttendence(resp.data);
         })
     }, [])
@@ -61,7 +61,6 @@ const MemberInfo = () => {
 
         axios.get(`/api/vacation/myVacation`)
             .then(resp => {
-                console.log(resp.data)
                 setMyVacation(resp.data);
             })
     }, [])
@@ -187,16 +186,36 @@ const MemberInfo = () => {
                             <div className={style.textdiv}>
                                 출근현황
                             </div>
+
                             <div className={style.alterdiv}>
-                                {attendence ? <Stack sx={{ width: '50%', height: '100%', padding: '0px' }} spacing={2}>
-                                    <Alert variant="outlined" severity="success">
-                                        근무중
-                                    </Alert>
-                                </Stack> : <Stack sx={{ width: '50%' }} spacing={2}>
-                                    <Alert variant="outlined" severity="warning">
-                                        출근을 해주세요
-                                    </Alert>
-                                </Stack>}
+                                {attendence ? (
+                                    attendence.workstart && attendence.workend ? (
+                                        <Stack sx={{ width: '50%' }} spacing={2}>
+                                            <Alert variant="outlined" severity="error">
+                                                퇴근했습니다.
+                                            </Alert>
+                                        </Stack>
+                                    ) : attendence.workstart ? (
+                                        <Stack sx={{ width: '50%' }} spacing={2} >
+                                            <Alert variant="outlined" severity="success">
+                                                근무중
+                                            </Alert>
+                                        </Stack>
+                                    ) : (
+                                        <Stack sx={{ width: '50%' }} spacing={2}>
+                                            <Alert variant="outlined" severity="warning">
+                                                퇴근을 해주세요
+                                            </Alert>
+                                        </Stack>
+                                    )
+                                ) : (
+                                    // attendence가 undefined인 경우 로딩 상태나 빈 화면을 표시할 수 있습니다.
+                                    <Stack sx={{ width: '50%' }} spacing={2}>
+                                       <Alert variant="outlined" severity="warning">
+                                                출근을 해주세요
+                                        </Alert>
+                                    </Stack>
+                                )}
                             </div>
 
                         </div>
