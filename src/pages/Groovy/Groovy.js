@@ -42,7 +42,6 @@ const Groovy = () => {
     useEffect(()=>{
         axios.get("/api/vacation/myVacation").then(resp=>{
             setMyVacation(resp.data);
-            console.log("한번만 와라");
         })
     },[])
 
