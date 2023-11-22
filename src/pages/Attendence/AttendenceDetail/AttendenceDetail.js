@@ -299,33 +299,33 @@ const Attendence_Detail = ({ approver }) => {
                                 <Table sx={{ minWidth: 650, width: '100%' }} aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안부서</TableCell>
+                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">기안부서</TableCell>
                                             <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold' }} align="center">{signWriterInfo.group_name}</TableCell>
-                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안일</TableCell>
+                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">기안일</TableCell>
                                             <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold' }} align="center">{formatDate(sign_list.write_date)}</TableCell>
-                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안문서</TableCell>
+                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">기안문서</TableCell>
                                             <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold' }} align="center">자동설정</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
                                         <TableRow>
-                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">증명서 종류</TableCell>
+                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">증명서 종류</TableCell>
                                             <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold' }} align="center">{`${sign_list.document_type}`}</TableCell>
-                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">용도</TableCell>
+                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">용도</TableCell>
                                             <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold' }} align="center">{`${sign_list.document_type}`}</TableCell>
-                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">제출처</TableCell>
+                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">제출처</TableCell>
                                             <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold' }} align="center">{signWriterInfo.group_name}</TableCell>
                                         </TableRow>
                                         <TableRow>
-                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">시작일</TableCell>
+                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">시작일</TableCell>
                                             <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold' }} align="center">{format(startDate, 'yyyy년 MM월 dd일')}</TableCell>
-                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">종료일</TableCell>
+                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">종료일</TableCell>
                                             <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold' }} align="center">{format(endDate, 'yyyy년 MM월 dd일')}</TableCell>
-                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">일수</TableCell>
+                                            <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">일수</TableCell>
                                             <TableCell sx={{ borderBottom: '1px solid gray', fontSize: '20px', fontWeight: 'bold' }} align="center">{sign_list.total_date}일</TableCell>
                                         </TableRow>
                                         <TableRow>
-                                            <TableCell sx={{ fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">제목</TableCell>
+                                            <TableCell sx={{ fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">제목</TableCell>
                                             <TableCell sx={{ fontSize: '20px', fontWeight: 'bold' }} align="center" colSpan={5}>{`${sign_list.title}`}</TableCell>
                                         </TableRow>
                                     </TableBody>

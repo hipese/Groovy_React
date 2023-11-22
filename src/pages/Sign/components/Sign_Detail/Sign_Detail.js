@@ -242,7 +242,7 @@ const Sign_Detail = ({ approver }) => {
                                 </ListItemAvatar>
                                 <ListItemText
                                     primaryTypographyProps={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold' }}
-                                    primary="결제자"
+                                    primary="결재자"
                                 />
                             </ListItem>
                             <Divider variant="inset" component="li" />

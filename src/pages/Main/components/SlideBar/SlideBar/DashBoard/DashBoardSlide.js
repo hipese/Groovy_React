@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
 import style from "./DashBoardSlide.module.css";
 import { useState } from "react";
 import down from "./assets/down.svg";
@@ -13,9 +13,11 @@ const DashBoardSlide = () => {
     return (
         <div>
             <div className={style.DashBoardSlide}>
-                <Link to=""><button className={style.btn}>
-                Home
-            </button></Link>
+                <Link to="">
+                    <button className={style.btn1}>
+                        Home
+                    </button>
+                </Link>
             </div>
             <button className={style.btn2} onClick={handleHid}>
                 프로젝트
@@ -25,24 +27,24 @@ const DashBoardSlide = () => {
                 <>
                     <div className={style.DashBoardSlide}>
                         <Link to="project"><button className={style.btn}>
-                        프로젝트 보기
-                    </button></Link>
+                            프로젝트 보기
+                        </button></Link>
                     </div>
                     <div className={`${style.DashBoardSlide} ${style.marginB10}`}>
                         <Link to="/Groovy/dashboard/project/create"><button className={`${style.btn}`}>
-                        프로젝트 생성
-                    </button></Link>
+                            프로젝트 생성
+                        </button></Link>
                     </div>
                 </>
             )}
-            
+
             <div className={style.DashBoardSlide}>
-            <Link to="notice"><button className={style.btn}>
-                부서 내 소식 보기
-            </button></Link>
+                <Link to="notice"><button className={style.btn}>
+                    부서 내 소식 보기
+                </button></Link>
             </div>
-        </div>        
-        
+        </div>
+
     );
 };
 

@@ -8,7 +8,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { blue } from '@mui/material/colors';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import CircularProgress from "@mui/material/CircularProgress";
@@ -139,7 +138,7 @@ const AttendenceStatus = () => {
                     <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableHead>
-                                <TableRow sx={{ backgroundColor: blue[200] }}>
+                                <TableRow sx={{ backgroundColor: '#f2f2f2' }}>
                                     <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">업무일자</TableCell>
                                     <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">출근시간</TableCell>
                                     <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">퇴근시간</TableCell>
