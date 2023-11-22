@@ -40,10 +40,13 @@
 
 .checkbox_idRem {
     margin-right: 5px;
+    cursor: pointer;
 }
 
 .idRem_notice {
     color: #ababab;
+    pointer-events: none;
+    user-select: none;
 }
 
 .loginbtn_container {

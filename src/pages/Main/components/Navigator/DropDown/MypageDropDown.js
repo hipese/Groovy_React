@@ -1,7 +1,6 @@
-import React, { Component, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, {  useContext } from "react";
+import {  useNavigate } from "react-router-dom";
 import style from "./MypageDropDown.module.css"
-import { MemberContext } from "../../../../Groovy/Groovy";
 import { LoginContext } from "../../../../../App";
 import axios from "axios";
 
@@ -11,7 +10,6 @@ import axios from "axios";
 const MypageDropDown = ({ closeDropdown }) => {
 
 
-    const members = useContext(MemberContext);
     const { loginID, setLoginID }=useContext(LoginContext)
     const navigate = useNavigate();
 
@@ -21,8 +19,6 @@ const MypageDropDown = ({ closeDropdown }) => {
     }
 
     const handleOutout=()=>{
-        console.log(loginID)
-
         const confirmLogout = window.confirm("로그아웃하시겠습니까?");
         if(confirmLogout){
 

@@ -4,6 +4,8 @@ import style from "./Manage.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
 import { Modal } from "@mui/material";
 import VacationEdit from '../Vacation/VacationEdit';
+import { Input } from "reactstrap";
+
 
 const Manage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -16,6 +18,8 @@ const Manage = () => {
     const [userCount, setUserCount] = useState(0);
     const [inactiveCount, setInactiveCount] = useState(0);
 
+    const [search, setSearch] = useState('');
+
     const [openModal, setOpenModal] = useState(false); // 모달 상태
     const [editingField, setEditingField] = useState(null);// 모달 제어용 
 
@@ -27,11 +31,10 @@ const Manage = () => {
 
     const handleCloseModal = () => {
         setOpenModal(false);
-        setEditingField(null); // 수정 중인 필드 상태를 초기화
+        setEditingField(null);
     };
 
-
-    const COUNT_PER_PAGE = 10;
+    const COUNT_PER_PAGE = 8;
 
     useEffect(() => {
         axios.get("/api/admin/user").then(resp => {
@@ -131,8 +134,8 @@ const Manage = () => {
         const userToDelete = users.find((user) => user.id === id);
 
         const confirmDelete = window.confirm(`${userToDelete.name}(사번: ${userToDelete.id})님을 진짜로 삭제하시겠습니까? 
-삭제된 사용자는 더이상 로그인 할 수 없으며, 
-데이터가 즉시 삭제됩니다.`);
+        삭제된 사용자는 더이상 로그인 할 수 없으며, 
+        데이터가 즉시 삭제됩니다.`);
 
         if (confirmDelete) {
             axios
@@ -147,10 +150,17 @@ const Manage = () => {
     };
 
     const handleSave = (id) => {
+
+        const isEmptyField = ['name', 'position'].some(field => editedUser[field] === '');
+        if (isEmptyField) {
+            alert('사용자 등록을 위해 값을 모두 채워주세요.');
+            return;
+        }
+
         const formData = new FormData();
         formData.append('name', editedUser.name);
         formData.append('id', editedUser.id);
-        formData.append('group_name', editedUser.group_name);
+        formData.append('group_name', editedUser.group_name || '');
         formData.append('position', editedUser.position);
 
         axios.put(`/api/admin/update/${id}`, formData)
@@ -165,16 +175,21 @@ const Manage = () => {
             });
     };
 
+    const inputChangeHandler = (e) => {
+        setSearch(e.target.value);
+    };
+
     return (
         <div className="Admincontainer">
             <div className={style.search}>
-                <input type="text" placeholder='사용자 검색'></input>
-                <button>검색</button>
+                <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
             </div>
             <hr></hr>
             <div className="body">
-                <div className={style.margin}>
-                    사용자 관리
+                <div className={style.text}>
+                    <div className={style.margin}>
+                        사용자 관리
+                    </div>
                 </div>
                 <div className={style.text}>
                     <div className={style.margin}>
@@ -184,75 +199,248 @@ const Manage = () => {
                 </div>
                 <br></br>
                 <hr></hr>
-                <div>
-                    <table border="1">
-                        <tbody>
-                            <tr>
-                                <th>이름</th>
-                                <th>ID</th>
-                                <th>비밀번호</th>
-                                <th>소속부서</th>
-                                <th>직급</th>
-                                <th>전화번호</th>
-                                <th>이메일</th>
-                                <th></th>
-                            </tr>
-                            <tr>
-                                <th><input type="text" placeholder='이름 입력' className={style.name} value={newUser.name} onChange={(e) => setNewUser({ ...newUser, name: e.target.value })} /></th>
-                                <th><input type="text" placeholder='ID 입력' className={style.id} value={newUser.id} onChange={(e) => setNewUser({ ...newUser, id: e.target.value })} /></th>
-                                <th><input type="password" placeholder='비밀번호 입력' className={style.pw} value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} /></th>
-                                <th>
-                                    <select name="department" value={newUser.department} className={style.dept} onChange={(e) => setNewUser({ ...newUser, department: e.target.value })}>
-                                        <option value="">부서입력</option>
-                                        {depts.map((e) => (
-                                            <option key={e.dept_name} value={e.dept_name}>{e.dept_name}</option>
-                                        ))}
-                                    </select>
-                                </th>
-                                <th>
-                                    <select name="position" value={newUser.position} className={style.position} onChange={(e) => setNewUser({ ...newUser, position: e.target.value })}>
-                                        <option value="">직급입력</option>
-                                        {positions.map((e) => (
-                                            <option key={e.position} value={e.position}>{e.position}</option>
-                                        ))}
-                                    </select>
-                                </th>
-                                <th><input type="text" placeholder='전화번호 입력' className={style.contact} value={newUser.contact} onChange={(e) => setNewUser({ ...newUser, contact: e.target.value })} /></th>
-                                <th><input type="text" placeholder='이메일 입력' className={style.email} value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} /></th>
-                                <th><button onClick={handleAdd} className={style.add}>사용자 등록</button></th>
-                            </tr>
-                            {visibleUser.map((user) => (
-                                <tr key={user.id}>
-                                    <td>
+                <div className={style.tableContainer}>
+                    <div className={style.tableRow} align="center">
+                        <div className={style.tableHeader}>이름</div>
+                        <div className={style.tableHeader}>ID</div>
+                        <div className={style.tableHeader}>비밀번호</div>
+                        <div className={style.tableHeader}>소속부서</div>
+                        <div className={style.tableHeader}>직급</div>
+                        <div className={style.tableHeader}>전화번호</div>
+                        <div className={style.tableHeader}>이메일</div>
+                        <div className={style.tableHeader}>-</div>
+                    </div>
+                    <div className={style.tableRow}>
+                        <div className={style.tableCell}>
+                            <input
+                                type="text"
+                                placeholder="이름 입력"
+                                className={style.name}
+                                value={newUser.name}
+                                onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                            />
+                        </div>
+                        <div className={style.tableCell}>
+                            <input
+                                type="text"
+                                placeholder="ID 입력"
+                                className={style.id}
+                                value={newUser.id}
+                                onChange={(e) => setNewUser({ ...newUser, id: e.target.value })}
+                            />
+                        </div>
+                        <div className={style.tableCell}>
+                            <input
+                                type="password"
+                                placeholder="비밀번호 입력"
+                                className={style.pw}
+                                value={newUser.password}
+                                onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                            />
+                        </div>
+                        <div className={style.tableCell}>
+                            <select
+                                name="department"
+                                value={newUser.department}
+                                className={style.dept}
+                                onChange={(e) => setNewUser({ ...newUser, department: e.target.value })}
+                            >
+                                <option value="">부서입력</option>
+                                {depts.map((e) => (
+                                    <option key={e.dept_name} value={e.dept_name}>
+                                        {e.dept_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className={style.tableCell}>
+                            <select
+                                name="position"
+                                value={newUser.position}
+                                className={style.position}
+                                onChange={(e) => setNewUser({ ...newUser, position: e.target.value })}
+                            >
+                                <option value="">직급입력</option>
+                                {positions.map((e) => (
+                                    <option key={e.position} value={e.position}>
+                                        {e.position}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className={style.tableCell}>
+                            <input
+                                type="text"
+                                placeholder="전화번호 입력"
+                                className={style.contact}
+                                value={newUser.contact}
+                                onChange={(e) => setNewUser({ ...newUser, contact: e.target.value })}
+                            />
+                        </div>
+                        <div className={style.tableCell}>
+                            <input
+                                type="text"
+                                placeholder="이메일 입력"
+                                className={style.email}
+                                value={newUser.email}
+                                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                            />
+                        </div>
+                        <div className={style.tableCell}>
+                            <button onClick={handleAdd} className={style.add}>
+                                사용자 등록
+                            </button>
+                        </div>
+                    </div>
+                    {search === ''
+                        ? visibleUser.map((user) => (
+                            <div className={style.tableRow} key={user.id}>
+                                <div className={style.tableCell2}>
+                                    {editUserId === user.id ? (
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={editedUser.name || ''}
+                                            className={style.name}
+                                            onChange={(e) => handleChange(e, 'name')}
+                                        />
+                                    ) : (
+                                        <div>{user.name}</div>
+                                    )}
+                                </div>
+                                <div className={style.tableCell2}>{user.id}</div>
+                                <div className={style.tableCell2}>********</div>
+                                <div className={style.tableCell2}>
+                                    {editUserId === user.id ? (
+                                        <select
+                                            name="department"
+                                            value={editedUser.group_name || ''}
+                                            className={style.dept}
+                                            onChange={(e) => handleChange(e, 'group_name')}
+                                        >
+                                            <option value="">부서입력</option>
+                                            {depts.map((e) => (
+                                                <option key={e.dept_name} value={e.dept_name}>
+                                                    {e.dept_name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <div>{user.group_name}</div>
+                                    )}
+                                </div>
+                                <div className={style.tableCell2}>
+                                    {editUserId === user.id ? (
+                                        <select
+                                            name="position"
+                                            value={editedUser.position || ''}
+                                            className={style.position}
+                                            onChange={(e) => handleChange(e, 'position')}
+                                        >
+                                            <option value="">직급입력</option>
+                                            {positions.map((e) => (
+                                                <option key={e.position} value={e.position}>
+                                                    {e.position}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <div>{user.position}</div>
+                                    )}
+                                </div>
+                                <div className={style.tableCell2}>{user.contact}</div>
+                                <div className={style.tableCell2}>{user.email}</div>
+                                <div className={style.buttons}>
+                                    {editUserId === user.id ? (
+                                        <>
+                                            <button onClick={handleCancel} className={style.cancel}>
+                                                수정취소
+                                            </button>
+                                            <button onClick={() => handleSave(user.id)} className={style.save}>
+                                                완료
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button onClick={() => handleEdit(user.id)} className={style.edit}>
+                                                수정
+                                            </button>
+                                            <button onClick={() => handleDel(user.id)} className={style.del}>
+                                                삭제
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        ))
+                        : users
+                            .filter(
+                                (e) =>
+                                    e.name.includes(search) ||
+                                    e.id.includes(search) ||
+                                    (e.group_name && e.group_name.includes(search)) ||
+                                    e.position.includes(search) ||
+                                    e.contact.includes(search) ||
+                                    e.email.includes(search)
+                            )
+                            .map((user) => (
+                                <div className={style.tableRow} key={user.id}>
+                                    <div className={style.tableCell}>
                                         {editUserId === user.id ? (
-                                            <input type="text" name="name" value={editedUser.name || ''} className={style.name} onChange={(e) => handleChange(e, 'name')} />
-                                        ) : (user.name)}
-                                    </td>
-                                    <td>{user.id}</td>
-                                    <td>********</td>
-                                    <td>
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                value={editedUser.name || ''}
+                                                className={style.name}
+                                                onChange={(e) => handleChange(e, 'name')}
+                                            />
+                                        ) : (
+                                            <div>{user.name}</div>
+                                        )}
+                                    </div>
+                                    <div className={style.tableCell}>{user.id}</div>
+                                    <div className={style.tableCell}>********</div>
+                                    <div className={style.tableCell}>
                                         {editUserId === user.id ? (
-                                            <select name="department" value={editedUser.group_name || ''} className={style.dept} onChange={(e) => handleChange(e, 'group_name')}>
+                                            <select
+                                                name="department"
+                                                value={editedUser.group_name || ''}
+                                                className={style.dept}
+                                                onChange={(e) => handleChange(e, 'group_name')}
+                                            >
                                                 <option value="">부서입력</option>
                                                 {depts.map((e) => (
-                                                    <option key={e.dept_name} value={e.dept_name}>{e.dept_name}</option>
+                                                    <option key={e.dept_name} value={e.dept_name}>
+                                                        {e.dept_name}
+                                                    </option>
                                                 ))}
                                             </select>
-                                        ) : (user.group_name)}
-                                    </td>
-                                    <td>
+                                        ) : (
+                                            <div>{user.group_name}</div>
+                                        )}
+                                    </div>
+                                    <div className={style.tableCell}>
                                         {editUserId === user.id ? (
-                                            <select name="position" value={editedUser.position || ''} className={style.position} onChange={(e) => handleChange(e, 'position')}>
+                                            <select
+                                                name="position"
+                                                value={editedUser.position || ''}
+                                                className={style.position}
+                                                onChange={(e) => handleChange(e, 'position')}
+                                            >
                                                 <option value="">직급입력</option>
                                                 {positions.map((e) => (
-                                                    <option key={e.position} value={e.position}>{e.position}</option>
+                                                    <option key={e.position} value={e.position}>
+                                                        {e.position}
+                                                    </option>
                                                 ))}
                                             </select>
-                                        ) : (user.position)}
-                                    </td>
-                                    <td>{user.contact}</td>
-                                    <td>{user.email}</td>
-                                    <td>
+                                        ) : (
+                                            <div>{user.position}</div>
+                                        )}
+                                    </div>
+                                    <div className={style.tableCell}>{user.contact}</div>
+                                    <div className={style.tableCell}>{user.email}</div>
+                                    <div className={style.buttons}>
                                         {editUserId === user.id ? (
                                             <>
                                                 <button onClick={handleCancel} className={style.cancel}>
@@ -272,12 +460,9 @@ const Manage = () => {
                                                 </button>
                                             </>
                                         )}
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
                             ))}
-
-                        </tbody>
-                    </table>
                 </div>
                 <hr></hr>
                 <div className={style.margin}>
@@ -297,14 +482,16 @@ const Manage = () => {
                     />
                 </div>
             </div>
-
             <div className={style.vacation}>
-                휴가관리<button className={style.btnVacation} onClick={() => handleEditModal('vacation')}>휴가조절</button>
+                <div className={style.margin}>
+                    휴가관리
+                    <button className={style.btnVacation} onClick={() => handleEditModal('vacation')}>휴가조절</button>
+                </div>
                 <Modal
                     open={openModal && editingField === 'vacation'}
                     onClose={handleCloseModal}
                 >
-                    <VacationEdit onClose={handleCloseModal}  />
+                    <VacationEdit onClose={handleCloseModal} />
                 </Modal>
             </div>
         </div>

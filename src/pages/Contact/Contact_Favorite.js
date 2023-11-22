@@ -127,6 +127,9 @@ const Contact_Favorite = () => {
                                 return "";
                             })
                             :
+                            contacts.filter(member => member.group_name.includes(search) || member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search)).length === 0  ?
+                            <Row className={style.no_search_result}>검색 결과가 없습니다.</Row>
+                            :
                             contacts.filter(member => member.group_name.includes(search) || member.name.includes(search) || member.position.includes(search) || member.contact.includes(search) || member.email.includes(search))
                             .map((member) => {
                                 if(favorite.some(fav => fav == member.id))
