@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { LoginContext } from '../../../App';
 import SendIcon from '@mui/icons-material/Send';
 import { SurveyContext } from '../Survey';
+import { Login } from '@mui/icons-material';
 
 const SurveyTitle = () => {
     const {contextData} = useContext(SurveyContentsContext);
@@ -55,7 +56,7 @@ const SurveyTitle = () => {
 
 const SurveyQuestion = () => {
     const {seq} = useParams();
-    const {contextData} = useContext(SurveyContentsContext);
+    const {contextData,submited} = useContext(SurveyContentsContext);
     const titleData = contextData ? contextData[0] : {title:"",writer:"",contents:""};
     const {loginID} = useContext(LoginContext);
     const questionData = contextData ? contextData.slice(1) : [{}];
@@ -84,6 +85,7 @@ const SurveyQuestion = () => {
     };
 
     const show = () =>{
+        console.log(response);
         axios.post(`/api/survey/response/${seq}`,response).then(res=>{
             navi("/Groovy/survey");
         }).catch((e)=>{
@@ -108,7 +110,7 @@ const SurveyQuestion = () => {
                     질문
                 </Typography>                
             </div>
-            <div className={`${style.padding40}`}>
+            <div className={`${style.padding40} ${style.borderbtm}`}>
             {questionData.map((e, i) => (
                     <div key={i}>
                         <Typography sx={{fontSize:"18",fontWeight:"bold"}}>
@@ -138,7 +140,6 @@ const SurveyQuestion = () => {
                     </div>
                 ))}
             </div>
-            <Divider sx={{bgcolor:"black"}}/>
             <div className={`${style.center} ${style.padding10} ${style.btnEven}`}>
                 <Link to="/Groovy/survey"><Button variant="outlined">
                     뒤로가기
@@ -146,7 +147,7 @@ const SurveyQuestion = () => {
                 {
                     loginID == titleData.writer ? <Button variant="outlined" color="error" onClick={deleteContents}>삭제하기</Button> : ""
                 }
-                <Button variant="contained" onClick={show}  endIcon={<SendIcon />}>
+                <Button variant="contained" onClick={show}  endIcon={<SendIcon />} disabled={submited}>
                     제출
                 </Button>
             </div>            
@@ -167,8 +168,12 @@ const SurveyContent = () => {
     };
 
     const {seq} = useParams();
+    const {loginID} = useContext(LoginContext);
     const [contextData,setContextData] = useState(undefined);
     const [isLoading,setLoading] = useState(true);
+    const [submited,setSubmited] = useState(false);
+    const [isResponsed,setResponsed] = useState(false);
+    const navi = useNavigate();
 
     const getData = async() => {
         const res = await axios.get(`/api/survey/content/${seq}`).finally(()=>{
@@ -176,8 +181,33 @@ const SurveyContent = () => {
         });
         setContextData(res.data);
     }
+    const getRes = () =>{
+        axios.get(`/api/survey/getRes/${seq}/${loginID}`).then(res=>{
+            setResponsed(res.data);
+        }).catch((e)=>{
+            console.log(e);
+        });
+    }
+
     useEffect(()=>{
-        getData();
+        getRes();
+        const titleData = contextData ? contextData[0] : {title:"",writer:"",contents:""};
+        if(titleData.writer == loginID){
+            if(isResponsed){
+                alert("이미 참여한 설문조사입니다.");
+                setSubmited(true);
+
+            }
+        }else{
+            if(isResponsed){
+                alert("이미 참여한 설문조사입니다.");
+                navi(-1);                
+            }
+        } 
+    },[contextData]);
+
+    useEffect(()=>{
+        getData();        
     },[]);
 
     if(isLoading){
@@ -185,7 +215,7 @@ const SurveyContent = () => {
     }
     return (
         <div className={`${style.padding40} ${style.contentDiv}`}>
-            <SurveyContentsContext.Provider value={{contextData,setContextData}}>
+            <SurveyContentsContext.Provider value={{contextData,setContextData,submited}}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <SurveyTitle/>

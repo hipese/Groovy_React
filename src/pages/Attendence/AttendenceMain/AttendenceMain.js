@@ -59,7 +59,8 @@ const AttendenceMain = () => {
     
     useEffect(() => {
         if (hasCompletedVacationFetched && members.member) {
-            const url = `/api/vacation/myVacation/` + (total_vactionDate ? `/${total_vactionDate}` : '');
+            const url = `/api/vacation/myVacation/${total_vactionDate}`;
+            // const url = `/api/vacation/myVacation/` + (total_vactionDate ? `/${total_vactionDate}` : '');
             axios.get(url).then(resp => {
                 setMyVacation(resp.data || {});
             }).catch(error => {

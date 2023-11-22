@@ -42,6 +42,7 @@ const SendMail = () => {
         });
     }, [member.id]);
 
+
     const handleDelete = (seq) => {
         const formData = new FormData();
         formData.append('member_id', member.id);
@@ -51,6 +52,7 @@ const SendMail = () => {
                 setLoading(false);
             }).catch(error => {
                 setLoading(false);
+
                 console.error("데이터 불러오기 중 오류 발생", error);
             });
         })

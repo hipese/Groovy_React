@@ -50,6 +50,9 @@
 .border{
     border: 1px solid black;
 }
+.borderbtm{
+    border-bottom: 1px solid black;
+}
 .borderRad10{
     border-radius: 10px;
 }

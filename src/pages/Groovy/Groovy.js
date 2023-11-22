@@ -33,12 +33,48 @@ const DepartmentContext = createContext({
 
 const Groovy = () => {
 
+    const navi = useNavigate();
+    const { loginID, setLoginID } = useContext(LoginContext);
+
+    useEffect(() => {
+        let intervalId = null;
+        const checkLoginStatus = async () => {
+            try {
+                const resp = await axios.get("/auth/check-session");
+                if (resp.data.loggedIn === false) {
+                    clearInterval(intervalId); // 인터벌 취소
+                    setLoginID("")
+                    navi("/"); // 로그인 페이지로 이동
+                }
+            } catch (error) {
+                console.error("Session check failed", error);
+                clearInterval(intervalId); // 인터벌 취소
+                navi("/"); // 로그인 페이지로 이동
+            }
+        };
+
+        intervalId = setInterval(checkLoginStatus, 15000);
+
+        // 컴포넌트가 언마운트되거나 인터벌이 취소될 때 정리
+        return () => {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+        };
+    }, [navi]);
+
+
     // 드롭다운의 표시 상태를 관리하는 state
     const [department, setDepartment] = useState([]);
 
     //작성자의 휴가정보를 뿌리기 위한 변수
     const [myVacation, setMyVacation] = useState({}); //(나중에 년도 검색할거면 이거 배열로 바꾸고 로직 추가해야함) 
 
+    useEffect(() => {
+        axios.get("/api/vacation/myVacation").then(resp => {
+            setMyVacation(resp.data);
+        })
+    }, [])
 
     // 드롭다운 내용을 관리하는 배열
     useEffect(() => {
@@ -57,8 +93,7 @@ const Groovy = () => {
     }, []);
 
     const location = useLocation();
-    const navi = useNavigate();
-    const { loginID, setLoginID } = useContext(LoginContext);
+
 
     useEffect(() => {
         axios.get("/auth/isLogined").then((resp) => {
@@ -91,7 +126,7 @@ const Groovy = () => {
                                 <Navigator />
                             </Container>
                             <ListContext.Provider value={{ refreshList }}>
-                                <ToDoListContext.Provider value={{ todoList, setTodoList, toggleStar, ListAdded, tdlbg}}>
+                                <ToDoListContext.Provider value={{ todoList, setTodoList, toggleStar, ListAdded, tdlbg }}>
                                     <div className="SlideContainer">
                                         <SlideBar refreshList={refreshList} />
                                     </div>
@@ -133,4 +168,4 @@ const Groovy = () => {
 };
 
 export default Groovy;
-export { MemberContext, DepartmentContext,VacationContext };
+export { MemberContext, DepartmentContext, VacationContext };
