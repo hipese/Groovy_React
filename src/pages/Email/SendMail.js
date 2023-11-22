@@ -9,36 +9,50 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import style from "./List.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
 import { Input } from "reactstrap";
-
-import { LoginContext } from '../../App';
 import { MemberContext } from '../Groovy/Groovy';
+
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 const SendMail = () => {
     const [search, setSearch] = useState('');
-    const { loginID } = useContext(LoginContext);
-    const members =useContext(MemberContext);
+    const {member} =useContext(MemberContext);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [mails, setMails] = useState([]);
     const COUNT_PER_PAGE = 8;
 
-    useEffect(() => {
-            axios.get(`/api/mails/send/${members.member.id}`).then(resp => {
-                setMails(resp.data);
-            }).catch(error => {
-                console.error("데이터 불러오기 중 오류 발생", error);
-            });
-    }, [members.member.id]);
+    const [loading, setLoading] = useState(true);
 
-    
+    useEffect(() => {
+        axios.get(`/api/mails/send/${member.id}`).then(resp => {
+            setMails(resp.data);
+            setLoading(false);
+        }).catch(error => {
+            setLoading(false);
+            console.error("데이터 불러오기 중 오류 발생", error);
+        });
+    }, [member.id]);
+
 
     const handleDelete = (seq) => {
         const formData = new FormData();
-        formData.append('member_id', loginID);
+        formData.append('member_id', member.id);
         axios.put(`/api/mails/sent/${seq}`, formData).then((resp) => {
-            axios.get(`/api/mails/send/${members.member.id}`).then(resp => {
+            axios.get(`/api/mails/send/${member.id}`).then(resp => {
                 setMails(resp.data);
+                setLoading(false);
             }).catch(error => {
+                setLoading(false);
+
                 console.error("데이터 불러오기 중 오류 발생", error);
             });
         })
@@ -62,6 +76,10 @@ const SendMail = () => {
     const inputChangeHandler = (e) => {
         setSearch(e.target.value);
     };
+
+    if (loading) {
+        return <CircularIndeterminate />;
+    }
 
     return (
         <div className="Mailcontainer">

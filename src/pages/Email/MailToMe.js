@@ -9,24 +9,37 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import style from "./List.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
 import { Input } from "reactstrap";
-import { LoginContext } from '../../App';
+import { MemberContext } from '../Groovy/Groovy';
+
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
+
 const MailToMe = () => {
     const [search, setSearch] = useState('');
 
-    const { loginID } = useContext(LoginContext);
+    const {member} =useContext(MemberContext);
+
     const [currentPage, setCurrentPage] = useState(1);
     const [mails, setMails] = useState([]);
     const COUNT_PER_PAGE = 8;
 
-    useEffect(() => {
-        LoadMails();
-    }, []);
+    const [loading, setLoading] = useState(true);
 
-    const LoadMails = () => {
-        axios.get(`/api/mails/tome/${loginID}`).then(resp => {
+    useEffect(() => {
+        setLoading(true);
+        axios.get(`/api/mails/tome/${member.id}`).then(resp => {
             setMails(resp.data);
+            setLoading(false);
         })
-    }
+    }, [member.id]);
 
     const totalItems = mails.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
@@ -45,12 +58,18 @@ const MailToMe = () => {
 
     const handleDelete = (seq) => {
         const formData = new FormData();
-        formData.append('member_id', loginID);
+        formData.append('member_id', member.id);
         axios.put(`/api/mails/sent/${seq}`, formData).then((resp) => {
-            LoadMails();
+            axios.get(`/api/mails/tome/${member.id}`).then(resp => {
+                setMails(resp.data);
+                setLoading(false);
+            })
         })
         axios.put(`/api/mails/inbox/${seq}`, formData).then((resp) => {
-            LoadMails();
+            axios.get(`/api/mails/tome/${member.id}`).then(resp => {
+                setMails(resp.data);
+                setLoading(false);
+            })
         })
             .catch((error) => {
             });
@@ -58,11 +77,18 @@ const MailToMe = () => {
 
     const markAsRead = (seq) => {
         axios.put(`/api/mails/read/${seq}`).then((resp) => {
-            LoadMails();
+            axios.get(`/api/mails/tome/${member.id}`).then(resp => {
+                setMails(resp.data);
+                setLoading(false);
+            })
         })
             .catch(() => {
             });
     };
+
+    if (loading) {
+        return <CircularIndeterminate />;
+    }
 
     return (
         <div className="Mailcontainer">

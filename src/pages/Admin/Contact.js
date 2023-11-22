@@ -11,7 +11,6 @@ const Contact = () => {
     const [search, setSearch] = useState("");
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [loading, setLoading] = useState(true);
 
     const COUNT_PER_PAGE = 10;
     const totalItems = contacts.length;
@@ -30,7 +29,6 @@ const Contact = () => {
             setContacts(resp.data);
         }).catch(err => {
         })
-        setLoading(false);
     }, [])
 
     const inputChangeHandler = (e) => {
