@@ -28,9 +28,10 @@ const Waste = () => {
         .then(([inboxResp, sendResp]) => {
             const inboxMails = inboxResp.data.map(item => ({ ...item, isInbox: true }));
             const sentMails = sendResp.data.map(item => ({ ...item, isInbox: false }));
-            const uniqueMails = inboxMails.concat(sentMails.filter(sentMail => !inboxMails.find(inboxMail => inboxMail.seq === sentMail.seq)));
-            
-            setMails(uniqueMails);
+
+            const combinedMails = [...inboxMails, ...sentMails];
+
+            setMails(combinedMails);
         })
         .catch(error => {
         });

@@ -65,6 +65,11 @@ const AdminSlide = () => {
                     </Link>
                 </>
             )}
+            <Link to="/Groovy/admin/contact">
+                <button className={style.btn}>
+                    외부 주소록 관리
+                </button>
+            </Link>
         </div>
     );
 };

@@ -50,7 +50,6 @@ function Write() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setMail(prev => ({ ...prev, [name]: value }));
-    console.log(mail);
   }
 
   const handleFileChange = (e) => {

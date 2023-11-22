@@ -27,7 +27,6 @@ const SendMail = () => {
     const LoadMails = () => {
         axios.get(`/api/mails/send/${loginID}`).then(resp => {
             setMails(resp.data);
-            console.log(resp.data)
         }).catch(error => {
             console.error("데이터 불러오기 중 오류 발생", error);
         });
@@ -86,7 +85,7 @@ const SendMail = () => {
                             ? visibleMail.map((e) => (
                                 <div key={e.seq} className={style.tableRow}>
                                     <div className={style.tableCell}>
-                                        <button onClick={() => handleDelete(e.seq)}>Del</button>
+                                        <button onClick={() => handleDelete(e.seq)}>삭제</button>
                                     </div>
                                     <div className={style.tableCell}>
                                         {e.is_read !== true ? (
