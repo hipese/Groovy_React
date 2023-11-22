@@ -66,6 +66,10 @@ const Modal = ({ showModal, setShowModal, selectedDate, onEventAdded }) => {
     if (!formData.title.trim() || !formData.contents.trim()) {
         alert('제목과 내용을 입력해 주세요.');
         return;
+        }
+    if (formData.starttime > formData.endtime) {
+        alert('시작일이 종료일보다 늦습니다.');
+        return;
     }
     axios.post("/api/calendar", formData)
         .then((res) => {
