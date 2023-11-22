@@ -39,7 +39,7 @@ import Org_Chart from "../../Org_Chart/components/Org_Chart_Modal/Org_Chart";
 import { LoginContext } from "../../../App";
 import { useWebSocket } from "../../../WebSocketContext/WebSocketContext";
 import { isWeekend } from 'date-fns';
-import { MemberContext } from "../../Groovy/Groovy";
+import { MemberContext, VacationContext } from "../../Groovy/Groovy";
 
 const modules = {
     toolbar: [
@@ -60,6 +60,7 @@ const AttendenceWrite = () => {
     const stompClient = useWebSocket();
     const { loginID } = useContext(LoginContext);
     const members = useContext(MemberContext);
+    const {myVacation,setMyVacation}=useContext(VacationContext);
 
     // 모달을 키거나 끌때 필요한 놈
     const [isModalOpen, setModalOpen] = useState(false);
@@ -151,6 +152,11 @@ const AttendenceWrite = () => {
 
     const calculateTotalDate = (start, end) => {
         const daysDifference = differenceInBusinessDays(start, end);
+        if(myVacation.remainingDays<daysDifference){
+            alert("남은 휴가보다 사용 일수가 많습니다.")
+            setEndDate(dayjs());
+            return;
+        }
         setTotal_date(daysDifference);
     };
 
