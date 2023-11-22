@@ -141,7 +141,7 @@ const DeptNoticeList = () => {
                 visibleNoticeList.map((e,i)=>{
                         return(
                             <List sx={style} key={i} component="nav" aria-label="mailbox folders">            
-                                <ListItem button>
+                                <Link to={`/groovy/board/detailDept/${e.seq}`}><ListItem button>
                                     <Grid container className={`${style.marginT10}`}> 
                                         <Grid item xs={1} className={style.center}>
                                             <Typography className={`${style.fs} ${style.b}`}>
@@ -164,7 +164,7 @@ const DeptNoticeList = () => {
                                             </Typography>
                                         </Grid>
                                     </Grid>            
-                                </ListItem>
+                                </ListItem></Link>
                             </List>           
                         )
                     }) :

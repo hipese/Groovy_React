@@ -64,7 +64,6 @@ const SurveyList = () => {
 
     useEffect(()=>{
         axios.get("/api/survey/list").then(res=>{
-            console.log(res.data);
             setSurvey(res.data);
         }).catch((e)=>{
             console.log(e);
@@ -182,7 +181,7 @@ const SurveyList = () => {
                             </List>
                             
                         )
-                    }) : 
+                    })  : 
                     survey.filter(e=>e.surtitle.includes(search) || (e.surwriter.includes(search))).map((e,i)=>{
                         return(
                             <List sx={style} key={i} component="nav" aria-label="mailbox folders">
