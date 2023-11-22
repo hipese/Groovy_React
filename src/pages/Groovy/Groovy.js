@@ -39,6 +39,12 @@ const Groovy = () => {
     //작성자의 휴가정보를 뿌리기 위한 변수
     const [myVacation, setMyVacation] = useState({}); //(나중에 년도 검색할거면 이거 배열로 바꾸고 로직 추가해야함) 
 
+    useEffect(()=>{
+        axios.get("/api/vacation/myVacation").then(resp=>{
+            setMyVacation(resp.data);
+            console.log("한번만 와라");
+        })
+    },[])
 
     // 드롭다운 내용을 관리하는 배열
     useEffect(() => {
