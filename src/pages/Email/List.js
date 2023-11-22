@@ -50,6 +50,7 @@ const List = () => {
         axios.put(`/api/mails/inbox/${seq}`, formData).then((resp) => {
             axios.get(`/api/mails/inbox/${member.id}`).then(resp => {
                 setMails(resp.data);
+                setLoading(false);
             })
         })
             .catch(() => {
@@ -60,6 +61,7 @@ const List = () => {
         axios.put(`/api/mails/read/${seq}`).then((resp) => {
             axios.get(`/api/mails/inbox/${member.id}`).then(resp => {
                 setMails(resp.data);
+                setLoading(false);
             })
         })
             .catch(() => {

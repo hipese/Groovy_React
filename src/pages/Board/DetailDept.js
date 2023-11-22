@@ -177,9 +177,11 @@ const DetailDept = () => {
                         <div align="end" className={style.buttons}>
                             {loginID == Board.writer ? (
                                 <>
-                                    <button onClick={handleBack}>Back</button>
+                                    <Link to="/Groovy/board" >
+                                        <button>Back</button>
+                                    </Link>
                                     <button onClick={handleDelete}>Del</button>
-                                    <Link to={`/groovy/board/updateDept/${seq}`}>
+                                    <Link to={`/groovy/board/update/${seq}`}>
                                         <button>Edit</button>
                                     </Link>
                                 </>
