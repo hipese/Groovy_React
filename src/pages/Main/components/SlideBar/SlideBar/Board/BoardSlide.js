@@ -20,10 +20,10 @@ const BoardSlide = () => {
     }
 
     return (
-        <div className={style.CalendarSlide}>
+        <div>
             <Link to="/groovy/board/write">
                 <button className={style.btn1}>
-                    <strong>+</strong> 글 작성하기
+                    <strong>+ 글 작성하기</strong>
                 </button>
             </Link>
             <Link to="/groovy/board">
