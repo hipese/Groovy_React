@@ -68,9 +68,9 @@ const Sign_Complete = () => {
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
-                            <TableRow sx={{ backgroundColor: blue[200] }} >
+                            <TableRow sx={{ backgroundColor: '#f2f2f2' }} >
                                 <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">문서번호</TableCell>
-                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결제양식</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결재양식</TableCell>
                                 <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">제목</TableCell>
                                 <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안자</TableCell>
                                 <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안일</TableCell>

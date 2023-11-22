@@ -20,7 +20,7 @@ const CalendarWrite = ({refreshList}) => {
     return (
         <div className={styles.calendarslideBody}>
             <button className={style.btn} onClick={() => setShowModal(true)}>
-                <strong>+</strong> 일정 추가
+                <strong>+ 일정 추가</strong>
             </button>
             <Modal showModal={showModal} setShowModal={setShowModal} onEventAdded={refreshList}/>
             <div className={styles.Calendar}>

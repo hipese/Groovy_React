@@ -21,7 +21,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { blue } from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import List from '@mui/material/List';
@@ -276,7 +275,7 @@ const Sign_SeniorReviewWrite = () => {
                 <div className={style.signline}>
                     <div className={style.titleText}>
                         <div className={style.textDiv}>
-                            결제선 지정
+                            결재선 지정
                         </div>
                         <div className={style.buttonDiv}>
                             <button onClick={toggleModal} className={style.btn}>직원 검색</button>
@@ -312,17 +311,17 @@ const Sign_SeniorReviewWrite = () => {
                     </div>
                 </div>
                 <div className={style.signwrite}>
-                    <div className={style.title}>결제 작성</div>
+                    <div className={style.title}>결재 작성</div>
                     <div className={style.tableBox2}>
                         <TableContainer component={Paper}>
                             <Table sx={{ minWidth: 650, width: '100%' }} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안부서</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">기안부서</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center"> {signWriterInfo && signWriterInfo.group_name ? signWriterInfo.group_name : "부서선택"}</TableCell>
-                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안일</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">기안일</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">{todayDate}</TableCell>
-                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: blue[200] }} align="center">기안문서</TableCell>
+                                        <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }} align="center">기안문서</TableCell>
                                         <TableCell sx={{ borderBottom: 'unset', fontSize: '20px', fontWeight: 'bold' }} align="center">{document_type}</TableCell>
                                     </TableRow>
                                 </TableHead>

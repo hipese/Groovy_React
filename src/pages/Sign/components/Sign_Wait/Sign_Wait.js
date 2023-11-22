@@ -11,7 +11,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { blue } from '@mui/material/colors';
-import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
@@ -64,9 +63,9 @@ const Sign_Wait = () => {
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
-                            <TableRow sx={{ backgroundColor: blue[200] }}>
+                            <TableRow sx={{ backgroundColor: '#f2f2f2' }}>
                                 <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">문서번호</TableCell>
-                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결제양식</TableCell>
+                                <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">결재양식</TableCell>
                                 <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">제목</TableCell>
                                 <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안자</TableCell>
                                 <TableCell style={{ fontSize: '20px', fontWeight: 'bold' }} align="center">기안일</TableCell>
@@ -84,7 +83,7 @@ const Sign_Wait = () => {
                                         {e.seq}
                                     </TableCell>
                                     <TableCell align="center">{e.document_type}</TableCell>
-                                    <TableCell align="center"><Link to={`/Groovy/signlist/detail/${e.seq}`}><InsertLinkIcon sx={{ color: blue[200] }} /> {e.title}</Link></TableCell>
+                                    <TableCell align="center"><Link to={`/Groovy/signlist/detail/${e.seq}`}>{e.title}</Link></TableCell>
                                     <TableCell align="center">{e.writer}</TableCell>
                                     <TableCell align="center">{e.write_date}</TableCell>
                                 </TableRow>
