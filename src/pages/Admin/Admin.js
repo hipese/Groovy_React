@@ -6,6 +6,7 @@ import Position from './Position';
 import Dept from './Dept';
 import Manage from './Manage';
 import Password from './Password';
+import Contact from './Contact';
 
 function Admin() {
     return (
@@ -16,6 +17,7 @@ function Admin() {
                 <Route path="/inactive" element={<Inactive />} />
                 <Route path="/position" element={<Position />} />
                 <Route path="/dept" element={<Dept />} />
+                <Route path="/contact" element={<Contact />} />
             </Routes>
         </div>
     )

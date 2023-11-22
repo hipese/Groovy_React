@@ -150,10 +150,17 @@ const Manage = () => {
     };
 
     const handleSave = (id) => {
+
+        const isEmptyField = ['name', 'position'].some(field => editedUser[field] === '');
+        if (isEmptyField) {
+            alert('사용자 등록을 위해 값을 모두 채워주세요.');
+            return;
+        }
+
         const formData = new FormData();
         formData.append('name', editedUser.name);
         formData.append('id', editedUser.id);
-        formData.append('group_name', editedUser.group_name);
+        formData.append('group_name', editedUser.group_name || '');
         formData.append('position', editedUser.position);
 
         axios.put(`/api/admin/update/${id}`, formData)
@@ -171,18 +178,6 @@ const Manage = () => {
     const inputChangeHandler = (e) => {
         setSearch(e.target.value);
     };
-
-    const filteredUser = search === ''
-        ? visibleUser
-        : visibleUser.filter(
-            (e) =>
-                e.name.includes(search) ||
-                e.id.includes(search) ||
-                (e.group_name && e.group_name.includes(search)) ||
-                e.position.includes(search) ||
-                e.contact.includes(search) ||
-                e.email.includes(search)
-        );
 
     return (
         <div className="Admincontainer">
@@ -297,86 +292,177 @@ const Manage = () => {
                             </button>
                         </div>
                     </div>
-                    {filteredUser.map((user) => (
-                        <div className={style.tableRow} key={user.id}>
-                            <div className={style.tableCell}>
-                                {editUserId === user.id ? (
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={editedUser.name || ''}
-                                        className={style.name}
-                                        onChange={(e) => handleChange(e, 'name')}
-                                    />
-                                ) : (
-                                    <div>{user.name}</div>
-                                )}
+                    {search === ''
+                        ? visibleUser.map((user) => (
+                            <div className={style.tableRow} key={user.id}>
+                                <div className={style.tableCell2}>
+                                    {editUserId === user.id ? (
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={editedUser.name || ''}
+                                            className={style.name}
+                                            onChange={(e) => handleChange(e, 'name')}
+                                        />
+                                    ) : (
+                                        <div>{user.name}</div>
+                                    )}
+                                </div>
+                                <div className={style.tableCell2}>{user.id}</div>
+                                <div className={style.tableCell2}>********</div>
+                                <div className={style.tableCell2}>
+                                    {editUserId === user.id ? (
+                                        <select
+                                            name="department"
+                                            value={editedUser.group_name || ''}
+                                            className={style.dept}
+                                            onChange={(e) => handleChange(e, 'group_name')}
+                                        >
+                                            <option value="">부서입력</option>
+                                            {depts.map((e) => (
+                                                <option key={e.dept_name} value={e.dept_name}>
+                                                    {e.dept_name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <div>{user.group_name}</div>
+                                    )}
+                                </div>
+                                <div className={style.tableCell2}>
+                                    {editUserId === user.id ? (
+                                        <select
+                                            name="position"
+                                            value={editedUser.position || ''}
+                                            className={style.position}
+                                            onChange={(e) => handleChange(e, 'position')}
+                                        >
+                                            <option value="">직급입력</option>
+                                            {positions.map((e) => (
+                                                <option key={e.position} value={e.position}>
+                                                    {e.position}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <div>{user.position}</div>
+                                    )}
+                                </div>
+                                <div className={style.tableCell2}>{user.contact}</div>
+                                <div className={style.tableCell2}>{user.email}</div>
+                                <div className={style.buttons}>
+                                    {editUserId === user.id ? (
+                                        <>
+                                            <button onClick={handleCancel} className={style.cancel}>
+                                                수정취소
+                                            </button>
+                                            <button onClick={() => handleSave(user.id)} className={style.save}>
+                                                완료
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button onClick={() => handleEdit(user.id)} className={style.edit}>
+                                                수정
+                                            </button>
+                                            <button onClick={() => handleDel(user.id)} className={style.del}>
+                                                삭제
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
                             </div>
-                            <div className={style.tableCell}>{user.id}</div>
-                            <div className={style.tableCell}>********</div>
-                            <div className={style.tableCell}>
-                                {editUserId === user.id ? (
-                                    <select
-                                        name="department"
-                                        value={editedUser.group_name || ''}
-                                        className={style.dept}
-                                        onChange={(e) => handleChange(e, 'group_name')}
-                                    >
-                                        <option value="">부서입력</option>
-                                        {depts.map((e) => (
-                                            <option key={e.dept_name} value={e.dept_name}>
-                                                {e.dept_name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                ) : (
-                                    <div>{user.group_name}</div>
-                                )}
-                            </div>
-                            <div className={style.tableCell}>
-                                {editUserId === user.id ? (
-                                    <select
-                                        name="position"
-                                        value={editedUser.position || ''}
-                                        className={style.position}
-                                        onChange={(e) => handleChange(e, 'position')}
-                                    >
-                                        <option value="">직급입력</option>
-                                        {positions.map((e) => (
-                                            <option key={e.position} value={e.position}>
-                                                {e.position}
-                                            </option>
-                                        ))}
-                                    </select>
-                                ) : (
-                                    <div>{user.position}</div>
-                                )}
-                            </div>
-                            <div className={style.tableCell}>{user.contact}</div>
-                            <div className={style.tableCell}>{user.email}</div>
-                            <div className={style.buttons}>
-                                {editUserId === user.id ? (
-                                    <>
-                                        <button onClick={handleCancel} className={style.cancel}>
-                                            수정취소
-                                        </button>
-                                        <button onClick={() => handleSave(user.id)} className={style.save}>
-                                            완료
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <button onClick={() => handleEdit(user.id)} className={style.edit}>
-                                            수정
-                                        </button>
-                                        <button onClick={() => handleDel(user.id)} className={style.del}>
-                                            삭제
-                                        </button>
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    ))}
+                        ))
+                        : users
+                            .filter(
+                                (e) =>
+                                    e.name.includes(search) ||
+                                    e.id.includes(search) ||
+                                    (e.group_name && e.group_name.includes(search)) ||
+                                    e.position.includes(search) ||
+                                    e.contact.includes(search) ||
+                                    e.email.includes(search)
+                            )
+                            .map((user) => (
+                                <div className={style.tableRow} key={user.id}>
+                                    <div className={style.tableCell}>
+                                        {editUserId === user.id ? (
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                value={editedUser.name || ''}
+                                                className={style.name}
+                                                onChange={(e) => handleChange(e, 'name')}
+                                            />
+                                        ) : (
+                                            <div>{user.name}</div>
+                                        )}
+                                    </div>
+                                    <div className={style.tableCell}>{user.id}</div>
+                                    <div className={style.tableCell}>********</div>
+                                    <div className={style.tableCell}>
+                                        {editUserId === user.id ? (
+                                            <select
+                                                name="department"
+                                                value={editedUser.group_name || ''}
+                                                className={style.dept}
+                                                onChange={(e) => handleChange(e, 'group_name')}
+                                            >
+                                                <option value="">부서입력</option>
+                                                {depts.map((e) => (
+                                                    <option key={e.dept_name} value={e.dept_name}>
+                                                        {e.dept_name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        ) : (
+                                            <div>{user.group_name}</div>
+                                        )}
+                                    </div>
+                                    <div className={style.tableCell}>
+                                        {editUserId === user.id ? (
+                                            <select
+                                                name="position"
+                                                value={editedUser.position || ''}
+                                                className={style.position}
+                                                onChange={(e) => handleChange(e, 'position')}
+                                            >
+                                                <option value="">직급입력</option>
+                                                {positions.map((e) => (
+                                                    <option key={e.position} value={e.position}>
+                                                        {e.position}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        ) : (
+                                            <div>{user.position}</div>
+                                        )}
+                                    </div>
+                                    <div className={style.tableCell}>{user.contact}</div>
+                                    <div className={style.tableCell}>{user.email}</div>
+                                    <div className={style.buttons}>
+                                        {editUserId === user.id ? (
+                                            <>
+                                                <button onClick={handleCancel} className={style.cancel}>
+                                                    수정취소
+                                                </button>
+                                                <button onClick={() => handleSave(user.id)} className={style.save}>
+                                                    완료
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <button onClick={() => handleEdit(user.id)} className={style.edit}>
+                                                    수정
+                                                </button>
+                                                <button onClick={() => handleDel(user.id)} className={style.del}>
+                                                    삭제
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
                 </div>
                 <hr></hr>
                 <div className={style.margin}>
