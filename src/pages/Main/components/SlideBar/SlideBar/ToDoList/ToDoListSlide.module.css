@@ -43,7 +43,7 @@ a {
 }
 
 .select:hover {
-    background-color: rgb(250, 250, 250);
+    background-color: rgb(180, 200, 255)
 }
 
 .selectDown {
@@ -82,7 +82,7 @@ a {
 }
 
 .tdlDBInsert:hover {
-    background-color: rgb(250, 250, 250);
+    background-color: rgb(180, 200, 255)
 }
 
 .bgbox {
