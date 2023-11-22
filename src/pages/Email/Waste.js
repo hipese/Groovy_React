@@ -55,8 +55,6 @@ const Waste = () => {
     }, [member.id]);
 
     const handleDelete = (seq, isInbox) => {
-        console.log(isInbox);
-        console.log(seq);
         const deleteEndpoint = isInbox ? `/api/mails/sent/${seq}` : `/api/mails/inbox/${seq}`;
         axios.delete(deleteEndpoint).then(() => {
             LoadMails();
