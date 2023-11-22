@@ -11,32 +11,36 @@ import { Pagination, PaginationItem } from "@mui/material";
 import { Input } from "reactstrap";
 
 import { LoginContext } from '../../App';
+import { MemberContext } from '../Groovy/Groovy';
 
 const SendMail = () => {
     const [search, setSearch] = useState('');
     const { loginID } = useContext(LoginContext);
+    const members =useContext(MemberContext);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [mails, setMails] = useState([]);
     const COUNT_PER_PAGE = 8;
 
     useEffect(() => {
-        LoadMails();
-    }, []);
+            axios.get(`/api/mails/send/${members.member.id}`).then(resp => {
+                setMails(resp.data);
+            }).catch(error => {
+                console.error("데이터 불러오기 중 오류 발생", error);
+            });
+    }, [members.member.id]);
 
-    const LoadMails = () => {
-        axios.get(`/api/mails/send/${loginID}`).then(resp => {
-            setMails(resp.data);
-        }).catch(error => {
-            console.error("데이터 불러오기 중 오류 발생", error);
-        });
-    }
+    
 
     const handleDelete = (seq) => {
         const formData = new FormData();
         formData.append('member_id', loginID);
         axios.put(`/api/mails/sent/${seq}`, formData).then((resp) => {
-            LoadMails();
+            axios.get(`/api/mails/send/${members.member.id}`).then(resp => {
+                setMails(resp.data);
+            }).catch(error => {
+                console.error("데이터 불러오기 중 오류 발생", error);
+            });
         })
             .catch((error) => {
                 console.error("삭제중 오류 발생", error);
