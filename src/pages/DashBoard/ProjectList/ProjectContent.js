@@ -38,8 +38,6 @@ const Modalstyle = {
     }
 
     const handleAdd = () => {
-        console.log(schedule);
-        console.log(schedule.pschedule_start<schedule.pschedule_end);
         if(schedule.pschedule_contents == "" || schedule.pschedule_contents == undefined){
             alert("할일을 적어주세요.");
             return;
@@ -50,6 +48,7 @@ const Modalstyle = {
 
         axios.post(`/api/project/addSchedule/${seq}`,schedule).then(res=>{
            setTodo(prev=>([...prev,schedule]));
+           handleClose();
         });
     }
     return(
@@ -128,7 +127,6 @@ const UpdateState = ({handleClose,pseq,setUpdate}) => {
     }
 
     const handleUpdate = () => {
-        if(state )
         axios.put(`/api/project/update/state`,state).then(res=>{
             setUpdate(true);
             handleClose();

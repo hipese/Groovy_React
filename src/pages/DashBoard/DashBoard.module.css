@@ -140,11 +140,6 @@ div{
 .borderbtm{
     border-bottom: 1px solid grey;
 }
-
-.textBorder {
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-}  
-
 .padding15{
     position: relative;
     padding: 15px;
@@ -243,5 +238,9 @@ div{
 }
 
 .bgblue{
-    background-color: #90caf9;
+    background-color: #bbdefb;
+}
+
+.bggray{
+    background-color: rgb(239, 244, 252);
 }
