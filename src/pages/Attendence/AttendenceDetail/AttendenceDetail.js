@@ -45,7 +45,7 @@ const CircularIndeterminate = () => {
 };
 
 
-const Attendence_Detail = ({ approver }) => {
+const Attendence_Detail = ({}) => {
 
     const { seq } = useParams();
     const [sign_list, setSign_list] = useState({});
@@ -59,9 +59,10 @@ const Attendence_Detail = ({ approver }) => {
 
     const [signWriterInfo, setSignWriterInfo] = useState({});
     const [signReceiverInfo, setSignReceiverInfo] = useState({});
+    const [receiverVacation,setReceiverVacation]= useState({});
     const startDate = new Date(sign_list.startDate);
     const endDate = new Date(sign_list.endDate);
-
+    
     useEffect(() => {
         axios.get(`/api/attend/${seq}`).then(resp => {
             setSign_list(resp.data);
@@ -83,6 +84,18 @@ const Attendence_Detail = ({ approver }) => {
 
 
     }, [seq]);
+
+    useEffect(() => {
+        if (signReceiverInfo && signReceiverInfo.id) {
+            axios.get(`/api/vacation/selectVacation/${signReceiverInfo.id}`)
+                .then(resp => {
+                    setReceiverVacation(resp.data);
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+    }, [signReceiverInfo]);
 
     const downloadFile = (file) => {
         // Make an API request to fetch the file content
@@ -115,7 +128,15 @@ const Attendence_Detail = ({ approver }) => {
         setSign_list(prev => ({ ...prev, [name]: value }))
     }
 
+    
     const handleAccept = (e) => {
+     
+        if (receiverVacation.remainingDays < sign_list.total_date) {
+            alert(`신청자의 남은 휴가가 신청일수보다 적습니다.\n신청자의 남은 휴가: ${receiverVacation.remainingDays}, 신청휴가: ${sign_list.total_date}`);
+            return; 
+        }
+
+
         axios.put(`/api/attend/accept/${seq}`, sign_list).then(resp => {
             const parentSeq = resp.data;
             const message = "휴가 신청이 승인되었습니다.";
