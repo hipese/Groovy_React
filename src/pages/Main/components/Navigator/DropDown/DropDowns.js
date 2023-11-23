@@ -24,7 +24,7 @@ const styles = {
   },
   button: {
     marginTop: '15px',
-    marginLeft: '10px',
+    marginLeft: '5px',
     borderRadius: '4px',
     cursor: 'pointer',
     backgroundColor: 'white',
