@@ -24,7 +24,7 @@ const CircularIndeterminate = () => {
 const AttendenceMain = () => {
 
     const members = useContext(MemberContext);
-    const {myVacation,setMyVacation}=useContext(VacationContext);
+    const { myVacation, setMyVacation } = useContext(VacationContext);
 
     const [vacation_complete_list, setVacation_complete_list] = useState([]);
     const [vacation_wait_list, setVacation_wait_list] = useState([]);
@@ -42,20 +42,20 @@ const AttendenceMain = () => {
                 ]);
                 setVacation_complete_list(completeResp.data);
                 setVacation_wait_list(waitResp.data);
-    
+
                 const totalUsedDays = completeResp.data.reduce((acc, doc) => acc + doc.total_date, 0);
                 setTotal_vactionDate(totalUsedDays);
-                setHasCompletedVacationFetched(true); 
+                setHasCompletedVacationFetched(true);
             } catch (error) {
                 console.error('Error fetching vacation lists:', error);
             } finally {
-                setLoading(false); 
+                setLoading(false);
             }
         };
-    
+
         fetchListData();
     }, []);
-    
+
     useEffect(() => {
         if (hasCompletedVacationFetched && members.member) {
             const url = `/api/vacation/myVacation/${total_vactionDate}`;
@@ -107,12 +107,12 @@ const AttendenceMain = () => {
                                     <TableCell align="center">{`${myVacation.usedDays}일`}</TableCell>
                                     <TableCell align="center">{`${myVacation.totalAnnualEntitlement - total_vactionDate}일`}</TableCell>
                                 </TableRow>
-                                : "사용자를 불러오지 못하였습니다."}
+                                : <TableRow><TableCell>사용자를 불러오지 못하였습니다.</TableCell></TableRow>}
                         </TableBody>
                     </Table>
                 </TableContainer>
             </div>
-            
+
             <div className={style.documents2}>
                 <div className={style.titleText}>휴가신청 완료</div>
                 <div className={style.text}>
