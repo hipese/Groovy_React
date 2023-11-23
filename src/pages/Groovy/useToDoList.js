@@ -5,7 +5,7 @@ export const useToDoList = () => {
   const [todoList, setTodoList] = useState([]);
   const [tdlbg, setTdlbg] = useState([]);
     
-  const toggleStar = async (id) => {
+  const toggleStar = async (id) => { // 즐겨찾기 버튼을 누르면 isActive가 true로 설정된다.
     const updatedList = todoList.map((todo, index) => {
       if (index === id) {
         return { ...todo, isActive: !todo.isActive };
@@ -16,8 +16,7 @@ export const useToDoList = () => {
 
     const selectedTodo = updatedList[id];
 
-    // isActive가 true로 설정된 경우 서버에 데이터 보내기
-    if (selectedTodo.isActive) {
+    if (selectedTodo.isActive) {// isActive가 true로 설정된 경우 서버에 데이터 보내기
       const dataToSend = { parent_seq: selectedTodo.seq, id: selectedTodo.id };
       try {
         await axios.post("/api/tdlbookmark", dataToSend);
@@ -26,7 +25,7 @@ export const useToDoList = () => {
       }
     }
     else {
-        try {
+        try { // isActive가 false로 설정된 경우 서버에서 데이터 삭제
             await axios.delete(`/api/tdlbookmark/${selectedTodo.seq}`);
         } catch (error) {
             console.error("Error deleting data from server:", error);
@@ -34,7 +33,7 @@ export const useToDoList = () => {
     }
   };
 
-    const getTodoList = async () => {
+    const getTodoList = async () => { // DB에 저장된 할 일 목록을 가져온다, 즐겨찾기 목록도 가져온다, Background 목록도 가져온다.
         try {
             const res = await axios.get("/api/tdList");
             let updatedTodoList = res.data.map(todo => ({ ...todo, isActive: false }));
