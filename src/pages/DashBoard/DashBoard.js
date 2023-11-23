@@ -332,7 +332,7 @@ const ProjectSection = () => {
     const {project,setProject,isLoading,setLoading} = React.useContext(ProjectContext);
     
     const [currentPage, setCurrentPage] = React.useState(1);
-    const COUNT_PER_PAGE = 3;
+    const COUNT_PER_PAGE = 4;
     const totalItems = project.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
     const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
@@ -348,7 +348,7 @@ const ProjectSection = () => {
             <div className={`${style.padding10} ${style.borderbtm} ${style.bgblue} ${style.bordertopRad}`}>
                 <Grid container spacing={2}>
                     <Grid item xs={11} className={`${style.vcenter}`}>
-                        <Typography sx={{color:"white",fontSize:"20px",fontWeight:"bold"}} className={`${style.textBorder}`}>
+                        <Typography sx={{color:"black",fontSize:"22px",fontWeight:"bold"}}>
                         프로젝트
                         </Typography>                        
                     </Grid>
@@ -447,7 +447,7 @@ const NoticeSection = () => {
     const [deptNotice,setDeptNotice] = React.useState([]);
     const {loginID} = React.useContext(LoginContext);
 
-    const COUNT_PER_PAGE = 3;
+    const COUNT_PER_PAGE = 4;
     const totalItems = deptNotice.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
     const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
@@ -476,7 +476,7 @@ const NoticeSection = () => {
             <div className={`${style.padding10} ${style.borderbtm} ${style.bgblue} ${style.bordertopRad}`}>      
                 <Grid container spacing={2}>
                     <Grid item xs={11} className={`${style.vcenter} ${style.titleText}`}>
-                        <Typography sx={{color:"white",fontSize:"20px",fontWeight:"bold"}} className={`${style.textBorder}`}>
+                        <Typography sx={{color:"black",fontSize:"21px",fontWeight:"bold"}}>
                             부서 내 소식
                         </Typography>                        
                     </Grid>
