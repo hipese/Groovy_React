@@ -3,7 +3,7 @@ import styles from "./Navigator.module.css";
 import DropDowns from "./DropDown/DropDowns";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col } from "reactstrap";
-import logo from "./assets/다운로드.png";
+import logo from "./assets/Groovy.png";
 import Avatar from "./Avatar/Avatar";
 import Badge from "./Badge/Badge";
 import { MemberContext } from "../../../Groovy/Groovy";
@@ -19,8 +19,8 @@ const Navigator = () => {
           <img
             src={logo}
             alt="logo"
-            width={"80px"}
-            height={"60px"}
+            width={"130px"}
+            height={"50px"}
             className={styles.logo}
           />
           </Link>
