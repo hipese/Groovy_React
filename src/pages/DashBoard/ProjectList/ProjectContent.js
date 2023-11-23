@@ -31,7 +31,7 @@ const Modalstyle = {
     const navi = useNavigate();
     const {seq} = useParams();
     const {todo,setTodo} = useContext(AddScheduleContext);
-    const [schedule,setSchedule] = useState({pschedule_start: '', pschedule_end: "", pschedule_contents: "", pschedule_importance: 'Low',pschedule_state:0});
+    const [schedule,setSchedule] = useState({pschedule_seq:0,pschedule_start: '', pschedule_end: "", pschedule_contents: "", pschedule_importance: 'Low',pschedule_state:0});
     const handleChange = (e) => {
         const {name,value} = e.target;
         setSchedule(prev=>({...prev,[name]:value}));
@@ -47,8 +47,9 @@ const Modalstyle = {
         }
 
         axios.post(`/api/project/addSchedule/${seq}`,schedule).then(res=>{
-           setTodo(prev=>([...prev,schedule]));
-           handleClose();
+            const temp = {...schedule,pschedule_seq:res.data};
+            setTodo(prev=>([...prev,temp]));
+            handleClose();
         });
     }
     return(
@@ -249,6 +250,7 @@ const ProjectTodo = () => {
                                 <ListItem button onClick={()=>{
                                     handleOpenUpdate();
                                     setSeq(e.pschedule_seq);
+                                    console.log(todo);
                                 }}>
                                     <Grid container className={`${style.marginT10}`}> 
                                         <Grid item xs={2} className={style.center}>
