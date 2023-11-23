@@ -218,7 +218,7 @@ const SurveyWrite = () => {
         }
         
         const updateResult = [survey,...shortAnswers.filter(Boolean),...multiAnswers.filter(Boolean)];
-
+        console.log(updateResult);
         updateResult.forEach(obj => {
             if (Array.isArray(obj.questions) && obj.questions.length > 0) {
               obj.questions = obj.questions.filter(question => question !== '');
@@ -227,9 +227,11 @@ const SurveyWrite = () => {
               }
             }
           });
+          console.log(updateResult);
+          const temp = updateResult.filter(e=>e.type !== 'multi' || (e.contents !== null && e.contents !== undefined && e.contents !== ""));
 
         await new Promise((res)=>{
-            setResult(prev=>[...prev,...updateResult]);
+            setResult(prev=>[...prev,...temp]);
             res();
         });
     }
