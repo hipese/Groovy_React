@@ -1,26 +1,38 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import style from "./Detail.module.css";
+
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 const Detail = () => {
     const { seq } = useParams();
     const [Mail, setMail] = useState({});
     const [receip, setReceip] = useState({});
     const [files, setFiles] = useState([]);
+    const navi = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         axios.get(`/api/mails/${seq}`).then((resp) => {
             setMail(resp.data);
-        });
-        axios.get(`/api/mails/mem/${seq}`).then((resp) => {
-            setReceip(resp.data);
-        });
-    }, [seq]);
-
-    useEffect(() => {
-        axios.get(`/api/mailFile/${seq}`).then((resp) => {
-            setFiles(resp.data);
+            axios.get(`/api/mails/mem/${seq}`).then((resp) => {
+                setReceip(resp.data);
+                axios.get(`/api/mailFile/${seq}`).then((resp) => {
+                    setFiles(resp.data);
+                    setLoading(false);
+                });
+            });
         });
     }, [seq]);
 
@@ -45,6 +57,14 @@ const Detail = () => {
             .catch((error) => {
             });
     };
+
+    const handleBack = () => {
+        navi(-1);
+    };
+
+    if (loading) {
+        return <CircularIndeterminate />;
+    }
 
     return (
         <div className={style.mailContainer}>
@@ -76,9 +96,7 @@ const Detail = () => {
                 )}
                 <div className={style.contents}>{Mail.contents}</div>
                 <div align="end" className={style.buttons}>
-                    <Link to="/groovy/mail">
-                        <button>Back</button>
-                    </Link>
+                    <button onClick={handleBack}>Back</button>
                 </div>
             </div>
         </div>

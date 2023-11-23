@@ -3,9 +3,19 @@ import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import style from "./Detail.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
-import ReactQuill from './ReactQuill.js'
 
 import { LoginContext } from '../../App';
+
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 const DetailDept = () => {
     const { loginID } = useContext(LoginContext);
@@ -23,10 +33,16 @@ const DetailDept = () => {
     const [editingReply, setEditingReply] = useState(null);
     const [editedReply, setEditedReply] = useState('');
     const [files, setFiles] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         axios.get(`/api/boards/dept/${seq}`).then((resp) => {
             setBoard(resp.data);
+            axios.get(`/api/boardFile/dept/${seq}`).then((resp) => {
+                setFiles(resp.data);
+                setLoading(false);
+            });
         });
     }, [seq]);
 
@@ -38,12 +54,6 @@ const DetailDept = () => {
             });
         }
     }, [Board]);
-
-    useEffect(() => {
-        axios.get(`/api/boardFile/dept/${seq}`).then((resp) => {
-            setFiles(resp.data);
-        });
-    }, [seq]);
 
     const handleBack = () => {
         navi(-1);
@@ -156,6 +166,10 @@ const DetailDept = () => {
     const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
     const visibleReply = Reply.slice(startIndex, endIndex);
 
+    if (loading) {
+        return <CircularIndeterminate />;
+    }
+
     return (
         <div className={style.boardContainer}>
             <div>
@@ -181,7 +195,7 @@ const DetailDept = () => {
                                         <button>Back</button>
                                     </Link>
                                     <button onClick={handleDelete}>Del</button>
-                                    <Link to={`/groovy/board/update/${seq}`}>
+                                    <Link to={`/groovy/board/updateDept/${seq}`}>
                                         <button>Edit</button>
                                     </Link>
                                 </>

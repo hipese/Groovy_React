@@ -3,10 +3,19 @@ import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import style from "./Detail.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
-import ReactQuill from './ReactQuill.js'
 
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 import { LoginContext } from '../../App';
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 
 const Detail = () => {
     const { loginID } = useContext(LoginContext);
@@ -24,10 +33,16 @@ const Detail = () => {
     const [editingReply, setEditingReply] = useState(null);
     const [editedReply, setEditedReply] = useState('');
     const [files, setFiles] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         axios.get(`/api/boards/com/${seq}`).then((resp) => {
             setBoard(resp.data);
+            axios.get(`/api/boardFile/${seq}`).then((resp) => {
+                setFiles(resp.data);
+                setLoading(false);
+            });
         });
     }, [seq]);
 
@@ -39,12 +54,6 @@ const Detail = () => {
             });
         }
     }, [Board]);
-
-    useEffect(() => {
-        axios.get(`/api/boardFile/${seq}`).then((resp) => {
-            setFiles(resp.data);
-        });
-    }, [seq]);
 
     const handleBack = () => {
         navi(-1);
@@ -156,6 +165,10 @@ const Detail = () => {
     const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
     const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
     const visibleReply = Reply.slice(startIndex, endIndex);
+
+    if (loading) {
+        return <CircularIndeterminate />;
+    }
 
     return (
         <div className={style.boardContainer}>
