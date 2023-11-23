@@ -5,7 +5,7 @@ import { formatISO, parseISO, addDays } from 'date-fns';
 export const useCalendar = () => {
     const [dbList, setDbList] = useState([]);
 
-    const refreshList = () => {
+    const refreshList = () => { // 캘린더에 표시할 이벤트 목록을 DB에서 가져온다.
         axios.get("/api/calendar").then((res) => {
             const NewEvents = res.data.map(transformEventDataToCalendarEvent);
             setDbList(NewEvents);
@@ -33,7 +33,7 @@ export const useCalendar = () => {
         }
     };
 
-    useEffect(() => {
+    useEffect(() => { // 캘린더에 표시할 이벤트 목록을 DB에서 가져와서 렌더링하여 바로 보여준다.
         refreshList();
     }, []);
 
