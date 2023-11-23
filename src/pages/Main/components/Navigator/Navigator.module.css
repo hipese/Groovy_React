@@ -8,6 +8,7 @@
 
 .logo {
     float: left;
+    margin-top: 5px;
 }
 
 .logo:hover {
