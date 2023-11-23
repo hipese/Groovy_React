@@ -7,15 +7,28 @@ import style from "./List.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
 import { Input } from "reactstrap";
 
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 const ComFreeBoard = () => {
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [boards, setBoards] = useState([]);
     const COUNT_PER_PAGE = 10;
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         axios.get("/api/boards/comfree").then(resp => {
             setBoards(resp.data);
+            setLoading(false);
         })
     }, []);
 
@@ -34,6 +47,10 @@ const ComFreeBoard = () => {
         setSearch(e.target.value);
     };
 
+    if (loading) {
+        return <CircularIndeterminate />;
+    }
+    
     return (
         <div className="Boardcontainer">
             <div className={style.search}>
