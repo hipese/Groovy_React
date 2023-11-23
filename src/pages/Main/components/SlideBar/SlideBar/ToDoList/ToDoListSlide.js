@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import styles from "./ToDoListSlide.module.css";
 import Modal from "../../../../../ToDoList/ToDoListModal/ToDoListModal"
 import { Link, useNavigate } from "react-router-dom";
-import calendar from "./assets/calendar.png";
 import grid from "./assets/grid.png";
 import { MemberContext } from "../../../../../Groovy/Groovy";
 import Avatar from "@mui/material/Avatar";
@@ -24,7 +23,7 @@ const ProfileContainer = styled("div")({
 
 const ToDoListSlide = () => {
     const members = useContext(MemberContext);
-    const { todoList, setTodoList, toggleStar, ListAdded, tdlbg } = useContext(ToDoListContext);
+    const { todoList, toggleStar, ListAdded, tdlbg } = useContext(ToDoListContext);
     const [showModal, setShowModal] = useState(false);
     const [submenus, setSubmenus] = useState({}); // 서브메뉴 목록
     const navigate = useNavigate();
@@ -34,7 +33,7 @@ const ToDoListSlide = () => {
         }
     };
     const submenuRefs = useRef({});
-    useEffect(() => {
+    useEffect(() => { // Submenu가 열려있는 상태에서 다른 곳을 클릭하면 submenu를 닫아준다.
         const handleClickOutside = (event) => {
             const isOutside = Object.keys(submenuRefs.current).every(key => {
                 return submenuRefs.current[key] && !submenuRefs.current[key].contains(event.target);
@@ -79,8 +78,8 @@ const ToDoListSlide = () => {
         }));
     };
 
-    const updateBackground = async (parent_seq, bgselect, e) => {
-        e.stopPropagation(); // Prevent event bubbling
+    const updateBackground = async (parent_seq, bgselect, e) => { // 배경을 바꾸고자 할때 실행되는 함수
+        e.stopPropagation();
         const sendtoupdate = { parent_seq: parent_seq, bgselect: bgselect };
         try {
             await axios.put(`/api/tdlbackground/${parent_seq}`, sendtoupdate);

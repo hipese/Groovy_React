@@ -48,7 +48,7 @@ const Calendar = () => {
     const { dbList, refreshList } = useContext(ListContext);
   
 
-    function handleEventClick(clickInfo) {
+    function handleEventClick(clickInfo) { // 생일 이벤트를 클릭하면 confetti 애니메이션을 시작.
       const { extendedProps, classNames } = clickInfo.event;
       if (classNames.includes('birthday-event')) {
         startConfettiAnimation();
@@ -58,49 +58,47 @@ const Calendar = () => {
       }
     }
 
-  // Function to start the confetti animation
-  function startConfettiAnimation() {
-    const duration = 60 * 60 * 1000;
-    const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 500, ticks: 20, zIndex: 0 }; //startvelocity: 시작 속도, spread: 분포, ticks: 틱, zIndex: z축
- 
-    function randomInRange(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-
-    const interval = setInterval(function () {
-      const timeLeft = animationEnd - Date.now();
-
-      if (timeLeft <= 0) {
-        return clearInterval(interval);
+    function startConfettiAnimation() { // confetti 애니메이션을 시작.
+      const duration = 60 * 60 * 1000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 500, ticks: 20, zIndex: 0 }; //startvelocity: 시작 속도, spread: 분포, ticks: 틱, zIndex: z축
+  
+      function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
       }
 
-      const particleCount = 20 * (timeLeft / duration);
-      confetti(
-        Object.assign({}, defaults, {
-          particleCount,
-          origin: { x: randomInRange(0, 1), y: randomInRange(0, 1) }
-        })
-      );
-      confetti(
-        Object.assign({}, defaults, {
-          particleCount,
-          origin: { x: randomInRange(0, 1), y: randomInRange(0, 1) }
-        })
-      );
-      confetti(
-        Object.assign({}, defaults, {
-          particleCount,
-          origin: { x: randomInRange(0, 1), y: randomInRange(0, 1) }
-        })
-      );
-    }, 250);
+      const interval = setInterval(function () {
+        const timeLeft = animationEnd - Date.now();
 
-    // Stop the animation after 5 seconds
-    setTimeout(() => clearInterval(interval), 10000);
-  }
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
 
-    function handleEventDrop(info) {
+        const particleCount = 20 * (timeLeft / duration);
+        confetti(
+          Object.assign({}, defaults, {
+            particleCount,
+            origin: { x: randomInRange(0, 1), y: randomInRange(0, 1) }
+          })
+        );
+        confetti(
+          Object.assign({}, defaults, {
+            particleCount,
+            origin: { x: randomInRange(0, 1), y: randomInRange(0, 1) }
+          })
+        );
+        confetti(
+          Object.assign({}, defaults, {
+            particleCount,
+            origin: { x: randomInRange(0, 1), y: randomInRange(0, 1) }
+          })
+        );
+      }, 250);
+
+      setTimeout(() => clearInterval(interval), 10000);
+    }
+
+    function handleEventDrop(info) { // DB에 저장된 이벤트를 Drag & Drop으로 수정할 수 있도록 함.
       const { event } = info;
       const startDate = new Date(event.start);
       startDate.setDate(startDate.getDate() + 1);
@@ -118,7 +116,7 @@ const Calendar = () => {
     };
 
   
-  useEffect(() => {
+  useEffect(() => { // DB에 저장된 이벤트를 불러옴.
     const fetchDataForMonth = async (year, month) => {
       try {
         const params = {
@@ -142,7 +140,7 @@ const Calendar = () => {
       }
     };
 
-    const fetchDataForYear = async (year) => {
+    const fetchDataForYear = async (year) => { // 공공 데이터 포털에서 1년치 데이터를 불러옴.
       const requests = [];
       for (let month = 1; month <= 12; month++) {
         const monthString = month.toString().padStart(2, '0'); // 월을 2자리 숫자로 변환합니다.
@@ -153,7 +151,7 @@ const Calendar = () => {
     };
     
 
-    const initializeCalendar = async () => {
+    const initializeCalendar = async () => { // 이벤트를 불러온 후, 달력에 표시합니다.
       const years = ['2023', '2024', '2025'];
       const eventPromises = years.map(fetchDataForYear);
       const eventsForAllYears = await Promise.all(eventPromises);
@@ -168,7 +166,7 @@ const Calendar = () => {
   }, []);
 
 
-  const handleDateSelect = (selectInfo) => {
+  const handleDateSelect = (selectInfo) => { // 달력을 Drag로 선택하면 Modal을 띄워 이벤트를 추가할 수 있도록 함.
     const startDateStr = selectInfo.startStr;
     let endDateStr = selectInfo.endStr;
 
@@ -187,7 +185,7 @@ const Calendar = () => {
   };
 
 
-  const handleCloseModal = () => {
+  const handleCloseModal = () => { // Modal을 닫음.
     setEventModalOpen(false);
     setEventDetails(null);
   };
@@ -199,23 +197,23 @@ const Calendar = () => {
         <div className={styles.FullCalendar}>
             <div className={styles.FullCalendarMain}>
                 <FullCalendar
-                  schedulerLicenseKey="Groove"
-                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                  initialView="dayGridMonth"
-                  headerToolbar={{ left: 'dayGridMonth,timeGridWeek,timeGridDay', center: 'title', right: 'today prev,next' }}
-                  locale={koLocale}
-                  weekends={weekendsVisible}
-                  events={[...editableDbList, ...nonEditableEvents]}
-                  select={handleDateSelect}
-                  selectable={true}
-                  selectMirror={true}
-                  dayMaxEvents={true}
-                  eventClick={handleEventClick}
-                  eventDrop={handleEventDrop}
+                  schedulerLicenseKey="Groove" // 라이센스 키
+                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]} // 달력에 표시할 플러그인 설정
+                  initialView="dayGridMonth" // 달력 초기 화면을 월간으로 설정
+                  headerToolbar={{ left: 'dayGridMonth,timeGridWeek,timeGridDay', center: 'title', right: 'today prev,next' }} // 달력 상단에 표시되는 버튼 설정
+                  locale={koLocale} // 한국어로 설정
+                  weekends={weekendsVisible} // 주말 표시 여부
+                  events={[...editableDbList, ...nonEditableEvents]} // 이벤트를 달력에 표시
+                  select={handleDateSelect} // 달력을 Drag로 선택하면 Modal을 띄워 이벤트를 추가할 수 있도록 함.
+                  selectable={true} // 달력을 Drag로 선택할 수 있도록 함.
+                  selectMirror={true} // 달력을 Drag할 때, 이벤트를 표시
+                  dayMaxEvents={true} // 달력에 표시되는 이벤트의 최대 개수를 설정 (더보기 버튼이 생김)
+                  eventClick={handleEventClick} // 이벤트를 클릭하면 Modal을 띄워 이벤트를 수정할 수 있도록 함.
+                  eventDrop={handleEventDrop} // 이벤트를 Drag & Drop으로 수정할 수 있도록 함.
                 />
             </div>
       </div>
-      <CalendarInnerModal isOpen={eventModalOpen} onClose={handleCloseModal} eventDetails={eventDetails} onEventAdded={refreshList}/>
+      <CalendarInnerModal isOpen={eventModalOpen} onClose={handleCloseModal} eventDetails={eventDetails} onEventAdded={refreshList}/> 
       {showModal && (
         <Modal
           showModal={showModal}
