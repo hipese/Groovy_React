@@ -8,6 +8,16 @@ import style from "./List.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
 import { MemberContext } from '../Groovy/Groovy';
 
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
 const DeptFreeBoard = () => {
     const { member } = useContext(MemberContext);
     const [search, setSearch] = useState('');
@@ -15,11 +25,14 @@ const DeptFreeBoard = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [boards, setBoards] = useState([]);
     const COUNT_PER_PAGE = 10;
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         const dept = member.group_name;
         axios.get(`/api/boards/deptfree/${dept}`).then((resp) => {
             setBoards(resp.data);
+            setLoading(false);
         });
     }, [member]);
 
@@ -37,6 +50,10 @@ const DeptFreeBoard = () => {
     const inputChangeHandler = (e) => {
         setSearch(e.target.value);
     };
+
+    if (loading) {
+        return <CircularIndeterminate />;
+    }
 
     return (
         <div className="Boardcontainer">
